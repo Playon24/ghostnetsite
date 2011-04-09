@@ -388,6 +388,21 @@ Class WoW_Items {
         return $gem;
     }
     
+    public function GetTemplateSocketsCount($entry) {
+        $data = DB::World()->selectRow("SELECT `SocketColor_1`, `SocketColor_2`, `SocketColor_3` FROM `item_template` WHERE `entry` = %d LIMIT 1", $entry);
+        if(!$data) {
+            WoW_Log::WriteError('%s : item #%d was not found in `item_template` table!', __METHOD__, $entry);
+            return 0;
+        }
+        $count = 0;
+        for($i = 1; $i < 4; ++$i) {
+            if($data['SocketColor_' . $i] != 0) {
+                ++$count;
+            }
+        }
+        return $count;
+    }
+    
     public function IsGemMatchesSocketColor($gem_color, $socket_color) {
         if($socket_color == $gem_color) {
             return true;
@@ -673,6 +688,9 @@ Class WoW_Items {
         return true;
     }
     
+    /**
+     * @param int $entry
+     **/
     public function GetItemInfo($entry) {
         return DB::World()->selectRow("SELECT `entry`, `name`, `displayid`, `Quality`, `class`, `subclass`, `InventoryType`, `ItemLevel` FROM `item_template` WHERE `entry`=%d", $entry);
     }

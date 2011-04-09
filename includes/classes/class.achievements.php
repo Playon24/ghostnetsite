@@ -143,7 +143,9 @@ Class WoW_Achievements {
         }
         $result = 0;
         foreach($categories[$catId] as $category) {
-            $result += count(self::$sorted_storage[$category]);
+            if(isset(self::$sorted_storage[$category])) {
+                $result += count(self::$sorted_storage[$category]);
+            }
         }
         return $result;
     }
@@ -171,8 +173,10 @@ Class WoW_Achievements {
         }
         else {
             foreach($categories[$catId] as $category) {
-                foreach(self::$sorted_storage[$category] as $ach) {
-                    $ids[] = $ach['achievement'];
+                if(isset(self::$sorted_storage[$category])) {
+                    foreach(self::$sorted_storage[$category] as $ach) {
+                        $ids[] = $ach['achievement'];
+                    }
                 }
             }
         }

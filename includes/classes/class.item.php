@@ -20,21 +20,21 @@
 
 Class WoW_Item {
     
-    private $entry    = false;
+    private $entry    = 0;
     private $equipped = false;
     private $loaded   = false;
     private $m_bag    = 0;
-    private $m_guid   = false;
+    private $m_guid   = 0;
     private $m_ench   = array();
     private $m_ilvl   = 0;
     private $m_owner  = 0;
-    private $m_proto  = false;
+    private $m_proto  = null;
     private $m_server = 0;
     private $m_slot   = 0;
     private $m_socketInfo = array();
-    private $m_values = false;
-    private $tc_data  = false;
-    private $tc_ench  = false;
+    private $m_values = array();
+    private $tc_data  = null;
+    private $tc_ench  = null;
     private $itemset_o = 0;
     private $itemset   = 0;
     private $itempieces = null;
@@ -53,6 +53,7 @@ Class WoW_Item {
             return false;
         }
         $this->m_server = $serverType;
+        $this->loaded = false;
         return true;
     }
     
@@ -245,6 +246,10 @@ Class WoW_Item {
         return $this->m_ench;
     }
     
+    public function HasBonusEnchantmentSlot() {
+        return $this->GetUInt32Value(ITEM_FIELD_ENCHANTMENT_7_1) != 0;
+    }
+    
     /**
      * @return array
      **/
@@ -253,7 +258,7 @@ Class WoW_Item {
             return 0;
         }
         if(isset($this->m_socketInfo[$num])) {
-            return $this->m_socketInfo[$num];
+            return $enchant_id_only ? $this->m_socketInfo[$num]['enchant_id'] : $this->m_socketInfo[$num];
         }
         $data = array();
         switch($this->m_server) {
@@ -348,7 +353,6 @@ Class WoW_Item {
                 break;
             default:
                 return 0;
-                break;
         }
     }
     
@@ -418,5 +422,4 @@ Class WoW_Item {
         return $this->itempieces;
     }
 }
-
 ?>

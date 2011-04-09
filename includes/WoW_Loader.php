@@ -60,6 +60,7 @@ include(WOW_DIRECTORY . '/includes/classes/class.items.php');
 include(WOW_DIRECTORY . '/includes/classes/class.itemprototype.php');
 include(WOW_DIRECTORY . '/includes/classes/class.guild.php');
 include(WOW_DIRECTORY . '/includes/classes/class.search.php');
+include(WOW_DIRECTORY . '/includes/classes/class.reputation.php');
 // Load data
 include(WOW_DIRECTORY . '/includes/data/data.classes.php');
 include(WOW_DIRECTORY . '/includes/data/data.races.php');

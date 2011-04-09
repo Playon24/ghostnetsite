@@ -80,6 +80,7 @@ Class WoW_Characters /*implements Interface_Characters*/ {
     private static $audit          = array(); // Character audit
     private static $stats_bonuses  = array(); // Enchants/gems bonuses
     private static $pvp_data       = array(); // Character PvP Data (Arena Teams)
+    private static $m_skills       = array(); // Character skills
     
     private static function IsCharacterFitsRequirements() {
         if(self::$level < WoWConfig::$MinLevelToDisplay) {
@@ -703,6 +704,26 @@ Class WoW_Characters /*implements Interface_Characters*/ {
         return true;
     }
     
+    private static function LoadSkills() {
+        if(self::$m_skills && is_array(self::$m_skills)) {
+            return true;
+        }
+        $skills = DB::Characters()->select("SELECT * FROM `character_skills` WHERE `guid` = %d", self::GetGUID());
+        if(!$skills) {
+            WoW_Log::WriteLog('%s : no skills found for character %s (GUID: %d).', __METHOD__, self::GetName(), self::GetGUID());
+            return false;
+        }
+        foreach($skills as $skill) {
+            self::$m_skills[$skill['skill']] = array(
+                'id'    => $skill['skill'],
+                'value' => $skill['value'],
+                'max'   => $skill['max']
+            );
+        }
+        unset($skill, $skills);
+        return true;
+    }
+    
     //------------------
     // Storages checkers
     //------------------
@@ -1037,6 +1058,26 @@ Class WoW_Characters /*implements Interface_Characters*/ {
         return isset(self::$m_items[$slot]) ? self::$m_items[$slot] : null;
     }
     
+    private static function GetSkill($skill_id) {
+        if(!self::$m_skills) {
+            self::LoadSkills();
+        }
+        if(!isset(self::$m_skills[$skill_id])) {
+            return 0;
+        }
+        return self::$m_skills[$skill_id];
+    }
+    
+    private static function GetSkillValue($skill_id) {
+        if(!self::$m_skills) {
+            self::LoadSkills();
+        }
+        if(!isset(self::$m_skills[$skill_id])) {
+            return 0;
+        }
+        return self::$m_skills[$skill_id]['value'];
+    }
+    
     /**
      * @param int $slot
      * @param bool $advanced = false
@@ -1047,8 +1088,9 @@ Class WoW_Characters /*implements Interface_Characters*/ {
             WoW_Log::WriteError('%s : character was not found.', __METHOD__);
             return false;
         }
-        // Find cached item.
+        // Try to find cached item...
         if(isset(self::$cache_item[$slot])) {
+            // ... and return it.
             return self::$cache_item[$slot];
         }
         if(!isset(self::$m_items[$slot])) {
@@ -1080,7 +1122,7 @@ Class WoW_Characters /*implements Interface_Characters*/ {
         );
         if($advanced) {
             $enchantment_info = DB::WoW()->selectRow("
-            SELECT 
+            SELECT
             `DBPREFIX_enchantment`.`text_%s` AS `text`,
             `DBPREFIX_spellenchantment`.`id` AS `spellId`
             FROM `DBPREFIX_enchantment`
@@ -1097,45 +1139,6 @@ Class WoW_Characters /*implements Interface_Characters*/ {
                     $item_data['gem' . $socket_index] = WoW_Items::GetSocketInfo($item_data['g' . $socket_index]['enchant_id']);
                 }
             }
-            // Character audit
-            $item_data['enchanted'] = true;
-            // Enchantments
-            if($item_data['enchid'] == 0) {
-                $item_data['enchanted'] = false;
-            }
-            if(!in_array($slot, array(EQUIPMENT_SLOT_BACK, EQUIPMENT_SLOT_OFFHAND, EQUIPMENT_SLOT_NECK, EQUIPMENT_SLOT_TABARD, EQUIPMENT_SLOT_TRINKET1, EQUIPMENT_SLOT_TRINKET2))) {
-                $item_data['enchanted'] = true; // Those items can' have enchantment slots.
-            }
-            else {
-                switch($slot) {
-                    case EQUIPMENT_SLOT_FINGER1:
-                    case EQUIPMENT_SLOT_FINGER2:
-                        // Check for SKILL_ENCHANTING
-                        if(self::HasProfessionSkill(SKILL_ENCHANTING) && !$item_data['enchanted']) {
-                            self::UpdateAudit(AUDIT_TYPE_UNUSED_PROFESSION_PERK, array(SKILL_ENCHANTING, $slot));
-                        }
-                        break;
-                    case EQUIPMENT_SLOT_WRISTS:
-                    case EQUIPMENT_SLOT_HANDS:
-                        if(self::HasProfessionSkill(SKILL_BLACKSMITHING) && !$item_data['enchanted']) {
-                            // Blacksmither's sockets are enchants.
-                            self::UpdateAudit(AUDIT_TYPE_UNUSED_PROFESSION_PERK, array(SKILL_ENCHANTING, $slot));
-                        }
-                        break;
-                    case EQUIPMENT_SLOT_WAIST:
-                        if(!$item_data['enchanted']) {
-                            self::UpdateAudit(AUDIT_TYPE_MISSING_BELT_BUCKLE, $slot);
-                        }
-                        break;
-                }
-            }
-            // Empty sockets
-            for($i = 1; $i < 4; $i++) {
-                if($info['socketColor_' . $i] > 0 && $item_data['g' . ($i - 1)] == 0) {
-                    self::UpdateAudit(AUDIT_TYPE_EMPTY_SOCKET, (self::GetAuditInfo(AUDIT_TYPE_EMPTY_SOCKET) + 1));
-                }
-            }
-            
         }
         // Create data-item url
         $data_item = sprintf('i=%d', $item->GetEntry());
@@ -1179,8 +1182,6 @@ Class WoW_Characters /*implements Interface_Characters*/ {
         $item_data['data-item'] = $data_item;
         // Add to cache
         self::$cache_item[$slot] = $item_data;
-        //print_r($item_data);
-        //die;
         return $item_data;
     }
     
@@ -1228,6 +1229,50 @@ Class WoW_Characters /*implements Interface_Characters*/ {
         }
     }
     
+    /**
+     * @param  int $entry
+     * @todo   Check item stats (avoid using mail with spririt by hunters, for example).
+     * @return bool
+     **/
+    public static function IsOptimalArmorForClass($entry) {
+        $item_data = DB::World()->selectRow("SELECT `class`, `subclass`, `InventoryType` FROM `item_template` WHERE `entry` = %d LIMIT 1", $entry);
+        if(!$item_data) {
+            WoW_Log::WriteError('%s : item #%d was not found in `item_template` table!', __METHOD__, $entry);
+            return false;
+        }
+        if(!in_array($item_data['class'], array(ITEM_CLASS_ARMOR, ITEM_CLASS_WEAPON))) {
+            WoW_Log::WriteError('%s : item #%d is not an armor or weapon (classID: %d), can\'t perform check!', __METHOD__, $entry, $item_data['class']);
+            return false;
+        }
+        if(in_array($item_data['InventoryType'], array(INVTYPE_CLOAK, INVTYPE_BODY, INVTYPE_RELIC, INVTYPE_TABARD))) {
+            // Skil this items
+            return true;
+        }
+        switch($item_data['subclass']) {
+            case ITEM_SUBCLASS_ARMOR_CLOTH:
+                if(!in_array(self::GetClassID(), array(CLASS_PRIEST, CLASS_MAGE, CLASS_WARLOCK))) {
+                    return false;
+                }
+                break;
+            case ITEM_SUBCLASS_ARMOR_LEATHER:
+                if(!in_array(self::GetClassID(), array(CLASS_ROGUE, CLASS_DRUID))) {
+                    return false;
+                }
+                break;
+            case ITEM_SUBCLASS_ARMOR_MAIL:
+                if(!in_array(self::GetClassID(), array(CLASS_HUNTER, CLASS_SHAMAN))) {
+                    return false;
+                }
+                break;
+            case ITEM_SUBCLASS_ARMOR_PLATE:
+                if(!in_array(self::GetClassID(), array(CLASS_WARRIOR, CLASS_PALADIN, CLASS_DK))) {
+                    return false;
+                }
+                break;
+        }
+        return true;
+    }
+    
     /************************
               Talents
     ************************/
@@ -1238,16 +1283,16 @@ Class WoW_Characters /*implements Interface_Characters*/ {
             return false;
         }
         $talentTabId = array(
-            1  => array(161, 164, 163), // Warior
-            2  => array(382, 383, 381), // Paladin
-            3  => array(361, 363, 362), // Hunter
-            4  => array(182, 181, 183), // Rogue
-            5  => array(201, 202, 203), // Priest
-            6  => array(398, 399, 400), // Death Knight
-            7  => array(261, 263, 262), // Shaman
-            8  => array( 81,  41,  61), // Mage
-            9  => array(302, 303, 301), // Warlock
-            11 => array(283, 281, 282), // Druid
+            CLASS_WARRIOR => array(161, 164, 163),
+            CLASS_PALADIN => array(382, 383, 381),
+            CLASS_HUNTER  => array(361, 363, 362),
+            CLASS_ROGUE   => array(182, 181, 183),
+            CLASS_PRIEST  => array(201, 202, 203),
+            CLASS_DK      => array(398, 399, 400),
+            CLASS_SHAMAN  => array(261, 263, 262),
+            CLASS_MAGE    => array( 81,  41,  61),
+            CLASS_WARLOCK => array(302, 303, 301),
+            CLASS_DRUID   => array(283, 281, 282)
         );
         if(!isset($talentTabId[self::GetClassID()])) {
             WoW_Log::WriteError('%s : talent tab for classID %d (character: %s, GUID: %d) was not found.', __METHOD__, self::GetClassID(), self::GetName(), self::GetGUID());
@@ -1491,9 +1536,9 @@ Class WoW_Characters /*implements Interface_Characters*/ {
             $specsData[$i]['roles'] = $roles;
             if($specsData[$i]['treeOne'] == 0 && $specsData[$i]['treeTwo'] == 0 && $specsData[$i]['treeThree'] == 0) {
                 // have no talents
-                $talent_spec[$i]['icon'] = 'inv_misc_questionmark';
-                $talent_spec[$i]['prim'] = WoW_Locale::GetString('template_no_talents');
-                $talent_spec[$i]['roles'] = null;
+                $specsData[$i]['icon'] = 'inv_misc_questionmark';
+                $specsData[$i]['prim'] = WoW_Locale::GetString('template_no_talents');
+                $specsData[$i]['roles'] = null;
             }
         }
         self::$fullTalentData = array(
@@ -1501,6 +1546,23 @@ Class WoW_Characters /*implements Interface_Characters*/ {
             'specsData' => $specsData
         );
         return self::$fullTalentData;
+    }
+    
+    private static function GetTalentPointsForLevel() {
+        $base_level = self::GetClassID() == CLASS_DK ? 55 : 9;
+        if(self::GetClassID() == CLASS_DK && self::GetLevel() > 60) {
+            $base_level == 9; // Quest-bonus talent points for DK's quest chain.
+        }
+        $base_talent = self::GetLevel() <= $base_level ? 0 : self::GetLevel() - $base_level;
+        return $base_talent <= MAX_TALENT_POINTS ? $base_talent : MAX_TALENT_POINTS;
+    }
+    
+    private static function GetFreeTalentPoints() {
+        if(!self::$fullTalentData || !isset(self::$fullTalentData['specsData'][self::GetActiveSpec()])) {
+            return MAX_TALENT_POINTS;
+        }
+        $spent_points = self::$fullTalentData['specsData'][self::GetActiveSpec()]['treeOne'] + self::$fullTalentData['specsData'][self::GetActiveSpec()]['treeTwo'] + self::$fullTalentData['specsData'][self::GetActiveSpec()]['treeThree'];
+        return self::GetTalentPointsForLevel() - $spent_points;
     }
     
     /************************
@@ -2376,6 +2438,105 @@ Class WoW_Characters /*implements Interface_Characters*/ {
         return self::$professions;
     }
     
+    /************************
+           Audit system
+    ************************/
+    
+    public static function AuditCharacter($rebuild = false) {
+        if(!self::IsCorrect()) {
+            WoW_Log::WriteError('%s : character was not found.', __METHOD__);
+            return false;
+        }
+        self::PerformAudit($rebuild);
+    }
+    
+    private static function PerformAudit($rebuild = false) {
+        // Empty glyphs
+        $empty_glyphs = 6;
+        switch(self::$m_server) {
+            default:
+            case SERVER_MANGOS:
+                $character_glyphs = DB::Characters()->select("SELECT `slot`, `glyph` FROM `character_glyphs` WHERE `guid` = %d AND `spec` = %d", self::GetGUID(), self::GetActiveSpec());
+                if(is_array($character_glyphs)) {
+                    foreach($character_glyphs as $glyph) {
+                        if($glyph['slot'] < 6 && $glyph['glyph'] > 0) {
+                            --$empty_glyphs;
+                        }
+                    }
+                }
+                break;
+            case SERVER_TRINITY:
+                $character_glyphs = DB::Characters()->select("SELECT `glyph1`, `glyph2`, `glyph3`, `glyph4`, `glyph5`, `glyph6` FROM `character_glyphs` WHERE `guid` = %d AND `spec` = %d", self::GetGUID(), self::GetActiveSpec());
+                if(is_array($character_glyphs)) {
+                    foreach($character_glyphs as $glyph) {
+                        for($i = 1; $i < 7; ++$i) {
+                            if($glyph['glyph' . $i] > 0) {
+                                --$empty_glyphs;
+                            }
+                        }
+                    }
+                }
+                break;
+        }
+        self::UpdateAudit(AUDIT_TYPE_EMPTY_GLYPH_SLOT, $empty_glyphs);
+        // Unspent talent points.
+        self::UpdateAudit(AUDIT_TYPE_UNSPENT_TALENT_POINTS, self::GetFreeTalentPoints());
+        if(self::IsInventoryLoaded()) {
+            // Inventory check
+            foreach(self::$m_items as $item) {
+                if(!$item) {
+                    continue;
+                }
+                // Non optimal armor
+                if(!self::IsOptimalArmorForClass($item->GetEntry())) {
+                    self::UpdateAudit(AUDIT_TYPE_NONOPTIMAL_ARMOR, $item->GetEntry());
+                }
+                // Unenchanted items
+                if($item->GetEnchantmentId() == 0 && !in_array($item->GetSlot(), array(INV_SHIRT, INV_RANGED_RELIC, INV_TABARD, INV_TRINKET_1, INV_TRINKET_2, INV_TYPE_NECK, INV_OFF_HAND, INV_RING_1, INV_RING_2))) {
+                    if($item->GetSlot() != INV_BELT) {
+                        self::UpdateAudit(AUDIT_TYPE_UNENCHANTED_ITEM, $item->GetEntry());
+                    }
+                    
+                }
+                // Missing belt buckle
+                if($item->GetSlot() == INV_BELT && !$item->HasBonusEnchantmentSlot()) {
+                    self::UpdateAudit(AUDIT_TYPE_MISSING_BELT_BUCKLE, true);
+                }
+                // Unused profession perks
+                switch($item->GetSlot()) {
+                    case INV_RING_1:
+                    case INV_RING_2:
+                        if(self::HasProfessionSkill(SKILL_ENCHANTING) && self::GetSkillValue(SKILL_ENCHANTING) >= 360 && $item->GetEnchantmentId() == 0) {
+                            self::UpdateAudit(AUDIT_TYPE_UNUSED_PROFESSION_PERK, array($item->GetSlot(), $item->GetEntry(), SKILL_ENCHANTING));
+                        }
+                        break;
+                    case INV_BRACERS:
+                    case INV_BELT:
+                        if(self::HasProfessionSkill(SKILL_BLACKSMITHING) && self::GetSkillValue(SKILL_BLACKSMITHING) >= 400 && !$item->HasBonusEnchantmentSlot()) {
+                            self::UpdateAudit(AUDIT_TYPE_UNUSED_PROFESSION_PERK, array($item->GetSlot(), $item->GetEntry(), SKILL_BLACKSMITHING));
+                        }
+                        break;
+                    }
+                // Empty sockets
+                $sockets_count = WoW_Items::GetTemplateSocketsCount($item->GetEntry());
+                if($item->HasBonusEnchantmentSlot()) {
+                    ++$sockets_count; // Include blacksmithing bonus slot
+                }
+                for($i = 1; $i < 4; ++$i) {
+                    if($item->GetSocketInfo($i, true) == 0) {
+                        if($i <= $sockets_count) {
+                            self::UpdateAudit(AUDIT_TYPE_EMPTY_SOCKET, $item->GetEntry());
+                        }
+                    }
+                    else {
+                        self::UpdateAudit(AUDIT_TYPE_USED_GEMS, $item->GetSocketInfo($i));
+                    }
+                }
+            }
+        }
+        return true;
+    }
+    
     private static function UpdateStatsBonuses($stat, $addValue) {
         if(!isset(self::$stats_bonuses[$stat])) {
             self::$stats_bonuses[$stat] = 0;
@@ -2393,22 +2554,68 @@ Class WoW_Characters /*implements Interface_Characters*/ {
     }
     
     private static function UpdateAudit($type, $value) {
-        self::$audit[$type] = $value;
+        if($type == AUDIT_TYPE_NONE || $type >= MAX_AUDIT_TYPE) {
+            WoW_Log::WriteError('%s : wrong audit type: %d', __METHOD__, $type);
+            return false;
+        }
+        switch($type) {
+            case AUDIT_TYPE_EMPTY_GLYPH_SLOT:
+            case AUDIT_TYPE_UNSPENT_TALENT_POINTS:
+            case AUDIT_TYPE_MISSING_BELT_BUCKLE:
+                self::$audit[$type] = $value;
+                break;
+            case AUDIT_TYPE_UNUSED_PROFESSION_PERK:
+            case AUDIT_TYPE_NONOPTIMAL_ARMOR:
+            case AUDIT_TYPE_UNENCHANTED_ITEM:
+                /*
+                    AUDIT_TYPE_UNUSED_PROFESSION_PERK:
+                        value[0] = item slot
+                        value[1] = item entry
+                        value[2] = skill ID
+                    AUDIT_TYPE_NONOPTIMAL_ARMOR:
+                    AUDIT_TYPE_UNENCHANTED_ITEM:
+                        value = item entry
+                */
+                self::$audit[$type][] = $value;
+                break;
+            case AUDIT_TYPE_EMPTY_SOCKET:
+                if(!isset(self::$audit[$type][$value])) {
+                    self::$audit[$type][$value] = 0;
+                }
+                ++self::$audit[$type][$value];
+                break;
+            case AUDIT_TYPE_STAT_BONUS:
+                if(!isset(self::$audit[$type][$value[0]])) {
+                    self::$audit[$type][$value[0]] = 0;
+                }
+                self::$audit[$type][$value[0]] += $value[1];
+                break;
+            case AUDIT_TYPE_USED_GEMS:
+                if(!isset(self::$audit[$type][$value['enchant_id']])) {
+                    self::$audit[$type][$value['enchant_id']] = $value;
+                    self::$audit[$type][$value['enchant_id']]['counter'] = 0;
+                }
+                ++self::$audit[$type][$value['enchant_id']]['counter'];
+                $matches = array();
+                if(preg_match_all('/\+(.+?) /i', self::$audit[$type][$value['enchant_id']]['enchant'], $matches)) {
+                    for($i = 0; $i < count($matches[1]); ++$i) {
+                        if($matches[1][$i] > 0) {
+                            self::$audit[$type][$value['enchant_id']]['overall_bonus_' . $i] = $matches[1][$i] * self::$audit[$type][$value['enchant_id']]['counter'];
+                        }
+                    }
+                }
+                break;
+        }
+        
         return true;
     }
     
     public static function GetAudit() {
-        //TODO: Implement audit feature
         return self::$audit;
     }
     
     private static function GetAuditInfo($type) {
         return isset(self::$audit[$type]) ? self::$audit[$type] : false;
-    }
-    
-    private static function HandleAudit() {
-        //TODO: Implement audit feature
-        return true;
     }
 }
 ?>

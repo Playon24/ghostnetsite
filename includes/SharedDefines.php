@@ -19,48 +19,48 @@
  **/
 
 /* Classes */
-define('CLASS_WARRIOR', 0x01);
-define('CLASS_PALADIN', 0x02);
-define('CLASS_HUNTER',  0x03);
-define('CLASS_ROGUE',   0x04);
-define('CLASS_PRIEST',  0x05);
-define('CLASS_DK',      0x06);
-define('CLASS_SHAMAN',  0x07);
-define('CLASS_MAGE',    0x08);
-define('CLASS_WARLOCK', 0x09);
-define('CLASS_DRUID',   0x0B);
-define('MAX_CLASSES',   0x0C);
+define('CLASS_WARRIOR', 1);
+define('CLASS_PALADIN', 2);
+define('CLASS_HUNTER',  3);
+define('CLASS_ROGUE',   4);
+define('CLASS_PRIEST',  5);
+define('CLASS_DK',      6);
+define('CLASS_SHAMAN',  7);
+define('CLASS_MAGE',    8);
+define('CLASS_WARLOCK', 9);
+define('CLASS_DRUID',   11);
+define('MAX_CLASSES',   12);
 
 /* Races */
-define('RACE_HUMAN',    0x01);
-define('RACE_ORC',      0x02);
-define('RACE_DWARF',    0x03);
-define('RACE_NIGHTELF', 0x04);
-define('RACE_UNDEAD',   0x05);
-define('RACE_TAUREN',   0x06);
-define('RACE_GNOME',    0x07);
-define('RACE_TROLL',    0x08);
-define('RACE_BLOODELF', 0x0A);
-define('RACE_DRAENEI',  0x0B);
-define('MAX_RACES',     0x0C);
+define('RACE_HUMAN',    1);
+define('RACE_ORC',      2);
+define('RACE_DWARF',    3);
+define('RACE_NIGHTELF', 4);
+define('RACE_UNDEAD',   5);
+define('RACE_TAUREN',   6);
+define('RACE_GNOME',    7);
+define('RACE_TROLL',    8);
+define('RACE_BLOODELF', 10);
+define('RACE_DRAENEI',  11);
+define('MAX_RACES',     12);
 
 /* Factions */
-define('FACTION_HORDE', 0);
+define('FACTION_HORDE',    0);
 define('FACTION_ALLIANCE', 1);
 
 /* Genders */
-define('GENDER_MALE', 0);
+define('GENDER_MALE',   0);
 define('GENDER_FEMALE', 1);
 
 /* Repuation Ranks */
-define('REP_HATED', 0);
-define('REP_HOSTILE', 1);
+define('REP_HATED',      0);
+define('REP_HOSTILE',    1);
 define('REP_UNFRIENDLY', 2);
-define('REP_NEUTRAL', 3);
-define('REP_FRIENDLY', 4);
-define('REP_HONORED', 5);
-define('REP_REVERED', 6);
-define('REP_EXALTED', 7);
+define('REP_NEUTRAL',    3);
+define('REP_FRIENDLY',   4);
+define('REP_HONORED',    5);
+define('REP_REVERED',    6);
+define('REP_EXALTED',    7);
 
 define('REPUTATION_CAP', 42999);
 define('REPUTATION_BOTTOM', -42000);
@@ -88,26 +88,6 @@ define('ACHIEVEMENTS_CATEGORY_PROFESSIONS', 169);
 define('ACHIEVEMENTS_CATEGORY_REPUTATION',  201);
 define('ACHIEVEMENTS_CATEGORY_EVENTS',      155);
 define('ACHIEVEMENTS_CATEGORY_FEATS',       81);
-
-define('ACHIEVEMENTS_COUNT_SUMMARY',     1058);
-define('ACHIEVEMENTS_COUNT_GENERAL',     54);
-define('ACHIEVEMENTS_COUNT_QUESTS',      49);
-define('ACHIEVEMENTS_COUNT_EXPLORATION', 70);
-define('ACHIEVEMENTS_COUNT_PVP',         166);
-define('ACHIEVEMENTS_COUNT_DUNGEONS',    458);
-define('ACHIEVEMENTS_COUNT_PROFESSIONS', 75);
-define('ACHIEVEMENTS_COUNT_REPUTATION',  45);
-define('ACHIEVEMENTS_COUNT_EVENTS',      141);
-
-define('ACHIEVEMENT_POINTS_SUMMARY',     11675);
-define('ACHIEVEMENT_POINTS_GENERAL',     570);
-define('ACHIEVEMENT_POINTS_QUESTS',      530);
-define('ACHIEVEMENT_POINTS_EXPLORATION', 830);
-define('ACHIEVEMENT_POINTS_PVP',         1930);
-define('ACHIEVEMENT_POINTS_DUNGEONS',    4955);
-define('ACHIEVEMENT_POINTS_PROFESSIONS', 760);
-define('ACHIEVEMENT_POINTS_REPUTATION',  560);
-define('ACHIEVEMENT_POINTS_EVENTS',      1540);
 
 /* SkillType */
 define('SKILL_NONE', 0);
@@ -275,12 +255,12 @@ define('FACTION_FLAG_INACTIVE', 0x20);        // player controlled, state
 define('FACTION_FLAG_RIVAL', 0x40);           // flag for the two competing outland factions
 
 /* Stats */
-define('STAT_STRENGTH', 0);
-define('STAT_AGILITY', 1);
-define('STAT_STAMINA', 2);
+define('STAT_STRENGTH',  0);
+define('STAT_AGILITY',   1);
+define('STAT_STAMINA',   2);
 define('STAT_INTELLECT', 3);
-define('STAT_SPIRIT', 4);
-define('MAX_STATS', 5);
+define('STAT_SPIRIT',    4);
+define('MAX_STATS',      5);
 
 define('ATTACK_POWER_MAGIC_NUMBER', 14);
 define('BLOCK_PER_STRENGTH', 0.5);
@@ -364,6 +344,7 @@ define('EQUIPMENT_SLOT_OFFHAND', 16);
 define('EQUIPMENT_SLOT_RANGED', 17);
 define('EQUIPMENT_SLOT_TABARD', 18);
 define('EQUIPMENT_SLOT_END', 19);
+
 define('INVENTORY_SLOT_BAG_START', 19);
 define('INVENTORY_SLOT_BAG_END', 23);
 
@@ -374,7 +355,7 @@ define('SOCK_ENCHANTMENT_SLOT',  2);
 define('SOCK_ENCHANTMENT_SLOT_2',  3);
 define('SOCK_ENCHANTMENT_SLOT_3',  4);
 define('BONUS_ENCHANTMENT_SLOT',  5);
-define('PRISMATIC_ENCHANTMENT_SLOT',  6);                    // added at apply special permanent enchantment
+define('PRISMATIC_ENCHANTMENT_SLOT',  6);                 // added at apply special permanent enchantment
 define('MAX_INSPECTED_ENCHANTMENT_SLOT',  7);
 
 define('PROP_ENCHANTMENT_SLOT_0',  7);                    // used with RandomSuffix
@@ -475,9 +456,9 @@ define('ITEM_MOD_HASTE_RATING', 36);
 define('ITEM_MOD_EXPERTISE_RATING', 37);
 define('ITEM_MOD_ATTACK_POWER', 38);
 define('ITEM_MOD_RANGED_ATTACK_POWER', 39);
-define('ITEM_MOD_FERAL_ATTACK_POWER', 40);//deprecated
-define('ITEM_MOD_SPELL_HEALING_DONE', 41);//deprecated
-define('ITEM_MOD_SPELL_DAMAGE_DONE', 42);//deprecated
+define('ITEM_MOD_FERAL_ATTACK_POWER', 40); //deprecated
+define('ITEM_MOD_SPELL_HEALING_DONE', 41); //deprecated
+define('ITEM_MOD_SPELL_DAMAGE_DONE', 42);  //deprecated
 define('ITEM_MOD_MANA_REGENERATION', 43);
 define('ITEM_MOD_ARMOR_PENETRATION_RATING', 44);
 define('ITEM_MOD_SPELL_POWER', 45);
@@ -621,6 +602,7 @@ define('TOTAL_PCT', 3);
 define('MODIFIER_TYPE_END', 4);
 
 /* Powers */
+define('POWER_HEALTH', 0xFFFFFFFE);
 define('POWER_MANA', 0);
 define('POWER_RAGE', 1);
 define('POWER_FOCUS', 2);
@@ -628,7 +610,6 @@ define('POWER_ENERGY', 3);
 define('POWER_HAPPINESS', 4);
 define('POWER_RUNE', 5);
 define('POWER_RUNIC_POWER', 6);
-define('POWER_HEALTH', 0xFFFFFFFE);
 define('MAX_POWERS', 7);
 
 /* ItemFlags */
@@ -848,6 +829,8 @@ define('GUILD_BANK_RIGHT_UPDATE_TEXT', 0x04);
 define('GUILD_BANK_RIGHT_DEPOSIT_ITEM', GUILD_BANK_RIGHT_VIEW_TAB | GUILD_BANK_RIGHT_PUT_ITEM);
 define('GUILD_BANK_RIGHT_FULL', 0xFF);
 
+define('MAX_TALENT_POINTS', 71); // Wrath
+
 /** Bookmarks and selected characters **/
 define('MAX_BOOKMARKS_COUNT', 60);
 define('MAX_SELECTED_CHARACTERS_COUNT', 5);
@@ -891,9 +874,11 @@ define('IN_WEEKS', 7 * IN_DAYS);
 define('IN_MONTHS', 30 * IN_DAYS);
 
 /** Class Roles **/
-define('ROLE_MELEE', 1);
+define('ROLE_MELEE',  1);
 define('ROLE_RANGED', 2);
 define('ROLE_CASTER', 3);
+define('ROLE_HEALER', 4);
+define('ROLE_TANK',   5);
 
 /** Professions **/
 define('MAX_PROFESSION_SKILL_VALUE', 450); // Wrath: 450 (+10 Racial Bonus), Cata: 525 (+10 Racial Bonus)
@@ -904,4 +889,18 @@ define('LOCALE_EN', 0);
 define('LOCALE_ES', 6);
 define('LOCALE_FR', 2);
 define('LOCALE_RU', 8);
+
+/** Character audit **/
+define('AUDIT_TYPE_NONE', 0);
+define('AUDIT_TYPE_EMPTY_GLYPH_SLOT', 1);
+define('AUDIT_TYPE_UNSPENT_TALENT_POINTS', 2);
+define('AUDIT_TYPE_UNENCHANTED_ITEM', 3);
+define('AUDIT_TYPE_EMPTY_SOCKET', 4);
+define('AUDIT_TYPE_NONOPTIMAL_ARMOR', 5);
+define('AUDIT_TYPE_MISSING_BELT_BUCKLE', 6);
+define('AUDIT_TYPE_UNUSED_PROFESSION_PERK', 7);
+define('AUDIT_TYPE_NO_REFORGED_ITEMS', 8);
+define('AUDIT_TYPE_USED_GEMS', 9);
+define('AUDIT_TYPE_STAT_BONUS', 10);
+define('MAX_AUDIT_TYPE', 11);
 ?>
