@@ -2489,12 +2489,12 @@ Class WoW_Characters /*implements Interface_Characters*/ {
                 }
                 // Non optimal armor
                 if(!self::IsOptimalArmorForClass($item->GetEntry())) {
-                    self::UpdateAudit(AUDIT_TYPE_NONOPTIMAL_ARMOR, $item->GetEntry());
+                    self::UpdateAudit(AUDIT_TYPE_NONOPTIMAL_ARMOR, array($item->GetSlot(), $item->GetEntry()));
                 }
                 // Unenchanted items
                 if($item->GetEnchantmentId() == 0 && !in_array($item->GetSlot(), array(INV_SHIRT, INV_RANGED_RELIC, INV_TABARD, INV_TRINKET_1, INV_TRINKET_2, INV_TYPE_NECK, INV_OFF_HAND, INV_RING_1, INV_RING_2))) {
                     if($item->GetSlot() != INV_BELT) {
-                        self::UpdateAudit(AUDIT_TYPE_UNENCHANTED_ITEM, $item->GetEntry());
+                        self::UpdateAudit(AUDIT_TYPE_UNENCHANTED_ITEM, array($item->GetSlot(), $item->GetEntry()));
                     }
                     
                 }
@@ -2525,7 +2525,7 @@ Class WoW_Characters /*implements Interface_Characters*/ {
                 for($i = 1; $i < 4; ++$i) {
                     if($item->GetSocketInfo($i, true) == 0) {
                         if($i <= $sockets_count) {
-                            self::UpdateAudit(AUDIT_TYPE_EMPTY_SOCKET, $item->GetEntry());
+                            self::UpdateAudit(AUDIT_TYPE_EMPTY_SOCKET, array($item->GetEntry(), $item->GetSlot()));
                         }
                     }
                     else {
@@ -2574,15 +2574,19 @@ Class WoW_Characters /*implements Interface_Characters*/ {
                         value[2] = skill ID
                     AUDIT_TYPE_NONOPTIMAL_ARMOR:
                     AUDIT_TYPE_UNENCHANTED_ITEM:
-                        value = item entry
+                        value[0] = item slot
+                        value[1] = item entry
                 */
                 self::$audit[$type][] = $value;
                 break;
             case AUDIT_TYPE_EMPTY_SOCKET:
-                if(!isset(self::$audit[$type][$value])) {
-                    self::$audit[$type][$value] = 0;
+                if(!isset(self::$audit[$type][$value[0]])) {
+                    self::$audit[$type][$value[0]] = array(
+                        'count' => 0,
+                        'slot' => $value[1]
+                    );
                 }
-                ++self::$audit[$type][$value];
+                ++self::$audit[$type][$value[0]]['count'];
                 break;
             case AUDIT_TYPE_STAT_BONUS:
                 if(!isset(self::$audit[$type][$value[0]])) {
@@ -2606,11 +2610,13 @@ Class WoW_Characters /*implements Interface_Characters*/ {
                 }
                 break;
         }
-        
         return true;
     }
     
     public static function GetAudit() {
+        if(!self::$audit || !is_array(self::$audit)) {
+            self::PerformAudit();
+        }
         return self::$audit;
     }
     

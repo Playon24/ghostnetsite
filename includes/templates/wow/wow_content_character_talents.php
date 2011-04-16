@@ -24,12 +24,8 @@ World of Warcraft
 </li>
 </ol>
 </div>
-<div class="content-bot">	
-
-	
-
-
-	<div id="profile-wrapper" class="profile-wrapper profile-wrapper-horde">
+<div class="content-bot">
+	<div id="profile-wrapper" class="profile-wrapper profile-wrapper-<?php echo WoW_Characters::GetFactionName(); ?>">
 
 		<div class="profile-sidebar-anchor">
 			<div class="profile-sidebar-outer">

@@ -410,11 +410,10 @@ foreach($allowed_tables as $table) {
 $sql_dump_text .= "\n\n/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;";
 if($_GET['do'] == 'save') {
     file_put_contents('../sql/wowcs_r' . (WOW_REVISION + 1) . '.sql', $sql_dump_text);
-    echo 'File was saved!';
+    echo 'File was successfuly saved!';
 }
 elseif($_GET['do'] == 'show') {
     echo $sql_dump_text;
 }
 unset($sql_dump_text);
-exit;
 ?>
