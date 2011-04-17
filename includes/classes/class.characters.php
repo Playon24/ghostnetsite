@@ -1490,6 +1490,9 @@ Class WoW_Characters /*implements Interface_Characters*/ {
             WoW_Log::WriteError('%s : character was not found.', __METHOD__);
             return false;
         }
+        if(self::$fullTalentData && is_array(self::$fullTalentData)) {
+            return self::$fullTalentData;
+        }
         self::HandleTalents(true);
         // Get specs names/icons
         $current_spec = array();
@@ -1668,6 +1671,7 @@ Class WoW_Characters /*implements Interface_Characters*/ {
         self::CalculateCharacterStamina($recalculate);
         self::CalculateCharacterIntellect($recalculate);
         self::CalculateCharacterSpirit($recalculate);
+        self::CalculateCharacterMastery($recalculate);
         self::UpdateStatsInfo('base_stats', true);
         return true;
     }
@@ -1762,6 +1766,14 @@ Class WoW_Characters /*implements Interface_Characters*/ {
             'effective'   => self::GetStat(STAT_SPIRIT),
             'healthRegen' => $healthRegen,
             'manaRegen'   => $manaRegen
+        );
+        return true;
+    }
+    
+    private static function CalculateCharacterMastery($recalculate = false) {
+        self::$stats_holder['base_stats']['mastery'] = array(
+            'base'      => 0,
+            'effective' => 0.0,
         );
         return true;
     }
@@ -2365,7 +2377,6 @@ Class WoW_Characters /*implements Interface_Characters*/ {
             case CLASS_DK:
                 self::$role = ROLE_MELEE;
                 return ROLE_MELEE;
-                break;
             case CLASS_PALADIN:
             case CLASS_DRUID:
             case CLASS_SHAMAN:
@@ -2376,26 +2387,31 @@ Class WoW_Characters /*implements Interface_Characters*/ {
                     }
                     if($spec['treeOne'] > $spec['treeTwo'] && $spec['treeOne'] > $spec['treeThree']) {
                         if(self::GetClassID() == CLASS_PALADIN) {
-                            self::$role = ROLE_CASTER;
-                            return ROLE_HEALER; // Paladin: Holy
+                            self::$role = ROLE_HEALER;
+                            return self::$role; // Paladin: Holy
                         }
                         else {
                             self::$role = ROLE_CASTER;
-                            return ROLE_CASTER; // Druid: Balance, Shaman: Elemental
+                            return self::$role; // Druid: Balance, Shaman: Elemental
                         }
                     }
                     elseif($spec['treeTwo'] > $spec['treeOne'] && $spec['treeTwo'] > $spec['treeThree']) {
-                        self::$role = ROLE_MELEE;
-                        return ROLE_MELEE; // Paladin: Protection, Druid: Feral, Shaman: Enhancemenet
+                        if(self::GetClassID() == CLASS_PALADIN) {
+                            self::$role = ROLE_TANK;// Paladin: Protection
+                        }
+                        else {
+                            self::$role = ROLE_MELEE; //Druid: Feral, Shaman: Enhancemenet
+                        }
+                        return self::$role;
                     }
                     else {
                         if(self::GetClassID() == CLASS_PALADIN) {
                             self::$role = ROLE_MELEE;
-                            return ROLE_MELEE; // Retribution
+                            return self::$role; // Retribution
                         }
                         else {
                             self::$role = ROLE_HEALER;
-                            return ROLE_HEALER; // Shaman, Druid: Restoration
+                            return self::$role; // Shaman, Druid: Restoration
                         }
                     }
                 }
@@ -2404,12 +2420,12 @@ Class WoW_Characters /*implements Interface_Characters*/ {
                 foreach(self::$fullTalentData['specsData'] as $spec) {
                     if($spec['active'] == 1) {
                         if($spec['treeThree'] > $spec['treeOne'] && $spec['treeThree'] > $spec['treeTwo']) {
-                            self::$role = ROLE_HEALER;
-                            return ROLE_HEALER;
+                            self::$role = ROLE_CASTER;
+                            return self::$role;
                         }
                         else {
-                            self::$role = ROLE_CASTER;
-                            return ROLE_CASTER;
+                            self::$role = ROLE_HEALER;
+                            return self::$role;
                         }
                     }
                 }
@@ -2417,13 +2433,250 @@ Class WoW_Characters /*implements Interface_Characters*/ {
             case CLASS_MAGE:
             case CLASS_WARLOCK:
                 self::$role = ROLE_CASTER;
-                return ROLE_CASTER;
+                return self::$role;
                 break;
             case CLASS_HUNTER:
                 self::$role = ROLE_RANGED;
-                return ROLE_RANGED;
+                return self::$role;
                 break;
         }
+    }
+    
+    public static function GetAppropriateStatsForClassAndSpec() {
+        $stats_data = array();
+        switch(self::GetRole()) {
+            case ROLE_TANK:
+                $stats_data = array(
+                    'main' => array(
+                        array(
+                            'type' => 'stat_stamina',
+                            'name' => 'stamina',
+                            'stat' => self::$stats_holder['base_stats']['stamina']['effective']
+                        ),
+                        array(
+                            'type' => 'stat_strength',
+                            'name' => 'strength',
+                            'stat' => self::$stats_holder['base_stats']['strength']['effective']
+                        ),
+                        array(
+                            'type' => 'stat_mastery',
+                            'name' => 'mastery',
+                            'stat' => self::$stats_holder['base_stats']['mastery']['effective']
+                        )
+                    ),
+                    'advanced' => array(
+                        array(
+                            'type' => 'stat_armor',
+                            'name' => 'armor',
+                            'stat' => self::$stats_holder['defense']['armor']['effective']
+                        ),
+                        array(
+                            'type' => 'stat_dodge',
+                            'name' => 'dodge',
+                            'stat' => self::$stats_holder['defense']['dodge']['percent'] . '%'
+                        ),
+                        array(
+                            'type' => 'stat_parry',
+                            'name' => 'parry',
+                            'stat' => self::$stats_holder['defense']['parry']['percent'] . '%'
+                        ),
+                        array(
+                            'type' => 'stat_block',
+                            'name' => 'block',
+                            'stat' => self::$stats_holder['defense']['block']['percent'] . '%'
+                        ),
+                        array(
+                            'type' => 'stat_expertise',
+                            'name' => 'expertise',
+                            'stat' => self::$stats_holder['melee']['expertise_rating']['value']
+                        )
+                    )
+                );
+                break;
+            case ROLE_CASTER:
+                $stats_data = array(
+                    'main' => array(
+                        array(
+                            'type' => 'stat_intellect',
+                            'name' => 'intellect',
+                            'stat' => self::$stats_holder['base_stats']['intellect']['effective']
+                        ),
+                        array(
+                            'type' => 'stat_stamina',
+                            'name' => 'stamina',
+                            'stat' => self::$stats_holder['base_stats']['stamina']['effective']
+                        ),
+                        array(
+                            'type' => 'stat_mastery',
+                            'name' => 'mastery',
+                            'stat' => self::$stats_holder['base_stats']['mastery']['effective']
+                        )
+                    ),
+                    'advanced' => array(
+                        array(
+                            'type' => 'stat_spell_power',
+                            'name' => 'spellpower',
+                            'stat' => self::$stats_holder['spell']['power']['value']
+                        ),
+                        array(
+                            'type' => 'stat_spell_haste',
+                            'name' => 'spellhaste',
+                            'stat' => self::$stats_holder['spell']['haste_rating']['hastePercent'] . '%'
+                        ),
+                        array(
+                            'type' => 'stat_hit',
+                            'name' => 'spellhit',
+                            'stat' => '+' . self::$stats_holder['spell']['hit_rating']['increasedHitPercent'] . '%'
+                        ),
+                        array(
+                            'type' => 'stat_crit',
+                            'name' => 'spellcrit',
+                            'stat' => self::$stats_holder['spell']['crit_rating']['value'] . '%'
+                        )
+                    )
+                );
+                break;
+            case ROLE_HEALER:
+                $stats_data = array(
+                    'main' => array(
+                        array(
+                            'type' => 'stat_intellect',
+                            'name' => 'intellect',
+                            'stat' => self::$stats_holder['base_stats']['intellect']['effective']
+                        ),
+                        array(
+                            'type' => 'stat_spirit',
+                            'name' => 'spirit',
+                            'stat' => self::$stats_holder['base_stats']['spirit']['effective']
+                        ),
+                        array(
+                            'type' => 'stat_stamina',
+                            'name' => 'stamina',
+                            'stat' => self::$stats_holder['base_stats']['stamina']['effective']
+                        ),
+                        array(
+                            'type' => 'stat_mastery',
+                            'name' => 'mastery',
+                            'stat' => self::$stats_holder['base_stats']['mastery']['effective']
+                        )
+                    ),
+                    'advanced' => array(
+                        array(
+                            'type' => 'stat_spell_power',
+                            'name' => 'spellpower',
+                            'stat' => self::$stats_holder['spell']['power']['value']
+                        ),
+                        array(
+                            'type' => 'stat_mana_regen',
+                            'name' => 'manaregen',
+                            'stat' => self::$stats_holder['spell']['mana_regen']['notCasting']
+                        ),
+                        array(
+                            'type' => 'stat_spell_haste',
+                            'name' => 'spellhaste',
+                            'stat' => self::$stats_holder['spell']['haste_rating']['hastePercent'] . '%'
+                        ),
+                        array(
+                            'type' => 'stat_crit',
+                            'name' => 'spellcrit',
+                            'stat' => self::$stats_holder['spell']['crit_rating']['value'] . '%'
+                        )
+                    )
+                );
+                break;
+            case ROLE_MELEE:
+                $stats_data = array(
+                    'main' => array(
+                        array(
+                            'type' => !in_array(self::GetClassID(), array(CLASS_ROGUE, CLASS_SHAMAN, CLASS_DRUID)) ? 'stat_strength' : 'stat_agility',
+                            'name' => !in_array(self::GetClassID(), array(CLASS_ROGUE, CLASS_SHAMAN, CLASS_DRUID)) ? 'strength' : 'agility',
+                            'stat' => !in_array(self::GetClassID(), array(CLASS_ROGUE, CLASS_SHAMAN, CLASS_DRUID)) ? self::$stats_holder['base_stats']['strength']['effective'] : self::$stats_holder['base_stats']['agility']['effective']
+                        ),
+                        array(
+                            'type' => 'stat_stamina',
+                            'name' => 'stamina',
+                            'stat' => self::$stats_holder['base_stats']['stamina']['effective']
+                        ),
+                        array(
+                            'type' => 'stat_mastery',
+                            'name' => 'mastery',
+                            'stat' => self::$stats_holder['base_stats']['mastery']['effective']
+                        )
+                    ),
+                    'advanced' => array(
+                        array(
+                            'type' => 'stat_attack_power',
+                            'name' => 'meleeattackpower',
+                            'stat' => self::$stats_holder['melee']['attack_power']['effective']
+                        ),
+                        array(
+                            'type' => 'stat_expertise',
+                            'name' => 'expertise',
+                            'stat' => self::$stats_holder['melee']['expertise_rating']['value']
+                        ),
+                        array(
+                            'type' => 'stat_haste',
+                            'name' => 'meleespeed',
+                            'stat' => self::$stats_holder['melee']['haste_rating']['value']
+                        ),
+                        array(
+                            'type' => 'stat_hit',
+                            'name' => 'meleehit',
+                            'stat' => self::$stats_holder['melee']['hit_rating']['increasedHitPercent'] . '%'
+                        ),
+                        array(
+                            'type' => 'stat_crit',
+                            'name' => 'meleecrit',
+                            'stat' => self::$stats_holder['melee']['crit_rating']['percent'] . '%'
+                        )
+                    )
+                );
+                break;
+            case ROLE_RANGED:
+                $stats_data = array(
+                    'main' => array(
+                        array(
+                            'type' => 'stat_agility',
+                            'name' => 'agility',
+                            'stat' => self::$stats_holder['base_stats']['agility']['effective']
+                        ),
+                        array(
+                            'type' => 'stat_stamina',
+                            'name' => 'stamina',
+                            'stat' => self::$stats_holder['base_stats']['stamina']['effective']
+                        ),
+                        array(
+                            'type' => 'stat_mastery',
+                            'name' => 'mastery',
+                            'stat' => self::$stats_holder['base_stats']['mastery']['effective']
+                        )
+                    ),
+                    'advanced' => array(
+                        array(
+                            'type' => 'stat_attack_power',
+                            'name' => 'rangedattackpower',
+                            'stat' => self::$stats_holder['ranged']['attack_power']['effective']
+                        ),
+                        array(
+                            'type' => 'stat_haste',
+                            'name' => 'rangedspeed',
+                            'stat' => self::$stats_holder['ranged']['haste_rating']['value']
+                        ),
+                        array(
+                            'type' => 'stat_hit',
+                            'name' => 'rangedhit',
+                            'stat' => self::$stats_holder['melee']['hit_rating']['increasedHitPercent'] . '%'
+                        ),
+                        array(
+                            'type' => 'stat_crit',
+                            'name' => 'rangedcrit',
+                            'stat' => self::$stats_holder['melee']['crit_rating']['percent'] . '%'
+                        )
+                    )
+                );
+                break;
+        }
+        return $stats_data;
     }
     
     public static function GetProfessions() {
@@ -2492,7 +2745,7 @@ Class WoW_Characters /*implements Interface_Characters*/ {
                     self::UpdateAudit(AUDIT_TYPE_NONOPTIMAL_ARMOR, array($item->GetSlot(), $item->GetEntry()));
                 }
                 // Unenchanted items
-                if($item->GetEnchantmentId() == 0 && !in_array($item->GetSlot(), array(INV_SHIRT, INV_RANGED_RELIC, INV_TABARD, INV_TRINKET_1, INV_TRINKET_2, INV_TYPE_NECK, INV_OFF_HAND, INV_RING_1, INV_RING_2))) {
+                if($item->GetEnchantmentId() == 0 && !in_array($item->GetSlot(), array(INV_SHIRT, INV_RANGED_RELIC, INV_TABARD, INV_TRINKET_1, INV_TRINKET_2, INV_TYPE_NECK, INV_OFF_HAND, INV_RING_1, INV_RING_2, INV_NECK))) {
                     if($item->GetSlot() != INV_BELT) {
                         self::UpdateAudit(AUDIT_TYPE_UNENCHANTED_ITEM, array($item->GetSlot(), $item->GetEntry()));
                     }
@@ -2553,6 +2806,32 @@ Class WoW_Characters /*implements Interface_Characters*/ {
         return isset(self::$stats_bonuses[$stat]) ? self::$stats_bonuses[$stat] : 0;
     }
     
+    public static function IsAuditPassed() {
+        $passed = true;
+        if(self::$audit[AUDIT_TYPE_EMPTY_GLYPH_SLOT] > 0) {
+            $passed = false;
+        }
+        if(self::$audit[AUDIT_TYPE_UNSPENT_TALENT_POINTS] > 0) {
+            $passed = false;
+        }
+        if(isset(self::$audit[AUDIT_TYPE_MISSING_BELT_BUCKLE])) {
+            $passed = false;
+        }
+        if(isset(self::$audit[AUDIT_TYPE_UNUSED_PROFESSION_PERK][0])) {
+            $passed = false;
+        }
+        if(isset(self::$audit[AUDIT_TYPE_NONOPTIMAL_ARMOR][0])) {
+            $passed = false;
+        }
+        if(isset(self::$audit[AUDIT_TYPE_UNENCHANTED_ITEM][0])) {
+            $passed = false;
+        }
+        if(isset(self::$audit[AUDIT_TYPE_EMPTY_SOCKET][0])) {
+            $passed = false;
+        }
+        return $passed;
+    }
+    
     private static function UpdateAudit($type, $value) {
         if($type == AUDIT_TYPE_NONE || $type >= MAX_AUDIT_TYPE) {
             WoW_Log::WriteError('%s : wrong audit type: %d', __METHOD__, $type);
@@ -2604,6 +2883,7 @@ Class WoW_Characters /*implements Interface_Characters*/ {
                 if(preg_match_all('/\+(.+?) /i', self::$audit[$type][$value['enchant_id']]['enchant'], $matches)) {
                     for($i = 0; $i < count($matches[1]); ++$i) {
                         if($matches[1][$i] > 0) {
+                            self::$audit[$type][$value['enchant_id']]['default_values_' . $i] = $matches[0][$i];
                             self::$audit[$type][$value['enchant_id']]['overall_bonus_' . $i] = $matches[1][$i] * self::$audit[$type][$value['enchant_id']]['counter'];
                         }
                     }

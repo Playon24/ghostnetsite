@@ -903,4 +903,5 @@ define('AUDIT_TYPE_NO_REFORGED_ITEMS', 8);
 define('AUDIT_TYPE_USED_GEMS', 9);
 define('AUDIT_TYPE_STAT_BONUS', 10);
 define('MAX_AUDIT_TYPE', 11);
+define('BELT_BUCKLE_ID', 41611); // Eternal Belt Buckle for Wrath
 ?>

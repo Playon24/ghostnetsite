@@ -73,6 +73,11 @@ $WoW_Locale = array(
     'template_locale_fr' => 'Французский',
     'template_locale_ru' => 'Русский',
     
+    'armor_cloth' => 'Ткань',
+    'armor_leather' => 'Кожа',
+    'armor_mail' => 'Кольчуга',
+    'armor_plate' => 'Латы',
+    
     'template_search' => 'Поиск',
     'template_bn_search' => 'Поиск по Battle.net',
     'template_search_site' => 'Поиск в Оружейной, на форуме и т.д.',
@@ -451,5 +456,23 @@ $WoW_Locale = array(
     'template_character_pvp_rating_roster' => 'Рейтинг',
     'template_character_pvp_season' => 'Сезон',
     'template_character_pvp_week' => 'На этой неделе',
+    
+    'template_character_audit' => 'Осмотр персонажа',
+    'template_character_audit_help' => 'Что это?',
+    'template_character_audit_empty_glyph_slots' => '<li><span class="number">%d</span> пустые ячейки символов</li>',
+    'template_character_audit_unspent_talent_points' => '<li><span class="number">%d</span> неиспользованные очки талантов</li>',
+    'template_character_audit_unenchanted_items' => '<span class="number">%d</span> незачарованный предмет',
+    'template_character_audit_empty_sockets' => '<span class="number">%d</span> пустые гнезда в <span class="tip">предметах «%d»</span>',
+    'template_character_audit_nonop_armor' => '<span class="number">%d</span> предмет из неподходящего материала (не %s)',
+    'template_character_audit_passed' => 'Этот персонаж прошел проверку!',
+    'template_character_reforge' => 'Перековка',
+    'template_character_reforge_none' => 'Ни один предмет не был перекован.',
+    'template_gems_enchants_bonuses' => 'Бонус за чары / камень',
+    'template_used_gems' => 'Камни',
+    'template_character_audit_no_gems' => 'Экипировка этого персонажа не инкрустирована камнями.',
+    'template_character_audit_no_bonuses' => 'Нет бонусов.',
+    
+    'template_character_profile_other_stats' => 'Другое',
+    'template_character_profile_toggle_stats_all' => 'Показать все характеристики',
 );
 ?>

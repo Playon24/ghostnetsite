@@ -292,6 +292,8 @@ Class WoW_Item {
             $data['item'] = $gemData['gem'];
             $data['icon'] = WoW_Items::GetItemIcon($data['item']);
             $data['enchant'] = $gemData['text'];
+            $data['quality'] = DB::World()->selectCell("SELECT `Quality` FROM `item_template` WHERE `entry` = %d", $data['item']);
+            $data['name'] = WoW_Items::GetItemName($data['item']);
             $data['color'] = DB::Wow()->selectCell("SELECT `color` FROM `DBPREFIX_gemproperties` WHERE `spellitemenchantement`=%d", $socketInfo);
             $this->m_socketInfo[$num] = $data; // Is it neccessary?
             return $data;

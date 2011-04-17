@@ -73,6 +73,11 @@ $WoW_Locale = array(
     'template_locale_fr' => 'French',
     'template_locale_ru' => 'Russian',
     
+    'armor_cloth' => 'Cloth',
+    'armor_leather' => 'Leather',
+    'armor_mail' => 'Mail',
+    'armor_plate' => 'Plate',
+    
     'template_search' => 'Search',
     'template_bn_search' => 'Search Battle.net',
     'template_search_site' => 'Search the Armory, forums and more...',
@@ -451,5 +456,23 @@ $WoW_Locale = array(
     'template_character_pvp_rating_roster' => 'Rating',
     'template_character_pvp_season' => 'Season',
     'template_character_pvp_week' => 'This week',
+    
+    'template_character_audit' => 'Character Audit',
+    'template_character_audit_help' => 'What is this?',
+    'template_character_audit_empty_glyph_slots' => '<li><span class="number">%d</span> empty glyph slots</li>',
+    'template_character_audit_unspent_talent_points' => '<li><span class="number">%d</span> unspent talent points</li>',
+    'template_character_audit_unenchanted_items' => '<span class="number">%d</span> unenchanted items',
+    'template_character_audit_empty_sockets' => '<span class="number">%d</span> empty sockets in <span class="tip">%d items</span>',
+    'template_character_audit_nonop_armor' => '<span class="number">%d</span> non-optimal armour (not %s)',
+    'template_character_audit_passed' => 'This character passed the audit!',
+    'template_character_reforge' => 'Reforging',
+    'template_character_reforge_none' => 'No items have been reforged.',
+    'template_gems_enchants_bonuses' => 'Enchant/Gem Bonuses',
+    'template_used_gems' => 'Gems',
+    'template_character_audit_no_gems' => 'This character doesn’t use any gems.',
+    'template_character_audit_no_bonuses' => 'No bonuses were found.',
+    
+    'template_character_profile_other_stats' => 'Other',
+    'template_character_profile_toggle_stats_all' => 'Show all stats',
 );
 ?>

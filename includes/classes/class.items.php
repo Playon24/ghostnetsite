@@ -385,6 +385,8 @@ Class WoW_Items {
         $gem = DB::Wow()->selectRow("SELECT `text_%s` AS `text`, `gem` AS `item` FROM `DBPREFIX_enchantment` WHERE `id`=%d", WoW_Locale::GetLocale(), $socket);
         $gem['icon'] = self::GetItemIcon($gem['item']);
         $gem['color'] = DB::WoW()->selectCell("SELECT `color` FROM `DBPREFIX_gemproperties` WHERE `spellitemenchantement` = %d", $socket);
+        $gem['quality'] = DB::World()->selectRow("SELECT `Quality` FROM `item_template` WHERE `entry` = %d", $gem['item']);
+        $gem['name'] = self::GetItemName($gem['item']);
         return $gem;
     }
     

@@ -1,13 +1,7 @@
 <?php
-
 // Talents data
 $talents = WoW_Characters::GetTalentsData();
 $audit = WoW_Characters::GetAudit();
-echo '<!--
-';
-print_r($audit);
-echo '
--->';
 ?>
 <div id="content">
 <div class="content-top">
@@ -740,23 +734,27 @@ World of Warcraft
 
 					<div class="summary-middle-right">
 						<div class="summary-audit" id="summary-audit">
-							<div class="category-right"><span class="tip" id="summary-audit-whatisthis">Что это?</span></div>
-								<h3 class="category ">Осмотр персонажа</h3>
+							<div class="category-right"><span class="tip" id="summary-audit-whatisthis"><?php echo WoW_Locale::GetString('template_character_audit_help'); ?></span></div>
+								<h3 class="category "><?php echo WoW_Locale::GetString('template_character_audit'); ?></h3>
 
 							<div class="profile-box-simple">
 
 	<ul class="summary-audit-list">
     <?php
+    $empty_sockets_slots_js = '';
+    $unench_slots_js = '';
+    $unenchanted_items_js = '';
+    $nonop_armor_slots_js = '';
+    $empty_sockets_js = '';
     if(isset($audit[AUDIT_TYPE_EMPTY_GLYPH_SLOT]) && $audit[AUDIT_TYPE_EMPTY_GLYPH_SLOT] > 0) {
-        echo sprintf('<li><span class="number">%d</span> пустые ячейки символов</li>', $audit[AUDIT_TYPE_EMPTY_GLYPH_SLOT]);
+        echo sprintf(WoW_Locale::GetString('template_character_audit_empty_glyph_slots'), $audit[AUDIT_TYPE_EMPTY_GLYPH_SLOT]);
     }
     if(isset($audit[AUDIT_TYPE_UNSPENT_TALENT_POINTS]) && $audit[AUDIT_TYPE_UNSPENT_TALENT_POINTS] > 0) {
-        echo sprintf('<li><span class="number">%d</span> неиспользованные очки талантов</li>', $audit[AUDIT_TYPE_UNSPENT_TALENT_POINTS]);
+        echo sprintf(WoW_Locale::GetString('template_character_audit_unspent_talent_points'), $audit[AUDIT_TYPE_UNSPENT_TALENT_POINTS]);
     }
     if(isset($audit[AUDIT_TYPE_UNENCHANTED_ITEM]) && is_array($audit[AUDIT_TYPE_UNENCHANTED_ITEM])) {
         $unench_slots = '';
         $unench_slots_js_tpl = '"unenchantedItems": {%s},';
-        $unench_slots_js = '';
         $count_unech_items = count($audit[AUDIT_TYPE_UNENCHANTED_ITEM]);
         for($i = 0; $i < $count_unech_items; ++$i) {
             if($i) {
@@ -768,13 +766,12 @@ World of Warcraft
         }
         $unenchanted_items_js = sprintf($unench_slots_js_tpl, $unench_slots_js);
         echo sprintf('<li data-slots="%s">
-        <span class="tip"><span class="number">%d</span> незачарованный предмет</span>
-        </li>', $unench_slots, $count_unech_items);
+        <span class="tip">' . sprintf(WoW_Locale::GetString('template_character_audit_unenchanted_items'), $count_unech_items) . '</span>
+        </li>', $unench_slots);
     }
     if(isset($audit[AUDIT_TYPE_EMPTY_SOCKET]) && is_array($audit[AUDIT_TYPE_EMPTY_SOCKET])) {
         $empty_sockets_slots = '';
         $empty_sockets_slots_js_tpl = '"itemsWithEmptySockets": {%s},';
-        $empty_sockets_slots_js = '';
         $count_empty_sockets = 0;
         $i = 0;
         foreach($audit[AUDIT_TYPE_EMPTY_SOCKET] as $tmp) {
@@ -789,22 +786,27 @@ World of Warcraft
         }
         $empty_sockets_js = sprintf($empty_sockets_slots_js_tpl, $empty_sockets_slots_js);
         echo sprintf('<li data-slots="%s">
-        <span class="number">%d</span> пустые гнезда в <span class="tip">предметах «%d»</span>
-        </li>', $empty_sockets_slots, $count_empty_sockets, count($audit[AUDIT_TYPE_EMPTY_SOCKET]));
+        '. sprintf(WoW_Locale::GetString('template_character_audit_empty_sockets'), $count_empty_sockets, count($audit[AUDIT_TYPE_EMPTY_SOCKET])) .'
+        </li>', $empty_sockets_slots);
     }
     if(isset($audit[AUDIT_TYPE_NONOPTIMAL_ARMOR]) && is_array($audit[AUDIT_TYPE_NONOPTIMAL_ARMOR])) {
         $nonop_armor_slots = '';
-        $nonop_armor_slots_js = '';
         $nonop_armor_slots_js_tpl = '"inappropriateArmorItems": {%s},';
+        $nonop_armor_count = 0;
         foreach($audit[AUDIT_TYPE_NONOPTIMAL_ARMOR] as $tmp) {
-            
+            ++$nonop_armor_count;
         }
         echo sprintf('<li data-slots="%d">
-        <span class="tip"><span class="number">%d</span> предмет из неподходящего материала (не %s)</span>
+        <span class="tip">' . sprintf(WoW_Locale::GetString('template_character_audit_nonop_armor', $nonop_armor_count, WoW_Utils::GetAppropriateItemClassForClassID(WoW_Characters::GetClassID()))) .  '</span>
         </li>');
     }
     ?>
 	</ul>
+    <?php
+    if(WoW_Characters::IsAuditPassed()) {
+        echo WoW_Locale::GetString('template_character_audit_passed');
+    }
+    ?>
 
 	<script type="text/javascript">
 	//<![CDATA[
@@ -813,10 +815,9 @@ World of Warcraft
 			 <?php
              echo $unenchanted_items_js;
              echo $empty_sockets_js;
-             
              ?>
              
-                 "foo": true
+             "foo": true
 			});
 		});
 	//]]>
@@ -824,22 +825,20 @@ World of Warcraft
 							</div>
 						</div>
 						<div id="summary-reforging" class="summary-reforging">
-								<h3 class="category ">Перековка</h3>
+								<h3 class="category "><?php echo WoW_Locale::GetString('template_character_reforge'); ?></h3>
 
-							<div class="profile-box-simple">
-
-		Ни один предмет не был перекован.
-							</div>
+							<div class="profile-box-simple"><?php echo WoW_Locale::GetString('template_character_reforge_none'); // Requires Cataclysm support ?></div>
 						</div>
 					</div>
 				
 					<div class="summary-middle-left">
 						<div class="summary-bonus-tally">
-								<h3 class="category ">Бонус за чары / камень</h3>
+								<h3 class="category "><?php echo WoW_Locale::GetString('template_gems_enchants_bonuses'); ?></h3>
 
 							<div class="profile-box-simple">
 
 
+            <!--
 		<div class="numerical">
 			<ul>
 					<li>
@@ -869,6 +868,7 @@ World of Warcraft
 					<li>
 						<span class="value">+10</span> Рейтинг меткости
 					</li>
+            
 			</ul>
 		</div>
 	
@@ -876,70 +876,35 @@ World of Warcraft
 				<span class="name"><a href="/wow/item/52760">ураган</a></span><span class="comma">,</span>
 				<span class="name"><a href="/wow/item/52291">Хаотический мглистый алмаз</a></span>
 		</div>
+        -->
 		
 							</div>
 						</div>
 
 						<div class="summary-gems">
-								<h3 class="category ">Камни</h3>
-
+								<h3 class="category "><?php echo WoW_Locale::GetString('template_used_gems'); ?></h3>
 							<div class="profile-box-simple">
-
-
 	<div class="summary-gems">
 		<ul>
-				<li>
-					<span class="value">4</span>
-					<span class="times">x</span>
-					<span class="icon">	<span class="icon-socket socket-10">
-			<a href="/wow/item/52236" class="gem">
-				<img src="http://eu.battle.net/wow-assets/static/images/icons/18/inv_misc_cutgemsuperior3.jpg" alt="" />
-				<span class="frame"></span>
-			</a>
-	</span>
-</span>
-					<a href="/wow/item/52236" class="name color-q3">Очищенное око демона</a>
-	<span class="clear"><!-- --></span>
-				</li>
-				<li>
-					<span class="value">3</span>
-					<span class="times">x</span>
-					<span class="icon">	<span class="icon-socket socket-2">
-			<a href="/wow/item/52207" class="gem">
-				<img src="http://eu.battle.net/wow-assets/static/images/icons/18/inv_misc_cutgemsuperior6.jpg" alt="" />
-				<span class="frame"></span>
-			</a>
-	</span>
-</span>
-					<a href="/wow/item/52207" class="name color-q3">Сверкающий инфернальный рубин</a>
-	<span class="clear"><!-- --></span>
-				</li>
-				<li>
-					<span class="value">2</span>
-					<span class="times">x</span>
-					<span class="icon">	<span class="icon-socket socket-4">
-			<a href="/wow/item/52232" class="gem">
-				<img src="http://eu.battle.net/wow-assets/static/images/icons/18/inv_misc_cutgemsuperior.jpg" alt="" />
-				<span class="frame"></span>
-			</a>
-	</span>
-</span>
-					<a href="/wow/item/52232" class="name color-q3">Мягкий янтарный самоцвет</a>
-	<span class="clear"><!-- --></span>
-				</li>
-				<li>
-					<span class="value">1</span>
-					<span class="times">x</span>
-					<span class="icon">	<span class="icon-socket socket-1">
-			<a href="/wow/item/52291" class="gem">
-				<img src="http://eu.battle.net/wow-assets/static/images/icons/18/inv_misc_metagem_b.jpg" alt="" />
-				<span class="frame"></span>
-			</a>
-	</span>
-</span>
-					<a href="/wow/item/52291" class="name color-q3">Хаотический мглистый алмаз</a>
-	<span class="clear"><!-- --></span>
-				</li>
+                <?php
+                if(is_array($audit[AUDIT_TYPE_USED_GEMS])) {
+                    foreach($audit[AUDIT_TYPE_USED_GEMS] as $gem) {
+                        echo sprintf('<li>
+                    <span class="value">%d</span>
+                    <span class="times">x</span>
+                    <span class="icon">	<span class="icon-socket socket-%d">
+                    <a href="/wow/item/%d" class="gem">
+                    <img src="http://eu.battle.net/wow-assets/static/images/icons/18/%s.jpg" alt="" />
+                    <span class="frame"></span>
+                    </a>
+                    </span>
+                    </span>
+                    <a href="/wow/item/%d" class="name color-q%d">%s</a>
+                    <span class="clear"><!-- --></span>
+                </li>', $gem['counter'], $gem['color'], $gem['item'], $gem['icon'], $gem['item'], $gem['quality'], $gem['name']);
+                    }
+                }
+                ?>
 		</ul>
 	</div>
 							</div>
@@ -952,246 +917,9 @@ World of Warcraft
 			</div>
 
 			<div class="summary-bottom">
-
-				<div class="profile-recentactivity">
-	<h3 class="category ">						Последние новости
-</h3>
-					<div class="profile-box-simple">
-	<ul class="activity-feed">
-
-
-
-	<li class="ach ">
-	<dl>
-		<dd>
-
-		<a href="achievement#168:14922:a3011" rel="np" onmouseover="Tooltip.show(this, '#achv-tooltip-0');">
- 
-
-
-
-
-		<span  class="icon-frame frame-18" style='background-image: url("http://eu.battle.net/wow-assets/static/images/icons/18/inv_valentinescard02.jpg");'>
-		</span>
-		</a>
-
-	Заработано достижение <a href="achievement#168:14922:a3011" rel="np" onmouseover="Tooltip.show(this, '#achv-tooltip-0');">Помиритесь и поцелуйтесь (25 игроков)</a> за 10 очков.
-
-	<div id="achv-tooltip-0" style="display: none">
-		<div class="item-tooltip">
- 
-
-
-
-
-		<span  class="icon-frame frame-56" style='background-image: url("http://eu.battle.net/wow-assets/static/images/icons/56/inv_valentinescard02.jpg");'>
-		</span>
-
-			<h3>Помиритесь и поцелуйтесь (25 игроков)</h3>
-			<div class="color-tooltip-yellow">/Поцелуйте разозлившуюся на вас Сару в Ульдуаре в рейде на 25 игроков.</div>
-		</div>
-	</div>
-</dd>
-		<dt>7 ч назад</dt>
-	</dl>
-	</li>
-
-
-
-	<li class="ach ">
-	<dl>
-		<dd>
-
-		<a href="achievement#168:a4844" rel="np" onmouseover="Tooltip.show(this, '#achv-tooltip-1');">
- 
-
-
-
-
-		<span  class="icon-frame frame-18" style='background-image: url("http://eu.battle.net/wow-assets/static/images/icons/18/inv_helm_plate_twilighthammer_c_01.jpg");'>
-		</span>
-		</a>
-
-	Заработано достижение <a href="achievement#168:a4844" rel="np" onmouseover="Tooltip.show(this, '#achv-tooltip-1');">Повелитель подземелий Cataclysm</a> за 20 очков.
-
-	<div id="achv-tooltip-1" style="display: none">
-		<div class="item-tooltip">
- 
-
-
-
-
-		<span  class="icon-frame frame-56" style='background-image: url("http://eu.battle.net/wow-assets/static/images/icons/56/inv_helm_plate_twilighthammer_c_01.jpg");'>
-		</span>
-
-			<h3>Повелитель подземелий Cataclysm</h3>
-			<div class="color-tooltip-yellow">Добейтесь указанных ниже достижений в подземельях Cataclysm в героическом режиме.</div>
-		</div>
-	</div>
-</dd>
-		<dt>1 дн. назад</dt>
-	</dl>
-	</li>
-
-
-
-	<li class="ach ">
-	<dl>
-		<dd>
-
-		<a href="achievement#168:15067:a5060" rel="np" onmouseover="Tooltip.show(this, '#achv-tooltip-2');">
- 
-
-
-
-
-		<span  class="icon-frame frame-18" style='background-image: url("http://eu.battle.net/wow-assets/static/images/icons/18/achievement_dungeon_blackrockcaverns.jpg");'>
-		</span>
-		</a>
-
-	Заработано достижение <a href="achievement#168:15067:a5060" rel="np" onmouseover="Tooltip.show(this, '#achv-tooltip-2');">Пещеры Черной горы (героич.)</a> за 10 очков.
-
-	<div id="achv-tooltip-2" style="display: none">
-		<div class="item-tooltip">
- 
-
-
-
-
-		<span  class="icon-frame frame-56" style='background-image: url("http://eu.battle.net/wow-assets/static/images/icons/56/achievement_dungeon_blackrockcaverns.jpg");'>
-		</span>
-
-			<h3>Пещеры Черной горы (героич.)</h3>
-			<div class="color-tooltip-yellow">Убейте Повелителя Перерожденных Обсидия в героическом режиме.</div>
-		</div>
-	</div>
-</dd>
-		<dt>1 дн. назад</dt>
-	</dl>
-	</li>
-
-
-
-	<li class="ach ">
-	<dl>
-		<dd>
-
-		<a href="achievement#168:15067:a5283" rel="np" onmouseover="Tooltip.show(this, '#achv-tooltip-3');">
- 
-
-
-
-
-		<span  class="icon-frame frame-18" style='background-image: url("http://eu.battle.net/wow-assets/static/images/icons/18/achievement_dungeon_blackrockcaverns_karshsteelbender.jpg");'>
-		</span>
-		</a>
-
-	Заработано достижение <a href="achievement#168:15067:a5283" rel="np" onmouseover="Tooltip.show(this, '#achv-tooltip-3');">Осторожно, горячо!</a> за 10 очков.
-
-	<div id="achv-tooltip-3" style="display: none">
-		<div class="item-tooltip">
- 
-
-
-
-
-		<span  class="icon-frame frame-56" style='background-image: url("http://eu.battle.net/wow-assets/static/images/icons/56/achievement_dungeon_blackrockcaverns_karshsteelbender.jpg");'>
-		</span>
-
-			<h3>Осторожно, горячо!</h3>
-			<div class="color-tooltip-yellow">Убейте Карша Гнущего Сталь после того, как он 15 раз воспользуется эффектом перегретой обсидиановой брони в Пещерах Черной горы в героическом режиме.</div>
-		</div>
-	</div>
-</dd>
-		<dt>1 дн. назад</dt>
-	</dl>
-	</li>
-
-
-
-	<li class="ach ">
-	<dl>
-		<dd>
-
-		<a href="achievement#168:a5535" rel="np" onmouseover="Tooltip.show(this, '#achv-tooltip-4');">
- 
-
-
-
-
-		<span  class="icon-frame frame-18" style='background-image: url("http://eu.battle.net/wow-assets/static/images/icons/18/pvecurrency-valor.jpg");'>
-		</span>
-		</a>
-
-	Заработано достижение <a href="achievement#168:a5535" rel="np" onmouseover="Tooltip.show(this, '#achv-tooltip-4');">1000 очков доблести</a> за 10 очков.
-
-	<div id="achv-tooltip-4" style="display: none">
-		<div class="item-tooltip">
- 
-
-
-
-
-		<span  class="icon-frame frame-56" style='background-image: url("http://eu.battle.net/wow-assets/static/images/icons/56/pvecurrency-valor.jpg");'>
-		</span>
-
-			<h3>1000 очков доблести</h3>
-			<div class="color-tooltip-yellow">Заработайте 1000 очков доблести</div>
-		</div>
-	</div>
-</dd>
-		<dt>1 дн. назад</dt>
-	</dl>
-	</li>
-	</ul>
-	<a class="profile-linktomore" href="/wow/character/ревущии-фьорд/%d0%a2%d0%be%d0%bd%d0%ba%d1%81/feed" rel="np">Смотреть более ранние новости</a>
-
-	<span class="clear"><!-- --></span>
-					</div>
-
-				</div>
-
+				<?php WoW_Template::LoadTemplate('block_character_recent_activity'); ?>
 				<div class="summary-bottom-left">
-
-					<div class="summary-talents" id="summary-talents">
-	<ul>
-
-	<li class="summary-talents-1">
-		<a href="/wow/character/ревущии-фьорд/%d0%a2%d0%be%d0%bd%d0%ba%d1%81/talent/secondary"><span class="inner">
-			<span class="icon"><img src="http://eu.battle.net/wow-assets/static/images/icons/36/spell_holy_guardianspirit.jpg" alt="" /><span class="frame"></span></span>
-				<span class="roles">
-							<span class="icon-healer"></span>
-				</span>
-			<span class="name-build">
-				<span class="name">Свет</span>
-				<span class="build">4<ins>/</ins>34<ins>/</ins>3</span>
-			</span>
-		</span></a>
-	</li>
-
-	<li class="summary-talents-1">
-		<a href="/wow/character/ревущии-фьорд/%d0%a2%d0%be%d0%bd%d0%ba%d1%81/talent/primary" class="active"><span class="inner">
-				<span class="checkmark"></span>
-			<span class="icon"><img src="http://eu.battle.net/wow-assets/static/images/icons/36/spell_shadow_shadowwordpain.jpg" alt="" /><span class="frame"></span></span>
-				<span class="roles">
-							<span class="icon-dps"></span>
-				</span>
-			<span class="name-build">
-				<span class="name">Тьма</span>
-				<span class="build">9<ins>/</ins>0<ins>/</ins>32</span>
-			</span>
-		</span></a>
-	</li>
-	</ul>
-					</div>
-
-					<div class="summary-health-resource">
-	<ul>
-		<li class="health" id="summary-health" data-id="health"><span class="name">Здоровье</span><span class="value">109791</span></li>
-		<li class="resource-0" id="summary-power" data-id="power-0"><span class="name">Мана</span><span class="value">77340</span></li>
-	</ul>
-					</div>
-
+					<?php WoW_Template::LoadTemplate('block_character_talents_summary'); ?>
 					<div class="summary-stats-profs-bgs">
 
 
@@ -1212,721 +940,44 @@ World of Warcraft
         $spell = WoW_Characters::GetSpellStats();
         $defense = WoW_Characters::GetDefenseStats();
         $resistances = WoW_Characters::GetResistanceStats();
-        switch(WoW_Characters::GetRole()) {
-            case ROLE_CASTER:
-                
-                break;
-            case ROLE_MELEE:
-                echo sprintf('<li data-id="strength" class="">
+        $appropriate_stats = WoW_Characters::GetAppropriateStatsForClassAndSpec();
+        foreach($appropriate_stats['main'] as $main) {
+            echo sprintf('<li data-id="%s" class="">
 		<span class="name">%s</span>
-		<span class="value">%d</span>
+		<span class="value">%s</span>
 	<span class="clear"><!-- --></span>
-	</li>', WoW_Locale::GetString('stat_strength'), $strength['effective']);
-                break;
+	</li>', $main['name'], WoW_Locale::GetString($main['type']), $main['stat']);
         }
         ?>
-	
-
-	<li data-id="agility" class="">
-		<span class="name"><?php echo WoW_Locale::GetString('stat_agility'); ?></span>
-		<span class="value"><?php echo $agility['effective']; ?></span>
-	<span class="clear"><!-- --></span>
-	</li>
-	<li data-id="stamina" class="">
-		<span class="name"><?php echo WoW_Locale::GetString('stat_stamina'); ?></span>
-		<span class="value color-q2"><?php echo $stamina['effective']; ?></span>
-	<span class="clear"><!-- --></span>
-	</li>
-	<li data-id="intellect" class="">
-		<span class="name"><?php echo WoW_Locale::GetString('stat_intellect'); ?></span>
-		<span class="value color-q2"><?php echo $intellect['effective']; ?></span>
-	<span class="clear"><!-- --></span>
-	</li>
-	<li data-id="spirit" class="">
-		<span class="name"><?php echo WoW_Locale::GetString('stat_spirit'); ?></span>
-		<span class="value color-q2"><?php echo $spirit['effective']; ?></span>
-	<span class="clear"><!-- --></span>
-	</li>
-	<li data-id="mastery" class="">
-		<span class="name"><?php echo WoW_Locale::GetString('stat_mastery'); ?></span>
-		<span class="value">0,0</span>
-	<span class="clear"><!-- --></span>
-	</li>
 		</ul>
 	</div>
 				</div>
 				<div class="summary-stats-advanced-role">
 	<div class="summary-stats-column">
-		<h4>Другое</h4>
+		<h4><?php echo WoW_Locale::GetString('template_character_profile_other_stats'); ?></h4>
 		<ul>
-
-	 
-
-
-
-
-
-	<li data-id="spellpower" class="">
-		<span class="name">Сила заклинаний</span>
-		<span class="value">5524</span>
+        <?php
+        foreach($appropriate_stats['advanced'] as $advanced) {
+            echo sprintf('<li data-id="%s" class="">
+		<span class="name">%s</span>
+		<span class="value">%s</span>
 	<span class="clear"><!-- --></span>
-	</li>
-
-	 
-
-
-
-
-
-	<li data-id="spellhaste" class="">
-		<span class="name">Скорость</span>
-		<span class="value">13,56%</span>
-	<span class="clear"><!-- --></span>
-	</li>
-
-	 
-
-
-
-
-
-	<li data-id="spellhit" class="">
-		<span class="name">Меткость</span>
-		<span class="value">+13,08%</span>
-	<span class="clear"><!-- --></span>
-	</li>
-
-	 
-
-
-
-
-
-	<li data-id="spellcrit" class="">
-		<span class="name">Критический удар</span>
-		<span class="value">12,73%</span>
-	<span class="clear"><!-- --></span>
-	</li>
+	</li>', $advanced['name'], WoW_Locale::GetString($advanced['type']), $advanced['stat']);
+        }
+        ?>
 		</ul>
 	</div>
 				</div>
 				<div class="summary-stats-end"></div>
 			</div>
-
-		<div id="summary-stats-simple" class="summary-stats-simple" style=" display: none">
-			<div class="summary-stats-simple-base">
-
-
-	<div class="summary-stats-column">
-		<h4>Характеристики</h4>
-		<ul>
-
-	 
-
-
-
-
-
-	<li data-id="strength" class="">
-		<span class="name">Сила</span>
-		<span class="value color-q2">58</span>
-	<span class="clear"><!-- --></span>
-	</li>
-
-	 
-
-
-
-
-
-	<li data-id="agility" class="">
-		<span class="name">Ловкость</span>
-		<span class="value color-q2">71</span>
-	<span class="clear"><!-- --></span>
-	</li>
-
-	 
-
-
-
-
-
-	<li data-id="stamina" class="">
-		<span class="name">Выносливость</span>
-		<span class="value color-q2">4769</span>
-	<span class="clear"><!-- --></span>
-	</li>
-
-	 
-
-
-
-
-
-	<li data-id="intellect" class="">
-		<span class="name">Интеллект</span>
-		<span class="value color-q2">3802</span>
-	<span class="clear"><!-- --></span>
-	</li>
-
-	 
-
-
-
-
-
-	<li data-id="spirit" class="">
-		<span class="name">Дух</span>
-		<span class="value color-q2">498</span>
-	<span class="clear"><!-- --></span>
-	</li>
-
-	 
-
-
-
-
-
-	<li data-id="mastery" class="">
-		<span class="name">Искусность</span>
-		<span class="value">13,52</span>
-	<span class="clear"><!-- --></span>
-	</li>
-		</ul>
-	</div>
-			</div>
-			<div class="summary-stats-simple-other">
-				<a id="summary-stats-simple-arrow" class="summary-stats-simple-arrow" href="javascript:;"></a>
-
-
-	<div class="summary-stats-column" style="display: none">
-		<h4>Ближний бой</h4>
-		<ul>
-
-	 
-
-	
-
-	<li data-id="meleedamage" class="">
-		<span class="name">Урон</span>
-		<span class="value">358–531</span>
-	<span class="clear"><!-- --></span>
-	</li>
-
-	 
-
-	
-
-	<li data-id="meleedps" class="">
-		<span class="name">УВС</span>
-		<span class="value">240,4</span>
-	<span class="clear"><!-- --></span>
-	</li>
-
-	 
-
-
-
-
-	<li data-id="meleeattackpower" class="">
-		<span class="name">Сила атаки</span>
-		<span class="value">96</span>
-	<span class="clear"><!-- --></span>
-	</li>
-
-	 
-
-	
-
-	<li data-id="meleespeed" class="">
-		<span class="name">Скорость атаки</span>
-		<span class="value">1,85</span>
-	<span class="clear"><!-- --></span>
-	</li>
-
-	 
-
-
-
-
-
-	<li data-id="meleehaste" class="">
-		<span class="name">Скорость </span>
-		<span class="value">13,56%</span>
-	<span class="clear"><!-- --></span>
-	</li>
-
-	 
-
-
-
-
-
-	<li data-id="meleehit" class="">
-		<span class="name">Меткость</span>
-		<span class="value">+8,64%</span>
-	<span class="clear"><!-- --></span>
-	</li>
-
-	 
-
-
-
-
-
-	<li data-id="meleecrit" class="">
-		<span class="name">Критический удар</span>
-		<span class="value">9,16%</span>
-	<span class="clear"><!-- --></span>
-	</li>
-
-	 
-
-	
-
-	<li data-id="expertise" class="">
-		<span class="name">Мастерство</span>
-		<span class="value">0</span>
-	<span class="clear"><!-- --></span>
-	</li>
-		</ul>
-	</div>
-
-
-	<div class="summary-stats-column" style="display: none">
-		<h4>Дальний бой</h4>
-		<ul>
-
-	 
-
-	
-
-	<li data-id="rangeddamage" class="">
-		<span class="name">Урон</span>
-		<span class="value">879–1633</span>
-	<span class="clear"><!-- --></span>
-	</li>
-
-	 
-
-
-
-
-
-	<li data-id="rangeddps" class="">
-		<span class="name">УВС</span>
-		<span class="value">1018,8</span>
-	<span class="clear"><!-- --></span>
-	</li>
-
-	 
-
-
-
-
-	<li data-id="rangedattackpower" class="">
-		<span class="name">Сила атаки</span>
-		<span class="value">0</span>
-	<span class="clear"><!-- --></span>
-	</li>
-
-	 
-
-
-
-
-
-	<li data-id="rangedspeed" class="">
-		<span class="name">Скорость</span>
-		<span class="value">1,23</span>
-	<span class="clear"><!-- --></span>
-	</li>
-
-	 
-
-
-
-
-
-	<li data-id="rangedhaste" class="">
-		<span class="name">Скорость</span>
-		<span class="value">13,56%</span>
-	<span class="clear"><!-- --></span>
-	</li>
-
-	 
-
-
-
-
-
-	<li data-id="rangedhit" class="">
-		<span class="name">Меткость</span>
-		<span class="value">+8,64%</span>
-	<span class="clear"><!-- --></span>
-	</li>
-
-	 
-
-
-
-
-
-	<li data-id="rangedcrit" class="">
-		<span class="name">Критический удар</span>
-		<span class="value">9,16%</span>
-	<span class="clear"><!-- --></span>
-	</li>
-		</ul>
-	</div>
-
-
-	<div class="summary-stats-column">
-		<h4>Заклинания</h4>
-		<ul>
-
-	 
-
-
-
-
-
-	<li data-id="spellpower" class="">
-		<span class="name">Сила заклинаний</span>
-		<span class="value">5524</span>
-	<span class="clear"><!-- --></span>
-	</li>
-
-	 
-
-
-
-
-
-	<li data-id="spellhaste" class="">
-		<span class="name">Скорость</span>
-		<span class="value">13,56%</span>
-	<span class="clear"><!-- --></span>
-	</li>
-
-	 
-
-
-
-
-
-	<li data-id="spellhit" class="">
-		<span class="name">Меткость</span>
-		<span class="value">+13,08%</span>
-	<span class="clear"><!-- --></span>
-	</li>
-
-	 
-
-
-
-
-
-	<li data-id="spellcrit" class="">
-		<span class="name">Критический удар</span>
-		<span class="value">12,73%</span>
-	<span class="clear"><!-- --></span>
-	</li>
-
-	 
-
-
-
-
-
-	<li data-id="spellpenetration" class="">
-		<span class="name">Проникающая способность </span>
-		<span class="value">0</span>
-	<span class="clear"><!-- --></span>
-	</li>
-
-	 
-
-
-
-
-
-	<li data-id="manaregen" class="">
-		<span class="name">Восполнение маны</span>
-		<span class="value">1543</span>
-	<span class="clear"><!-- --></span>
-	</li>
-
-	 
-
-
-
-
-
-	<li data-id="combatregen" class="">
-		<span class="name">Восполнение в бою</span>
-		<span class="value">1028</span>
-	<span class="clear"><!-- --></span>
-	</li>
-		</ul>
-	</div>
-
-
-	<div class="summary-stats-column" style="display: none">
-		<h4>Защита</h4>
-		<ul>
-
-	 
-
-
-
-
-
-	<li data-id="armor" class="">
-		<span class="name">Броня</span>
-		<span class="value">7442</span>
-	<span class="clear"><!-- --></span>
-	</li>
-
-	 
-
-
-
-
-
-	<li data-id="dodge" class="">
-		<span class="name">Уклонение</span>
-		<span class="value">3,42%</span>
-	<span class="clear"><!-- --></span>
-	</li>
-
-	 
-
-
-
-
-
-	<li data-id="parry" class="">
-		<span class="name">Парирование</span>
-		<span class="value">0,00%</span>
-	<span class="clear"><!-- --></span>
-	</li>
-
-	 
-
-
-
-
-
-	<li data-id="block" class="">
-		<span class="name">Блокирование</span>
-		<span class="value">0,00%</span>
-	<span class="clear"><!-- --></span>
-	</li>
-
-	 
-
-
-
-
-
-	<li data-id="resilience" class="">
-		<span class="name">Устойчивость</span>
-		<span class="value">0</span>
-	<span class="clear"><!-- --></span>
-	</li>
-		</ul>
-	</div>
-
-
-	<div class="summary-stats-column" style="display: none">
-		<h4>Сопротивление</h4>
-		<ul>
-
-	 
-
-
-
-
-
-	<li data-id="arcaneres" class=" has-icon">
-			<span class="icon"> 
-
-
-
-
-		<span class="icon-frame frame-12">
-			<img src="http://eu.battle.net/wow-assets/static/images/icons/18/resist_arcane.jpg" alt="" width="12" height="12" />
-		</span>
-</span>
-		<span class="name">Тайная магия</span>
-		<span class="value">85</span>
-	<span class="clear"><!-- --></span>
-	</li>
-
-	 
-
-
-
-
-
-	<li data-id="fireres" class=" has-icon">
-			<span class="icon"> 
-
-
-
-
-		<span class="icon-frame frame-12">
-			<img src="http://eu.battle.net/wow-assets/static/images/icons/18/resist_fire.jpg" alt="" width="12" height="12" />
-		</span>
-</span>
-		<span class="name">Магия огня</span>
-		<span class="value">0</span>
-	<span class="clear"><!-- --></span>
-	</li>
-
-	 
-
-
-
-
-
-	<li data-id="frostres" class=" has-icon">
-			<span class="icon"> 
-
-
-
-
-		<span class="icon-frame frame-12">
-			<img src="http://eu.battle.net/wow-assets/static/images/icons/18/resist_frost.jpg" alt="" width="12" height="12" />
-		</span>
-</span>
-		<span class="name">Магия льда</span>
-		<span class="value">0</span>
-	<span class="clear"><!-- --></span>
-	</li>
-
-	 
-
-
-
-
-
-	<li data-id="natureres" class=" has-icon">
-			<span class="icon"> 
-
-
-
-
-		<span class="icon-frame frame-12">
-			<img src="http://eu.battle.net/wow-assets/static/images/icons/18/resist_nature.jpg" alt="" width="12" height="12" />
-		</span>
-</span>
-		<span class="name">Силы природы</span>
-		<span class="value">0</span>
-	<span class="clear"><!-- --></span>
-	</li>
-
-	 
-
-
-
-
-
-	<li data-id="shadowres" class=" has-icon">
-			<span class="icon"> 
-
-
-
-
-		<span class="icon-frame frame-12">
-			<img src="http://eu.battle.net/wow-assets/static/images/icons/18/resist_shadow.jpg" alt="" width="12" height="12" />
-		</span>
-</span>
-		<span class="name">Темная магия</span>
-		<span class="value">0</span>
-	<span class="clear"><!-- --></span>
-	</li>
-		</ul>
-	</div>
-			</div>
-			<div class="summary-stats-end"></div>
-		</div>
-
-			<a href="javascript:;" id="summary-stats-toggler" class="summary-stats-toggler"><span class="inner"><span class="arrow">Показать все характеристики</span></span></a>
+            <?php WoW_Template::LoadTemplate('block_character_stats_simple'); ?>
+			<a href="javascript:;" id="summary-stats-toggler" class="summary-stats-toggler"><span class="inner"><span class="arrow"><?php echo WoW_Locale::GetString('template_character_profile_toggle_stats_all'); ?></span></span></a>
 	</div>
  
 	<?php
     WoW_Template::LoadTemplate('block_profile_stats_js');
+    WoW_Template::LoadTemplate('block_character_bg_professions');
     ?>
-
-
-						<div class="summary-stats-bottom">
-
-							<div class="summary-battlegrounds">
-	<ul>
-		<li class="rating"><span class="name">Рейтинг на полях боя</span><span class="value">0</span>	<span class="clear"><!-- --></span>
-</li>
-		<li class="kills"><span class="name">Почетные победы</span><span class="value">11852</span>	<span class="clear"><!-- --></span>
-</li>
-	</ul>
-							</div>
-
-							<div class="summary-professions">
-	<ul>
-				<li>
-	    
-	
-    
-	<div class="profile-progress border-3 completed" >
-		<div class="bar border-3" style="width: 100%"></div>
-			<div class="bar-contents">						<span class="profession-details">
-							<span class="icon"> 
-
-
-
-
-		<span class="icon-frame frame-12">
-			<img src="http://eu.battle.net/wow-assets/static/images/icons/18/trade_tailoring.jpg" alt="" width="12" height="12" />
-		</span>
-</span>
-							<span class="name">Портняжное дело</span>
-							<span class="value">525</span>
-						</span>
-
-	<a href="javascript:;" data-fansite="skill|197|Портняжное дело" class="fansite-link fansite-small"> </a>
-</div>
-	</div>
-				</li>
-				<li>
-	    
-	
-    
-	<div class="profile-progress border-3" >
-		<div class="bar border-3" style="width: 97%"></div>
-			<div class="bar-contents">						<span class="profession-details">
-							<span class="icon"> 
-
-
-
-
-		<span class="icon-frame frame-12">
-			<img src="http://eu.battle.net/wow-assets/static/images/icons/18/trade_engraving.jpg" alt="" width="12" height="12" />
-		</span>
-</span>
-							<span class="name">Наложение чар</span>
-							<span class="value">510</span>
-						</span>
-
-	<a href="javascript:;" data-fansite="skill|333|Наложение чар" class="fansite-link fansite-small"> </a>
-</div>
-	</div>
-				</li>
-	</ul>
-							</div>
-
-	<span class="clear"><!-- --></span>
-						</div>
 					</div>
 				</div>
 	<span class="clear"><!-- --></span>

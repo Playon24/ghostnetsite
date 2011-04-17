@@ -520,7 +520,7 @@ Class WoW_Utils {
         return $radius[0] . ' - ' . $radius[2];
     }
     
-    public function AnalyzeLocales($loc1, $loc2) {
+    public function AnalyzeLocales($loc1, $loc2, $returnAsText = false) {
         if(!file_exists(WOW_DIRECTORY . '/includes/locales/locale_' . $loc1 . '.php') || !file_exists(WOW_DIRECTORY . '/includes/locales/locale_' . $loc2 . '.php')) {
             return false;
         }
@@ -528,17 +528,45 @@ Class WoW_Utils {
         $locale1 = $WoW_Locale;
         include(WOW_DIRECTORY . '/includes/locales/locale_' . $loc2 . '.php');
         $locale2 = $WoW_Locale;
+        $text = '';
         foreach($locale1 as $index => $value) {
             if(!isset($locale2[$index])) {
-                WoW_Log::WriteError('%s : locale %s does not have "%s" index (%s value: "%s").', __METHOD__, $loc2, $index, $loc1, $value);
+                if(!$returnAsText) {
+                    WoW_Log::WriteError('%s : locale %s does not have "%s" index (%s value: <code>"%s"</code>).', __METHOD__, $loc2, $index, $loc1, str_replace(array('<', '>'), array('&lt;', '&gt;'), $value));
+                }
+                else {
+                    $text .= sprintf('Locale <strong>%s</strong> does not have <strong>"%s"</strong> index (%s value: <code>"%s"</code>).<br />', $loc2, $index, $loc1, str_replace(array('<', '>'), array('&lt;', '&gt;'), $value));
+                }
             }
         }
         foreach($locale2 as $index => $value) {
             if(!isset($locale1[$index])) {
-                WoW_Log::WriteError('%s : locale %s does not have "%s" index (%s value: "%s").', __METHOD__, $loc1, $index, $loc2, $value);
+                if(!$returnAsText) {
+                    WoW_Log::WriteError('%s : locale %s does not have "%s" index (%s value: <code>"%s"</code>).', __METHOD__, $loc1, $index, $loc2, str_replace(array('<', '>'), array('&lt;', '&gt;'), $value));
+                }
+                else {
+                    $text .= sprintf('Locale <strong>%s</strong> does not have <strong>"%s"</strong> index (%s value: <code>"%s"</code>).<br />', $loc1, $index, $loc2, str_replace(array('<', '>'), array('&lt;', '&gt;'), $value));
+                }
             }
         }
-        return true;
+        return $returnAsText ? $text : true;
+    }
+    
+    public function GetAppropriateItemClassForClassID($classID) {
+        switch($classID) {
+            case CLASS_MAGE:
+            case CLASS_PRIEST:
+            case CLASS_WARLOCK:
+                return WoW_Locale::GetString('armor_cloth');
+            case CLASS_ROGUE:
+            case CLASS_DRUID:
+                return WoW_Locale::GetString('armor_leather');
+            case CLASS_HUNTER:
+            case CLASS_SHAMAN:
+                return WoW_Locale::GetString('armor_mail');
+            default:
+                return WoW_Locale::GetString('armor_plate');
+        }
     }
 }
 ?>
