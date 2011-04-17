@@ -1,7 +1,11 @@
 <?php
 // Talents data
 $talents = WoW_Characters::GetTalentsData();
+// Character audit
 $audit = WoW_Characters::GetAudit();
+echo '<!--';
+print_r($audit);
+echo '-->';
 ?>
 <div id="content">
 <div class="content-top">
@@ -30,7 +34,6 @@ World of Warcraft
 			<div class="profile-sidebar-outer">
 				<div class="profile-sidebar-inner">
 					<div class="profile-sidebar-contents">
-
 		<div class="profile-info-anchor">
 			<div class="profile-info">
 				<div class="name"><a href="<?php echo WoW_Characters::GetURL(); ?>" rel="np"><?php echo WoW_Characters::GetName(); ?></a></div>
@@ -59,14 +62,9 @@ World of Warcraft
 				</div>
 			</div>
 		</div>
-		
 		<div class="profile-contents">
-
 		<div class="summary-top">
-		
 			<div class="summary-top-right">
-
-
 	<ul class="profile-view-options" id="profile-view-options-summary">
 			<li>
 				<a href="javascript:;" rel="np" class="threed disabled">
@@ -84,8 +82,6 @@ World of Warcraft
 				</a>
 			</li>
 	</ul>
-
-
 					<div class="summary-averageilvl">
 	<div class="rest">
 		<?php echo WoW_Locale::GetString('template_profile_avg_itemlevel'); ?><br />
@@ -95,609 +91,77 @@ World of Warcraft
 		<?php echo WoW_Characters::GetAVGItemLevel(); ?>
 	</div>
 					</div>
-
 			</div>
-		
 				<div class="summary-top-inventory">
-
-
 	<div id="summary-inventory" class="summary-inventory summary-inventory-advanced">
-    <?php
-    //WoW_Characters::GetEquippedItemInfo(EQUIPMENT_SLOT_HEAD, true);
-    
+    <?php    
     $item_slots = array(
-        EQUIPMENT_SLOT_HEAD      => array('slot' => 1,  'style' => ' left: 0px; top: 0px;'),
-        EQUIPMENT_SLOT_NECK      => array('slot' => 2,  'style' => ' left: 0px; top: 58px;'),
-        EQUIPMENT_SLOT_SHOULDERS => array('slot' => 3,  'style' => 'left: 0px; top: 116px;'),
-        EQUIPMENT_SLOT_BACK      => array('slot' => 16, 'style' => ' left: 0px; top: 174px;'),
-        EQUIPMENT_SLOT_CHEST     => array('slot' => 5,  'style' => ' left: 0px; top: 232px;'),
-        EQUIPMENT_SLOT_BODY      => array('slot' => 4,  'style' => ' left: 0px; top: 290px;'),
-        EQUIPMENT_SLOT_TABARD    => array('slot' => 19, 'style' => ' left: 0px; top: 348px;'),
-        EQUIPMENT_SLOT_WRISTS    => array('slot' => 9,  'style' => ' left: 0px; top: 406px;'),
-        EQUIPMENT_SLOT_HANDS     => array('slot' => 10, 'style' => ' top: 0px; right: 0px;'),
-        EQUIPMENT_SLOT_WAIST     => array('slot' => 6,  'style' => ' top: 58px; right: 0px;'),
-        EQUIPMENT_SLOT_LEGS      => array('slot' => 7,  'style' => ' top: 116px; right: 0px;'),
-        EQUIPMENT_SLOT_FEET      => array('slot' => 8,  'style' => ' top: 174px; right: 0px;'),
-        EQUIPMENT_SLOT_FINGER1   => array('slot' => 11, 'style' => ' top: 232px; right: 0px;'),
-        EQUIPMENT_SLOT_FINGER2   => array('slot' => 11, 'style' => ' top: 290px; right: 0px;'),
-        EQUIPMENT_SLOT_TRINKET1  => array('slot' => 12, 'style' => ' top: 348px; right: 0px;'),
-        EQUIPMENT_SLOT_TRINKET2  => array('slot' => 12, 'style' => ' top: 406px; right: 0px;'),
-        EQUIPMENT_SLOT_MAINHAND  => array('slot' => 21, 'style' => ' left: 241px; bottom: 0px;'),
-        EQUIPMENT_SLOT_OFFHAND   => array('slot' => 22, 'style' => ' left: 306px; bottom: 0px;'),
-        EQUIPMENT_SLOT_RANGED    => array('slot' => 28, 'style' => ' left: 371px; bottom: 0px;')
+        EQUIPMENT_SLOT_HEAD      => array('slot' => 1,  'style' => ' left: 0px; top: 0px;',      'class' => 'slot slot-1 item-quality-%d'),
+        EQUIPMENT_SLOT_NECK      => array('slot' => 2,  'style' => ' left: 0px; top: 58px;',     'class' => 'slot slot-2 item-quality-%d'),
+        EQUIPMENT_SLOT_SHOULDERS => array('slot' => 3,  'style' => 'left: 0px; top: 116px;',     'class' => 'slot slot-3 item-quality-%d'),
+        EQUIPMENT_SLOT_BACK      => array('slot' => 16, 'style' => ' left: 0px; top: 174px;',    'class' => 'slot slot-16 item-quality-%d'),
+        EQUIPMENT_SLOT_CHEST     => array('slot' => 5,  'style' => ' left: 0px; top: 232px;',    'class' => 'slot slot-5 item-quality-%d'),
+        EQUIPMENT_SLOT_BODY      => array('slot' => 4,  'style' => ' left: 0px; top: 290px;',    'class' => 'slot slot-4 item-quality-%d'),
+        EQUIPMENT_SLOT_TABARD    => array('slot' => 19, 'style' => ' left: 0px; top: 348px;',    'class' => 'slot slot-19 item-quality-%d'),
+        EQUIPMENT_SLOT_WRISTS    => array('slot' => 9,  'style' => ' left: 0px; top: 406px;',    'class' => 'slot slot-9 item-quality-%d'),
+        EQUIPMENT_SLOT_HANDS     => array('slot' => 10, 'style' => ' top: 0px; right: 0px;',     'class' => 'slot slot-10 slot-align-right item-quality-%d'),
+        EQUIPMENT_SLOT_WAIST     => array('slot' => 6,  'style' => ' top: 58px; right: 0px;',    'class' => 'slot slot-6 slot-align-right item-quality-%d'),
+        EQUIPMENT_SLOT_LEGS      => array('slot' => 7,  'style' => ' top: 116px; right: 0px;',   'class' => 'slot slot-7 slot-align-right item-quality-%d'),
+        EQUIPMENT_SLOT_FEET      => array('slot' => 8,  'style' => ' top: 174px; right: 0px;',   'class' => 'slot slot-8 slot-align-right item-quality-%d'),
+        EQUIPMENT_SLOT_FINGER1   => array('slot' => 11, 'style' => ' top: 232px; right: 0px;',   'class' => 'slot slot-11 slot-align-right item-quality-%d'),
+        EQUIPMENT_SLOT_FINGER2   => array('slot' => 11, 'style' => ' top: 290px; right: 0px;',   'class' => 'slot slot-11 slot-align-right item-quality-%d'),
+        EQUIPMENT_SLOT_TRINKET1  => array('slot' => 12, 'style' => ' top: 348px; right: 0px;',   'class' => 'slot slot-12 slot-align-right item-quality-%d'),
+        EQUIPMENT_SLOT_TRINKET2  => array('slot' => 12, 'style' => ' top: 406px; right: 0px;',   'class' => 'slot slot-12 slot-align-right item-quality-%d'),
+        EQUIPMENT_SLOT_MAINHAND  => array('slot' => 15, 'style' => ' left: -6px; bottom: 0px;',  'class' => 'slot slot-15 slot-align-right item-quality-%d'),
+        EQUIPMENT_SLOT_OFFHAND   => array('slot' => 22, 'style' => ' left: 271px; bottom: 0px;', 'class' => 'slot slot-22 item-quality-%d'),
+        EQUIPMENT_SLOT_RANGED    => array('slot' => 28, 'style' => ' left: 548px; bottom: 0px;', 'class' => 'slot slot-28 item-quality-%d')
     );
-    
+    foreach($item_slots as $slot => $data) {
+        $item_info = WoW_Characters::GetEquippedItemInfo($slot, true);
+        if(!$item_info || $item_info['item_id'] == 0) {
+            echo sprintf('<div data-id="%d" data-type="%d" class="slot slot-%d" style="%s"><div class="slot-inner"><div class="slot-contents"><a href="javascript:;" class="empty"><span class="frame"></span></a></div></div></div>', ($data['slot'] - 1), $data['slot'], $data['slot'], $data['style']);
+            continue;
+        }
+        $socket_text = '';
+        for($i = 0; $i < 3; ++$i) {
+            if(is_array($item_info['g' . $i]) && isset($item_info['g' . $i]['item'])) {
+                $socket_text .= sprintf('<span class="icon-socket socket-%d"><a href="/wow/item/%d" class="gem"><img src="http://eu.battle.net/wow-assets/static/images/icons/18/%s.jpg" alt="" /><span class="frame"></span></a></span>', $item_info['g' . $i]['color'], $item_info['g' . $i]['item'], $item_info['g' . $i]['icon']);
+            }
+        }
+        echo sprintf('<div data-id="%d" data-type="%d" class="%s" style="%s">
+        <div class="slot-inner">
+            <div class="slot-contents">
+                <a href="/wow/item/%d" class="item" data-item="%s"><img src="http://eu.battle.net/wow-assets/static/images/icons/56/%s.jpg" alt="" /><span class="frame"></span></a>
+                <div class="details">
+                    <span class="name-shadow">%s</span>
+                    <span class="name color-q%d">
+                        %s
+                        <a href="/wow/item/%d" data-item="%s">%s</a>
+                        %s
+                    </span>
+                    <span class="enchant-shadow">%s</span>
+                    <div class="enchant color-q%d">%s%s%s</div>
+                    <span class="level">%d</span>
+                    %s
+                </div>
+            </div>
+        </div>
+    </div>
+', 
+        ($data['slot'] - 1), $data['slot'], sprintf($data['class'], $item_info['quality']), $data['style'],
+        $item_info['item_id'], $item_info['data-item'], $item_info['icon'],
+        $item_info['name'], $item_info['quality'],
+        (($data['slot'] >= 6 && $data['slot'] <= 12) && $item_info['enchid'] == 0 && $item_info['can_ench']) ? '<a href="javascript:;" class="audit-warning"></a>' : null,
+        $item_info['item_id'], $item_info['data-item'], $item_info['name'],
+        (($data['slot'] < 6 || $data['slot'] > 12) && $item_info['enchid'] == 0 && $item_info['can_ench']) ? '<a href="javascript:;" class="audit-warning"></a>' : null, 
+        isset($item_info['enchant_text']) ? $item_info['enchant_text'] : null, 
+        isset($item_info['enchant_quality']) ? $item_info['enchant_quality'] : null, 
+        isset($item_info['enchant_item']) ? $item_info['enchant_item'] > 0 ? sprintf('<a href="/wow/item/%d">', $item_info['enchant_item']) : null : null, 
+        isset($item_info['enchant_text']) ? $item_info['enchant_text'] : null,
+        isset($item_info['enchant_item']) ? $item_info['enchant_item'] > 0 ? '</a>' : null : null,
+        $item_info['item_level'], $socket_text != null ? sprintf('<span class="sockets">%s</span>', $socket_text) : null);
+    }
     ?>
-    <div data-id="0" data-type="1" class="slot slot-1 item-quality-3" style=" left: 0px; top: 0px;">
-		<div class="slot-inner">
-			<div class="slot-contents">
-					<a href="/wow/item/58155" class="item" data-item="i=58155&amp;e=4207&amp;g0=1810&amp;g1=1779&amp;d=60"><img src="http://eu.battle.net/wow-assets/static/images/icons/56/inv_helm_robe_dungeonrobe_c_04.jpg" alt="" /><span class="frame"></span></a>
-						<div class="details">
-							<span class="name-shadow">Клобук приятной меланхолии</span>
-							<span class="name color-q3">
-								
-								<a href="/wow/item/58155" data-item="i=58155&amp;e=4207&amp;g0=1810&amp;g1=1779&amp;d=60">Клобук приятной меланхолии</a>
-							</span>
-								<span class="enchant-shadow">
-									+60 к интеллекту и 35 к рейтингу критического удара
-								</span>
-								<div class="enchant color-q2">
-+60 к интеллекту и 35 к рейтингу критического удара								</div>
-							<span class="level">346</span>
-								<span class="sockets">
-	<span class="icon-socket socket-1">
-			<a href="/wow/item/52291" class="gem">
-				<img src="http://eu.battle.net/wow-assets/static/images/icons/18/inv_misc_metagem_b.jpg" alt="" />
-				<span class="frame"></span>
-			</a>
-	</span>
-	<span class="icon-socket socket-8">
-			<a href="/wow/item/52236" class="gem">
-				<img src="http://eu.battle.net/wow-assets/static/images/icons/18/inv_misc_cutgemsuperior3.jpg" alt="" />
-				<span class="frame"></span>
-			</a>
-	</span>
-								</span>
-						</div>
-			</div>
-		</div>
-	</div>
-
-
-	 	
-
-
-
-
-	<div data-id="1" data-type="2" class="slot slot-2 item-quality-3" style=" left: 0px; top: 58px;">
-		<div class="slot-inner">
-			<div class="slot-contents">
-					<a href="/wow/item/56288" class="item" data-item="i=56288&amp;s=1540433984"><img src="http://eu.battle.net/wow-assets/static/images/icons/56/inv_misc_necklacea1.jpg" alt="" /><span class="frame"></span></a>
-						<div class="details">
-							<span class="name-shadow">Подвеска из рыбы-иглы</span>
-							<span class="name color-q3">
-								
-								<a href="/wow/item/56288" data-item="i=56288&amp;s=1540433984">Подвеска из рыбы-иглы</a>
-							</span>
-							<span class="level">346</span>
-						</div>
-			</div>
-		</div>
-	</div>
-
-
-	 	
-
-
-
-
-	<div data-id="2" data-type="3" class="slot slot-3 item-quality-3" style=" left: 0px; top: 116px;">
-		<div class="slot-inner">
-			<div class="slot-contents">
-					<a href="/wow/item/56399" class="item" data-item="i=56399&amp;g0=1779&amp;s=672462032&amp;d=59"><img src="http://eu.battle.net/wow-assets/static/images/icons/56/inv_shoulder_robe_dungeonrobe_c_03.jpg" alt="" /><span class="frame"></span></a>
-						<div class="details">
-							<span class="name-shadow">Накидка мастера Чо</span>
-							<span class="name color-q3">
-								
-								<a href="/wow/item/56399" data-item="i=56399&amp;g0=1779&amp;s=672462032&amp;d=59">Накидка мастера Чо</a><a href="javascript:;" class="audit-warning"></a>
-							</span>
-							<span class="level">346</span>
-								<span class="sockets">
-	<span class="icon-socket socket-8">
-			<a href="/wow/item/52236" class="gem">
-				<img src="http://eu.battle.net/wow-assets/static/images/icons/18/inv_misc_cutgemsuperior3.jpg" alt="" />
-				<span class="frame"></span>
-			</a>
-	</span>
-								</span>
-						</div>
-			</div>
-		</div>
-	</div>
-
-
-	 	
-
-
-
-
-	<div data-id="14" data-type="16" class="slot slot-16 item-quality-3" style=" left: 0px; top: 174px;">
-		<div class="slot-inner">
-			<div class="slot-contents">
-					<a href="/wow/item/56267" class="item" data-item="i=56267&amp;e=4087&amp;s=1751315584"><img src="http://eu.battle.net/wow-assets/static/images/icons/56/inv_misc_cape_cataclysm_caster_b_01.jpg" alt="" /><span class="frame"></span></a>
-						<div class="details">
-							<span class="name-shadow">Литториновый плащ</span>
-							<span class="name color-q3">
-								
-								<a href="/wow/item/56267" data-item="i=56267&amp;e=4087&amp;s=1751315584">Литториновый плащ</a>
-							</span>
-								<span class="enchant-shadow">
-									критический удар I
-								</span>
-								<div class="enchant color-q2">
-<a href="/wow/item/52764">критический удар I</a>								</div>
-							<span class="level">346</span>
-						</div>
-			</div>
-		</div>
-	</div>
-
-
-	 	
-
-
-
-
-	<div data-id="4" data-type="5" class="slot slot-5 item-quality-3" style=" left: 0px; top: 232px;">
-		<div class="slot-inner">
-			<div class="slot-contents">
-					<a href="/wow/item/58153" class="item" data-item="i=58153&amp;e=4063&amp;g0=1750&amp;g1=1779&amp;d=104"><img src="http://eu.battle.net/wow-assets/static/images/icons/56/inv_chest_robe_dungeonrobe_c_04.jpg" alt="" /><span class="frame"></span></a>
-						<div class="details">
-							<span class="name-shadow">Одеяния благовоний тьмы</span>
-							<span class="name color-q3">
-								
-								<a href="/wow/item/58153" data-item="i=58153&amp;e=4063&amp;g0=1750&amp;g1=1779&amp;d=104">Одеяния благовоний тьмы</a>
-							</span>
-								<span class="enchant-shadow">
-									все характеристики VIII
-								</span>
-								<div class="enchant color-q2">
-<a href="/wow/item/52744">все характеристики VIII</a>								</div>
-							<span class="level">346</span>
-								<span class="sockets">
-	<span class="icon-socket socket-2">
-			<a href="/wow/item/52207" class="gem">
-				<img src="http://eu.battle.net/wow-assets/static/images/icons/18/inv_misc_cutgemsuperior6.jpg" alt="" />
-				<span class="frame"></span>
-			</a>
-	</span>
-	<span class="icon-socket socket-8">
-			<a href="/wow/item/52236" class="gem">
-				<img src="http://eu.battle.net/wow-assets/static/images/icons/18/inv_misc_cutgemsuperior3.jpg" alt="" />
-				<span class="frame"></span>
-			</a>
-	</span>
-								</span>
-						</div>
-			</div>
-		</div>
-	</div>
-
-
-	 	
-
-
-
-
-	<div data-id="3" data-type="4" class="slot slot-4" style=" left: 0px; top: 290px;">
-		<div class="slot-inner">
-			<div class="slot-contents">
-					<a href="javascript:;" class="empty"><span class="frame"></span></a>
-			</div>
-		</div>
-	</div>
-
-
-	 	
-
-
-
-
-	<div data-id="18" data-type="19" class="slot slot-19 item-quality-1" style=" left: 0px; top: 348px;">
-		<div class="slot-inner">
-			<div class="slot-contents">
-					<a href="/wow/item/65905" class="item" data-item="i=65905"><img src="http://eu.battle.net/wow-assets/static/images/icons/56/inv_misc_tabard_earthenring.jpg" alt="" /><span class="frame"></span></a>
-						<div class="details">
-							<span class="name-shadow">Гербовая накидка Служителей Земли</span>
-							<span class="name color-q1">
-								
-								<a href="/wow/item/65905" data-item="i=65905">Гербовая накидка Служителей Земли</a>
-							</span>
-							<span class="level">85</span>
-						</div>
-			</div>
-		</div>
-	</div>
-
-
-	 	
-
-
-
-
-	<div data-id="8" data-type="9" class="slot slot-9 item-quality-3" style=" left: 0px; top: 406px;">
-		<div class="slot-inner">
-			<div class="slot-contents">
-					<a href="/wow/item/56389" class="item" data-item="i=56389&amp;e=4071&amp;s=1404020224&amp;d=30"><img src="http://eu.battle.net/wow-assets/static/images/icons/56/inv_bracer_robe_dungeonrobe_c_03.jpg" alt="" /><span class="frame"></span></a>
-						<div class="details">
-							<span class="name-shadow">Нарукавье песчаного шелка</span>
-							<span class="name color-q3">
-								
-								<a href="/wow/item/56389" data-item="i=56389&amp;e=4071&amp;s=1404020224&amp;d=30">Нарукавье песчаного шелка</a>
-							</span>
-								<span class="enchant-shadow">
-									критический удар I
-								</span>
-								<div class="enchant color-q2">
-<a href="/wow/item/52752">критический удар I</a>								</div>
-							<span class="level">346</span>
-						</div>
-			</div>
-		</div>
-	</div>
-
-
-	 
-	
-
-
-
-
-	<div data-id="9" data-type="10" class="slot slot-10 slot-align-right item-quality-3" style=" top: 0px; right: 0px;">
-		<div class="slot-inner">
-			<div class="slot-contents">
-					<a href="/wow/item/58158" class="item" data-item="i=58158&amp;e=4068&amp;g0=1775&amp;d=35"><img src="http://eu.battle.net/wow-assets/static/images/icons/56/inv_gauntlets_robe_dungeonrobe_c_04.jpg" alt="" /><span class="frame"></span></a>
-						<div class="details">
-							<span class="name-shadow">Перчатки тихой полночи</span>
-							<span class="name color-q3">
-								
-								<a href="/wow/item/58158" data-item="i=58158&amp;e=4068&amp;g0=1775&amp;d=35">Перчатки тихой полночи</a>
-							</span>
-								<span class="enchant-shadow">
-									ускорение II
-								</span>
-								<div class="enchant color-q2">
-<a href="/wow/item/52749">ускорение II</a>								</div>
-							<span class="level">346</span>
-								<span class="sockets">
-	<span class="icon-socket socket-4">
-			<a href="/wow/item/52232" class="gem">
-				<img src="http://eu.battle.net/wow-assets/static/images/icons/18/inv_misc_cutgemsuperior.jpg" alt="" />
-				<span class="frame"></span>
-			</a>
-	</span>
-								</span>
-						</div>
-			</div>
-		</div>
-	</div>
-
-
-	 
-	
-
-
-
-
-	<div data-id="5" data-type="6" class="slot slot-6 slot-align-right item-quality-4" style=" top: 58px; right: 0px;">
-		<div class="slot-inner">
-			<div class="slot-contents">
-					<a href="/wow/item/54504" class="item" data-item="i=54504&amp;es=3729&amp;g0=1779&amp;g1=1750&amp;s=777109312&amp;d=40"><img src="http://eu.battle.net/wow-assets/static/images/icons/56/inv_belt_cloth_raidpriest_i_01.jpg" alt="" /><span class="frame"></span></a>
-						<div class="details">
-							<span class="name-shadow">Пояс глубин</span>
-							<span class="name color-q4">
-								
-								<a href="/wow/item/54504" data-item="i=54504&amp;es=3729&amp;g0=1779&amp;g1=1750&amp;s=777109312&amp;d=40">Пояс глубин</a>
-							</span>
-							<span class="level">359</span>
-								<span class="sockets">
-	<span class="icon-socket socket-8">
-			<a href="/wow/item/52236" class="gem">
-				<img src="http://eu.battle.net/wow-assets/static/images/icons/18/inv_misc_cutgemsuperior3.jpg" alt="" />
-				<span class="frame"></span>
-			</a>
-	</span>
-	<span class="icon-socket socket-14">
-			<a href="/wow/item/52207" class="gem">
-				<img src="http://eu.battle.net/wow-assets/static/images/icons/18/inv_misc_cutgemsuperior6.jpg" alt="" />
-				<span class="frame"></span>
-			</a>
-	</span>
-								</span>
-						</div>
-			</div>
-		</div>
-	</div>
-
-
-	 
-	
-
-
-
-
-	<div data-id="6" data-type="7" class="slot slot-7 slot-align-right item-quality-4" style=" top: 116px; right: 0px;">
-		<div class="slot-inner">
-			<div class="slot-contents">
-					<a href="/wow/item/54505" class="item" data-item="i=54505&amp;e=4114&amp;g0=1750&amp;s=1457437952&amp;d=87"><img src="http://eu.battle.net/wow-assets/static/images/icons/56/inv_pant_cloth_raidpriest_i_01.jpg" alt="" /><span class="frame"></span></a>
-						<div class="details">
-							<span class="name-shadow">Брюки избавления от кошмаров</span>
-							<span class="name color-q4">
-								
-								<a href="/wow/item/54505" data-item="i=54505&amp;e=4114&amp;g0=1750&amp;s=1457437952&amp;d=87">Брюки избавления от кошмаров</a>
-							</span>
-								<span class="enchant-shadow">
-									Освященная чародейская нить
-								</span>
-								<div class="enchant color-q2">
-<span class="tip" onmouseover="Tooltip.show(this, '#lsdklgns34-wow-10001');">Освященная чародейская нить</span>	<div id="lsdklgns34-wow-10001" style="display: none">
-		<div class="item-tooltip">
- 
-
-
-
-
-		<span  class="icon-frame frame-56" style='background-image: url("http://eu.battle.net/wow-assets/static/images/icons/56/spell_nature_astralrecalgroup.jpg");'>
-		</span>
-			<h3>Освященная чародейская нить</h3>
-			<span class="color-tooltip-yellow">Вышивка чародейской нитью на штанах, увеличивающая интеллект на 95 и дух на 55.
-
-
-
-Вышиты могут быть только собственные штаны заклинателя; после вышивки предмет становится персональным.</span>
-		</div>
-	</div>
-								</div>
-							<span class="level">359</span>
-								<span class="sockets">
-	<span class="icon-socket socket-2">
-			<a href="/wow/item/52207" class="gem">
-				<img src="http://eu.battle.net/wow-assets/static/images/icons/18/inv_misc_cutgemsuperior6.jpg" alt="" />
-				<span class="frame"></span>
-			</a>
-	</span>
-								</span>
-						</div>
-			</div>
-		</div>
-	</div>
-
-
-	 
-	
-
-
-
-
-	<div data-id="7" data-type="8" class="slot slot-8 slot-align-right item-quality-4" style=" top: 174px; right: 0px;">
-		<div class="slot-inner">
-			<div class="slot-contents">
-					<a href="/wow/item/62450" class="item" data-item="i=62450&amp;e=4069&amp;g0=1775&amp;d=57"><img src="http://eu.battle.net/wow-assets/static/images/icons/56/inv_boots_cloth_raidwarlock_i_01.jpg" alt="" /><span class="frame"></span></a>
-						<div class="details">
-							<span class="name-shadow">Сандалии странника пустынь</span>
-							<span class="name color-q4">
-								
-								<a href="/wow/item/62450" data-item="i=62450&amp;e=4069&amp;g0=1775&amp;d=57">Сандалии странника пустынь</a>
-							</span>
-								<span class="enchant-shadow">
-									ускорение
-								</span>
-								<div class="enchant color-q2">
-<a href="/wow/item/52750">ускорение</a>								</div>
-							<span class="level">359</span>
-								<span class="sockets">
-	<span class="icon-socket socket-4">
-			<a href="/wow/item/52232" class="gem">
-				<img src="http://eu.battle.net/wow-assets/static/images/icons/18/inv_misc_cutgemsuperior.jpg" alt="" />
-				<span class="frame"></span>
-			</a>
-	</span>
-								</span>
-						</div>
-			</div>
-		</div>
-	</div>
-
-
-	 
-	
-
-
-
-
-	<div data-id="10" data-type="11" class="slot slot-11 slot-align-right item-quality-4" style=" top: 232px; right: 0px;">
-		<div class="slot-inner">
-			<div class="slot-contents">
-					<a href="/wow/item/58188" class="item" data-item="i=58188&amp;e=4080"><img src="http://eu.battle.net/wow-assets/static/images/icons/56/inv_misc_diamondring1.jpg" alt="" /><span class="frame"></span></a>
-						<div class="details">
-							<span class="name-shadow">Перстень тайных имен</span>
-							<span class="name color-q4">
-								
-								<a href="/wow/item/58188" data-item="i=58188&amp;e=4080">Перстень тайных имен</a>
-							</span>
-								<span class="enchant-shadow">
-									интеллект
-								</span>
-								<div class="enchant color-q2">
-<span class="tip" onmouseover="Tooltip.show(this, '#lsdklgns34-wow-10002');">интеллект</span>	<div id="lsdklgns34-wow-10002" style="display: none">
-		<div class="item-tooltip">
- 
-
-
-
-
-		<span  class="icon-frame frame-56" style='background-image: url("http://eu.battle.net/wow-assets/static/images/icons/56/trade_engraving.jpg");'>
-		</span>
-			<h3>Чары для кольца - интеллект</h3>
-			<span class="color-tooltip-yellow">Наложение на ваше собственное кольцо чар, повышающих интеллект на 40. Любое зачарованное кольцо становится персональным. Чтобы чары продолжали действовать, ваш навык наложения чар должен быть не ниже 475.</span>
-		</div>
-	</div>
-								</div>
-							<span class="level">359</span>
-						</div>
-			</div>
-		</div>
-	</div>
-
-
-	 
-	
-
-
-
-
-	<div data-id="11" data-type="11" class="slot slot-11 slot-align-right item-quality-3" style=" top: 290px; right: 0px;">
-		<div class="slot-inner">
-			<div class="slot-contents">
-					<a href="/wow/item/56276" class="item" data-item="i=56276&amp;e=4080&amp;s=688176608"><img src="http://eu.battle.net/wow-assets/static/images/icons/56/inv_misc_stonering2.jpg" alt="" /><span class="frame"></span></a>
-						<div class="details">
-							<span class="name-shadow">Кольцо антии</span>
-							<span class="name color-q3">
-								
-								<a href="/wow/item/56276" data-item="i=56276&amp;e=4080&amp;s=688176608">Кольцо антии</a>
-							</span>
-								<span class="enchant-shadow">
-									интеллект
-								</span>
-								<div class="enchant color-q2">
-<span class="tip" onmouseover="Tooltip.show(this, '#lsdklgns34-wow-10003');">интеллект</span>	<div id="lsdklgns34-wow-10003" style="display: none">
-		<div class="item-tooltip">
- 
-
-
-
-
-		<span  class="icon-frame frame-56" style='background-image: url("http://eu.battle.net/wow-assets/static/images/icons/56/trade_engraving.jpg");'>
-		</span>
-			<h3>Чары для кольца - интеллект</h3>
-			<span class="color-tooltip-yellow">Наложение на ваше собственное кольцо чар, повышающих интеллект на 40. Любое зачарованное кольцо становится персональным. Чтобы чары продолжали действовать, ваш навык наложения чар должен быть не ниже 475.</span>
-		</div>
-	</div>
-								</div>
-							<span class="level">346</span>
-						</div>
-			</div>
-		</div>
-	</div>
-
-
-	 
-	
-
-
-
-
-	<div data-id="12" data-type="12" class="slot slot-12 slot-align-right item-quality-3" style=" top: 348px; right: 0px;">
-		<div class="slot-inner">
-			<div class="slot-contents">
-					<a href="/wow/item/56400" class="item" data-item="i=56400&amp;s=1606991616"><img src="http://eu.battle.net/wow-assets/static/images/icons/56/spell_nature_invisibilitytotem.jpg" alt="" /><span class="frame"></span></a>
-						<div class="details">
-							<span class="name-shadow">Песнь печали</span>
-							<span class="name color-q3">
-								
-								<a href="/wow/item/56400" data-item="i=56400&amp;s=1606991616">Песнь печали</a>
-							</span>
-							<span class="level">346</span>
-						</div>
-			</div>
-		</div>
-	</div>
-
-
-	 
-	
-
-
-
-
-	<div data-id="13" data-type="12" class="slot slot-12 slot-align-right item-quality-3" style=" top: 406px; right: 0px;">
-		<div class="slot-inner">
-			<div class="slot-contents">
-					<a href="/wow/item/56407" class="item" data-item="i=56407&amp;s=520420800"><img src="http://eu.battle.net/wow-assets/static/images/icons/56/inv_misc_book_17.jpg" alt="" /><span class="frame"></span></a>
-						<div class="details">
-							<span class="name-shadow">Песенник Ануура</span>
-							<span class="name color-q3">
-								
-								<a href="/wow/item/56407" data-item="i=56407&amp;s=520420800">Песенник Ануура</a>
-							</span>
-							<span class="level">346</span>
-						</div>
-			</div>
-		</div>
-	</div>
-
-
-	 
-
-
-
-
-	<div data-id="15" data-type="21" class="slot slot-21 slot-align-right item-quality-3" style=" left: -6px; bottom: 0px;">
-		<div class="slot-inner">
-			<div class="slot-contents">
-					<a href="/wow/item/56271" class="item" data-item="i=56271&amp;e=4083&amp;s=1423551232&amp;d=83"><img src="http://eu.battle.net/wow-assets/static/images/icons/56/inv_stave_2h_cataclysm_c_02.jpg" alt="" /><span class="frame"></span></a>
-						<div class="details">
-							<span class="name-shadow">Посох из островерхой раковины</span>
-							<span class="name color-q3">
-								
-								<a href="/wow/item/56271" data-item="i=56271&amp;e=4083&amp;s=1423551232&amp;d=83">Посох из островерхой раковины</a>
-							</span>
-								<span class="enchant-shadow">
-									ураган
-								</span>
-								<div class="enchant color-q2">
-<a href="/wow/item/52760">ураган</a>								</div>
-							<span class="level">346</span>
-						</div>
-			</div>
-		</div>
-	</div>
-
-
-	 
-
-
-
-
-	<div data-id="16" data-type="22" class="slot slot-22" style=" left: 271px; bottom: 0px;">
-		<div class="slot-inner">
-			<div class="slot-contents">
-					<a href="javascript:;" class="empty"><span class="frame"></span></a>
-			</div>
-		</div>
-	</div>
-
-
-	 
-
-
-
-
-	<div data-id="17" data-type="15" class="slot slot-15 item-quality-3" style=" left: 548px; bottom: 0px;">
-		<div class="slot-inner">
-			<div class="slot-contents">
-					<a href="/wow/item/65172" class="item" data-item="i=65172&amp;d=54"><img src="http://eu.battle.net/wow-assets/static/images/icons/56/inv_staff_02.jpg" alt="" /><span class="frame"></span></a>
-						<div class="details">
-							<span class="name-shadow">Мешалка повара</span>
-							<span class="name color-q3">
-								
-								<a href="/wow/item/65172" data-item="i=65172&amp;d=54">Мешалка повара</a>
-							</span>
-							<span class="level">346</span>
-						</div>
-			</div>
-		</div>
-	</div>
 	</div>
 
 	<script type="text/javascript">
@@ -724,21 +188,15 @@ World of Warcraft
 		});
 	//]]>
 	</script>
-
 				</div>
-
 		</div>
-
 			<div class="summary-middle">
 				<div class="summary-middle-inner">
-
 					<div class="summary-middle-right">
 						<div class="summary-audit" id="summary-audit">
 							<div class="category-right"><span class="tip" id="summary-audit-whatisthis"><?php echo WoW_Locale::GetString('template_character_audit_help'); ?></span></div>
 								<h3 class="category "><?php echo WoW_Locale::GetString('template_character_audit'); ?></h3>
-
 							<div class="profile-box-simple">
-
 	<ul class="summary-audit-list">
     <?php
     $empty_sockets_slots_js = '';
@@ -800,6 +258,9 @@ World of Warcraft
         <span class="tip">' . sprintf(WoW_Locale::GetString('template_character_audit_nonop_armor', $nonop_armor_count, WoW_Utils::GetAppropriateItemClassForClassID(WoW_Characters::GetClassID()))) .  '</span>
         </li>');
     }
+    if(isset($audit[AUDIT_TYPE_MISSING_BELT_BUCKLE]) && $audit[AUDIT_TYPE_MISSING_BELT_BUCKLE] == true) {
+        echo sprintf('<li data-slots="5">%s</li>', sprintf(WoW_Locale::GetString('template_character_audit_missing_belt_buckle'), BELT_BUCKLE_ID, WoW_Items::GetItemName(BELT_BUCKLE_ID)));
+    }
     ?>
 	</ul>
     <?php
@@ -807,7 +268,6 @@ World of Warcraft
         echo WoW_Locale::GetString('template_character_audit_passed');
     }
     ?>
-
 	<script type="text/javascript">
 	//<![CDATA[
 		$(document).ready(function() {
@@ -830,14 +290,11 @@ World of Warcraft
 							<div class="profile-box-simple"><?php echo WoW_Locale::GetString('template_character_reforge_none'); // Requires Cataclysm support ?></div>
 						</div>
 					</div>
-				
 					<div class="summary-middle-left">
 						<div class="summary-bonus-tally">
 								<h3 class="category "><?php echo WoW_Locale::GetString('template_gems_enchants_bonuses'); ?></h3>
 
 							<div class="profile-box-simple">
-
-
             <!--
 		<div class="numerical">
 			<ul>
@@ -871,13 +328,11 @@ World of Warcraft
             
 			</ul>
 		</div>
-	
 		<div class="other">
 				<span class="name"><a href="/wow/item/52760">ураган</a></span><span class="comma">,</span>
 				<span class="name"><a href="/wow/item/52291">Хаотический мглистый алмаз</a></span>
 		</div>
         -->
-		
 							</div>
 						</div>
 
@@ -915,14 +370,11 @@ World of Warcraft
 	<span class="clear"><!-- --></span>
 				</div>
 			</div>
-
 			<div class="summary-bottom">
 				<?php WoW_Template::LoadTemplate('block_character_recent_activity'); ?>
 				<div class="summary-bottom-left">
 					<?php WoW_Template::LoadTemplate('block_character_talents_summary'); ?>
 					<div class="summary-stats-profs-bgs">
-
-
 	<div class="summary-stats" id="summary-stats">
 			<div id="summary-stats-advanced" class="summary-stats-advanced">
 				<div class="summary-stats-advanced-base">
@@ -973,7 +425,6 @@ World of Warcraft
             <?php WoW_Template::LoadTemplate('block_character_stats_simple'); ?>
 			<a href="javascript:;" id="summary-stats-toggler" class="summary-stats-toggler"><span class="inner"><span class="arrow"><?php echo WoW_Locale::GetString('template_character_profile_toggle_stats_all'); ?></span></span></a>
 	</div>
- 
 	<?php
     WoW_Template::LoadTemplate('block_profile_stats_js');
     WoW_Template::LoadTemplate('block_character_bg_professions');
@@ -984,12 +435,9 @@ World of Warcraft
 	<span class="clear"><!-- --></span>
 			</div>
 		</div>
-
 	<span class="clear"><!-- --></span>
 	</div>
-
 	<script type="text/javascript" src="/wow/static/js/locales/summary_<?php echo WoW_Locale::GetLocale(); ?>.js"></script>
-
 </div>
 </div>
 </div>

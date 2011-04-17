@@ -1108,19 +1108,23 @@ Class WoW_Characters /*implements Interface_Characters*/ {
             return false;
         }
         $item_data = array(
-            'item_id' => $item->GetEntry(),
-            'name'    => WoW_Items::GetItemName($item->GetEntry()),
-            'guid'    => $item->GetGUID(),
-            'quality' => $info['Quality'],
+            'item_id'    => $item->GetEntry(),
+            'name'       => WoW_Items::GetItemName($item->GetEntry()),
+            'guid'       => $item->GetGUID(),
+            'quality'    => $info['Quality'],
             'item_level' => $item->GetItemLevel(),
-            'icon'    => WoW_Items::GetItemIcon(0, $info['displayid']),
-            'slot_id' => $item->GetSlot(),
-            'enchid'  => $item->GetEnchantmentId(),
-            'g0'      => $item->GetSocketInfo(1),
-            'g1'      => $item->GetSocketInfo(2),
-            'g2'      => $item->GetSocketInfo(3)
+            'icon'       => WoW_Items::GetItemIcon(0, $info['displayid']),
+            'slot_id'    => $item->GetSlot(),
+            'enchid'     => $item->GetEnchantmentId(),
+            'g0'         => $item->GetSocketInfo(1),
+            'g1'         => $item->GetSocketInfo(2),
+            'g2'         => $item->GetSocketInfo(3),
+            'can_ench'   => !in_array($item->GetSlot(), array(INV_SHIRT, INV_RANGED_RELIC, INV_TABARD, INV_TRINKET_1, INV_TRINKET_2, INV_TYPE_NECK, INV_OFF_HAND, INV_RING_1, INV_RING_2, INV_NECK, INV_BELT))
         );
         if($advanced) {
+            $item_data['enchant_text'] = '';
+            $item_data['enchant_quality'] = 2;
+            $item_data['enchant_item'] = 0;
             $enchantment_info = DB::WoW()->selectRow("
             SELECT
             `DBPREFIX_enchantment`.`text_%s` AS `text`,
@@ -1130,8 +1134,15 @@ Class WoW_Characters /*implements Interface_Characters*/ {
             WHERE `DBPREFIX_enchantment`.`id` = %d LIMIT 1", WoW_Locale::GetLocale(), $item_data['enchid']);
             if(is_array($enchantment_info)) {
                 $item_data['enchant_text'] = $enchantment_info['text'];
-                // SpellID 483 - "Learning".
-                $item_data['enchant_quality'] = DB::World()->selectCell("SELECT `Quality` FROM `item_template` WHERE `spellid_1` = 483 AND `spellid_2` = %d LIMIT 1", $enchantment_info['spellId']);
+                $ench_spell = DB::WoW()->selectCell("SELECT `id` FROM `DBPREFIX_spellenchantment` WHERE `Value` = %d", $item_data['enchid']);
+                if($ench_spell > 0) {
+                    $item_data['enchant_item'] = DB::World()->selectCell("SELECT `entry` FROM `item_template` WHERE `spellid_1` = %d OR `spellid_2` = %d OR `spellid_3` = %d LIMIT 1", $ench_spell, $ench_spell, $ench_spell);
+                    if($item_data['enchant_item'] > 0) {
+                        $item_ench_name = WoW_Items::GetItemName($item_data['enchant_item']);
+                        $matches = array();
+                        $item_data['enchant_text'] = str_replace('- ', null, substr($item_ench_name, strpos($item_ench_name, ' - ')));
+                    }
+                }
             }
             for($socket_index = 0; $socket_index < 3; $socket_index++) {
                 $item_data['gem' . $socket_index] = array();
@@ -2745,11 +2756,8 @@ Class WoW_Characters /*implements Interface_Characters*/ {
                     self::UpdateAudit(AUDIT_TYPE_NONOPTIMAL_ARMOR, array($item->GetSlot(), $item->GetEntry()));
                 }
                 // Unenchanted items
-                if($item->GetEnchantmentId() == 0 && !in_array($item->GetSlot(), array(INV_SHIRT, INV_RANGED_RELIC, INV_TABARD, INV_TRINKET_1, INV_TRINKET_2, INV_TYPE_NECK, INV_OFF_HAND, INV_RING_1, INV_RING_2, INV_NECK))) {
-                    if($item->GetSlot() != INV_BELT) {
-                        self::UpdateAudit(AUDIT_TYPE_UNENCHANTED_ITEM, array($item->GetSlot(), $item->GetEntry()));
-                    }
-                    
+                if($item->GetEnchantmentId() == 0 && !in_array($item->GetSlot(), array(INV_BELT, INV_SHIRT, INV_RANGED_RELIC, INV_TABARD, INV_TRINKET_1, INV_TRINKET_2, INV_TYPE_NECK, INV_OFF_HAND, INV_RING_1, INV_RING_2, INV_NECK))) {
+                    self::UpdateAudit(AUDIT_TYPE_UNENCHANTED_ITEM, array($item->GetSlot(), $item->GetEntry()));
                 }
                 // Missing belt buckle
                 if($item->GetSlot() == INV_BELT && !$item->HasBonusEnchantmentSlot()) {

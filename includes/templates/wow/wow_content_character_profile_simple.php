@@ -1,8 +1,6 @@
 <?php
-
 // Talents data
 $talents = WoW_Characters::GetTalentsData();
-WoW_Characters::AuditCharacter();
 ?>
 <div id="content">
 <div class="content-top">
@@ -24,9 +22,7 @@ World of Warcraft
 </ol>
 </div>
 <div class="content-bot">
-
 	<div id="profile-wrapper" class="profile-wrapper profile-wrapper-<?php echo WoW_Characters::GetFactionName(); ?> profile-wrapper-light">
-
 		<div class="profile-sidebar-anchor">
 			<div class="profile-sidebar-outer">
 				<div class="profile-sidebar-inner">
@@ -58,14 +54,9 @@ World of Warcraft
 				</div>
 			</div>
 		</div>
-		
 		<div class="profile-contents">
-
 		<div class="summary-top">
-		
 			<div class="summary-top-right">
-
-
 	<ul class="profile-view-options" id="profile-view-options-summary">
 			<li>
 				<a href="javascript:;" rel="np" class="threed disabled">
@@ -83,8 +74,6 @@ World of Warcraft
 				</a>
 			</li>
 	</ul>
-
-
 					<div class="summary-averageilvl">
 	<div class="rest">
 		<?php echo WoW_Locale::GetString('template_profile_avg_itemlevel'); ?><br />
@@ -94,12 +83,8 @@ World of Warcraft
 		<?php echo WoW_Characters::GetAVGItemLevel(); ?>
 	</div>
 					</div>
-
 			</div>
-		
 				<div class="summary-top-inventory">
-
-
 	<div id="summary-inventory" class="summary-inventory summary-inventory-simple">
     <?php
     $item_slots = array(
@@ -144,9 +129,7 @@ World of Warcraft
     }
     
     ?>
-
 	</div>
-
 	<script type="text/javascript">
 	//<![CDATA[
 		$(document).ready(function() {
@@ -171,51 +154,29 @@ World of Warcraft
 		});
 	//]]>
 	</script>
-
 				</div>
-
 		</div>
-
-
-
 			<div class="summary-bottom">
-
 				<?php WoW_Template::LoadTemplate('block_character_recent_activity'); ?>
-
 				<div class="summary-bottom-left">
-
 					<?php WoW_Template::LoadTemplate('block_character_talents_summary'); ?>
-					
 					<div class="summary-stats-profs-bgs">
 	<div class="summary-stats" id="summary-stats">
 		<?php WoW_Template::LoadTemplate('block_character_stats_simple'); ?>
-
 	</div>
-
 	<?php
     WoW_Template::LoadTemplate('block_profile_stats_js');
     WoW_Template::LoadTemplate('block_character_bg_professions');
     ?>
-
 					</div>
-
 				</div>
-
 	<span class="clear"><!-- --></span>
-
-					
-
 	<span class="clear"><!-- --></span>
-
 			</div>
-
-
 		</div>
-
 	<span class="clear"><!-- --></span>
 	</div>
 	<script type="text/javascript" src="/wow/static/js/locales/summary_<?php echo WoW_Locale::GetLocale(); ?>.js"></script>
-
 </div>
 </div>
 </div>
