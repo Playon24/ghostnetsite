@@ -219,8 +219,8 @@ World of Warcraft
                 $unench_slots .= ',';
                 $unench_slots_js .= ",";
             }
-            $unench_slots .= $audit[AUDIT_TYPE_UNENCHANTED_ITEM][$i][0];
-            $unench_slots_js .= $audit[AUDIT_TYPE_UNENCHANTED_ITEM][$i][0] . " : 1";
+            $unench_slots .= $audit[AUDIT_TYPE_UNENCHANTED_ITEM][$i][0]-1;
+            $unench_slots_js .= $audit[AUDIT_TYPE_UNENCHANTED_ITEM][$i][0]-1 . " : 1";
         }
         $unenchanted_items_js = sprintf($unench_slots_js_tpl, $unench_slots_js);
         echo sprintf('<li data-slots="%s">
@@ -333,16 +333,16 @@ World of Warcraft
 				<span class="name"><a href="/wow/item/52291">Хаотический мглистый алмаз</a></span>
 		</div>
         -->
+            <?php echo WoW_Locale::GetString('template_character_audit_no_bonuses'); ?>
 							</div>
 						</div>
 
 						<div class="summary-gems">
 								<h3 class="category "><?php echo WoW_Locale::GetString('template_used_gems'); ?></h3>
 							<div class="profile-box-simple">
-	<div class="summary-gems">
-		<ul>
                 <?php
-                if(is_array($audit[AUDIT_TYPE_USED_GEMS])) {
+                if(isset($audit[AUDIT_TYPE_USED_GEMS]) && is_array($audit[AUDIT_TYPE_USED_GEMS])) {
+                    echo '<div class="summary-gems"><ul>';
                     foreach($audit[AUDIT_TYPE_USED_GEMS] as $gem) {
                         echo sprintf('<li>
                     <span class="value">%d</span>
@@ -358,10 +358,12 @@ World of Warcraft
                     <span class="clear"><!-- --></span>
                 </li>', $gem['counter'], $gem['color'], $gem['item'], $gem['icon'], $gem['item'], $gem['quality'], $gem['name']);
                     }
+                    echo '</ul></div>';
+                }
+                else {
+                    echo WoW_Locale::GetString('template_character_audit_no_gems');
                 }
                 ?>
-		</ul>
-	</div>
 							</div>
 						</div>
 

@@ -1564,8 +1564,8 @@ Class WoW_Characters /*implements Interface_Characters*/ {
     
     private static function GetTalentPointsForLevel() {
         $base_level = self::GetClassID() == CLASS_DK ? 55 : 9;
-        if(self::GetClassID() == CLASS_DK && self::GetLevel() > 60) {
-            $base_level == 9; // Quest-bonus talent points for DK's quest chain.
+        if(self::GetClassID() == CLASS_DK && self::GetLevel() >= 60) {
+            $base_level = 9; // Quest-bonus talent points for DK's quest chain.
         }
         $base_talent = self::GetLevel() <= $base_level ? 0 : self::GetLevel() - $base_level;
         return $base_talent <= MAX_TALENT_POINTS ? $base_talent : MAX_TALENT_POINTS;
@@ -2752,8 +2752,12 @@ Class WoW_Characters /*implements Interface_Characters*/ {
                     continue;
                 }
                 // Non optimal armor
-                if(!self::IsOptimalArmorForClass($item->GetEntry())) {
+                if(!in_array($item->GetSlot(), array(INV_MAIN_HAND, INV_OFF_HAND, INV_BELT, INV_SHIRT, INV_RANGED_RELIC, INV_TABARD, INV_TRINKET_1, INV_TRINKET_2, INV_TYPE_NECK, INV_OFF_HAND, INV_RING_1, INV_RING_2, INV_NECK)) && !self::IsOptimalArmorForClass($item->GetEntry())) {
                     self::UpdateAudit(AUDIT_TYPE_NONOPTIMAL_ARMOR, array($item->GetSlot(), $item->GetEntry()));
+                }
+                // Enchant bonus
+                if($item->GetEnchantmentId() != 0) {
+                    //self::UpdateAudit(AUDIT_TYPE_STAT_BONUS, $item->GetEnchantmentId());
                 }
                 // Unenchanted items
                 if($item->GetEnchantmentId() == 0 && !in_array($item->GetSlot(), array(INV_BELT, INV_SHIRT, INV_RANGED_RELIC, INV_TABARD, INV_TRINKET_1, INV_TRINKET_2, INV_TYPE_NECK, INV_OFF_HAND, INV_RING_1, INV_RING_2, INV_NECK))) {
@@ -2791,6 +2795,7 @@ Class WoW_Characters /*implements Interface_Characters*/ {
                     }
                     else {
                         self::UpdateAudit(AUDIT_TYPE_USED_GEMS, $item->GetSocketInfo($i));
+                        //self::UpdateAudit(AUDIT_TYPE_STAT_BONUS, $item->GetSocketInfo($i));
                     }
                 }
             }
