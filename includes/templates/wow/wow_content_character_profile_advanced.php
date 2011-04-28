@@ -3,9 +3,6 @@
 $talents = WoW_Characters::GetTalentsData();
 // Character audit
 $audit = WoW_Characters::GetAudit();
-echo '<!--';
-print_r($audit);
-echo '-->';
 ?>
 <div id="content">
 <div class="content-top">
@@ -220,7 +217,7 @@ World of Warcraft
                 $unench_slots_js .= ",";
             }
             $unench_slots .= $audit[AUDIT_TYPE_UNENCHANTED_ITEM][$i][0]-1;
-            $unench_slots_js .= $audit[AUDIT_TYPE_UNENCHANTED_ITEM][$i][0]-1 . " : 1";
+            $unench_slots_js .= $audit[AUDIT_TYPE_UNENCHANTED_ITEM][$i][0] . " : 1";
         }
         $unenchanted_items_js = sprintf($unench_slots_js_tpl, $unench_slots_js);
         echo sprintf('<li data-slots="%s">
@@ -295,45 +292,41 @@ World of Warcraft
 								<h3 class="category "><?php echo WoW_Locale::GetString('template_gems_enchants_bonuses'); ?></h3>
 
 							<div class="profile-box-simple">
-            <!--
-		<div class="numerical">
-			<ul>
-					<li>
-						<span class="value">+510</span> Интеллект
-					</li>
-					<li>
-						<span class="value">+214</span> Рейтинг критического удара
-					</li>
-					<li>
-						<span class="value">+190</span> Рейтинг скорости боя
-					</li>
-					<li>
-						<span class="value">+190</span> Дух
-					</li>
-					<li>
-						<span class="value">+20</span> Рейтинг искусности
-					</li>
-					<li>
-						<span class="value">+15</span> Сила
-					</li>
-					<li>
-						<span class="value">+15</span> Ловкость
-					</li>
-					<li>
-						<span class="value">+15</span> Выносливость
-					</li>
-					<li>
-						<span class="value">+10</span> Рейтинг меткости
-					</li>
-            
-			</ul>
-		</div>
-		<div class="other">
-				<span class="name"><a href="/wow/item/52760">ураган</a></span><span class="comma">,</span>
-				<span class="name"><a href="/wow/item/52291">Хаотический мглистый алмаз</a></span>
-		</div>
-        -->
-            <?php echo WoW_Locale::GetString('template_character_audit_no_bonuses'); ?>
+            <?php
+            if(!isset($audit[AUDIT_TYPE_STAT_BONUS]) || !is_array($audit[AUDIT_TYPE_STAT_BONUS])) {
+                echo WoW_Locale::GetString('template_character_audit_no_bonuses');
+            }
+            else {
+                echo '<div class="numerical"><ul>';
+                foreach($audit[AUDIT_TYPE_STAT_BONUS] as $ench_type => $ench_bonus) {
+                    echo sprintf('<li><span class="value">+%d</span> %s</li>', $ench_bonus, WoW_Locale::GetString('template_stat_name_' . $ench_type));
+                }
+                echo '</ul></div>';
+                $weapon = WoW_Characters::GetEquippedItemInfo(EQUIPMENT_SLOT_MAINHAND, true); // Will be returned from cache
+                $head = WoW_Characters::GetEquippedItemInfo(EQUIPMENT_SLOT_HEAD, true);
+                $gem_data = array();
+                if(is_array($head)) {
+                    for($i = 0; $i < 3; ++$i) {
+                        if($head['g' . $i]['color'] == 1) {
+                            $gem_data = array(
+                                'id' => $head['g' . $i]['item'],
+                                'name' => $head['g' . $i]['name']
+                            );
+                        }
+                    }
+                }
+                $other_str = null;
+                if(is_array($weapon) && isset($weapon['enchant_item']) && $weapon['enchant_item'] > 0) {
+                    $other_str .= sprintf('<span class="name"><a href="/wow/item/%d">%s</a></span>%s ', $weapon['enchant_item'], $weapon['enchant_text'], (is_array($gem_data) && isset($gem_data['name'])) ? '<span class="comma">,</span>' : null);
+                }
+                if(is_array($gem_data) && isset($gem_data['name'])) {
+                    $other_str .= sprintf('<span class="name"><a href="/wow/item/%d">%s</a></span>', $gem_data['id'], $gem_data['name']);
+                }
+                if($other_str != null) {
+                    echo sprintf('<div class="other">%s</div>', $other_str);
+                }
+            }
+            ?>
 							</div>
 						</div>
 
