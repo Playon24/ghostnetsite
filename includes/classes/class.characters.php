@@ -2751,7 +2751,7 @@ Class WoW_Characters /*implements Interface_Characters*/ {
                 if(!$item) {
                     continue;
                 }
-                self::UpdateAudit(AUDIT_TYPE_STAT_BONUS, $item->GetItemBonuses()); // Add some stats from ench/gem.
+                //self::UpdateAudit(AUDIT_TYPE_STAT_BONUS, $item->GetItemBonuses()); // Add some stats from ench/gem.
                 // Non optimal armor
                 if(!in_array($item->GetSlot(), array(INV_MAIN_HAND, INV_OFF_HAND, INV_BELT, INV_SHIRT, INV_RANGED_RELIC, INV_TABARD, INV_TRINKET_1, INV_TRINKET_2, INV_TYPE_NECK, INV_OFF_HAND, INV_RING_1, INV_RING_2, INV_NECK)) && !self::IsOptimalArmorForClass($item->GetEntry())) {
                     self::UpdateAudit(AUDIT_TYPE_NONOPTIMAL_ARMOR, array($item->GetSlot(), $item->GetEntry()));
