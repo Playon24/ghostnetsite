@@ -108,4 +108,5 @@ if(isset($_GET['_DISPLAYVERSION_'])) {
 // RunOnce.
 define('__RUNONCE__', true);
 include(WOW_DIRECTORY . '/includes/RunOnce.php');
+WoW::AddInWoW();
 ?>

@@ -205,6 +205,30 @@ Class WoW {
         }
         return $realmList;
     }
+    
+    public static function AddInWoW() {
+        if(self::IsInWoW()) {
+            return true;
+        }
+        if(!isset($_SESSION['in_wow'])) {
+            $_SESSION['in_wow'] = true;
+        }
+        else {
+            $_SESSION['in_wow2'] = true;
+        }
+    }
+    
+    public static function IsInWoW() {
+        return isset($_SESSION['in_wow']) && isset($_SESSION['in_wow2']);
+    }
+    
+    public static function RedirectToCorrectProfilePage($current_type = '') {
+        if($current_type == 'simple' && !preg_match('/simple/i', $_SERVER['REQUEST_URI'])) {
+            if(isset($_COOKIE['wow_character_summary_view']) && in_array($_COOKIE['wow_character_summary_view'], array('simple', 'advanced'))) {
+                header(sprintf('Location: %s%s%s', $_SERVER['REQUEST_URI'], substr($_SERVER['REQUEST_URI'], (strlen($_SERVER['REQUEST_URI']) - 1), 1) == '/' ? '' : '/', $_COOKIE['wow_character_summary_view']));
+                exit;
+            }
+        }
+    }
 }
-
 ?>

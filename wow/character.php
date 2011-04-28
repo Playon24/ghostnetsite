@@ -28,6 +28,17 @@ if(!$url_data) {
     WoW_Template::SetPageData('errorProfile', 'template_404');
 }
 else {
+    if($url_data['action0'] == 'advanced') {
+        // Set "wow.character.summary.view" cookie as "advanced"
+        setcookie('wow.character.summary.view', 'advanced', strtotime('NEXT YEAR'), '/wow/character/');
+    }
+    elseif($url_data['action0'] == null && (isset($url_data['name']) && isset($url_data['realmName']))) {
+        WoW::RedirectToCorrectProfilePage('simple');
+    }
+    elseif($url_data['action0'] == 'simple') {
+        // Set "wow.character.summary.view" cookie as "simple"
+        setcookie('wow.character.summary.view', 'simple', strtotime('NEXT YEAR'), '/wow/character/');
+    }
     $load_result = WoW_Characters::LoadCharacter($url_data['name'], WoW_Utils::GetRealmIDByName($url_data['realmName']), true, true);
     if(!WoW_Characters::IsCorrect() || $load_result != 3) {
         if($url_data['action0'] == 'tooltip') {
