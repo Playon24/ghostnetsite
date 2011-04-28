@@ -1,3 +1,9 @@
 Engine must be installed in DocumentRoot folder (site root)!
+Execute all SQL dumps from archive
+   sql/wowcs_rXXX.7z
+where XXX - № of latest available revision.
 
 Движок должен быть установлен в корневую папку сайта!
+Выполните все SQL дампы из архива
+   sql/wowcs_rXXX.7z
+где XXX - № последней доступной ревизии.
