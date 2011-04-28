@@ -32,6 +32,9 @@ switch(WoW_Search::GetCurrentPage()) {
     case 'article':
         WoW_Template::LoadTemplate('block_search_table_articles');
         break;
+    case 'wowguild':
+        WoW_Template::LoadTemplate('block_search_results_guilds');
+        break;
     case 'search':
     default:
         WoW_Template::LoadTemplate('block_search_results_left');

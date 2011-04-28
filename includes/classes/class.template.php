@@ -593,9 +593,9 @@ Class WoW_Template {
         switch(self::GetPageIndex()) {
             case 'character_profile_simple':
             case 'character_profile_advanced':
-                return sprintf('%s @ %s - ' , WoW_Characters::GetName(), WoW_Characters::GetRealmName());
+                return sprintf('%s @ %s - %s - ' , WoW_Characters::GetName(), WoW_Characters::GetRealmName(), WoW_Locale::GetString('template_menu_game'));
             case 'character_talents':
-                return sprintf('%s - ', WoW_Locale::GetString('template_profile_talents'));
+                return sprintf('%s - %s - ', WoW_Locale::GetString('template_profile_talents'), WoW_Locale::GetString('template_menu_game'));
             case 'character_achievements':
                 return sprintf('%s - %s - ', WoW_Locale::GetString('template_profile_achievements'), WoW_Locale::GetString('template_menu_game'));
             case 'character_reputation':
@@ -613,5 +613,4 @@ Class WoW_Template {
         }
     }
 }
-
 ?>

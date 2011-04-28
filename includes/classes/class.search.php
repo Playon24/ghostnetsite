@@ -209,6 +209,7 @@ Class WoW_Search {
                 continue;
             }
             foreach($current_result as $res) {
+                $res['realmName'] = $realm['name'];
                 $results[] = $res;
             }
         }
