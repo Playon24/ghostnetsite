@@ -616,6 +616,10 @@ $WoW_Locale = array(
     
     'template_character_statistic_update' => 'Обновления статистики',
     
+    'template_character_feed' => 'Лента новостей персонажа',
+    'template_character_feed_most_recent_events' => 'Отображаются 50 последних событий, связанных с персонажем.',
+    
+    
     'template_blog_report_post' => 'Сообщить модераторам о сообщении #<span id="report-postID"></span> игрока <span id="report-poster"></span>',
     'template_blog_report_reason' => 'Причина',
     'template_blog_report_reasons' => '<option value="SPAMMING">Спам</option><option value="REAL_LIFE_THREATS">Угрозы в реальной жизни</option><option value="BAD_LINK">«Битая» ссылка</option><option value="ILLEGAL">Противозаконно</option><option value="ADVERTISING_STRADING">Реклама</option><option value="HARASSMENT">Оскорбления</option><option value="OTHER">Иное</option><option value="NOT_SPECIFIED">Не указано</option><option value="TROLLING">Троллинг</option>',

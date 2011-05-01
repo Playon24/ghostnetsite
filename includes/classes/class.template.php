@@ -398,6 +398,30 @@ Class WoW_Template {
                     )
                 );
                 break;
+            case 'character_feed':
+                $css_data_page = array(
+                    array(
+                        'path' => '/wow/static/css/profile.css',
+                        'version' => 4,
+                        'browser' => false
+                    ),
+                    array(
+                        'path' => '/wow/static/css/profile-ie.css',
+                        'version' => 4,
+                        'browser' => 'IE'
+                    ),
+                    array(
+                        'path' => '/wow/static/css/profile-ie6.css',
+                        'version' => 4,
+                        'browser' => 'IE 6'
+                    ),
+                    array(
+                        'path' => '/wow/static/css/character/feed.css',
+                        'version' => 7,
+                        'browser' => false
+                    )
+                );
+                break;
             case 'blog':
                 $css_data_page = array(
                     array(
@@ -676,6 +700,8 @@ Class WoW_Template {
                 return sprintf('%s - %s - ', WoW_Locale::GetString('template_profile_statistics'), WoW_Locale::GetString('template_menu_game'));
             case 'character_pvp':
                 return sprintf('PvP - %s - ', WoW_Locale::GetString('template_menu_game'));
+            case 'character_feed':
+                return sprintf('%s - %s - ', WoW_Locale::GetString('template_character_feed'), WoW_Locale::GetString('template_menu_game'));
             case 'item':
                 return sprintf('%s - ', self::GetPageData('itemName'));
             case 'guild_page':

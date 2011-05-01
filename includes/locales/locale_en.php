@@ -616,6 +616,9 @@ $WoW_Locale = array(
     
     'template_character_statistic_update' => 'Latest Updated Statistics',
     
+    'template_character_feed' => 'Activity Feed',
+    'template_character_feed_most_recent_events' => 'Displaying the 50 most recent events for this character.',
+    
     'template_blog_report_post' => 'Report Post #<span id="report-postID"></span> written by <span id="report-poster"></span>',
     'template_blog_report_reason' => 'Reason',
     'template_blog_report_reasons' => '<option value="SPAMMING">Spamming</option><option value="REAL_LIFE_THREATS">Real Life Threats</option><option value="BAD_LINK">Bad Link</option><option value="ILLEGAL">Illegal</option><option value="ADVERTISING_STRADING">Advertising</option><option value="HARASSMENT">Harassment</option><option value="OTHER">Other</option><option value="NOT_SPECIFIED">Not Specified</option><option value="TROLLING">Trolling</option>',

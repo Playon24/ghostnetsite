@@ -76,6 +76,9 @@ switch(WoW_Template::GetPageIndex()) {
     case 'character_statistics':
         WoW_Template::LoadTemplate('content_character_statistics');
         break;
+    case 'character_feed':
+        WoW_Template::LoadTemplate('content_character_feed');
+        break;
     case 'search':
         WoW_Template::LoadTemplate('content_search');
         break;
@@ -122,6 +125,9 @@ switch(WoW_Template::GetPageData('page')) {
     case 'character_achievements':
         echo '<script type="text/javascript" src="/wow/static/js/profile.js?v7"></script>
 <script type="text/javascript" src="/wow/static/js/character/achievement.js?v7"></script>';
+        break;
+    case 'character_feed':
+        echo '<script type="text/javascript" src="/wow/static/js/profile.js?v6"></script>';
         break;
     case 'item':
         echo '<script type="text/javascript" src="/wow/static/local-common/js/table.js?v15"></script>

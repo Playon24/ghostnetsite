@@ -527,7 +527,7 @@ Class WoW_Characters /*implements Interface_Characters*/ {
             return false;
         }
         $feed_count = count(self::$feed_data);
-        for($i = 0; $i < $feed_count; $i++) {
+        for($i = 0; $i < $feed_count; ++$i) {
             if(self::$feed_data[$i]['type'] == TYPE_ACHIEVEMENT_FEED) {
                 self::$feed_data[$i]['date'] = WoW_Achievements::GetAchievementDate(self::$feed_data[$i]['data']);
             }

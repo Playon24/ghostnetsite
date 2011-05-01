@@ -117,6 +117,10 @@ else {
                 WoW_Template::SetPageIndex('character_statistics');
                 WoW_Template::SetPageData('page', 'character_statistics');
                 break;
+            case 'feed':
+                WoW_Template::SetPageIndex('character_feed');
+                WoW_Template::SetPageData('page', 'character_feed');
+                break;
         }
     }
 }
