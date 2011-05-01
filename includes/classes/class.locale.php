@@ -22,6 +22,7 @@ Class WoW_Locale {
     private static $locale_name = null;
     private static $locale_id = -1;
     private static $locale_holder = null;
+    private static $menu_holder = null;
     
     public static function SetLocale($locale_name, $locale_id, $load_locale = true) {
         self::$locale_name = self::GetAppropriateLocaleNameForLocale($locale_name);
@@ -59,7 +60,11 @@ Class WoW_Locale {
         if(!@include(WOW_DIRECTORY . '/includes/locales/locale_' . self::$locale_name . '.php')) {
             @include(WOW_DIRECTORY . '/includes/locales/locale_' . WoWConfig::$DefaultLocale . '.php');
         }
+        if(!@include(WOW_DIRECTORY . '/includes/locales/menu_' . self::$locale_name . '.php')) {
+            @include(WOW_DIRECTORY . '/includes/locales/menu_' . WoWConfig::$DefaultLocale . '.php');
+        }
         self::$locale_holder = $WoW_Locale;
+        self::$menu_holder = $WoW_Menu;
         return true;
     }
     
@@ -85,6 +90,10 @@ Class WoW_Locale {
             }
         }
         return $string;
+    }
+    
+    public static function GetMenuString() {
+        return self::$menu_holder;
     }
     
     public static function IsLocale($locale_str, $locale_id) {

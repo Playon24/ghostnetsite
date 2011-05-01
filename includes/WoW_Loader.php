@@ -51,6 +51,7 @@ include(WOW_DIRECTORY . '/includes/classes/class.db.php');
 include(WOW_DIRECTORY . '/includes/classes/class.wow.php');
 include(WOW_DIRECTORY . '/includes/classes/class.locale.php');
 include(WOW_DIRECTORY . '/includes/classes/class.template.php');
+// Custom classes
 include(WOW_DIRECTORY . '/includes/classes/class.account.php');
 include(WOW_DIRECTORY . '/includes/classes/class.utils.php');
 include(WOW_DIRECTORY . '/includes/classes/class.characters.php');
