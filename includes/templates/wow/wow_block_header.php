@@ -21,14 +21,15 @@ Core.baseUrl = '/wow';
 Core.project = 'wow';
 Core.locale = '<?php echo WoW_Locale::GetLocale(LOCALE_DOUBLE); ?>';
 Core.buildRegion = 'eu';
+Core.shortDateFormat= 'dd/MM/Y';
 Core.loggedIn = false;
 Flash.videoPlayer = '/wow/player/videoplayer.swf';
 Flash.videoBase = '/wow/media/videos';
 Flash.ratingImage = '/wow/player/rating-pegi.jpg';
 //]]>
 </script>
-<meta name="title" content="World of Warcraft" />
-<link rel="image_src" href="/wow/static/images/icons/facebook/game.jpg" />
+<meta name="title" content="<?php echo WoW_Template::GetPageData('overall_meta_title') != null ? WoW_Template::GetPageData('overall_meta_title') : 'World of Warcraft'; ?>" />
+<link rel="image_src" href="<?php echo WoW_Template::GetPageData('overall_meta_img') != null ? WoW_Template::GetPageData('overall_meta_img') : '/wow/static/images/icons/facebook/game.jpg'; ?>" />
 <?php
 switch(WoW_Template::GetPageData('page')) {
     case 'character_profile':

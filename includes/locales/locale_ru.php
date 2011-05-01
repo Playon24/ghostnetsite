@@ -414,10 +414,20 @@ $WoW_Locale = array(
     'template_guild' => 'Гильдия',
     'template_guild_members_count' => 'Членов гильдии: %d',
     
+    'template_guild_menu_summary' => 'Сводка',
+    'template_guild_menu_roster' => 'Состав',
+    'template_guild_menu_news' => 'Новости',
+    'template_guild_menu_events' => 'События',
+    'template_guild_menu_achievements' => 'Достижения',
+    'template_guild_menu_perks' => 'Бонусы',
+    'template_guild_menu_rewards' => 'Награды',
+    
     'template_guild_news' => 'Новости гильдии (%d)',
     'template_guild_feed_achievement' => 'Персонаж %s $gполучил:получила; достижение «%s» стоимостью %d очк.',
     'template_guild_feed_fos' => 'Персонаж %s $gполучил:получила; великое достижение «%s».',
     'template_guild_feed_obtained_item' => 'Персонаж %s $gполучил:получила; предмет «%s».',
+    
+    'template_guild_perk_level' => 'Уровень %d',
     
     'template_character_friends_caption' => 'Друзья персонажа (%d)',
     'template_character_friends_character' => 'Уровень %d %s %s',
@@ -520,5 +530,27 @@ $WoW_Locale = array(
     
     'template_character_profile_other_stats' => 'Другое',
     'template_character_profile_toggle_stats_all' => 'Показать все характеристики',
+    
+    'template_blog_report_post' => 'Сообщить модераторам о сообщении #<span id="report-postID"></span> игрока <span id="report-poster"></span>',
+    'template_blog_report_reason' => 'Причина',
+    'template_blog_report_reasons' => '<option value="SPAMMING">Спам</option><option value="REAL_LIFE_THREATS">Угрозы в реальной жизни</option><option value="BAD_LINK">«Битая» ссылка</option><option value="ILLEGAL">Противозаконно</option><option value="ADVERTISING_STRADING">Реклама</option><option value="HARASSMENT">Оскорбления</option><option value="OTHER">Иное</option><option value="NOT_SPECIFIED">Не указано</option><option value="TROLLING">Троллинг</option>',
+    'template_blog_report_description' => 'Объяснение <small>(не более 256 символов)</small>',
+    'template_blog_send_report' => 'Отправить',
+    'template_blog_cancel_report' => 'Отмена',
+    'template_blog_report_success' => 'Готово!',
+    'template_blog_close_report' => 'Закрыть',
+    'template_blog_comments' => 'Комментарии',
+    'template_blog_add_post' => 'Разместить ответ',
+    'template_blog_add_to_black_list' => 'Внести в черный список',
+    'template_blog_remove_from_black_list' => 'Внести в черный список',
+    'template_blog_answer' => 'Ответить',
+    'template_blog_lookup_forum_messages' => 'Просмотр сообщений на форуме',
+    'template_blog_add_post_button' => 'Сообщение',
+    'template_blog_karma_up' => 'Нравится',
+    'template_blog_karma_down' => 'Не нравится',
+    'template_blog_karma_trolling' => 'Троллинг',
+    'template_blog_karma_spam' => 'Спам',
+    'template_blog_karma_report' => 'Сообщить модераторам',
+    'template_blog_karma_already_rated' => 'Вы уже дали оценку этому сообщению.',
 );
 ?>

@@ -52,6 +52,9 @@ switch(WoW_Template::GetPageIndex()) {
     case 'guild_page':
         WoW_Template::LoadTemplate('content_guild_page');
         break;
+    case 'guild_perks':
+        WoW_Template::LoadTemplate('content_guild_perks');
+        break;
     case 'guild_roster':
         WoW_Template::LoadTemplate('content_guild_roster');
         break;
@@ -72,6 +75,9 @@ switch(WoW_Template::GetPageIndex()) {
         break;
     case 'realm_status':
         WoW_Template::LoadTemplate('content_realm_status');
+        break;
+    case 'blog':
+        WoW_Template::LoadTemplate('content_blog');
         break;
 }
 WoW_Template::LoadTemplate('block_footer', true);
@@ -141,6 +147,9 @@ switch(WoW_Template::GetPageData('page')) {
 <script type="text/javascript" src="/wow/static/js/character/pvp.js?v7"></script>
 <script type="text/javascript" src="/wow/static/js/character/arena-flag.js?v7"></script>
 <script type="text/javascript" src="/wow/static/js/pvp/arena.js?v7"></script>';
+        break;
+    case 'blog':
+        echo '<script type="text/javascript" src="/wow/static/local-common/js/lightbox.js?v17"></script>';
         break;
 }
 ?>

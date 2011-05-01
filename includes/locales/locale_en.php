@@ -520,5 +520,27 @@ $WoW_Locale = array(
     
     'template_character_profile_other_stats' => 'Other',
     'template_character_profile_toggle_stats_all' => 'Show all stats',
+    
+    'template_blog_report_post' => 'Report Post #<span id="report-postID"></span> written by <span id="report-poster"></span>',
+    'template_blog_report_reason' => 'Reason',
+    'template_blog_report_reasons' => '<option value="SPAMMING">Spamming</option><option value="REAL_LIFE_THREATS">Real Life Threats</option><option value="BAD_LINK">Bad Link</option><option value="ILLEGAL">Illegal</option><option value="ADVERTISING_STRADING">Advertising</option><option value="HARASSMENT">Harassment</option><option value="OTHER">Other</option><option value="NOT_SPECIFIED">Not Specified</option><option value="TROLLING">Trolling</option>',
+    'template_blog_report_description' => 'Explain <small>(256 characters max)',
+    'template_blog_send_report' => 'Submit',
+    'template_blog_cancel_report' => 'Cancel',
+    'template_blog_report_success' => 'Reported!',
+    'template_blog_close_report' => 'Close',
+    'template_blog_comments' => 'Comments',
+    'template_blog_add_post' => 'Add a reply',
+    'template_blog_add_to_black_list' => 'Ignore',
+    'template_blog_remove_from_black_list' => 'Unignore',
+    'template_blog_answer' => 'Reply',
+    'template_blog_lookup_forum_messages' => 'View posts',
+    'template_blog_add_post_button' => 'Post',
+    'template_blog_karma_up' => 'Like',
+    'template_blog_karma_down' => 'Dislike',
+    'template_blog_karma_trolling' => 'Trolling',
+    'template_blog_karma_spam' => 'Spam',
+    'template_blog_karma_report' => 'Report',
+    'template_blog_karma_already_rated' => 'You have already rated this item.',
 );
 ?>

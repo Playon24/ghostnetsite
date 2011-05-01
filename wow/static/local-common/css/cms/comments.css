@@ -1,6 +1,7 @@
 /* Comments */
-@import url("cms-common.css");
+ @import url("cms-common.css");
 
+#comments-page .title { font-size:21px; padding:8px 15px; font-weight:normal;  }
 
 #page-comments { clear:both; margin-top:20px; padding:20px 0 65px; font-family:Verdana, Geneva, sans-serif; background-repeat:no-repeat; background-position:50% 0; }
 .page-comment-interior { background-repeat:no-repeat; background-position:50% 100%; }
@@ -9,6 +10,7 @@
 
 #page-comments h3 { color:white; text-transform:none; padding-bottom:15px; font-size:18px; font-weight:normal; }
 #page-comments .comment-cm { float:right; text-align:right; width:45%; }
+#page-comments .comment-cm form { display:inline; }
 #page-comments .comment { 	font-size: 11px; line-height: 24px; margin-bottom:12px; position:relative; 
 							-moz-border-radius: 5px; border-radius: 5px; }
 
@@ -51,7 +53,7 @@
 #content .cm-action {  float:left; }
 .comment-actions .break-down { float:left; line-height:24px; padding-left:15px; font-size:12px;  }
 
-#page-comments .nested { padding-left:14%; }
+#page-comments .nested { padding-left:85px; }
 #page-comments .nested .nested { padding-left:0; }
 
 #page-comments .reply { width:85%; }
@@ -76,6 +78,7 @@
 #page-comments .cancel,
 #page-comments .submit { float:right; }
 #page-comments .cancel { padding-right:10px; display:none; line-height:38px;  }
+#page-comments .postCountdown { line-height: 38px; }
 #comment-form-reply .cancel { display:block;  }
 
 #page-comments #report-post {  margin-bottom:12px; }

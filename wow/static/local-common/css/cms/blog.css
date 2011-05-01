@@ -41,7 +41,7 @@ h3.blog-title { font-weight:normal; font-size:30px; color:#fff; letter-spacing:-
 
 #blog .header-image { padding:10px 0 19px 0; text-align:center; }
 
-#blog .detail { line-height: 2em; padding: 5px 0 20px; }
+#blog .detail, .damocles-edit { line-height: 2em; padding: 5px 0 20px; }
 #blog .detail p { padding:6px 0; }
 #blog .detail h3 { margin-top:25px; text-decoration:underline; }
 

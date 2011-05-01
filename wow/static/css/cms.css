@@ -13,6 +13,7 @@
 
 /* Common */
 .more { background:url("../images/icons/more-arrows.gif") no-repeat scroll 100% 2px transparent; padding-right:12px }
+#posts .last-read { background-image:url("../images/icons/arrows.gif") }
 
 /* From cms-common.css */
 .pageNav { background: none; padding-left: 0; }
@@ -49,6 +50,7 @@ a.comments-link { background-image:url("../images/layout/cms/blog_icons.gif"); }
 #news-updates { background:url(../images/homepage/news-btm.jpg) 0 100% no-repeat #23120B; padding-bottom: 40px; }
 
 #blog { background-image:url("../images/layout/cms/blog_bg.jpg"); padding: 50px 25px 0 25px;  }
+#blog.damocles-edit { background-color:#1A0F08; }
 
 h3.blog-title { font-size:24px; color:#fdeea4; font-weight:bold; }
 .header-image img { margin-bottom:-4px;}
@@ -116,8 +118,14 @@ h3.blog-title { font-size:24px; color:#fdeea4; font-weight:bold; }
 .forum-parent { color:#71330e; font-size:20px; margin-top:16px; line-height:41px; padding-bottom:0; padding-left: 20px; text-transform:uppercase; letter-spacing: -0.05em; }
 .forum-parent { background: url('../images/layout/cms/collapse-expand.png') no-repeat 0 1px; }
 .forum-parent.collapsed { background-position: 0 -39px }
-.forum-parent:hover { background-position: 0 -78px }
-.forum-parent.collapsed:hover { background-position: 0 -119px }
+.forum-parent:active,
+.forum-parent:hover,
+.forum-parent:target { background-position: 0 -78px }
+.forum-parent.collapsed:active,
+.forum-parent.collapsed:hover,
+.forum-parent.collapsed:target { background-position: 0 -119px }
+.forum-parent:active,
+.forum-parent:target { color: #fff }
 .child-forums { padding:0; }
 .non-verbose .forum-link { height: 47px; }
 .forum-link { background-color: rgba(0, 0, 0, 0.25); color:#fab000; }
@@ -126,7 +134,7 @@ h3.blog-title { font-size:24px; color:#fdeea4; font-weight:bold; }
 .forum-link:hover span { color:#fff; }
 #forum-list { width: 604px; }
 #popular-topics { margin: 0; padding-top:0; }
-#popular-topics .readmore { border-bottom-color:#552b12; font-size: 14px; padding: 0; padding-bottom: 6px; margin-top: 4px; margin-bottom: 6px; background: none; }  
+#popular-topics .readmore { border-bottom-color:#552b12; font-size: 14px; padding: 0; padding-bottom: 6px; margin-top: 4px; margin-bottom: 6px; background: none; }
 .coc { color:#71401F; margin: 0; text-transform: none; font-size: 11px; width: 290px; background:url("../images/layout/cms/code_bg.gif"); font-style:italic;  }
 
 .forum-link .int { width:230px; }
@@ -167,7 +175,7 @@ div.forum-options a.active { color:#fff; font-weight: bold; }
 
 #posts .post-replies, #posts .post-views { color: #643416; }
 #posts tr.read .post-title a { color:#a67100; }
-#posts tr.read:hover .post-title a { color: #fff; } 
+#posts tr.read .post-title a:hover { color: #fff; } 
 
 #posts tr.read .forum-post-icon { background-image:url(../images/layout/cms/post_inactive.png); }
 .tt_time { color: #8e8e8f; }
@@ -197,6 +205,8 @@ div.forum-options a.active { color:#fff; font-weight: bold; }
 
 /* Topic */
 .nextBlizz { background-image:url("../images/layout/cms/next_blizz.gif"); }
+#forum-content .section-header .sticky-request { border-color:#281407; background-color:#1e1006; }
+#forum-content .section-header .sticky-request:hover { background-color:#331b0a; background-image:-moz-linear-gradient(#341c0a, #221207); background-image:-webkit-gradient(linear,center top, center bottom,from(#341c0a),to(#221207)); }
 
 #poll-container {	background-color:#1f1d1b; border-color:#8b8775;
 					-moz-box-shadow:0 0 3px #000; -webkit-box-shadow:0 0 3px #000; }
@@ -208,14 +218,14 @@ div.forum-options a.active { color:#fff; font-weight: bold; }
 #poll-container .poll-stats span { color:#b6af8f;  }
 #poll-container .results .result-container { background-image:url(../images/layout/cms/poll_bars.gif); background-color:#01151c; }
 #poll-container .results .result { background-image:url(../images/layout/cms/poll_bars.gif); }
-#poll-container .results .result span { background-image:url(../images/layout/cms/poll_bars.gif); 
+#poll-container .results .result span { background-image:url(../images/layout/cms/poll_bars.gif);
 										text-shadow:0 0 2px #000E21,0 0 2px #000E21,0 0 2px #000E21,0 0 2px #000E21; }
 #poll-container .poll-actions a:hover, #poll-container .poll-actions a.selected { color:#fff; }
 #poll-container .poll-actions a { color:#CCC; }
 #poll-container .result { color:#CCC;  }
 #poll-container .max .result { color:#fff;  }
-										
-.post { background-image:url(../images/layout/cms/post_bg.jpg); background-color:#1a0f08; }
+
+.post, .post .deleted { background-image:url(../images/layout/cms/post_bg.jpg); background-color:#1a0f08; }
 #thread .blizzard { background-image:url(../images/layout/cms/post_bg_blizzard.jpg);background-color:#1a0f08; background-repeat: no-repeat; }
 .high-rated { background-image:url(../images/layout/cms/post_bg_rated_high.jpg); background-color:#381D0A; }
 .high-rated .post-detail { color: #fff; }
@@ -254,7 +264,7 @@ div.forum-options a.active { color:#fff; font-weight: bold; }
 .post .deleted .user-name-container, .post .deleted .post-detail, .post .deleted .post-info-int, .low-rated .post-detail { color:#726456 }
 #thread .post .deleted .context-link { color:#726456;  }
 
-#page-comments .mvp .portrait-b img, 
+#page-comments .mvp .portrait-b img,
 #page-comments .mvp .portrait-c img { border:2px solid #81b558;  }
 
 .post-detail { line-height: 1.7em; }
@@ -334,9 +344,9 @@ div.forum-options a.active { color:#fff; font-weight: bold; }
 .sidebar-content .featured-news a { color: #bd8100; }
 .sidebar-content .featured-news .date { color: #71401f; }
 .sidebar-content .featured-news .featured { margin-bottom: 0; }
-.sidebar-content .featured-news .featured a { padding: 6px 0; padding-right: 20px; border-bottom: 1px solid #271b15; background: url(../images/layout/cms/arrow_r_hover.png) 100% -5px no-repeat; }
+.sidebar-content .featured-news .featured a { padding: 6px 20px 6px 8px; border-bottom: 1px solid #271b15; background: url(../images/layout/cms/arrow_r_hover.png) 100% -3px no-repeat; }
 .sidebar-content #related-news .featured a { background:none; }
-.sidebar-content .featured-news .featured a:hover { background-position: 100% -53px; background-color: #2b1507; }
+.sidebar-content .featured-news .featured a:hover { background-position: 100% -51px; background-color: #2b1507; }
 .sidebar-content .featured-news .featured:last-child a { border-bottom: 0; }
 .sidebar-content .featured-news .featured-desc { font-size: 11px; }
 
@@ -361,12 +371,13 @@ div.forum-options a.active { color:#fff; font-weight: bold; }
 
 /* sidebar promos */
 .promo { width: 300px; height: 250px; display: block; position: relative; margin: 0 0 25px 3px; -moz-box-shadow: #000 0 0 15px; -webkit-box-shadow: #000 0 0 15px; box-shadow: #000 0 0 15px; overflow: hidden; }
-.promo.promo-wow .kr-promo { background:url("../images/sidebar/bg-wow-kr.jpg") no-repeat; width: 300px; height: 250px; }
-.promo.promo-wow .free-trial { background: url("../images/sidebar/bg-wow.jpg") no-repeat; }
-.promo.promo-bc .free-trial { background: url("../images/sidebar/bg-bc.jpg") no-repeat; }
-.promo.promo-wrath .free-trial { background: url("../images/sidebar/bg-wrath.jpg") no-repeat; }
-.promo.promo-cataclysm .free-trial { background: url("../images/sidebar/bg-cataclysm.jpg") no-repeat; }
-.promo .free-trial { width: 300px; height: 40px; line-height: 40px; display: block; text-align: center; padding: 155px 0 55px 0; vertical-align: middle; }
+.promo.promo-wow .kr-promo {         background-image: url("../images/sidebar/bg-wow-kr.jpg"); width: 300px; height: 250px;  }
+.promo.promo-wow .free-trial {       background-image: url("../images/sidebar/bg-wow.jpg") }
+.promo.promo-bc .free-trial {        background-image: url("../images/sidebar/bg-bc.jpg") }
+.promo.promo-wrath .free-trial {     background-image: url("../images/sidebar/bg-wrath.jpg") }
+.promo.promo-cataclysm .free-trial { background-image: url("../images/sidebar/bg-cataclysm.jpg") }
+.promo.promo-free-wow .free-trial {  background-image: url("../images/sidebar/free-wow-for-sc2/en-us.jpg") }
+.promo .free-trial { width: 300px; height: 40px; line-height: 40px; display: block; text-align: center; padding: 155px 0 55px 0; vertical-align: middle; background-repeat: no-repeat }
 .promo .free-trial:hover { background-position: 0 -250px; }
 .promo .kr-promo { display:block; height:40px; line-height:40px; padding:155px 0 55px; text-align:center; vertical-align:middle; width:300px; }
 .promo .kr-promo:hover { background-position: 0 -251px; }
@@ -391,7 +402,7 @@ div.forum-options a.active { color:#fff; font-weight: bold; }
 	.promo-cataclysm-activate .retail { background: url("../images/sidebar/cataclysm-activate/retail.jpg") no-repeat; }
 	.promo-cataclysm-activate .digital:hover,
 	.promo-cataclysm-activate .retail:hover { background-position: 0 -30px; }
-	
+
 /* sotd */
 .sotd { display: block; margin: 15px auto 0 auto; background: #000 50% 50% no-repeat; border: 1px solid #372511; height: 179px; width: 297px;  -moz-box-shadow:0 0 6px #000000; -webkit-box-shadow:0 0 6px #000000; box-shadow:0 0 6px #000000; -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px; }
 .sotd .image { display: block; height: 137px; width: 295px; border: 1px solid #000; -moz-border-radius-topleft: 4px; -moz-border-radius-topright: 4px; border-top-left-radius: 4px; border-top-right-radius: 4px; }

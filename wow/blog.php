@@ -19,13 +19,24 @@
  **/
 
 include('../includes/WoW_Loader.php');
-$wow_news = WoW::GetLastNews();
-$carousel = WoW::GetCarouselData();
-WoW_Template::SetPageData('carousel', $carousel);
-WoW_Template::SetPageData('wow_news', $wow_news);
-WoW_Template::SetPageData('body_class', sprintf('%s homepage', WoW_Locale::GetLocale(LOCALE_DOUBLE)));
 WoW_Template::SetTemplateTheme('wow');
-WoW_Template::SetPageIndex('index');
+WoW_Template::SetPageData('body_class', WoW_Locale::GetLocale(LOCALE_DOUBLE));
+$url_data = WoW::GetUrlData('blog');
+$blog_id = $url_data['blog_id'];
+if(!$blog_id || !WoW::LoadBlog($blog_id)) {
+    WoW_Template::SetPageIndex('404');
+    WoW_Template::SetPageData('page', '404');
+    WoW_Template::SetPageData('errorProfile', 'template_404');
+}
+else {
+    WoW_Template::SetPageData('wow_news', WoW::GetLastNews());
+    WoW_Template::SetPageData('blog_title', WoW::GetBlogData('title'));
+    WoW_Template::SetPageData('overall_meta_title', WoW::GetBlogData('title'));
+    WoW_Template::SetPageData('overall_meta_img', '/cms/blog_thumbnail/' . WoW::GetBlogData('image'));
+    WoW_Template::SetPageIndex('blog');
+    WoW_Template::SetPageData('page', 'blog');
+}
 WoW_Template::SetMenuIndex('menu-home');
 WoW_Template::LoadTemplate('page_index');
+exit;
 ?>

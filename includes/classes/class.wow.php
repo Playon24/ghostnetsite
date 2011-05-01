@@ -138,8 +138,8 @@ Class WoW {
                 for($i = 0; $i < $count; $i++) {
                     switch($url_array[$i]) {
                         case 'guild':
-                            $urldata['realmName'] = (isset($url_array[$i + 2])) ? $url_array[$i + 1] : null;
-                            $urldata['name'] = (isset($url_array[$i + 1])) ? $url_array[$i + 2] : null;
+                            $urldata['realmName'] = (isset($url_array[$i + 1])) ? $url_array[$i + 1] : null;
+                            $urldata['name'] = (isset($url_array[$i + 2])) ? $url_array[$i + 2] : null;
                             for($j = 0; $j < 10; $j++) {
                                 if(isset($url_array[ $i + ($j + 3) ]) && $url_array[ $i + ($j + 3) ] != null) {
                                     $urldata['action' . $j] = $url_array[$i + ($j + 3)];
@@ -229,6 +229,33 @@ Class WoW {
                 exit;
             }
         }
+    }
+    
+    public static function LoadBlog($blog_id) {
+        $blog_data = DB::WoW()->selectRow("SELECT `id`, `image`, `header_image`, `title_%s` AS `title`, `text_%s` AS `text`, `author`, `postdate` FROM `DBPREFIX_news` WHERE `id` = %d LIMIT 1", WoW_Locale::GetLocale(), WoW_Locale::GetLocale(), $blog_id);
+        if(!$blog_data) {
+            WoW_Log::WriteError('%s : blog entry #%d was not found in DB.', __METHOD__, $blog_id);
+            return false;
+        }
+        self::$blog_contents['blog'] = $blog_data;
+        unset($blog_data);
+        self::$blog_contents['comments'] = DB::WoW()->select("SELECT * FROM `DBPREFIX_blog_comments` WHERE `blog_id` = %d", $blog_id);
+        self::$blog_contents['blog']['comments_count'] = count(self::$blog_contents['comments']);
+        return true;
+    }
+    
+    public static function GetBlogData($data) {
+        if(!is_array(self::$blog_contents) || !isset(self::$blog_contents['blog']) || !is_array(self::$blog_contents['blog'])) {
+            return false;
+        }
+        return isset(self::$blog_contents['blog'][$data]) ? self::$blog_contents['blog'][$data] : null;
+    }
+    
+    public static function GetBlogComments() {
+        if(!is_array(self::$blog_contents) || !isset(self::$blog_contents['comments']) || !is_array(self::$blog_contents['comments'])) {
+            return false;
+        }
+        return self::$blog_contents['comments'];
     }
 }
 ?>

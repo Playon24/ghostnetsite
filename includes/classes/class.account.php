@@ -18,33 +18,187 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  **/
 
+/**
+ * WoW_Account class
+ * 
+ * This is account class which allows to perform some specific operations such as:
+ *  - User authorization
+ *  - User logout
+ *  - User's characters loading
+ *  - User's characters handling
+ *  etc.
+ * 
+ * @package WoWCS
+ * @author  Shadez <https://github.com/Shadez>
+ **/
 Class WoW_Account {
     
-    private static $userid = null;
+    /**
+     * User ID (from DB)
+     * @access    private
+     * @staticvar int $userid
+     * @return    int
+     **/
+    private static $userid = 0;
+    
+    /**
+     * User name (from DB)
+     * @access    private
+     * @staticvar string $username
+     * @return    string
+     **/
     private static $username = null;
+    
+    /**
+     * User password
+     * @access    private
+     * @staticvar string $password
+     * @return    string
+     **/
     private static $password = null;
+    
+    /**
+     * User sha1 hash (from DB)
+     * @access    private
+     * @staticvar string $sha_pass_hash
+     * @return    string
+     **/
     private static $sha_pass_hash = null;
+    
+    /**
+     * User access level (from DB)
+     * @access    private
+     * @staticvar int $gm_level
+     * @return    int
+     **/
     private static $gm_level = 0;
+    
+    /**
+     * User E-Mail address (from DB)
+     * @access    private
+     * @staticvar string $email
+     * @return    string
+     **/
     private static $email = null;
+    
+    /**
+     * User's characters storage
+     * @access    private
+     * @staticvar array $characters_data
+     * @return    array
+     **/
     private static $characters_data = array();
+    
+    /**
+     * Last error code (account class)
+     * @access    private
+     * @staticvar int $last_error_code
+     * @return    int
+     **/
     private static $last_error_code = 0;
+    
+    /**
+     * User session ID (from DB)
+     * @access    private
+     * @staticvar string $sid
+     * @return    string
+     **/
     private static $sid = null;
+    
+    /**
+     * User session hash
+     * @access    private
+     * @staticvar string $session_hash
+     * @return    string
+     **/
     private static $session_hash = null;
+    
+    /**
+     * User session string (saved as session data)
+     * @access    private
+     * @staticvar string $session_string
+     * @return    string
+     **/
     private static $session_string = null;
+    
+    /**
+     * User's login state
+     * @access    private
+     * @staticvar int $login_state
+     * @return    int
+     **/
     private static $login_state = null;
+    
+    /**
+     * User login time (Unix Timestamp)
+     * @access    private
+     * @staticvar int $login_time
+     * @return    int
+     **/
     private static $login_time = null;
+    
+    /**
+     * User (pseudo-) Battle.Net ID. Used as user's real name index.
+     * @access    private
+     * @staticvar int $bnet_id
+     * @return    int
+     **/
     private static $bnet_id = 0;
+    
+    /**
+     * User's first name
+     * @access    private
+     * @staticvar string $first_name
+     * @return    string
+     **/
     private static $first_name = null;
+    
+    /**
+     * User's last name
+     * @access    private
+     * @staticvar string $last_name
+     * @return    string
+     **/
     private static $last_name = null;
+    
+    /**
+     * Selected character
+     * @access    private
+     * @staticvar array $active_character
+     * @return    array
+     **/
     private static $active_character = array();
+    
+    /**
+     * Characters storage checker
+     * @access    private
+     * @staticvar bool $characters_loaded
+     * @return    bool
+     **/
     private static $characters_loaded = false;
+    
+    /**
+     * Selected character's info
+     * @access    private
+     * @staticvar array $character_info
+     * @return    array
+     **/
     private static $character_info = array();
+    
+    /**
+     * Selected character's friends data
+     * @access    private
+     * @staticvar array $friends_data
+     * @return    array
+     **/
     private static $friends_data = array();
     
     /**
-     * Class constructor
-     * @category Account Manager Class
+     * Class constructor.
+     * 
      * @access   public
+     * @static   WoW_Account::Initialize()
+     * @category Account Manager Class
      * @return   bool
      **/
     public static function Initialize() {
@@ -55,10 +209,26 @@ Class WoW_Account {
         return true;
     }
     
+    /**
+     * Returns true if user is logged in and false if not.
+     * 
+     * @access   public
+     * @static   WoW_Account::IsLoggedIn()
+     * @category Account Manager Class
+     * @return   bool
+     **/
     public static function IsLoggedIn() {
         return self::GetSessionInfo('wow_sid') != null;
     }
     
+    /**
+     * Re-builds account info from session data (if exists).
+     * 
+     * @access   public
+     * @static   WoW_Account::BuildAccountInfo()
+     * @category Account Manager Class
+     * @return   bool
+     **/
     private static function BuildAccountInfo() {
         if(!self::GetSessionInfo('wow_sid')) {
             WoW_Log::WriteError('%s : unable to build info: session was not found.', __METHOD__);
@@ -88,8 +258,10 @@ Class WoW_Account {
     
     /**
      * Creates SHA1 hash for LOGIN:PASSWORD combination.
+     * 
+     * @access   public
+     * @static   WoW_Account::CreateShaPassHash()
      * @category Account Manager Class
-     * @access   private
      * @return   bool
      **/
     private static function CreateShaPassHash() {
@@ -103,9 +275,11 @@ Class WoW_Account {
     
     /**
      * Sets username.
-     * @category Account Manager Class
+     * 
      * @access   public
+     * @static   WoW_Account::SetUserName(string $username)
      * @param    string $username
+     * @category Account Manager Class
      * @return   bool
      **/
     public static function SetUserName($username) {
@@ -115,9 +289,11 @@ Class WoW_Account {
     
     /**
      * Sets password
-     * @category Account Manager Class
+     * 
      * @access   public
+     * @static   WoW_Account::SetPassword(string $password)
      * @param    string $password
+     * @category Account Manager Class
      * @return   bool
      **/
     public static function SetPassword($password) {
@@ -439,6 +615,9 @@ Class WoW_Account {
     }
     
     public static function GetActiveCharacter() {
+        if(!self::IsCharactersLoaded()) {
+            self::LoadCharacters();
+        }
         return self::$active_character;
     }
     
