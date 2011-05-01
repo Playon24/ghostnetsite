@@ -35,8 +35,39 @@ if($guild_error) {
     WoW_Template::SetPageData('errorProfile', 'template_404');
 }
 else {
-    WoW_Template::SetPageIndex('guild_page');
-    WoW_Template::SetPageData('page', 'guild');
+    $primary = WoW_Account::GetActiveCharacter();
+    WoW_Template::SetPageData('guild-authorized', false);
+    if(is_array($primary) && isset($primary['realmName'])) {
+        if($primary['realmName'] == WoW_Guild::GetGuildRealmName() && $primary['guildId'] == WoW_Guild::GetGuildID()) {
+            WoW_Template::SetPageData('guild-authorized', true);
+        }
+    }
+    switch($url_data['action0']) {
+        default:
+            WoW_Template::SetPageData('guild-page', 'summary');
+            WoW_Template::SetPageIndex('guild_page');
+            WoW_Template::SetPageData('page', 'guild_page');
+            break;
+        case 'perk':
+            WoW_Template::SetPageData('guild-page', 'perks');
+            WoW_Template::SetPageIndex('guild_perks');
+            WoW_Template::SetPageData('page', 'guild_perks');
+            break;
+        case 'roster':
+            switch($url_data['action1']) {
+                default:
+                    WoW_Template::SetPageIndex('guild_roster');
+                    WoW_Template::SetPageData('page', 'guild_roster');
+                    break;
+                case 'professions':
+                    WoW_Guild::InitProfessions();
+                    WoW_Template::SetPageIndex('guild_professions');
+                    WoW_Template::SetPageData('page', 'guild_professions');
+                    break;
+            }
+            WoW_Template::SetPageData('guild-page', 'roster');
+            break;
+    }
     WoW_Template::SetPageData('guildName', $url_data['name']);
     WoW_Template::SetPageData('realmName', $url_data['realmName']);
     WoW_Template::SetMenuIndex('menu-game');

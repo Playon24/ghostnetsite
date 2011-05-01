@@ -443,6 +443,7 @@ Class WoW_Template {
             case 'guild_perks':
             case 'guild_achievements':
             case 'guild_roster':
+            case 'guild_professions':
                 $css_data_page = array(
                     array(
                         'path' => '/wow/static/css/profile.css',
@@ -480,6 +481,30 @@ Class WoW_Template {
                         'browser' => 'IE 6'
                     )
                 );
+                if(self::GetPageIndex() == 'guild_perks') {
+                    $css_data_page[] = array(
+                        'path' => '/wow/static/css/guild/perks.css',
+                        'version' => 7,
+                        'browser' => false
+                    );
+                }
+                elseif(in_array(self::GetPageIndex(), array('guild_roster', 'guild_professions'))) {
+                    $css_data_page[] = array(
+                        'path' => '/wow/static/css/guild/roster.css',
+                        'version' => 7,
+                        'browser' => false
+                    );
+                    $css_data_page[] = array(
+                        'path' => '/wow/static/css/guild/roster-ie.css',
+                        'version' => 7,
+                        'browser' => 'IE'
+                    );
+                    $css_data_page[] = array(
+                        'path' => '/wow/static/css/guild/roster-ie6.css',
+                        'version' => 7,
+                        'browser' => 'IE 6'
+                    );
+                }
                 break;
             case 'realm_status':
                 $css_data_page = array(
@@ -623,7 +648,10 @@ Class WoW_Template {
             case 'guild_page':
                 return sprintf('%s @ %s - ', WoW_Guild::GetGuildName(), WoW_Guild::GetGuildRealmName());
             case 'guild_perks':
-                return sprintf('%s - %s - ', WoW_Locale::GetString('template_guild_menu_perks'), WoW_Locale::GetString('tempalte_menu_game'));
+                return sprintf('%s - %s - ', WoW_Locale::GetString('template_guild_menu_perks'), WoW_Locale::GetString('template_menu_game'));
+            case 'guild_roster':
+            case 'guild_professions':
+                return sprintf('%s - %s - ', WoW_Locale::GetString('template_guild_menu_roster'), WoW_Locale::GetString('template_menu_game'));
             case 'search':
                 return WoW_Search::GetSearchQuery() != null ? sprintf('%s - %s - ', WoW_Search::GetSearchQuery(), WoW_Locale::GetString('template_search')) : sprintf('%s - ', WoW_Locale::GetString('template_search'));
             case 'realm_status':

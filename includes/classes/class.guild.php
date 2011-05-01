@@ -38,6 +38,11 @@ Class WoW_Guild {
     private static $guild_feed = array();
     private static $guild_feed_data = array();
     private static $guild_member_guids = array();
+    private static $guild_perks_data = array();
+    private static $guild_ranks = array();
+    private static $guild_members_filtered = 0;
+    private static $guild_roster_page = 0;
+    private static $guild_professions = array();
     
     public static function LoadGuild($guild_name, $realm_id) {
         // Data checks
@@ -83,6 +88,7 @@ Class WoW_Guild {
         self::LoadGuildMembers();
         self::GenerateGuildMembersGUIDs();
         self::LoadGuildFeed();
+        self::LoadGuildRanks();
         self::HandleGuildFeed();
         self::CalculateGuildLevel();
         return true;
@@ -109,6 +115,20 @@ Class WoW_Guild {
     
     public static function GetGuildMembersCount() {
         return count(self::$guild_roster);
+    }
+    
+    public static function GetGuildMembers() {
+        return self::$guild_roster;
+    }
+    
+    public static function GetFilteredGuildMembersCount() {
+        if(self::GetGuildMembersCount() <= 100) {
+            self::$guild_members_filtered = self::GetGuildMembersCount();
+        }
+        else {
+            self::$guild_members_filtered = 100;
+        }
+        return self::$guild_members_filtered;
     }
     
     public static function GetGuildURL() {
@@ -149,6 +169,14 @@ Class WoW_Guild {
         return self::$guild_feed_data;
     }
     
+    public static function GetGuildRanks() {
+        return self::$guild_ranks;
+    }
+    
+    public static function GetGuildProfessions() {
+        return self::$guild_professions;
+    }
+    
     private static function GenerateGuildMembersGUIDs() {
         if(!self::IsCorrect()) {
             WoW_Log::WriteError('%s : guild was not found.', __METHOD__);
@@ -168,7 +196,7 @@ Class WoW_Guild {
             WoW_Log::WriteError('%s : guild was not found.', __METHOD__);
             return false;
         }
-        self::$guild_roster = DB::Characters()->select("
+        $members = DB::Characters()->select("
             SELECT
             `guild_member`.`guid`,
             `guild_member`.`rank` AS `rankID`,
@@ -179,14 +207,39 @@ Class WoW_Guild {
             `characters`.`gender` AS `genderID`,
             `characters`.`level`
             FROM `guild_member` AS `guild_member`
-            LEFT JOIN `guild_rank` AS `guild_rank` ON `guild_rank`.`rid`=`guild_member`.`rank` AND `guild_rank`.`guildid`=%d
-            LEFT JOIN `characters` AS `characters` ON `characters`.`guid`=`guild_member`.`guid`
+            JOIN `guild_rank` AS `guild_rank` ON `guild_rank`.`rid`=`guild_member`.`rank` AND `guild_rank`.`guildid`=%d
+            JOIN `characters` AS `characters` ON `characters`.`guid`=`guild_member`.`guid`
             WHERE `guild_member`.`guildid`=%d
         ", self::GetGuildID(),  self::GetGuildID());
-        if(!self::$guild_roster) {
-            WoW_Log::WriteError('%s : unable to find any member of guild %s (ID: %d). Guild is empty?', __METHOD__, self::GetGuildName(), self::GetGuildID());
+        if(!$members) {
+            WoW_Log::WriteError('%s : unable to find any member of guild %s (GUILDID: %d). Guild is empty?', __METHOD__, self::GetGuildName(), self::GetGuildID());
             return false;
         }
+        $roster = array();
+        foreach($members as $member) {
+            $member['race_text'] = WoW_Locale::GetString('character_race_' . $member['raceID']);
+            $member['class_text'] = WoW_Locale::GetString('character_class_' . $member['classID']);
+            $member['url'] = sprintf('/wow/character/%s/%s/', self::GetGuildRealmName(), $member['name']);
+            $achievement_ids = DB::Characters()->select("SELECT `achievement` FROM `character_achievement` WHERE `guid` = %d", $member['guid']);
+            if(is_array($achievement_ids)) {
+                $ids = array();
+                foreach($achievement_ids as $ach) {
+                    $ids[] = $ach['achievement'];
+                }
+                if(is_array($ids)) {
+                    $member['achievement_points'] = DB::WoW()->selectCell("SELECT SUM(`points`) FROM `DBPREFIX_achievement` WHERE `id` IN (%s)", $ids);
+                }
+                else {
+                    $member['achievement_points'] = 0;
+                }
+            }
+            else {
+                $member['achievement_points'] = 0;
+            }
+            $roster[] = $member;
+        }
+        self::$guild_roster = $roster;
+        unset($roster);
         // Set faction
         self::$guild_factionID = WoW_Utils::GetFactionId(self::GetMemberInfo(0, 'raceID'));
         return true;
@@ -234,6 +287,15 @@ Class WoW_Guild {
                 self::$guild_feed[$i]['date'] = DB::Characters()->selectCell("SELECT `date` FROM `character_achievement` WHERE `guid` = %d AND `achievement` = %d LIMIT 1", self::$guild_feed[$i]['guid'], self::$guild_feed[$i]['data']);
             }
         }
+        return true;
+    }
+    
+    private static function LoadGuildRanks() {
+        if(!self::IsCorrect()) {
+            WoW_Log::WriteError('%s : guild was not found.', __METHOD__);
+            return false;
+        }
+        self::$guild_ranks = DB::Characters()->select("SELECT `rid` AS `rankID`, `rname` AS `rankName` FROM `guild_rank` WHERE `guildid` = %d", self::GetGuildID());
         return true;
     }
     
@@ -307,11 +369,9 @@ Class WoW_Guild {
                 case TYPE_BOSS_FEED:
                     // Not supported here.
                     continue;
-                    break;
                 default:
                     WoW_Log::WriteError('%s : unknown feed type (%d)!', __METHOD__, $event['type']);
                     continue;
-                    break;
             }
             $feeds_data[] = $feed;
             $feed_count++;
@@ -340,7 +400,136 @@ Class WoW_Guild {
             $start_stamp -= 1 * IN_MONTHS;
             $level++;
         }
-        self::$guild_level = $level;
+        self::$guild_level = min(25, $level);
+    }
+    
+    public static function InitPerks() {
+        self::LoadPerksData();
+    }
+    
+    private static function LoadPerksData() {
+        if(self::$guild_perks_data && is_array(self::$guild_perks_data)) {
+            return true;
+        }
+        self::$guild_perks_data = DB::WoW()->select("SELECT `id`, `level`, `icon`, `spell_id`, `name_%s` AS `name`, `desc_%s` AS `desc` FROM `DBPREFIX_guild_perks`", WoW_Locale::GetLocale(), WoW_Locale::GetLocale());
+    }
+    
+    private static function LoadProfessions() {
+        if(!self::IsCorrect()) {
+            WoW_Log::WriteError('%s : guild was not found.', __METHOD__);
+            return false;
+        }
+        $skills_professions = array(
+            SKILL_BLACKSMITHING,
+            SKILL_LEATHERWORKING,
+            SKILL_ALCHEMY,
+            SKILL_HERBALISM,
+            SKILL_MINING,
+            SKILL_TAILORING,
+            SKILL_ENGINERING,
+            SKILL_ENCHANTING,
+            SKILL_SKINNING,
+            SKILL_JEWELCRAFTING,
+            SKILL_INSCRIPTION
+        );
+        DB::ConnectToDB(DB_CHARACTERS, self::$guild_realmID, true, false);
+        if(!DB::Characters()->TestLink()) {
+            return false;
+        }
+        self::$guild_professions = DB::Characters()->select("SELECT * FROM `character_skills` WHERE `guid` IN (%s) AND `skill` IN (%s)", self::GetGuildMembersGUIDs(), $skills_professions);
+        if(!is_array(self::$guild_professions)) {
+            WoW_Log::WriteError('%s : no professions were found for guild %s (GUILDID: %d).', __METHOD__, self::GetGuildName(), self::GetGuildID());
+            return false;
+        }
+        return true;
+    }
+    
+    private static function HandleProfessions() {
+        if(!self::IsCorrect()) {
+            WoW_Log::WriteError('%s : guild was not found.', __METHOD__);
+            return false;
+        }
+        if(!is_array(self::$guild_professions)) {
+            if(!self::LoadProfessions()) {
+                return false;
+            }
+        }
+        $professions = self::$guild_professions;
+        self::$guild_professions = array();
+        foreach($professions as $prof) {
+            self::AddProfession($prof); // Add profession to professions list
+            self::AddProfessionToGuildMember($prof); // Add professions to guild roster
+        }
+        unset($professions, $prof);
+        return true;
+    }
+    
+    public static function InitProfessions() {
+        self::LoadProfessions();
+        self::HandleProfessions();
+    }
+    
+    private static function AddProfessionToGuildMember($profession) {
+        if(!self::IsCorrect()) {
+            WoW_Log::WriteError('%s : guild was not found.', __METHOD__);
+            return false;
+        }
+        $count = self::GetGuildMembersCount();
+        for($i = 0; $i < $count; ++$i) {
+            if(self::$guild_roster[$i]['guid'] == $profession['guid']) {
+                if(!isset(self::$guild_roster[$i]['professions'])) {
+                    self::$guild_roster[$i]['professions'] = array();
+                }
+                self::$guild_roster[$i]['professions'][] = $profession;
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    private static function AddProfession($profession) {
+        if(!self::IsCorrect()) {
+            WoW_Log::WriteError('%s : guild was not found.', __METHOD__);
+            return false;
+        }
+        $skills_professions = array(
+            SKILL_BLACKSMITHING,
+            SKILL_LEATHERWORKING,
+            SKILL_ALCHEMY,
+            SKILL_HERBALISM,
+            SKILL_MINING,
+            SKILL_TAILORING,
+            SKILL_ENGINERING,
+            SKILL_ENCHANTING,
+            SKILL_SKINNING,
+            SKILL_JEWELCRAFTING,
+            SKILL_INSCRIPTION
+        );
+        if(!in_array($profession['skill'], $skills_professions)) {
+            WoW_Log::WriteError('%s : wrong skill ID (%d) for player %d (Realm: %s), ignore.', __METHOD__, $profession['skill'], $profession['guid'], self::GetGuildRealmName());
+            return false;
+        }
+        if(!isset(self::$guild_professions[$profession['skill']])) {
+            self::$guild_professions[$profession['skill']] = array();
+        }
+        self::$guild_professions[$profession['skill']][] = $profession;
+        return true;
+    }
+    
+    public static function GetGuildPerkFromDB($perk_id = 0, $level = 0) {
+        if($level > 1 && $level <= 25) {
+            return DB::WoW()->selectRow("SELECT `id`, `level`, `icon`, `spell_id`, `name_%s` AS `name`, `desc_%s` AS `desc` FROM `DBPREFIX_guild_perks` WHERE `level` = %d", WoW_Locale::GetLocale(), WoW_Locale::GetLocale(), $level);
+        }
+        elseif($perk_id > 0 && $perk_id < 25) {
+            return DB::WoW()->selectRow("SELECT `id`, `level`, `icon`, `spell_id`, `name_%s` AS `name`, `desc_%s` AS `desc` FROM `DBPREFIX_guild_perks` WHERE `id` = %d", WoW_Locale::GetLocale(), WoW_Locale::GetLocale(), $perk_id);
+        }
+    }
+    
+    public static function GetGuildPerksData() {
+        if(!self::$guild_perks_data) {
+            self::LoadPerksData();
+        }
+        return self::$guild_perks_data;
     }
 }
 ?>

@@ -58,6 +58,9 @@ switch(WoW_Template::GetPageIndex()) {
     case 'guild_roster':
         WoW_Template::LoadTemplate('content_guild_roster');
         break;
+    case 'guild_professions':
+        WoW_Template::LoadTemplate('content_guild_professions');
+        break;
     case 'character_achievements':
         WoW_Template::LoadTemplate('content_character_achievements');
         break;
@@ -122,9 +125,22 @@ switch(WoW_Template::GetPageData('page')) {
 <script type="text/javascript" src="/wow/static/local-common/js/filter.js?v15"></script>
 <script type="text/javascript" src="/wow/static/js/item/item.js?v6"></script>';
         break;
-    case 'guild':
+    case 'guild_page':
+    case 'guild_perks':
+    case 'guild_roster':
+    case 'guild_professions':
+        if(in_array(WoW_Template::GetPageData('page'), array('guild_roster', 'guild_professions'))) {
+            echo '<script type="text/javascript" src="/wow/static/local-common/js/table.js?v17"></script>
+<script type="text/javascript" src="/wow/static/local-common/js/filter.js?v17"></script>
+<script type="text/javascript" src="/wow/static/local-common/js/dropdown.js?v17"></script>
+';
+        }
+        if(WoW_Template::GetPageData('page') == 'guild_professions') {
+            echo '<script type="text/javascript" src="/wow/static/js/guild/professions.js?v7"></script>';
+        }
         echo '<script type="text/javascript" src="/wow/static/js/profile.js?v6"></script>
-<script type="text/javascript" src="/wow/static/js/character/guild-tabard.js?v6"></script>';
+<script type="text/javascript" src="/wow/static/js/character/guild-tabard.js?v6"></script>
+<script type="text/javascript" src="/wow/static/js/guild/guild.js?v7"></script>';
         break;
     case 'search':
         echo '<script type="text/javascript" src="/wow/static/local-common/js/table.js?v16"></script>

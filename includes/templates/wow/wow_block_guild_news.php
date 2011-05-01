@@ -2,6 +2,7 @@
                 $guild_feed = WoW_Guild::GetGuildFeed();
                 if(is_array($guild_feed)) {
                     $i = 1;
+                    echo '<ul class="activity-feed">';
                     foreach($guild_feed as $feed) {
                         switch($feed['type']) {
                             case TYPE_ACHIEVEMENT_FEED:
@@ -53,5 +54,9 @@
                                 break;
                         }
                     }
+                    echo sprintf('</ul><a class="profile-linktomore" href="%snews" rel="np">%s</a><span class="clear"><!-- --></span>', WoW_Guild::GetGuildUrl(), WoW_Locale::GetString('template_guild_feed_all_feeds'));
+                }
+                else {
+                    echo WoW_Locale::GetString('template_guild_feed_no_news');
                 }
                 ?>
