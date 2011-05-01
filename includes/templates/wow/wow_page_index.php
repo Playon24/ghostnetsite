@@ -88,6 +88,9 @@ switch(WoW_Template::GetPageIndex()) {
     case 'blog':
         WoW_Template::LoadTemplate('content_blog');
         break;
+    case 'game':
+        WoW_Template::LoadTemplate('content_game');
+        break;
 }
 WoW_Template::LoadTemplate('block_footer', true);
 WoW_Template::LoadTemplate('block_service', true);
