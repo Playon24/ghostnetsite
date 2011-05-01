@@ -3,51 +3,51 @@
 <div id="sitemap" class="footer-ads">
 <div class="column">
 <h3 class="bnet">
-<a href="http://eu.battle.net/" tabindex="100">Battle.net</a>
+<a href="http://eu.battle.net/" tabindex="100"><?php echo WoW_Locale::GetString('template_footer_home_title'); ?></a>
 </h3>
 <ul>
-<li><a href="http://eu.battle.net/what-is/">Что такое Battle.net?</a></li>
-<li><a href="https://eu.battle.net/account/management/get-a-game.html">Купить игры</a></li>
-<li><a href="http://eu.battle.net/sc2/community/esports/">Киберспорт</a></li>
-<li><a href="https://eu.battle.net/account/management/?lnk=3">Учетная запись</a></li>
-<li><a href="http://eu.blizzard.com/support/">Поддержка</a></li>
-<li><a href="http://eu.battle.net/realid/">«Настоящее имя»</a></li>
+<li><a href="http://eu.battle.net/what-is/"><?php echo WoW_Locale::GetString('template_footer_home_link1'); ?></a></li>
+<li><a href="https://eu.battle.net/account/management/get-a-game.html"><?php echo WoW_Locale::GetString('template_footer_home_link2'); ?></a></li>
+<li><a href="http://eu.battle.net/sc2/community/esports/"><?php echo WoW_Locale::GetString('template_footer_home_link3'); ?></a></li>
+<li><a href="https://eu.battle.net/account/management/?lnk=3"><?php echo WoW_Locale::GetString('template_footer_home_link4'); ?></a></li>
+<li><a href="http://eu.blizzard.com/support/"><?php echo WoW_Locale::GetString('template_footer_home_link5'); ?></a></li>
+<li><a href="http://eu.battle.net/realid/"><?php echo WoW_Locale::GetString('template_footer_home_link6'); ?></a></li>
 </ul>
 </div>
 <div class="column">
 <h3 class="games">
-<a href="http://eu.battle.net/" tabindex="100">Игры</a>
+<a href="http://eu.battle.net/" tabindex="100"><?php echo WoW_Locale::GetString('template_footer_games_title'); ?></a>
 </h3>
 <ul>
-<li><a href="http://eu.battle.net/sc2/">StarCraft II</a></li>
-<li><a href="http://eu.battle.net/wow/">World of Warcraft</a></li>
-<li><a href="http://eu.battle.net/games/d3">Diablo III</a></li>
-<li><a href="http://eu.battle.net/games/classic">Классические игры</a></li>
-<li><a href="https://eu.battle.net/account/download/">Загрузка клиента игры</a></li>
+<li><a href="http://eu.battle.net/sc2/"><?php echo WoW_Locale::GetString('template_footer_games_link1'); ?></a></li>
+<li><a href="http://eu.battle.net/wow/"><?php echo WoW_Locale::GetString('template_footer_games_link2'); ?></a></li>
+<li><a href="http://eu.battle.net/games/d3"><?php echo WoW_Locale::GetString('template_footer_games_link3'); ?></a></li>
+<li><a href="http://eu.battle.net/games/classic"><?php echo WoW_Locale::GetString('template_footer_games_link4'); ?></a></li>
+<li><a href="https://eu.battle.net/account/download/"><?php echo WoW_Locale::GetString('template_footer_games_link5'); ?></a></li>
 </ul>
 </div>
 <div class="column">
 <h3 class="account">
-<a href="https://eu.battle.net/account/management/?lnk=4" tabindex="100">Учетная запись</a>
+<a href="https://eu.battle.net/account/management/?lnk=4" tabindex="100"><?php echo WoW_Locale::GetString('template_footer_account_title'); ?></a>
 </h3>
 <ul>
-<li><a href="https://eu.battle.net/account/support/password-reset.html">Не можете войти в систему?</a></li>
-<li><a href="https://eu.battle.net/account/creation/tos.html">Создать учетную запись</a></li>
-<li><a href="https://eu.battle.net/account/management/?lnk=5">Управление записью</a></li>
-<li><a href="https://eu.battle.net/account/management/authenticator.html">Безопасность учетной записи</a></li>
-<li><a href="https://eu.battle.net/account/management/add-game.html">Добавить игру</a></li>
-<li><a href="https://eu.battle.net/account/management/redemption/redeem.html">Использовать код</a></li>
+<li><a href="https://eu.battle.net/account/support/password-reset.html"><?php echo WoW_Locale::GetString('template_footer_account_link1'); ?></a></li>
+<li><a href="https://eu.battle.net/account/creation/tos.html"><?php echo WoW_Locale::GetString('template_footer_account_link2'); ?></a></li>
+<li><a href="https://eu.battle.net/account/management/?lnk=5"><?php echo WoW_Locale::GetString('template_footer_account_link3'); ?></a></li>
+<li><a href="https://eu.battle.net/account/management/authenticator.html"><?php echo WoW_Locale::GetString('template_footer_account_link4'); ?></a></li>
+<li><a href="https://eu.battle.net/account/management/add-game.html"><?php echo WoW_Locale::GetString('template_footer_account_link5'); ?></a></li>
+<li><a href="https://eu.battle.net/account/management/redemption/redeem.html"><?php echo WoW_Locale::GetString('template_footer_account_link6'); ?></a></li>
 </ul>
 </div>
 <div class="column">
 <h3 class="support">
-<a href="http://eu.blizzard.com/support/" tabindex="100">Поддержка</a>
+<a href="http://eu.blizzard.com/support/" tabindex="100"><?php echo WoW_Locale::GetString('template_footer_support_title'); ?></a>
 </h3>
 <ul>
-<li><a href="http://eu.blizzard.com/support/">Сайт поддержки</a></li>
-<li><a href="https://eu.battle.net/account/parental-controls/index.html">Родительский контроль</a></li>
-<li><a href="http://eu.battle.net/security/">Защита учетной записи</a></li>
-<li><a href="http://eu.battle.net/security/help">Помогите, мою запись взломали!</a></li>
+<li><a href="http://eu.blizzard.com/support/"><?php echo WoW_Locale::GetString('template_footer_support_link1'); ?></a></li>
+<li><a href="https://eu.battle.net/account/parental-controls/index.html"><?php echo WoW_Locale::GetString('template_footer_support_link2'); ?></a></li>
+<li><a href="http://eu.battle.net/security/"><?php echo WoW_Locale::GetString('template_footer_support_link3'); ?></a></li>
+<li><a href="http://eu.battle.net/security/help"><?php echo WoW_Locale::GetString('template_footer_support_link4'); ?></a></li>
 </ul>
 </div>
 <div id="footer-ad">
@@ -67,9 +67,9 @@ BnetAds.init('#footer-ad', '300x100');
 <span><?php echo sprintf('%s - %s', WoW_Locale::GetString('locale_region'), WoW_Locale::GetString('locale_name')); ?></span>
 </a>
 <?php echo WoW_Locale::GetString('copyright_bottom_title'); ?>
-<a onclick="return Core.open(this);" href="http://eu.blizzard.com/company/legal/" tabindex="100">Соглашения</a>
-<a onclick="return Core.open(this);" href="http://eu.blizzard.com/company/about/privacy.html" tabindex="100">Политика конфиденциальности</a>
-<a onclick="return Core.open(this);" href="http://eu.blizzard.com/company/about/infringementnotice.html" tabindex="100">Авторское право</a>
+<a onclick="return Core.open(this);" href="http://eu.blizzard.com/company/legal/" tabindex="100"><?php echo WoW_Locale::GetString('copyright_bottom_legal'); ?></a>
+<a onclick="return Core.open(this);" href="http://eu.blizzard.com/company/about/privacy.html" tabindex="100"><?php echo WoW_Locale::GetString('copyright_bottom_privacy'); ?></a>
+<a onclick="return Core.open(this);" href="http://eu.blizzard.com/company/about/infringementnotice.html" tabindex="100"><?php echo WoW_Locale::GetString('copyright_bottom_copyright'); ?></a>
 </div>
 <div id="international"></div>
 <div id="legal">
