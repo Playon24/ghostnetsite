@@ -106,6 +106,17 @@ else {
                 WoW_Template::SetPageData('page', 'character_pvp');
                 WoW_Characters::InitPvP();
                 break;
+            case 'statistic':
+                for($i = 2; $i > 0; $i--) {
+                    if(isset($url_data['action' . $i]) && $url_data['action' . $i] != null) {
+                        WoW_Achievements::SetCategoryForTemplate($url_data['action' . $i]);
+                        WoW_Template::LoadTemplate('page_character_statistics');
+                        exit;
+                    }
+                }
+                WoW_Template::SetPageIndex('character_statistics');
+                WoW_Template::SetPageData('page', 'character_statistics');
+                break;
         }
     }
 }

@@ -702,6 +702,47 @@ Class WoW_Achievements {
         }
         return isset(self::$categories_names[$categoryId]) ? self::$categories_names[$categoryId]['name'] : null;
     }
+    
+    public static function StatisticCategory($category) {
+        $achievement_category = array();
+        $achievements = DB::WoW()->select("SELECT `id`, `name_%s` AS `name`, `description_%s` AS `desc`, `categoryId` FROM `DBPREFIX_achievement` WHERE `categoryId` = %d", WoW_Locale::GetLocale(), WoW_Locale::GetLocale(), $category);
+        if(!$achievements) {
+            WoW_Log::WriteError('%s : unable to find any achievement in %d category!', __METHOD__, $category);
+            return false;
+        }
+        foreach($achievements as $ach) {
+            $achievement_category[$ach['id']] = $ach;
+            $achievement_category[$ach['id']]['quantity'] = self::GetCriteriaValue($ach['id']);
+        }
+        return $achievement_category;
+    }
+    
+    public static function GetStatisticSummary() {
+        $summary = array();
+        $achievements = DB::WoW()->select("SELECT `id`, `name_%s` AS `name`, `description_%s` AS `desc`, `categoryId` FROM `DBPREFIX_achievement` WHERE `id` IN (377, 1198, 338, 529, 931, 588, 378, 339)", WoW_Locale::GetLocale(), WoW_Locale::GetLocale());
+        if(!$achievements) {
+            WoW_Log::WriteError('%s : unable to find any achievement for statistics!', __METHOD__, $category);
+            return false;
+        }
+        foreach($achievements as $ach) {
+            $summary[$ach['id']] = $ach;
+            $summary[$ach['id']]['quantity'] = self::GetCriteriaValue($ach['id']);
+        }
+        return $summary;
+    }
+    
+    private static function GetCriteriaValue($ach_id) {
+        $criteria_ids = DB::WoW()->select("SELECT `id` FROM `DBPREFIX_achievement_criteria` WHERE `referredAchievement` = %d", $ach_id);
+        if(!$criteria_ids) {
+            return false;
+        }
+        foreach($criteria_ids as $id) {
+            if(!isset(self::$criterias_storage[$id['id']])) {
+                continue;
+            }
+            return self::$criterias_storage[$id['id']]['counter'] == 0 ? '--' : self::$criterias_storage[$id['id']]['counter'];
+        }
+        return '--';
+    }
 }
-
 ?>

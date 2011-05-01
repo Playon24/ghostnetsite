@@ -73,6 +73,9 @@ switch(WoW_Template::GetPageIndex()) {
     case 'character_pvp':
         WoW_Template::LoadTemplate('content_character_pvp');
         break;
+    case 'character_statistics':
+        WoW_Template::LoadTemplate('content_character_statistics');
+        break;
     case 'search':
         WoW_Template::LoadTemplate('content_search');
         break;
@@ -163,6 +166,10 @@ switch(WoW_Template::GetPageData('page')) {
 <script type="text/javascript" src="/wow/static/js/character/pvp.js?v7"></script>
 <script type="text/javascript" src="/wow/static/js/character/arena-flag.js?v7"></script>
 <script type="text/javascript" src="/wow/static/js/pvp/arena.js?v7"></script>';
+        break;
+    case 'character_statistics':
+        echo '<script type="text/javascript" src="/wow/static/js/profile.js?v7"></script>
+<script type="text/javascript" src="/wow/static/js/character/statistic.js?v7"></script>';
         break;
     case 'blog':
         echo '<script type="text/javascript" src="/wow/static/local-common/js/lightbox.js?v17"></script>';

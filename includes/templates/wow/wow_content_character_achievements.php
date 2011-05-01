@@ -19,7 +19,7 @@ World of Warcraft
 </li>
 <li class="last">
 <a href="<?php echo WoW_Characters::GetURL(); ?>achievement" rel="np">
-Достижения
+<?php echo WoW_Locale::GetString('template_profile_achievements'); ?>
 </a>
 </li>
 </ol>
