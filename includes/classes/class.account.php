@@ -661,8 +661,9 @@ Class WoW_Account {
     
     private static function LoadCharacters() {
         self::$characters_loaded = false;
+        $total_chars_count = DB::Realm()->selectCell("SELECT SUM(`numchars`) FROM `realmcharacters` WHERE `acctid` = %d", self::GetUserID());
         self::$characters_data = DB::WoW()->select("SELECT * FROM `DBPREFIX_user_characters` WHERE `account` = %d ORDER BY `index`", self::GetUserID());
-        if(!self::$characters_data) {
+        if(!self::$characters_data || count(self::$characters_data) < $total_chars_count) {
             self::LoadCharactersFromWorld();
         }
         else {
@@ -680,6 +681,7 @@ Class WoW_Account {
         }
         $active_set = false;
         $index = 0;
+        DB::WoW()->query("DELETE FROM `DBPREFIX_user_characters` WHERE `account` = %d", self::GetUserID());
         foreach(self::$characters_data as $char) {
             DB::WoW()->query("INSERT INTO `DBPREFIX_user_characters` VALUES (%d, %d, %d, '%s', %d, '%s', %d, '%s', %d, %d, %d, '%s', %d, %d, '%s', %d, '%s', '%s', '%s')",
                 self::GetUserID(),
