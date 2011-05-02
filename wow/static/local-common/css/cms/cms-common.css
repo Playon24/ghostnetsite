@@ -1,17 +1,17 @@
+/* General */
+.edit-icon { background:url(../../images/cms/edit-icon.gif) 5px -1px no-repeat; padding-left: 23px; font-size:13px !important; }
+
+/* Comments */
+a.comments-link { background:-16px -8px; padding-left:17px; margin-left:8px; display:block; float:left;	  }
+.by-line a.comments-link { line-height: 1.2em; float:none; display:inline; background-position:-15px -14px;  }
+.cm-actions form { display:inline; }
+
 /* Comments */
 a.comments-link { background:-16px -8px; padding-left:17px; margin-left:8px; display:block; float:left;	  }
 .by-line a.comments-link { line-height: 1.2em; float:none; display:inline; background-position:-15px -14px;  }
 
-
-/* Comments */
-a.comments-link { background:-16px -8px; padding-left:17px; margin-left:8px; display:block; float:left;	  }
-.by-line a.comments-link { line-height: 1.2em; float:none; display:inline; background-position:-14px -15px; letter-spacing:-1px; }
-
 #posts tr.mvp .post-author, #page-comments .mvp .context-link { color:#6f9d3f; }
-#thread .mvp .post-detail, #page-comments .mvp .content  { color:#81b558 }
-
-#thread .mvp .post-detail blockquote { border-color:#81b558; border-bottom-color:#83bb57; }
-#thread .mvp .post-detail blockquote:hover { border-color: #7fcf40; }
+#page-comments .mvp .content  { color:#81b558 }
 
 .character-info .user-name { display:inline; position:relative; }
 .character-info .user-name .context-link { font-size:13px; }
@@ -37,7 +37,7 @@ a.comments-link { background:-16px -8px; padding-left:17px; margin-left:8px; dis
 
 .post-user .avatar, #page-comments .avatar { background:no-repeat; position:absolute; top:28px; left:24px;   }
 .post-user .avatar-interior, #page-comments .avatar-interior {  background: no-repeat; height:64px; width:64px; }
-.post-user .avatar-interior a { height:100%; width:100%; }
+.post-user .avatar-interior a { height:100%; width:100%; display: block; }
 #page-comments .nested .avatar-interior { height:32px; width:32px; }
 #page-comments .nested .comment-interior { padding-left: 85px; }
 .noCharacter { padding:10px; }
@@ -46,7 +46,7 @@ a.comments-link { background:-16px -8px; padding-left:17px; margin-left:8px; dis
 
 /* Announcement */
 
-.cms-announcement { width: 80%; margin:0 auto; -moz-border-radius:7px; border-radius:7px; background:no-repeat; }
+.cms-announcement { width: 80%; margin:10px auto 0; -moz-border-radius:7px; border-radius:7px; background:no-repeat; }
 .cms-announcement .announce-content { padding:18px 40px 18px 131px; overflow:hidden; margin: 0 0 15px; }
 .cms-announcement .announce-image { float:left; height:72px; } /* Min Height for BG */
 .cms-announcement .announce-title { font-size:18px;  color:white; }
@@ -62,7 +62,7 @@ a.comments-link { background:-16px -8px; padding-left:17px; margin-left:8px; dis
 .karma .ratedown { width:51px; }
 .karma .rateup { }
 .karma .rateup span { 	display:block; margin-left:16px; padding:0 8px 0 2px; height:36px; line-height:36px; text-align:center; white-space:nowrap; 
-						background-position:right -108px; }
+						background-position:right -108px; font-size:10px; }
 .karma.voted .selected .rate-btn { visibility:visible }
 .karma .rate-btn-holder:hover .ratedown, .karma .post-info .ratedown:hover  { background-position:0 -36px; }
 .karma .rateup { background-position:-51px 0; }
@@ -78,7 +78,7 @@ a.comments-link { background:-16px -8px; padding-left:17px; margin-left:8px; dis
 .karma-feedback, .prev-vote { 	border:7px solid transparent; clear:both; text-align:center;  width:88px; padding:5px 0; margin-top:3px;
 								-moz-border-radius:5px 0 3px 0; border-radius:5px 0 3px 0; }
 .karma-feedback { visibility:hidden; }
-.iehover .karma-feedback, .comment:hover .karma-feedback, .post:hover .karma-feedback { visibility:visible; }
+.iehover .karma-feedback, .comment:hover .karma-feedback, .post:hover .karma-feedback { visibility:visible;}
 .prev-vote { display:none; }
 
 .karma .rate-action { position:absolute; right:0; top:0px; display:none; }
@@ -97,6 +97,66 @@ a.comments-link { background:-16px -8px; padding-left:17px; margin-left:8px; dis
 #content .hidden .hidden-reveal { font-size:11px; margin-left:13px; display:inline; }
 #content .hidden-reveal { display:none }
 #content .hidden-reveal  { }
+
+/* ####### Poll */
+
+#poll-container {	background: top right no-repeat; border:1px solid #000; font-size:11px; margin:20px;  position:relative; }
+#blog #poll-container { margin-bottom:50px }
+#poll-container .poll-interior { background:50% 0 no-repeat; padding:12px 40px 15px;  }
+#poll-container, #poll-container .poll-interior { -moz-border-radius:8px 0 4px 0; border-radius:8px 0 4px 0; }
+#poll-container h3 { font-size:14px; color:white; font-weight:normal; padding:5px 100px 14px 0; }
+
+#poll-container .vote { }
+#poll-container .vote label { display:block; line-height:24px; }
+#poll-container .vote input { margin:0 10px; vertical-align:middle; }
+/* firefox only hack */
+	@-moz-document url-prefix() {
+		#poll-container .vote input { vertical-align: sub }
+	}
+
+#poll-container .selection-count { font:italic bold 11px/14px Trebuchet MS; position:absolute; right:14px; top:14px; text-align:right; }
+#poll-container .selection-count .value { font-size:36px; float:right; padding-top:8px; line-height:normal; margin-top:-15px; }
+#poll-container .poll-stats { position:relative; bottom:-30px; left:-39px; z-index:1; padding-right:200px; display:block; }
+#poll-container .poll-stats span { }
+#poll-container .poll-actions { position:absolute; right:14px; bottom:-17px; z-index:2; }
+#poll-container .poll-actions a { 	line-height:30px; text-align:center; text-transform:uppercase; color:white; 
+									background:no-repeat 0 -64px; height:32px; width:83px; display:block; float:left; }
+#poll-container .poll-actions a span { padding-left:5px; }
+#poll-container .poll-actions a:hover { background-position:0 -32px; color:#000; }
+#poll-container .poll-actions a.selected { background-position:0 0; color:#000;}
+#poll-container .poll-actions a.selected:hover { background-position:0 -96px; }
+#poll-container .poll-actions a.r-btn { background-position:-83px -64px; }
+#poll-container .poll-actions a.r-btn span { padding-right:10px; }
+#poll-container .poll-actions a.r-btn:hover { background-position:-83px -32px; }
+#poll-container .poll-actions a.r-btn.selected { background-position:-83px 0; }
+#poll-container .poll-actions a.r-btn.selected:hover { background-position:-83px -96px; }
+#poll-container.results-only .poll-actions .v-btn { background-position:0 -128px; cursor:default; }
+#poll-container.results-only .poll-actions .v-btn.voted  { background-position:0 -160px; }
+#poll-container.results-only .poll-actions .v-btn:hover { color:white; }
+#poll-container.noResult .poll-actions .r-btn { background-position:-83px -128px; cursor:default; }
+#poll-container.noResult .poll-actions .r-btn:hover { background-position:-83px -128px; color:white; }
+
+
+#poll-container .results { display:none; width:700px; }
+#blog #poll-container .results { width:460px; }
+
+#poll-container .results table { width:100%; border-collapse:collapse; }
+#poll-container .results td { padding:5px; }
+#poll-container .results table td:first-child { text-align:right; white-space:nowrap; max-width:50%; }
+#poll-container .results table td:last-child { min-width:50%; width:100%; }
+#poll-container .verbose table td:first-child { width:50%; white-space:normal; }
+#poll-container .verbose table td:last-child { width:50%; }
+
+#poll-container .results .result-container { background:0 -36px no-repeat; padding:1px 0; }
+#poll-container .results .result { width:100%; height:16px; background:0 -19px no-repeat; }
+#poll-container .results .result span { margin-left:5px; display:block;  font:bold 11px/16px Arial;  text-align:center; white-space:nowrap;
+										background:right -19px no-repeat; }
+#poll-container .max .result { background-position:0 0; }
+#poll-container .max .result span { background-position:right 0; }
+
+
+#poll-container.results-only .vote { display:none; }
+#poll-container.results-only .results { display:block; }
 
 
 /* Banned Messaging */
