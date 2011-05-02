@@ -646,6 +646,20 @@ Class WoW_Template {
                     )
                 );
                 break;
+            case 'account_status':
+                $css_data_page = array(
+                    array(
+                        'path' => '/wow/static/local-common/css/cms/forums.css',
+                        'version' => 17,
+                        'browser' => false
+                    ),
+                    array(
+                        'path' => '/wow/static/local-common/css/cms/cms-common.css',
+                        'version' => 17,
+                        'browser' => false
+                    )
+                );
+                break;
         }
         $cssList = array_merge($css_data, $css_data_page);
         $cssList[] = array(

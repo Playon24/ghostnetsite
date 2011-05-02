@@ -38,10 +38,11 @@ rel="np">
 
 $all_characters = WoW_Account::GetCharactersData();
 if(is_array($all_characters)) {
-    $i = 1;
     foreach($all_characters as $char) {
-        echo sprintf('<a href="%s" onclick="CharSelect.pin(%d, this); return false;" class="char "rel="np"><span class="pin"></span><span class="name">%s</span><span class="class color-c%d">%d %s %s</span><span class="realm">%s</span></a>', $char['url'], $i, $char['name'], $char['class'], $char['level'], $char['race_text'], $char['class_text'], $char['realmName']);
-        $i++;
+        if($char['guid'] == WoW_Account::GetActiveCharacterInfo('guid') && $char['realmId'] == WoW_Account::GetActiveCharacterInfo('realmId')) {
+            continue; // Skip active character
+        }
+        echo sprintf('<a href="%s" onclick="CharSelect.pin(%d, this); return false;" class="char "rel="np"><span class="pin"></span><span class="name">%s</span><span class="class color-c%d">%d %s %s</span><span class="realm">%s</span></a>', $char['url'], $char['index'], $char['name'], $char['class'], $char['level'], $char['race_text'], $char['class_text'], $char['realmName']);
     }
 }
 ?>
@@ -69,10 +70,11 @@ onmouseover="Tooltip.show(this, $(this).children(\'.hide\').text());">
 <span class="hide">%s %s (%s)</span>
 </a>', WoW_Account::GetActiveCharacterInfo('class'), WoW_Account::GetActiveCharacterInfo('race'), WoW_Account::GetActiveCharacterInfo('gender'), WoW_Account::GetActiveCharacterInfo('class'), WoW_Account::GetActiveCharacterInfo('level'), WoW_Account::GetActiveCharacterInfo('name'), WoW_Account::GetActiveCharacterInfo('race_text'), WoW_Account::GetActiveCharacterInfo('class_text'), WoW_Account::GetActiveCharacterInfo('realmName'));
 if(is_array($all_characters)) {
-    $i = 1;
     foreach($all_characters as $char) {
-        echo sprintf('<a href="%s" class="color-c%d" rel="np" onclick="CharSelect.pin(%d, this); return false;" onmouseover="Tooltip.show(this, $(this).children(\'.hide\').text());"><img src="/wow/static/images/icons/race/%d-%d.gif" alt="" /><img src="/wow/static/images/icons/class/%d.gif" alt="" />%d %s<span class="hide">%s %s (%s)</span></a>', $char['url'], $char['class'], $i, $char['race'], $char['gender'], $char['class'], $char['level'], $char['name'], $char['race_text'], $char['class_text'], $char['realmName']);
-        $i++;
+        if($char['guid'] == WoW_Account::GetActiveCharacterInfo('guid') && $char['realmId'] == WoW_Account::GetActiveCharacterInfo('realmId')) {
+            continue; // Skip active character
+        }
+        echo sprintf('<a href="%s" class="color-c%d" rel="np" onclick="CharSelect.pin(%d, this); return false;" onmouseover="Tooltip.show(this, $(this).children(\'.hide\').text());"><img src="/wow/static/images/icons/race/%d-%d.gif" alt="" /><img src="/wow/static/images/icons/class/%d.gif" alt="" />%d %s<span class="hide">%s %s (%s)</span></a>', $char['url'], $char['class'], $char['index'], $char['race'], $char['gender'], $char['class'], $char['level'], $char['name'], $char['race_text'], $char['class_text'], $char['realmName']);
     }
 }
 ?>

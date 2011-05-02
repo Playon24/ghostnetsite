@@ -91,6 +91,9 @@ switch(WoW_Template::GetPageIndex()) {
     case 'game':
         WoW_Template::LoadTemplate('content_game');
         break;
+    case 'account_status':
+        WoW_Template::LoadTemplate('content_account_status');
+        break;
 }
 WoW_Template::LoadTemplate('block_footer', true);
 WoW_Template::LoadTemplate('block_service', true);

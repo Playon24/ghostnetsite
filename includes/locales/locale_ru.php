@@ -667,5 +667,12 @@ $WoW_Locale = array(
     'template_game_wowhead_desc' => 'Обширная база данных Wowhead поможет вам в поиске предметов, заданий, НПС и многого другого!',
     'template_game_wowpedia_title' => 'Wowpedia',
     'template_game_wowpedia_desc' => 'Wowpedia представляет собой подробную энциклопедию мира Warcraft.',
+    
+    'template_account_status_posting_disabled' => 'Вы не можете размещать сообщения с этой учетной записи.',
+    'template_account_status_info_no_subscribe' => 'Срок действия игровой лицензии истек или нет текущей подписки.',
+    'template_account_status_info_no_session' => 'Вы не авторизованы.',
+    'template_account_status_info_success' => 'С учетной записью все в порядке.',
+    'template_account_status_clear_session' => 'Если вы считаете, что вы по ошибке видите это сообщение, выйдите из системы и снова авторизуйтесь.',
+    'template_account_status_log_out' => 'Выход',
 );
 ?>

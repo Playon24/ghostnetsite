@@ -194,6 +194,14 @@ Class WoW_Account {
     private static $friends_data = array();
     
     /**
+     * Ban checker
+     * @access    private
+     * @staticvar bool $is_banned;
+     * @return    bool
+     **/
+    private static $is_banned = false;
+    
+    /**
      * Class constructor.
      * 
      * @access   public
@@ -219,6 +227,18 @@ Class WoW_Account {
      **/
     public static function IsLoggedIn() {
         return self::GetSessionInfo('wow_sid') != null;
+    }
+    
+    /**
+     * Returns true if user is banned and false if not.
+     * 
+     * @access   public
+     * @static   WoW_Account::IsBanned()
+     * @category Account Manager Class
+     * @return   bool
+     **/
+    public static function IsBanned() {
+        return self::GetSessionInfo('wow_ban') != null;
     }
     
     /**
@@ -252,6 +272,7 @@ Class WoW_Account {
         self::$first_name = self::NormalizeStringForSessionString($sess_data[6], NORMALIZE_FROM);
         self::$last_name = self::NormalizeStringForSessionString($sess_data[7], NORMALIZE_FROM);
         self::$bnet_id = $sess_data[8];
+        self::$is_banned = $sess_data[9];
         self::SetLoginState(ACCMGR_LOGGED_IN);
         return true;
     }
@@ -423,7 +444,7 @@ Class WoW_Account {
      * @return   bool
      **/
     private static function CreateSession() {
-        self::$session_string = sprintf('%d:%s:%s:%s:%s:%d:%s:%s:%d',
+        self::$session_string = sprintf('%d:%s:%s:%s:%s:%d:%s:%s:%d:%d',
             self::GetUserID(), // [0]
             self::NormalizeStringForSessionString(self::GetUserName(), NORMALIZE_TO), // [1]
             self::NormalizeStringForSessionString(self::GetPassword(), NORMALIZE_TO), // [2]
@@ -432,7 +453,8 @@ Class WoW_Account {
             self::GetLoginTimeStamp(), // [5]
             self::NormalizeStringForSessionString(self::$first_name, NORMALIZE_TO), // [6]
             self::NormalizeStringForSessionString(self::$last_name, NORMALIZE_TO),  // [7]
-            self::$bnet_id // [8]
+            self::$bnet_id, // [8]
+            self::$is_banned // [9]
         );
         self::$session_hash = md5(self::$session_string);
         self::$sid = md5(self::$session_hash);
@@ -441,6 +463,7 @@ Class WoW_Account {
         $_SESSION['wow_sid_hash'] = self::$session_hash;
         $_SESSION['wow_logged_in'] = true;
         $_SESSION['wow_account_hash'] = sprintf('EU-%d-%s', rand(), md5(rand()));
+        $_SESSION['wow_ban'] = self::$is_banned;
         return true;
     }
     
@@ -554,6 +577,7 @@ Class WoW_Account {
             self::$first_name = self::$username;
             self::$last_name = self::$username;
         }
+        self::$is_banned = (bool) DB::Realm()->selectCell("SELECT 1 FROM `account_banned` WHERE `id` = %d AND `active` = 1", self::GetUserID());
         self::CreateSession();
         self::SetLoginState(ACCMGR_LOGGED_IN);
         self::$login_time = time();
@@ -636,21 +660,72 @@ Class WoW_Account {
     }
     
     private static function LoadCharacters() {
+        self::$characters_loaded = false;
+        self::$characters_data = DB::WoW()->select("SELECT * FROM `DBPREFIX_user_characters` WHERE `account` = %d ORDER BY `index`", self::GetUserID());
+        if(!self::$characters_data) {
+            self::LoadCharactersFromWorld();
+        }
+        else {
+            self::$characters_loaded = true;
+            foreach(self::$characters_data as $char) {
+                if($char['isActive'] == true) {
+                    self::$active_character = $char;
+                    return true;
+                }
+            }
+            return true;
+        }
+        if(!self::$characters_data) {
+            return false;
+        }
+        $active_set = false;
+        $index = 0;
+        foreach(self::$characters_data as $char) {
+            DB::WoW()->query("INSERT INTO `DBPREFIX_user_characters` VALUES (%d, %d, %d, '%s', %d, '%s', %d, '%s', %d, %d, %d, '%s', %d, %d, '%s', %d, '%s', '%s', '%s')",
+                self::GetUserID(),
+                $index,
+                $char['guid'],
+                $char['name'],
+                $char['class'],
+                $char['class_text'],
+                $char['race'],
+                $char['race_text'],
+                $char['gender'],
+                $char['level'],
+                $char['realmId'],
+                $char['realmName'],
+                $active_set ? 0 : 1,
+                $char['faction'],
+                $char['faction_text'],
+                $char['guildId'],
+                $char['guildName'],
+                $char['guildUrl'],
+                $char['url']
+            );
+            if(!$active_set) {
+                self::$active_character = $char;
+                $active_set = true;
+            }
+            ++$index;
+        }
+        self::$characters_loaded = true;
+        return true;
+    }
+    
+    private static function LoadCharactersFromWorld() {
         $db = null;
         $chars_data = array();
-        $isActive = false;
-        $firstSaved = false;
-        $first_character = array();
-        $active_char_info = DB::WoW()->selectRow("SELECT `guid`, `realm_id` FROM `DBPREFIX_user_characters` WHERE `selected` = 1");
+        self::$characters_data = array();
+        $index = 0;
         foreach(WoWConfig::$Realms as $realm_info) {
             $db = DB::ConnectToDB(DB_CHARACTERS, $realm_info['id']);
             $chars_data = DB::Characters()->select("
                 SELECT
-                `characters`.`guid`, 
-                `characters`.`name`, 
-                `characters`.`class`, 
-                `characters`.`race`, 
-                `characters`.`gender`, 
+                `characters`.`guid`,
+                `characters`.`name`,
+                `characters`.`class`,
+                `characters`.`race`,
+                `characters`.`gender`,
                 `characters`.`level`,
                 `guild_member`.`guildid` AS `guildId`,
                 `guild`.`name` AS `guildName`
@@ -662,24 +737,20 @@ Class WoW_Account {
                 continue;
             }
             foreach($chars_data as $char) {
-                if(is_array($active_char_info) && $active_char_info['guid'] == $char['guid'] && $active_char_info['realm_id'] == $realm_info['id']) {
-                    $isActive = true;
-                }
-                else {
-                    $isActive = false;
-                }
                 $tmp_char_data = array(
+                    'account' => self::GetUserID(),
+                    'index' => $index,
                     'guid' => $char['guid'],
                     'name' => $char['name'],
                     'class' => $char['class'],
-                    'class_text' => DB::WoW()->selectCell("SELECT `name_%s_%d` FROM `DBPREFIX_classes` WHERE `id` = %d", WoW_Locale::GetLocale(), $char['gender'], $char['class']),
+                    'class_text' => WoW_Locale::GetString('character_class_' . $char['class'], $char['gender']),
                     'race' => $char['race'],
-                    'race_text' => DB::WoW()->selectCell("SELECT `name_%s_%d` FROM `DBPREFIX_races` WHERE `id` = %d", WoW_Locale::GetLocale(), $char['gender'], $char['race']),
+                    'race_text' => WoW_Locale::GetString('character_race_' . $char['race'], $char['gender']),
                     'gender' => $char['gender'],
                     'level' => $char['level'],
                     'realmName' => $realm_info['name'],
                     'realmId' => $realm_info['id'],
-                    'isActive' => $isActive,
+                    'isActive' => 0,
                     'faction' => WoW_Utils::GetFactionId($char['race']),
                     'faction_text' => (WoW_Utils::GetFactionId($char['race']) == FACTION_ALLIANCE) ? 'alliance' : 'horde',
                     'guildId' => $char['guildId'],
@@ -687,25 +758,10 @@ Class WoW_Account {
                     'guildUrl' => sprintf('/wow/guild/%s/%s/', urlencode($realm_info['name']), urlencode($char['guildName'])),
                     'url' => sprintf('/wow/character/%s/%s/', urlencode($realm_info['name']), urlencode($char['name']))
                 );
-                if($isActive) {
-                    self::$active_character = $tmp_char_data;
-                }
                 self::$characters_data[] = $tmp_char_data;
-                if(!$firstSaved) {
-                    $firstSaved = true;
-                    $first_character = $tmp_char_data;
-                }
+                ++$index;
             }
         }
-        if(!self::$characters_data) {
-            return false;
-        }
-        if(!self::$active_character) {
-            // Set first character as primary.
-            self::$active_character = $first_character;
-        }
-        self::$characters_loaded = true;
-        return true;
     }
     
     public static function IsCharactersLoaded() {

@@ -666,5 +666,11 @@ $WoW_Locale = array(
     'template_game_wowhead_desc' => 'Browse Wowhead’s extensive database of World of Warcraft items, quests, NPCs, and much more!',
     'template_game_wowpedia_title' => 'Wowpedia',
     'template_game_wowpedia_desc' => 'Wowpedia is a comprehensive wiki dedicated to cataloguing the Warcraft universe.',
+    
+    'template_account_status_posting_disabled' => 'Posting on this account is disabled.',
+    'template_account_status_info_not_subscribe' => 'This game licence has expired or been frozen.',
+    'template_account_status_info_success' => 'This account appears to be in good standing. Carry on.',
+    'template_account_status_clear_session' => 'If you believe you are seeing this message in error, log out and log back in to clear your session.',
+    'template_account_status_log_out' => 'Log Out',
 );
 ?>

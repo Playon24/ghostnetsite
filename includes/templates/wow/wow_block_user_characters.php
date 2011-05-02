@@ -13,7 +13,6 @@
                         WoW_Account::GetActiveCharacterInfo('realmName'));
                         $characters = WoW_Account::GetCharactersData();
                         if(is_array($characters)) {
-                            $i = 1;
                             foreach($characters as $char) {
                                 if($char['guid'] == WoW_Account::GetActiveCharacterInfo('guid') && $char['realmId'] == WoW_Account::GetActiveCharacterInfo('realmId')) {
                                     continue; // Skip active character
@@ -22,8 +21,7 @@
                                 <span class="pin"></span>
 								<span class="name">%s</span>
 								<span class="class color-c%d">%d %s %s</span>
-								<span class="realm up">%s</span></a>', $char['url'], $i, $char['name'], $char['class'], $char['level'], $char['race_text'], $char['class_text'], $char['realmName']);
-                                ++$i;
+								<span class="realm up">%s</span></a>', $char['url'], $char['index'], $char['name'], $char['class'], $char['level'], $char['race_text'], $char['class_text'], $char['realmName']);
                             }
                         }
                         ?>
@@ -57,9 +55,8 @@
                                     WoW_Account::GetActiveCharacterInfo('class'),
                                     WoW_Account::GetActiveCharacterInfo('level'),
                                     WoW_Account::GetActiveCharacterInfo('name'));
-                                    
+
                                     if(is_array($characters)) {
-                                        $i = 1;
                                         foreach($characters as $char) {
                                             if($char['guid'] == WoW_Account::GetActiveCharacterInfo('guid') && $char['realmId'] == WoW_Account::GetActiveCharacterInfo('realmId')) {
                                                 continue; // Skip active character
@@ -68,9 +65,8 @@
 										<img src="/wow/static/images/icons/race/%d-%d.gif" alt="" />
 										<img src="/wow/static/images/icons/class/%d.gif" alt="" />
 										%d %s
-									</a>', $char['url'], $char['class'], $i, $char['race_text'], $char['class_text'], $char['realmName'],
+									</a>', $char['url'], $char['class'], $char['index'], $char['race_text'], $char['class_text'], $char['realmName'],
                                     $char['race'], $char['gender'], $char['class'], $char['level'], $char['name']);
-                                            ++$i;
                                         }
                                     }
                                     ?>
