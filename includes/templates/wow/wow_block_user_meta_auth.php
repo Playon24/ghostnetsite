@@ -1,19 +1,28 @@
-<div id="user-plate" class="user-plate plate-<?php echo WoW_Account::GetActiveCharacterInfo('faction') == FACTION_ALLIANCE ? 'alliance' : 'horde' ?> ajax-update" style="background: url(/wow/static/images/2d/card/<?php echo WoW_Account::GetActiveCharacterInfo('race'); ?>-<?php echo WoW_Account::GetActiveCharacterInfo('gender'); ?>.jpg) 0 100% no-repeat;">
-<div class="card-overlay"></div>
-<a href="<?php echo WoW_Account::GetActiveCharacterInfo('url'); ?>" rel="np" class="profile-link"><span class="hover"></span></a>
-<div class="user-meta">
+<div class="user-plate ajax-update">
+<div id="user-plate" class="card-character plate-<?php echo WoW_Account::GetActiveCharacterInfo('faction_text'); ?> ajax-update"
+style="background: url(/wow/static/images/2d/card/<?php echo WoW_Account::GetActiveCharacterInfo('race'); ?>-<?php echo WoW_Account::GetActiveCharacterInfo('gender'); ?>.jpg) 0 100% no-repeat;">
+<a href="<?php echo WoW_Account::GetActiveCharacterInfo('url'); ?>" rel="np" class="profile-link">
+<span class="hover"></span>
+</a>
+<div class="meta">
 <div class="player-name"><?php echo WoW_Account::GetFullName(); ?></div>
 <div class="character">
-<a class="character-name context-link" rel="np" href="<?php echo WoW_Account::GetActiveCharacterInfo('url'); ?>" data-tooltip="<?php echo WoW_Locale::GetString('template_change_character'); ?>">
-<?php echo WoW_Account::GetActiveCharacterInfo('name'); ?>
-</a>
+<?php
+echo sprintf('<a class="character-name context-link"
+rel="np"
+href="%s"
+data-tooltip="%s %s (%s)"
+data-tooltip-options=\'{"location": "topCenter"}\'>
+%s
+</a>', WoW_Account::GetActiveCharacterInfo('url'), WoW_Account::GetActiveCharacterInfo('race_text'), WoW_Account::GetActiveCharacterInfo('class_text'), WoW_Account::GetActiveCharacterInfo('realmName'), WoW_Account::GetActiveCharacterInfo('name'));
+?>
 <div id="context-1" class="ui-context character-select">
 <div class="context">
 <a href="javascript:;" class="close" onclick="return CharSelect.close(this);"></a>
 <div class="context-user">
 <strong><?php echo WoW_Account::GetActiveCharacterInfo('name'); ?></strong>
 <br />
-<span><?php echo WoW_Account::GetActiveCharacterInfo('realmName'); ?></span>
+<span class="realm up"><?php echo WoW_Account::GetActiveCharacterInfo('realmName'); ?></span>
 </div>
 <div class="context-links">
 <a href="<?php echo WoW_Account::GetActiveCharacterInfo('url'); ?>" title="<?php echo WoW_Locale::GetString('template_profile_caption'); ?>" rel="np" class="icon-profile link-first">
@@ -78,7 +87,6 @@ if(is_array($all_characters)) {
     }
 }
 ?>
-<div class="no-results <?php echo is_array($all_characters) ? 'hide' : null; ?>"><?php echo WoW_Locale::GetString('template_characters_not_found'); ?></div>
 </div>
 </div>
 </div>
@@ -96,10 +104,5 @@ if(WoW_Account::GetActiveCharacterInfo('guildId') > 0) {
 ?>
 </div>
 </div>
-<script type="text/javascript">
-//<![CDATA[
-$(document).ready(function() {
-Tooltip.bind('#header .user-meta .character-name', { location: 'topCenter' });
-});
-//]]>
-</script>
+<div class="card-overlay"></div>
+</div>

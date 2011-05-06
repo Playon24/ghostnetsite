@@ -222,7 +222,7 @@ $WoW_Locale = array(
     'copyright_bottom_legal' => 'Legal',
 	'copyright_bottom_privacy' => 'Privacy Policy',
 	'copyright_bottom_copyright' => 'Copyright Infringement',
-    'template_userbox_auth_caption' => '<a href="?login" onclick="return Login.open(\'/login/login.frag\')"><strong>Log in</strong></a> with your Battle.net account to post comments and personalize your site content.',
+    'template_userbox_auth_caption' => '<strong>Log in now</strong> to enhance and personalize your experience!',
     'template_articles_full_caption' => 'More',
     'template_sotd_sidebar_title' => 'Screenshot of the Day',
     'template_forums_sidebar_title' => 'Popular Topics',

@@ -1,7 +1,5 @@
-
 <div class="user-plate ajax-update">
-<div class="user-meta meta-login">
+<a href="?login" class="card-login" onclick="BnetAds.trackImpression('Battle.net Login', 'Character Card', 'New'); return Login.open('/login/login.frag');">
 <?php echo WoW_Locale::GetString('template_userbox_auth_caption'); ?>
-
-</div>
-</div>
+</a>
+<div class="card-overlay"></div>

@@ -222,7 +222,7 @@ $WoW_Locale = array(
    	'copyright_bottom_legal' => 'Соглашения',
 	'copyright_bottom_privacy' => 'Политика конфиденциальности',
 	'copyright_bottom_copyright' => 'Авторское право',
-    'template_userbox_auth_caption' => '<a href="?login" onclick="return Login.open(\'/login/login.frag\')"><strong>Авторизуйтесь</strong></a> со своей учетной записи Battle.net, чтобы размещать комментарии и настраивать страницы.',
+    'template_userbox_auth_caption' => '<strong>Авторизуйтесь</strong> чтобы настраивать страницы!',
     'template_articles_full_caption' => 'Далее',
     'template_sotd_sidebar_title' => 'Скриншот дня',
     'template_forums_sidebar_title' => 'Форумы',
