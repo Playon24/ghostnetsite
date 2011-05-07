@@ -244,6 +244,21 @@ define('SKILL_PET_WASP', 785);
 define('SKILL_PET_EXOTIC_RHINO', 786);
 define('SKILL_PET_EXOTIC_CORE_HOUND', 787);
 define('SKILL_PET_EXOTIC_SPIRIT_BEAST', 788);
+define('SKILL_RACIAL_WORGEN', 789);
+define('SKILL_RACIAL_GOBLIN', 790);
+define('SKILL_LANG_WORGEN', 791);
+define('SKILL_LANG_GOBLIN', 792);
+define('SKILL_ARCHAEOLOGY', 794);
+define('SKILL_GENERAL_HUNTER', 795);
+define('SKILL_GENERAL_DEATHKNIGHT', 796);
+define('SKILL_GENERAL_ROGUE', 797);
+define('SKILL_GENERAL_DRUID', 798);
+define('SKILL_GENERAL_MAGE', 799);
+define('SKILL_GENERAL_PALADIN', 800);
+define('SKILL_GENERAL_SHAMAN', 801);
+define('SKILL_GENERAL_WARLOCK', 802);
+define('SKILL_GENERAL_WARRIOR', 803);
+define('SKILL_GENERAL_PRIEST', 804);
 
 /* FactionFlags */
 define('FACTION_FLAG_VISIBLE', 0x01);         // makes visible in client (set or can be set at interaction with target of this faction)

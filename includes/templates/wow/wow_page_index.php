@@ -89,7 +89,7 @@ switch(WoW_Template::GetPageIndex()) {
         WoW_Template::LoadTemplate('content_blog');
         break;
     case 'game':
-        WoW_Template::LoadTemplate('content_game');
+        WoW_Template::LoadTemplate('static_game_index');
         break;
     case 'account_status':
         WoW_Template::LoadTemplate('content_account_status');
