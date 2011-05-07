@@ -62,6 +62,10 @@ if($url_data['tooltip'] == true) {
     WoW_Template::LoadTemplate('page_item_tooltip');
 }
 else {
+    if(isset($url_data['action0']) && $url_data['action0'] != null) {
+        //TODO: jQuery page
+        exit;
+    }
     WoW_Template::SetPageIndex('item');
     WoW_Template::SetPageData('tooltip', false);
     WoW_Template::SetPageData('itemName', $proto->name);

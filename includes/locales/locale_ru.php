@@ -385,10 +385,12 @@ $WoW_Locale = array(
     'template_item_spell_trigger_1' => 'Если на персонаже: %s',
     'template_item_spell_trigger_2' => 'Вероятность попадания при ударе: %s',
     'template_item_spell_trigger_6' => 'Использовать: %s',
-    'template_item_disenchant_fact' => 'Для распыления необходимо обладать навыком наложения чар (%d)',
+    'template_item_quick_facts' => 'Это интересно!',
+    'template_item_disenchant_fact' => '<span class="term">Распыление:</span> %d Наложение чар',
     'template_item_fansite_link' => 'Найти этот предмет на:',
     'template_item_table_dropped_by' => 'Добыча с: (%d)',
     'template_item_table_disenchant_from' => 'Можно распылить на: (%d)',
+    'template_item_learn_more' => 'Подробнее',
     
     'template_profile_summary' => 'Сводка',
     'template_profile_talents' => 'Таланты и символы',

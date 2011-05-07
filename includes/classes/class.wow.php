@@ -75,6 +75,14 @@ Class WoW {
                     switch($url_array[$i]) {
                         case 'item':
                             $urldata['item_entry'] = (isset($url_array[$i + 1])) ? $url_array[$i + 1] : 0;
+                            for($j = 0; $j < 10; $j++) {
+                                if(isset($url_array[ $i + ($j + 2) ]) && $url_array[ $i + ($j + 2) ] != null) {
+                                    $urldata['action' . $j] = $url_array[$i + ($j + 2)];
+                                }
+                                else {
+                                    $urldata['action' . $j] = null;
+                                }
+                            }
                             break;
                         case 'tooltip':
                             $urldata['tooltip'] = true;

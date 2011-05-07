@@ -33,7 +33,7 @@ switch(WoW_Template::GetPageIndex()) {
         WoW_Template::LoadTemplate('content_index');
         break;
     case 'item':
-        WoW_Template::LoadTemplate('content_item_info');
+        WoW_Template::LoadTemplate('content_item_page');
         break;
     case 'character_profile_simple':
         WoW_Template::LoadTemplate('content_character_profile_simple');
@@ -136,9 +136,12 @@ switch(WoW_Template::GetPageData('page')) {
         echo '<script type="text/javascript" src="/wow/static/js/profile.js?v6"></script>';
         break;
     case 'item':
-        echo '<script type="text/javascript" src="/wow/static/local-common/js/table.js?v15"></script>
-<script type="text/javascript" src="/wow/static/local-common/js/filter.js?v15"></script>
-<script type="text/javascript" src="/wow/static/js/item/item.js?v6"></script>';
+        echo '<script type="text/javascript" src="/wow/static/js/wiki/wiki.js?v10"></script>
+<script type="text/javascript" src="/wow/static/js/wiki/item.js?v10"></script>
+<script type="text/javascript" src="/wow/static/local-common/js/table.js?v19"></script>
+<script type="text/javascript" src="/wow/static/local-common/js/cms.js?v19"></script>
+<script type="text/javascript" src="/wow/static/local-common/js/filter.js?v19"></script>
+<script type="text/javascript" src="/wow/static/local-common/js/utility/model-rotator.js?v19"></script>';
         break;
     case 'guild_page':
     case 'guild_perks':

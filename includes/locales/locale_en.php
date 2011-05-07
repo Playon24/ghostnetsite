@@ -385,10 +385,12 @@ $WoW_Locale = array(
     'template_item_spell_trigger_1' => 'Equip: %s',
     'template_item_spell_trigger_2' => 'Chance on hit: %s',
     'template_item_spell_trigger_6' => 'Use: %s',
-    'template_item_disenchant_fact' => 'Disenchanting requires Enchanting (%d)',
+    'template_item_quick_facts' => 'Quick Facts',
+    'template_item_disenchant_fact' => '<span class="term">Disenchant:</span> %d Enchanting',
     'template_item_fansite_link' => 'Find this item on:',
     'template_item_table_dropped_by' => 'Dropped from: (%d)',
     'template_item_table_disenchant_from' => 'Disenchants Into: (%d)',
+    'template_item_learn_more' => 'Learn More',
     
     'template_profile_summary' => 'Summary',
     'template_profile_talents' => 'Talents & Glyphs',

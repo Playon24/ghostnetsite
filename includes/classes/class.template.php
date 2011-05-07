@@ -481,14 +481,19 @@ Class WoW_Template {
             case 'item':
                 $css_data_page = array(
                     array(
-                        'path' => '/wow/static/css/item/item.css',
-                        'version' => 4,
+                        'path' => '/wow/static/css/wiki/wiki.css',
+                        'version' => 10,
                         'browser' => false
                     ),
                     array(
-                        'path' => '/wow/static/css/item/item-ie6.css',
-                        'version' => 4,
-                        'browser' => 'IE 6'
+                        'path' => '/wow/static/css/wiki/wiki-ie6.css',
+                        'version' => 10,
+                        'browser' => 'IE'
+                    ),
+                    array(
+                        'path' => '/wow/static/css/wiki/item.css',
+                        'version' => 10,
+                        'browser' => false
                     )
                 );
                 break;

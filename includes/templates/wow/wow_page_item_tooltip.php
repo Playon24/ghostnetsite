@@ -8,9 +8,9 @@ $ssd = WoW_Template::GetPageData('ssd');
 $ssd_level = WoW_Template::GetPageData('ssd_level');
 $ssv = WoW_Template::GetPageData('ssv');
 ?>
-<div class="<?php echo WoW_Template::GetPageData('tooltip') == true ? 'item-tooltip' : 'details'; ?>">
+<div class="<?php echo WoW_Template::GetPageData('tooltip') == true ? 'item-tooltip' : 'item-detail'; ?>">
     <span  class="icon-frame frame-56" style='background-image: url("http://eu.battle.net/wow-assets/static/images/icons/56/<?php echo $proto->icon; ?>.jpg");'></span>
-    <h3 class="<?php echo WoW_Template::GetPageData('tooltip') == true ? null : 'subheader '; ?>color-q<?php echo $proto->Quality; ?>"><?php echo $proto->name; ?></h3>
+    <h3 class="<?php echo WoW_Template::GetPageData('tooltip') == true ? null : 'subheader '; ?>color-q<?php echo $proto->Quality; ?>"><?php echo WoW_Template::GetPageData('tooltip') == true ? $proto->name : null; ?></h3>
     <ul class="item-specs" style="margin: 0">
         <?php
         // Is binded to instance?
