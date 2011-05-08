@@ -771,7 +771,12 @@ Class WoW_Items {
     }
     
     public function GetItemsForTable($page, $classId, $subClassId, $invType) {
-        $sql_query = 'SELECT `entry`, `name`, `displayid`, `ItemLevel`, `class`, `subclass`, `InventoryType`, `Quality`, `RequiredLevel` FROM `item_template` WHERE';
+        if(WoWConfig::$Realms[1]['type'] == SERVER_MANGOS) {
+            $sql_query = 'SELECT `entry`, `name`, `displayid`, `ItemLevel`, `class`, `subclass`, `InventoryType`, `Quality`, `RequiredLevel`, `Flags`, `Flags2` FROM `item_template` WHERE';
+        }
+        else {
+            $sql_query = 'SELECT `entry`, `name`, `displayid`, `ItemLevel`, `class`, `subclass`, `InventoryType`, `Quality`, `RequiredLevel`, `Flags`, `FlagsExtra` AS `Flags2` FROM `item_template` WHERE';
+        }
         $sql_query_count = 'SELECT COUNT(*) FROM `item_template` WHERE';
         $smthng_added = false;
         if($classId >= 0) {
@@ -846,6 +851,21 @@ Class WoW_Items {
             }
             $items[$i]['type'] = DB::WoW()->selectCell("SELECT `subclass_name_%s` FROM `DBPREFIX_item_subclass` WHERE `class` = %d AND `subclass` = %d", WoW_Locale::GetLocale(), $items[$i]['class'], $items[$i]['subclass']);
             $items[$i]['source'] = '';
+            if($items[$i]['Flags2'] & ITEM_FLAGS2_ALLIANCE_ONLY) {
+                $items[$i]['faction'] = FACTION_HORDE;
+            }
+            elseif($items[$i]['Flags2'] & ITEM_FLAGS2_HORDE_ONLY) {
+                $items[$i]['faction'] = FACTION_ALLIANCE;
+            }
+            else {
+                $items[$i]['faction'] = -1;
+            }
+            if($items[$i]['Flags'] & ITEM_FLAGS_HEROIC) {
+                $items[$i]['heroic'] = 1;
+            }
+            else {
+                $items[$i]['heroic'] = 0;
+            }
         }
         unset($new_icons);
         if(isset($new_names)) {

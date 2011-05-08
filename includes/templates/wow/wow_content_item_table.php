@@ -189,13 +189,18 @@ World of Warcraft
                                     <a href="/wow/item/%d" class="item-link color-q%d">
                                         <span  class="icon-frame frame-18 " style=\'background-image: url("http://eu.media.blizzard.com/wow/icons/18/%s.jpg");\'> </span>
                                         <strong>%s</strong>
+                                        %s
+                                        %s
                                     </a>
                                 </td>
                                 <td class="align-center">%d</td>
                                 <td class="align-center" data-raw="1">%d</td>
                                 <td>%s</td>
                                 <td>%s</em></td>
-                            </tr>', $toggleStyle % 2 ? 1 : 2, $item['name'], $item['entry'], $item['Quality'], $item['icon'], $item['name'], $item['ItemLevel'], $item['RequiredLevel'], $item['source'], $item['type']);
+                            </tr>', $toggleStyle % 2 ? 1 : 2, $item['name'], $item['entry'], $item['Quality'], $item['icon'], $item['name'], 
+                            $item['faction'] >= 0 ? sprintf('<span class="icon-faction-%d"></span>', $item['faction']) : null,
+                            $item['heroic'] == 1 ? '<span class="icon-heroic-skull"></span>' : null,
+                            $item['ItemLevel'], $item['RequiredLevel'], $item['source'], $item['type']);
                         ++$toggleStyle;
                     }
                 }

@@ -38,12 +38,6 @@ Class DB implements DB_Interface {
         self::ConnectToDB(DB_WORLD);
         self::ConnectToDB(DB_REALM);
         self::ConnectToDB(DB_WOW);
-        /*
-        $count_databases = count(DatabaseConfig::$characters);
-        for($i = 1; $i <= $count_databases; $i++) {
-            self::ConnectToDB(DB_CHARACTERS, $i);
-        }
-        */
         return true;
     }
     
