@@ -44,6 +44,7 @@ $proto->LoadItem($item_entry);
 if(!$proto->IsCorrect()) {
     exit; // [PH]
 }
+WoW_Template::SetPageData('item_entry', $item_entry);
 // SSD and SSV data
 $ssd = DB::WoW()->selectRow("SELECT * FROM `DBPREFIX_ssd` WHERE `entry` = %d", $proto->ScalingStatDistribution);
 $ssd_level = MAX_LEVEL_PLAYER;
@@ -69,7 +70,9 @@ if($url_data['tooltip'] == true) {
 }
 else {
     if(isset($url_data['action0']) && $url_data['action0'] != null) {
-        //TODO: jQuery page
+        //header('Content-type: text/xml');
+        WoW_Template::SetPageData('tab_type', $url_data['action0']);
+        WoW_Template::LoadTemplate('page_item_tab');
         exit;
     }
     WoW_Template::SetPageIndex('item');

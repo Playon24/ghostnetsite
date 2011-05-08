@@ -99,43 +99,23 @@ if(in_array($proto->class, array(ITEM_CLASS_WEAPON, ITEM_CLASS_ARMOR))) {
 		<?php WoW_Template::LoadTemplate('page_item_tooltip'); ?>
 		</div>
 	<span class="clear"><!-- --></span>
-			<!--<div class="related">
-				<div class="tabs ">
-                    
-					<ul id="related-tabs">
-								<li>
-									<a href="#rewardFromQuests" data-key="rewardFromQuests" id="tab-rewardFromQuests">
-										<span><span>
-												Награда за задание
-												(<em>1</em>)
-										</span></span>
-									</a>
-								</li>
-								<li>
-									<a href="#disenchantItems" data-key="disenchantItems" id="tab-disenchantItems">
-										<span><span>
-												Можно распылить на:
-												(<em>1</em>)
-										</span></span>
-									</a>
-								</li>
-								<li>
-									<a href="#comments" data-key="comments" id="tab-comments">
-										<span><span>
-												Комментарии
-												(<em>0</em>)
-										</span></span>
-									</a>
-								</li>
-					</ul>
-
-	<span class="clear"> </span>
-				</div>
-
-				<div id="related-content" class="loading">
-				</div>
-			</div>-->
-
+    <?php
+    $item_tabs = WoW_Items::GetItemTabsNames($proto->entry);
+    if(is_array($item_tabs)) {
+        echo '<div class="related"><div class="tabs "><ul id="related-tabs">';
+        foreach($item_tabs as $tab) {
+            if(!is_array($tab)) {
+                continue;
+            }
+            echo sprintf('<li>
+            <a href="#%s" data-key="%s" id="tab-%s">
+                <span><span>%s</span></span>
+            </a>
+        </li>', $tab['type'], $tab['type'], $tab['type'], sprintf(WoW_Locale::GetString('template_item_tab_' . $tab['type']), $tab['count']));
+        }
+        echo '</ul><span class="clear"> </span></div><div id="related-content" class="loading"></div></div>';
+    }
+    ?>
 	<script type="text/javascript">
 	//<![CDATA[
 				$(function() {
