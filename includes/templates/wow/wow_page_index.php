@@ -35,6 +35,9 @@ switch(WoW_Template::GetPageIndex()) {
     case 'item':
         WoW_Template::LoadTemplate('content_item_page');
         break;
+    case 'item_list':
+        WoW_Template::LoadTemplate('content_item_table');
+        break;
     case 'character_profile_simple':
         WoW_Template::LoadTemplate('content_character_profile_simple');
         break;

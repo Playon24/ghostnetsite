@@ -29,7 +29,13 @@ if(!$url_data) {
     exit;
 }
 $item_entry = $url_data['item_entry'];
-if(!$item_entry) {
+if($item_entry == 0) {
+    $breadcrumbs = WoW_Items::GetBreadCrumbsForItem($_GET);
+    WoW_Template::SetPageIndex('item_list');
+    WoW_Template::SetPageData('page', 'item_list');
+    WoW_Template::SetPageData('breadcrumbs', $breadcrumbs);
+    WoW_Template::SetPageData('last-crumb', is_array($breadcrumbs) ? $breadcrumbs[(sizeof($breadcrumbs))-1]['caption'] : WoW_Locale::GetString('template_menu_items'));
+    WoW_Template::LoadTemplate('page_index');
     exit;
 }
 // Load proto

@@ -696,5 +696,197 @@ Class WoW_Items {
     public function GetItemInfo($entry) {
         return DB::World()->selectRow("SELECT `entry`, `name`, `displayid`, `Quality`, `class`, `subclass`, `InventoryType`, `ItemLevel` FROM `item_template` WHERE `entry`=%d", $entry);
     }
+    
+    /**
+     * @param array $item_info
+     * @param int   $item_entry = 0
+     **/
+    public function GetBreadCrumbsForItem($item_info, $item_entry = 0) {
+        if($item_entry > 0 || !is_array($item_info)) {
+            $item_info = DB::World()->selectRow("SELECT `class` AS `classId`, `subclass` AS `subClassId`, `InventoryType` AS `invType` FROM `item_template` WHERE `entry` = %d LIMIT 1", $item_entry);
+        }
+        if(!$item_info || !is_array($item_info)) {
+            return false;
+        }
+        $itemsubclass = null;
+        if(isset($item_info['classId']) && isset($item_info['subClassId'])) {
+            $itemsubclass = DB::Wow()->selectRow("SELECT `subclass_name_%s` AS `subclass`, `class_name_%s` AS `class` FROM `DBPREFIX_item_subclass` WHERE `subclass` = %d AND `class` = %d LIMIT 1", WoW_Locale::GetLocale(), WoW_Locale::GetLocale(), $item_info['subClassId'], $item_info['classId']);
+        }
+        elseif(isset($item_info['classId'])) {
+            $itemsubclass = DB::Wow()->selectRow("SELECT `class_name_%s` AS `class` FROM `DBPREFIX_item_subclass` WHERE `class` = %d LIMIT 1", WoW_Locale::GetLocale(), $item_info['classId']);
+        }
+        elseif(isset($item_info['subClassId'])) {
+            $itemsubclass = DB::Wow()->selectRow("SELECT `subclass_name_%s` AS `subclass` FROM `DBPREFIX_item_subclass` WHERE `subclass` = %d LIMIT 1", WoW_Locale::GetLocale(), $item_info['subClassId']);
+        }
+        if(!$itemsubclass || !is_array($itemsubclass)) {
+            return false;
+        }
+        $breadcrumbs = array();
+        $global_url = '/wow/item/';
+        $index = 0;
+        if(isset($item_info['classId'])) {
+            $global_url .= '?classId=' . $item_info['classId'];
+            $breadcrumbs[$index] = array(
+                'caption' => $itemsubclass['class'],
+                'link' => $global_url,
+                'last' => true
+            );
+            ++$index;
+        }
+        if(isset($item_info['subClassId'])) {
+            if(strpos($global_url, '?classId=') > 0) {
+                $global_url .= '&amp;subClassId=' . $item_info['subClassId'];
+            }
+            else {
+                $global_url .= '?subClassId=' . $item_info['subClassId'];
+            }
+            $breadcrumbs[$index] = array(
+                'caption' => $itemsubclass['subclass'],
+                'link' => $global_url,
+                'last' => true
+            );
+            if($index > 0) {
+                $breadcrumbs[$index - 1]['last'] = false;
+            }
+            ++$index;
+        }
+        if(isset($item_info['invType'])) {
+            if(strpos($global_url, '?') > 0) {
+                $global_url .= '&amp;invType=' . $item_info['invType'];
+            }
+            else {
+                $global_url .= '?invType=' . $item_info['invType'];
+            }
+            $breadcrumbs[$index] = array(
+                'caption' => WoW_Locale::GetString('template_item_invtype_' . $item_info['invType']),
+                'link' => $global_url,
+                'last' => true
+            );
+            if($index > 0) {
+                $breadcrumbs[$index - 1]['last'] = false;
+            }
+            ++$index;
+        }
+        return $breadcrumbs;
+    }
+    
+    public function GetItemsForTable($page, $classId, $subClassId, $invType) {
+        $sql_query = 'SELECT `entry`, `name`, `displayid`, `ItemLevel`, `class`, `subclass`, `InventoryType`, `Quality`, `RequiredLevel` FROM `item_template` WHERE';
+        $sql_query_count = 'SELECT COUNT(*) FROM `item_template` WHERE';
+        $smthng_added = false;
+        if($classId >= 0) {
+            if($smthng_added) {
+                $sql_query .= ' AND';
+                $sql_query_count .= ' AND';
+            }
+            $sql_query .= ' `class` = ' . $classId;
+            $sql_query_count .= ' `class` = ' . $classId;
+            $smthng_added = true;
+        }
+        if($subClassId >= 0) {
+            if($smthng_added) {
+                $sql_query .= ' AND';
+                $sql_query_count .= ' AND';
+            }
+            $sql_query .= ' `subclass` = ' . $subClassId;
+            $sql_query_count .= ' `subclass` = ' . $subClassId;
+            $smthng_added = true;
+        }
+        if($invType >= 0) {
+            if($smthng_added) {
+                $sql_query .= ' AND';
+                $sql_query_count .= ' AND';
+            }
+            $sql_query .= ' `InventoryType` = ' . $invType;
+            $sql_query_count .= ' `InventoryType` = ' . $invType;
+            $smthng_added = true;
+        }
+        if(!$smthng_added) {
+            $sql_query .= ' 1';
+            $sql_query_count .= ' 1';
+        }
+        $items = DB::World()->select("%s ORDER BY `Quality` DESC, `ItemLevel` DESC LIMIT %d, 50", $sql_query, (($page - 1) * 50));
+        if(!$items) {
+            return false;
+        }
+        $count_items = DB::World()->selectCell('%s', $sql_query_count);
+        $item_ids = array();
+        $item_displayids = array();
+        foreach($items as $item) {
+            $item_displayids[] = $item['displayid'];
+            $item_ids[] = $item['entry'];
+        }
+        $icons = DB::WoW()->select("SELECT `displayid`, `icon` FROM `DBPREFIX_icons` WHERE `displayid` IN (%s)", $item_displayids);
+        if(!$icons) {
+            return false;
+        }
+        if(WoW_Locale::GetLocaleID() != LOCALE_EN) {
+            $names = DB::World()->select("SELECT `entry`, `name_loc%d` AS `name` FROM `locales_item` WHERE `entry` IN (%s)", WoW_Locale::GetLocaleID(), $item_ids);
+            if(is_array($names)) {
+                $new_names = array();
+                foreach($names as $name) {
+                    $new_names[$name['entry']] = $name['name'];
+                }
+                unset($names, $name);
+            }
+        }
+        unset($item_ids);
+        $new_icons = array();
+        foreach($icons as $icon) {
+            $new_icons[$icon['displayid']] = $icon['icon'];
+        }
+        unset($icons, $icon);
+        $size = sizeof($items);
+        for($i = 0; $i < $size; ++$i) {
+            $items[$i]['icon'] = $new_icons[$items[$i]['displayid']];
+            if(isset($new_names) && is_array($new_names)) {
+                if(isset($new_names[$items[$i]['entry']])) {
+                    $items[$i]['name'] = $new_names[$items[$i]['entry']];
+                }
+            }
+            $items[$i]['type'] = DB::WoW()->selectCell("SELECT `subclass_name_%s` FROM `DBPREFIX_item_subclass` WHERE `class` = %d AND `subclass` = %d", WoW_Locale::GetLocale(), $items[$i]['class'], $items[$i]['subclass']);
+            $items[$i]['source'] = '';
+        }
+        unset($new_icons);
+        if(isset($new_names)) {
+            unset($new_names);
+        }
+        return array(
+            'count' => $count_items,
+            'items' => $items
+        );
+    }
+    
+    private function GetItemSourceFromdDB($item_entry) {
+        if($item_entry <= 0) {
+            WoW_Log::WriteError('%s : entry must be > than 0 (%d given)!', __METHOD__, $item_entry);
+            return false;
+        }
+        $source_info = DB::WoW()->selectRow("SELECT `source`, `areaKey`, `areaUrl`, `isHeroic` FROM `DBPREFIX_source` WHERE `item` = %d", $item_entry);
+        if(!$source_info) {
+            WoW_Log::WriteError('%s : item #%d was not found in DBPREFIX_source table!', __METHOD__, $item_entry);
+            return false;
+        }
+        // Parse
+        switch($source_info['source']) {
+            default:
+                return;
+            case 'sourceType.dungeon':
+                if($source_info['areaKey'] == '') {
+                    return false;
+                }
+                $boss_entry = DB::World()->selectCell("SELECT `entry` FROM `creature_loot_template` WHERE `item` = %d", $item_entry);
+                if($boss_entry > 0) {
+                    $name = DB::World()->selectCell("SELECT `name` FROM `creature_template` WHERE `entry` = %d", $boss_entry);
+                    if(WoW_Locale::GetLocale() != LOCALE_EN) {
+                        $name_loc = DB::World()->selectCell("SELECT `name_loc%d` FROM `locales_creature` WHERE `entry` = %d", WoW_Locale::GetLocaleID(), $boss_entry);
+                        return $name_loc ? $name_loc : $name;
+                    }
+                    return $name;
+                }
+                break;
+        }
+        return false;
+    }
 }
 ?>

@@ -30,11 +30,16 @@ World of Warcraft
 <?php echo $proto->subclass_name; ?>
 </a>
 </li>
-<li>
-<a href="/wow/item/?classId=<?php echo sprintf('%d&amp;subClassId=%d&InventoryType=%d', $proto->class, $proto->subclass, $proto->InventoryType); ?>" rel="np">
-<?php echo WoW_Locale::GetString('template_item_invtype_' . $proto->InventoryType); ?>
+<?php
+if(in_array($proto->class, array(ITEM_CLASS_WEAPON, ITEM_CLASS_ARMOR))) {
+    echo sprintf('<li>
+<a href="/wow/item/?classId=%s" rel="np">
+%s
 </a>
-</li>
+</li>', sprintf('%d&amp;subClassId=%d&InventoryType=%d', $proto->class, $proto->subclass, $proto->InventoryType), WoW_Locale::GetString('template_item_invtype_' . $proto->InventoryType));
+}
+
+?>
 <li class="last">
 <a href="/wow/item/<?php echo $proto->entry; ?>" rel="np">
 <?php echo $proto->name; ?>

@@ -479,6 +479,7 @@ Class WoW_Template {
                 );
                 break;
             case 'item':
+            case 'item_list':
                 $css_data_page = array(
                     array(
                         'path' => '/wow/static/css/wiki/wiki.css',
@@ -742,6 +743,8 @@ Class WoW_Template {
                 return sprintf('%s - %s - ', WoW_Locale::GetString('template_character_feed'), WoW_Locale::GetString('template_menu_game'));
             case 'item':
                 return sprintf('%s - ', self::GetPageData('itemName'));
+            case 'item_list':
+                return sprintf('%s - ', self::GetPageData('last-crumb'));
             case 'guild_page':
                 return sprintf('%s @ %s - ', WoW_Guild::GetGuildName(), WoW_Guild::GetGuildRealmName());
             case 'guild_perks':
