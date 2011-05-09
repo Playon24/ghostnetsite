@@ -82,6 +82,14 @@ Class WoW_Account {
     private static $email = null;
     
     /**
+     * User expansion level (from DB)
+     * @access    public
+     * @staticvar int $expansion
+     * @return    int
+     **/
+    private static $expansion = 0;
+    
+    /**
      * User's characters storage
      * @access    private
      * @staticvar array $characters_data
@@ -238,7 +246,7 @@ Class WoW_Account {
      * @return   bool
      **/
     public static function IsBanned() {
-        return self::GetSessionInfo('wow_ban') != null;
+        return self::$is_banned;
     }
     
     /**
@@ -273,6 +281,7 @@ Class WoW_Account {
         self::$last_name = self::NormalizeStringForSessionString($sess_data[7], NORMALIZE_FROM);
         self::$bnet_id = $sess_data[8];
         self::$is_banned = $sess_data[9];
+        self::$expansion = $sess_data[10];
         self::SetLoginState(ACCMGR_LOGGED_IN);
         return true;
     }
@@ -392,6 +401,16 @@ Class WoW_Account {
         return self::$login_time;
     }
     
+    /**
+     * Returns account expansion
+     * @category Account Manager Class
+     * @access   public
+     * @return   int
+     **/
+    public static function GetExpansion() {
+        return self::$expansion;
+    }
+    
     public static function GetCharactersData() {
         if(!self::IsCharactersLoaded()) {
             self::LoadCharacters();
@@ -444,7 +463,7 @@ Class WoW_Account {
      * @return   bool
      **/
     private static function CreateSession() {
-        self::$session_string = sprintf('%d:%s:%s:%s:%s:%d:%s:%s:%d:%d',
+        self::$session_string = sprintf('%d:%s:%s:%s:%s:%d:%s:%s:%d:%d:%d',
             self::GetUserID(), // [0]
             self::NormalizeStringForSessionString(self::GetUserName(), NORMALIZE_TO), // [1]
             self::NormalizeStringForSessionString(self::GetPassword(), NORMALIZE_TO), // [2]
@@ -454,7 +473,8 @@ Class WoW_Account {
             self::NormalizeStringForSessionString(self::$first_name, NORMALIZE_TO), // [6]
             self::NormalizeStringForSessionString(self::$last_name, NORMALIZE_TO),  // [7]
             self::$bnet_id, // [8]
-            self::$is_banned // [9]
+            self::$is_banned, // [9]
+            self::$expansion // [10]
         );
         self::$session_hash = md5(self::$session_string);
         self::$sid = md5(self::$session_hash);
@@ -504,6 +524,8 @@ Class WoW_Account {
         self::$first_name = null;
         self::$last_name = null;
         self::$bnet_id = 0;
+        self::$is_banned = false;
+        self::$expansion = 0;
         return true;
     }
     
@@ -555,7 +577,7 @@ Class WoW_Account {
         self::SetPassword($password);
         self::CreateShaPassHash();
         // No SQL injection
-        $user_data = DB::Realm()->selectRow("SELECT `id`, `username`, `sha_pass_hash`, `email` FROM `account` WHERE `username` = '%s' LIMIT 1", self::GetUserName());
+        $user_data = DB::Realm()->selectRow("SELECT `id`, `username`, `sha_pass_hash`, `email`, `expansion` FROM `account` WHERE `username` = '%s' LIMIT 1", self::GetUserName());
         if(!$user_data) {
             WoW_Log::WriteError('%s : user %s was not found in `account` table!', __METHOD__, self::GetUserName());
             self::SetLastErrorCode(ERROR_WRONG_USERNAME_OR_PASSWORD);
@@ -577,7 +599,8 @@ Class WoW_Account {
             self::$first_name = self::$username;
             self::$last_name = self::$username;
         }
-        self::$is_banned = (bool) DB::Realm()->selectCell("SELECT 1 FROM `account_banned` WHERE `id` = %d AND `active` = 1", self::GetUserID());
+        self::$is_banned = DB::Realm()->selectCell("SELECT 1 FROM `account_banned` WHERE `id` = %d AND `active` = 1", self::GetUserID());
+        self::$expansion = $user_data['expansion'];
         self::CreateSession();
         self::SetLoginState(ACCMGR_LOGGED_IN);
         self::$login_time = time();

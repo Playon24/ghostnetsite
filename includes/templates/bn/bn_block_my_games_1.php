@@ -3,15 +3,15 @@
 
 				<div id="game-selections">
 						<div class="selection-block">
-							<h3 class="selection-title">Мои игры <span>(1)</span></h3>
+							<h3 class="selection-title"><?php echo WoW_Locale::GetString('template_bn_my_games'); ?> <span>(1)</span></h3>
 
 
 
 
-		<div class="game-selection " id="game-WOWX3" onclick="openGameDialog(this, '#dialog-WOWX3');" title="World of Warcraft: Cataclysm">
-			<img class="box" src="/static/local-common/images/game-boxes/<?php echo WoW_Locale::GetLocale(LOCALE_DOUBLE); ?>/wowx3.png" alt="" />
+		<div class="game-selection " id="game-WOW<?php echo WoW_Account::GetExpansion() > 0 ? 'X' . WoW_Account::GetExpansion() : 'C'; ?>" onclick="openGameDialog(this, '#dialog-WOW<?php echo WoW_Account::GetExpansion() > 0 ? 'X' . WoW_Account::GetExpansion() : 'C'; ?>');" title="<?php echo WoW_Locale::GetString('expansion_' . WoW_Account::GetExpansion()); ?>">
+			<img class="box" src="/static/local-common/images/game-boxes/<?php echo WoW_Locale::GetLocale(LOCALE_DOUBLE); ?>/wow<?php echo WoW_Account::GetExpansion() > 0 ? 'x' . WoW_Account::GetExpansion() : 'C'; ?>.png" alt="" />
 			<span class="plus"></span>
-			<div class="game-label">World of Warcraft: Cataclysm</div>
+			<div class="game-label"><?php echo WoW_Locale::GetString('expansion_' . WoW_Account::GetExpansion()); ?></div>
 
 
 			<span class="pointer"></span>
@@ -19,7 +19,7 @@
 						</div>
 
 						<div class="selection-block">
-							<h3 class="selection-title">Купить игру <span>(6)</span></h3>
+							<h3 class="selection-title"><?php echo WoW_Locale::GetString('template_bn_buy_game'); ?> <span>(6)</span></h3>
 
 
 
@@ -109,18 +109,18 @@
 
 
 
-		<div class="game-selection-dialog" id="dialog-WOWX3" style="display: none">
+		<div class="game-selection-dialog" id="dialog-WOW<?php echo WoW_Account::GetExpansion() > 0 ? 'X' . WoW_Account::GetExpansion() : 'C'; ?>" style="display: none">
 			<div class="game-label">
-				World of Warcraft: Cataclysm
+				<?php echo WoW_Locale::GetString('expansion_' . WoW_Account::GetExpansion()); ?>
 			</div>
 
 				<a href="/account/management/" class="dialog-button manage-game">
-					<span>Управление игрой</span>
+					<span><?php echo WoW_Locale::GetString('template_bn_manage_game'); ?></span>
 				</a>
 
 
 				<a href="/wow/" class="dialog-button community">
-					<span>Сообщество</span>
+					<span><?php echo WoW_Locale::GetString('template_bn_community'); ?></span>
 				</a>
 
 	<span class="clear"><!-- --></span>
@@ -137,15 +137,15 @@
 			</div>
 
 					<a href="https://eu.battle.net/account/activation/landing.html?product=S2&amp;key&amp;purchase" class="dialog-button buy-physical">
-						<span>Заказы</span>
+						<span><?php echo WoW_Locale::GetString('template_bn_orders'); ?></span>
 					</a>
 
 					<a href="https://eu.battle.net/account/management/digital-purchase.html?product=S2&amp;gameRegion=EU" class="dialog-button buy-digital">
-						<span>Купить электронную версию</span>
+						<span><?php echo WoW_Locale::GetString('template_bn_buy_egame'); ?></span>
 					</a>
 
 				<a href="http://eu.battle.net/sc2/" class="dialog-button community">
-					<span>Сообщество</span>
+					<span><?php echo WoW_Locale::GetString('template_bn_community'); ?></span>
 				</a>
 
 	<span class="clear"><!-- --></span>
@@ -160,15 +160,15 @@
 			</div>
 
 					<a href="http://eu.blizzard.com/store/details.xml?id=210000045" class="dialog-button buy-physical">
-						<span>Заказы</span>
+						<span><?php echo WoW_Locale::GetString('template_bn_orders'); ?></span>
 					</a>
 
 					<a href="https://eu.battle.net/account/management/digital-purchase.html?product=WAR3&amp;gameRegion=EU" class="dialog-button buy-digital">
-						<span>Купить электронную версию</span>
+						<span><?php echo WoW_Locale::GetString('template_bn_buy_egame'); ?></span>
 					</a>
 
 				<a href="http://eu.battle.net/games/classic" class="dialog-button community">
-					<span>Сообщество</span>
+					<span><?php echo WoW_Locale::GetString('template_bn_community'); ?></span>
 				</a>
 
 	<span class="clear"><!-- --></span>
@@ -183,15 +183,15 @@
 			</div>
 
 					<a href="http://eu.blizzard.com/store/details.xml?id=210000003" class="dialog-button buy-physical">
-						<span>Заказы</span>
+						<span><?php echo WoW_Locale::GetString('template_bn_orders'); ?></span>
 					</a>
 
 					<a href="https://eu.battle.net/account/management/digital-purchase.html?product=W3XP&amp;gameRegion=EU" class="dialog-button buy-digital">
-						<span>Купить электронную версию</span>
+						<span><?php echo WoW_Locale::GetString('template_bn_buy_egame'); ?></span>
 					</a>
 
 				<a href="http://eu.battle.net/games/classic" class="dialog-button community">
-					<span>Сообщество</span>
+					<span><?php echo WoW_Locale::GetString('template_bn_community'); ?></span>
 				</a>
 
 	<span class="clear"><!-- --></span>
@@ -206,15 +206,15 @@
 			</div>
 
 					<a href="http://eu.blizzard.com/store/details.xml?id=210000089" class="dialog-button buy-physical">
-						<span>Заказы</span>
+						<span><?php echo WoW_Locale::GetString('template_bn_orders'); ?></span>
 					</a>
 
 					<a href="https://eu.battle.net/account/management/digital-purchase.html?product=D2DV&amp;gameRegion=EU" class="dialog-button buy-digital">
-						<span>Купить электронную версию</span>
+						<span><?php echo WoW_Locale::GetString('template_bn_buy_egame'); ?></span>
 					</a>
 
 				<a href="http://eu.battle.net/games/classic" class="dialog-button community">
-					<span>Сообщество</span>
+					<span><?php echo WoW_Locale::GetString('template_bn_community'); ?></span>
 				</a>
 
 	<span class="clear"><!-- --></span>
@@ -229,15 +229,15 @@
 			</div>
 
 					<a href="http://eu.blizzard.com/store/details.xml?id=210000090" class="dialog-button buy-physical">
-						<span>Заказы</span>
+						<span><?php echo WoW_Locale::GetString('template_bn_orders'); ?></span>
 					</a>
 
 					<a href="https://eu.battle.net/account/management/digital-purchase.html?product=D2XP&amp;gameRegion=EU" class="dialog-button buy-digital">
-						<span>Купить электронную версию</span>
+						<span><?php echo WoW_Locale::GetString('template_bn_buy_egame'); ?></span>
 					</a>
 
 				<a href="http://eu.battle.net/games/classic" class="dialog-button community">
-					<span>Сообщество</span>
+					<span><?php echo WoW_Locale::GetString('template_bn_community'); ?></span>
 				</a>
 
 	<span class="clear"><!-- --></span>
@@ -252,15 +252,15 @@
 			</div>
 
 					<a href="http://eu.blizzard.com/store/details.xml?id=210000002" class="dialog-button buy-physical">
-						<span>Заказы</span>
+						<span><?php echo WoW_Locale::GetString('template_bn_orders'); ?></span>
 					</a>
 
 					<a href="https://eu.battle.net/account/management/digital-purchase.html?product=STAR&amp;gameRegion=EU" class="dialog-button buy-digital">
-						<span>Купить электронную версию</span>
+						<span><?php echo WoW_Locale::GetString('template_bn_buy_egame'); ?></span>
 					</a>
 
 				<a href="http://eu.battle.net/games/classic" class="dialog-button community">
-					<span>Сообщество</span>
+					<span><?php echo WoW_Locale::GetString('template_bn_community'); ?></span>
 				</a>
 
 	<span class="clear"><!-- --></span>
@@ -271,6 +271,6 @@
 	<span class="clear"><!-- --></span>
 
 			<div id="community-section">
-				<h3 class="selection-title">Сайты игр</h3>
+				<h3 class="selection-title"><?php echo WoW_Locale::GetString('template_bn_game_cs'); ?></h3>
 			</div>
 		</div>

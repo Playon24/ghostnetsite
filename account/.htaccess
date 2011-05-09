@@ -1,0 +1,3 @@
+RewriteEngine On
+
+RewriteRule ^management/(.*) /account/index.php?%{QUERY_STRING}

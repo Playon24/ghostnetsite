@@ -1,9 +1,6 @@
 <ul class="service-bar">
 			<li class="service-cell service-home"><a href="/" tabindex="50" accesskey="1" title="Battle.net"> </a></li>
-
-
 				<li class="service-cell service-welcome">
-
 					<?php
                     if(WoW_Account::IsLoggedIn()) {
                         echo sprintf(WoW_Locale::GetString('template_servicebar_welcome_caption'), WoW_Account::GetFirstName());
@@ -12,9 +9,7 @@
                         echo WoW_Locale::GetString('template_servicebar_auth_caption');
                     } ?>
 				</li>
-
-			<li class="service-cell service-account"><a href="https://eu.battle.net/account/management/?lnk=1" class="service-link" tabindex="50" accesskey="3"><?php echo WoW_Locale::GetString('template_servicebar_account'); ?></a></li>
-
+			<li class="service-cell service-account"><a href="/account/management/?lnk=1" class="service-link" tabindex="50" accesskey="3"><?php echo WoW_Locale::GetString('template_servicebar_account'); ?></a></li>
 				<li class="service-cell service-support"><a href="http://eu.blizzard.com/support/" class="service-link" tabindex="50" accesskey="4"><?php echo WoW_Locale::GetString('template_servicebar_support'); ?></a></li>
 
 			<li class="service-cell service-explore">

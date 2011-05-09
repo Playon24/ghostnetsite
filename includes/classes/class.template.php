@@ -89,71 +89,172 @@ Class WoW_Template {
     }
     
     public static function PrintCSSForBNPage() {
+        switch(self::GetTemplateTheme()) {
+            case 'account':
+                $root_path = '/account';
+                break;
+            default:
+                $root_path = '/static';
+                break;
+        }
         $css_data = array(
             array(
-                'path' => '/static/local-common/css/common.css',
+                'path' => '/local-common/css/common.css',
                 'version' => 15,
-                'browser' => false
+                'browser' => false,
+                'skip_path' => false
             ),
             array(
-                'path' => '/static/local-common/css/common-ie.css',
+                'path' => '/local-common/css/common-ie.css',
                 'version' => 15,
-                'browser' => 'IE'
+                'browser' => 'IE',
+                'skip_path' => false
             ),
             array(
-                'path' => '/static/local-common/css/common-ie6.css',
+                'path' => '/local-common/css/common-ie6.css',
                 'version' => 15,
-                'browser' => 'IE 6'
+                'browser' => 'IE 6',
+                'skip_path' => false
             ),
             array(
-                'path' => '/static/local-common/css/common-ie7.css',
+                'path' => '/local-common/css/common-ie7.css',
                 'version' => 15,
-                'browser' => 'IE 7'
+                'browser' => 'IE 7',
+                'skip_path' => false
             ),
             array(
-                'path' => '/static/css/bnet.css',
+                'path' => '/css/bnet.css',
                 'version' => 5,
-                'browser' => false
+                'browser' => false,
+                'skip_path' => false
             ),
             array(
-                'path' => '/static/css/homepage.css',
+                'path' => '/css/bnet-ie.css',
                 'version' => 5,
-                'browser' => false
+                'browser' => 'IE',
+                'skip_path' => false
             ),
             array(
-                'path' => '/static/css/bnet-ie.css',
+                'path' => '/css/bnet-ie6.css',
                 'version' => 5,
-                'browser' => 'IE'
+                'browser' => 'IE 6',
+                'skip_path' => false
             ),
             array(
-                'path' => '/static/css/bnet-ie6.css',
+                'path' => '/css/bnet-ie7.css',
                 'version' => 5,
-                'browser' => 'IE 6'
-            ),
-            array(
-                'path' => '/static/css/bnet-ie7.css',
-                'version' => 5,
-                'browser' => 'IE 7'
+                'browser' => 'IE 7',
+                'skip_path' => false
             )
         );
         switch(self::GetPageIndex()) {
             default:
-                $css_data_page = array();
+                $css_data_page = array(
+                    array(
+                        'path' => '/css/homepage.css',
+                        'version' => 5,
+                        'browser' => false,
+                        'skip_path' => false
+                    )
+                );
+                break;
+            case 'management':
+                $css_data_page = array(
+                    array(
+                        'path' => '/css/bnet-print.css',
+                        'version' => 19,
+                        'media' => 'print',
+                        'browser' => false,
+                        'skip_path' => false
+                    ),
+                    array(
+                        'path' => '/css/inputs.css',
+                        'version' => 19,
+                        'browser' => false,
+                        'skip_path' => false
+                    ),
+                    array(
+                        'path' => '/css/inputs-ie6.css',
+                        'version' => 19,
+                        'browser' => 'IE 6',
+                        'skip_path' => false
+                    ),
+                    array(
+                        'path' => '/css/inputs-ie7.css',
+                        'version' => 19,
+                        'browser' => 'IE 7',
+                        'skip_path' => false
+                    ),
+                    array(
+                        'path' => '/css/management/lobby.css',
+                        'version' => 19,
+                        'browser' => false,
+                        'skip_path' => false
+                    ),
+                    array(
+                        'path' => '/css/management/lobby-ie.css',
+                        'version' => 19,
+                        'browser' => 'IE',
+                        'skip_path' => false
+                    ),
+                );
+                break;
+            case 'dashboard':
+                $css_data_page = array(
+                    array(
+                        'path' => '/css/bnet-print.css',
+                        'media' => 'print',
+                        'version' => 19,
+                        'browser' => false,
+                        'skip_path' => false
+                    ),
+                    array(
+                        'path' => '/css/management/dashboard.css',
+                        'version' => 19,
+                        'browser' => false,
+                        'skip_path' => false
+                    ),
+                    array(
+                        'path' => '/css/management/wow/dashboard.css',
+                        'version' => 19,
+                        'browser' => false,
+                        'skip_path' => false
+                    ),
+                    array(
+                        'path' => '/css/management/wow/dashboard-ie.css',
+                        'version' => 19,
+                        'browser' => 'IE',
+                        'skip_path' => false
+                    ),
+                    array(
+                        'path' => '/css/management/wow/dashboard-ie6.css',
+                        'version' => 19,
+                        'browser' => 'IE 6',
+                        'skip_path' => false
+                    ),
+                );
                 break;
         }
         $cssList = array_merge($css_data, $css_data_page);
         $cssList[] = array(
-            'path' => sprintf('/static/local-common/css/locale/%s.css', WoW_Locale::GetLocale(LOCALE_DOUBLE)),
+            'path' => sprintf('/local-common/css/locale/%s.css', WoW_Locale::GetLocale(LOCALE_DOUBLE)),
             'version' => 15,
-            'browser' => false
+            'browser' => false,
+            'skip_path' => false
         );
         $cssList[] = array(
-            'path' => sprintf('/static/css/locale/%s.css', WoW_Locale::GetLocale(LOCALE_DOUBLE)),
+            'path' => sprintf('/css/locale/%s.css', WoW_Locale::GetLocale(LOCALE_DOUBLE)),
             'version' => 5,
-            'browser' => false
+            'browser' => false,
+            'skip_path' => false
         );
         foreach($cssList as $sheet) {
-            self::PrintCSS($sheet['path'], $sheet['version'], $sheet['browser']);
+            if($sheet['skip_path']) {
+                self::PrintCSS($sheet['path'], $sheet['version'], $sheet['browser'], isset($sheet['media']) ? $sheet['media'] : false);
+            }
+            else {
+                self::PrintCSS($root_path . $sheet['path'], $sheet['version'], $sheet['browser'], isset($sheet['media']) ? $sheet['media'] : false);
+            }
         }
     }
     
@@ -688,12 +789,12 @@ Class WoW_Template {
         }
     }
     
-    private static function PrintCSS($path, $version = 0, $browser = false) {
+    private static function PrintCSS($path, $version = 0, $browser = false, $media = false) {
         if(!$browser) {
-            echo sprintf("<link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"%s?v%d\" />\n", $path, $version);
+            echo sprintf("<link rel=\"stylesheet\" type=\"text/css\" media=\"%s\" href=\"%s?v%d\" />\n", $media ? $media : 'all', $path, $version);
         }
         else {
-            echo sprintf("<!--[if %s]><link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"%s?v%d\" /><![endif]-->\n", $browser, $path, $version);
+            echo sprintf("<!--[if %s]><link rel=\"stylesheet\" type=\"text/css\" media=\"%s\" href=\"%s?v%d\" /><![endif]-->\n", $browser, $media ? $media : 'all', $path, $version);
         }
         return true;
     }
@@ -760,6 +861,10 @@ Class WoW_Template {
                 return sprintf('%s - ', WoW_Template::GetPageData('blog_title'));
             case 'game':
                 return sprintf('%s - ', WoW_Locale::GetString('template_menu_game'));
+            case 'management':
+                return WoW_Locale::GetString('template_management_main_title');
+            case 'dashboard':
+                return sprintf('%s - Battle.Net', WoW_Locale::GetString('expansion_' . WoW_Account::GetExpansion()));
             default:
                 return false;
         }

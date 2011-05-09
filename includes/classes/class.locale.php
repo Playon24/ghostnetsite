@@ -39,13 +39,13 @@ Class WoW_Locale {
                 return self::$locale_name;
                 break;
             case LOCALE_DOUBLE:
-                return self::$locale_name . '-' . self::$locale_name;
+                return self::$locale_id == LOCALE_EN ? 'en-gb' : self::$locale_name . '-' . self::$locale_name;
                 break;
             case LOCALE_SPLIT:
-                return self::$locale_name . self::$locale_name;
+                return self::$locale_id == LOCALE_EN ? 'engb' : self::$locale_name . self::$locale_name;
                 break;
             case LOCALE_PATH:
-                return self::$locale_name . '_' . self::$locale_name;
+                return self::$locale_id == LOCALE_EN ? 'en_gb' : self::$locale_name . '_' . self::$locale_name;
         }
     }
     

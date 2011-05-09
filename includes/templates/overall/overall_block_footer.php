@@ -1,6 +1,6 @@
 <!-- START: Footer -->
 <div id="footer">
-<div id="sitemap" class="footer-ads">
+<div id="sitemap"<?php echo in_array(WoW_Template::GetTemplateTheme(), array('account', 'bn')) ? null : ' class="footer-ads"'; ?>>
 <div class="column">
 <h3 class="bnet">
 <a href="http://eu.battle.net/" tabindex="100"><?php echo WoW_Locale::GetString('template_footer_home_title'); ?></a>
@@ -72,7 +72,9 @@ BnetAds.init('#footer-ad', '300x100');
 <a onclick="return Core.open(this);" href="http://eu.blizzard.com/company/about/infringementnotice.html" tabindex="100"><?php echo WoW_Locale::GetString('copyright_bottom_copyright'); ?></a>
 </div>
 <div id="international"></div>
-<div id="legal">
+<?php
+if(WoW_Template::GetTemplateTheme() == 'wow') {
+    echo '<div id="legal">
 <div id="legal-ratings" class="png-fix">
 <a href="http://www.pegi.info/" onclick="return Core.open(this);">
 <img class="legal-image" alt="" src="/wow/static/local-common/images/legal/eu/pegi-wow.png" />
@@ -82,6 +84,8 @@ BnetAds.init('#footer-ad', '300x100');
 <a href="http://blizzard.com" tabindex="100"><img src="/wow/static/local-common/images/logos/blizz-wow.png" alt="" /></a>
 </div>
 <span class="clear"><!-- --></span>
-</div>
+</div>';
+}
+?>
 </div>
 <!-- END: Footer -->
