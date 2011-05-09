@@ -2,8 +2,6 @@
 How to install World of Warcraft Community Site
 =========================
 
-WARNING! IT'S NOT EVEN A BETA VERSION, DO NOT INSTALL IT ON LIVE SERVERS!
-
 SYSTEM REQUIREMENTS:
 1. Apache HTTP Server
 2. PHP 5
@@ -33,8 +31,6 @@ NOTE: engine must be installed in DocumentRoot folder (site root)!
 =========================
 Установка World of Warcraft Community Site
 =========================
-
-ВНИМАНИЕ! ЭТО ДАЛЕКО НЕ БЕТА ВЕРСИЯ, НЕ УСТАНАВЛИВАЙТЕ ДВИЖОК НА ЖИВЫЕ СЕРВЕРА!
 
 СИСТЕМНЫЕ ТРЕБОВАНИЯ:
 1. Web-сервер Apache HTTP Server
