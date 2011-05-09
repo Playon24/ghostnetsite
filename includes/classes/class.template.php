@@ -234,6 +234,26 @@ Class WoW_Template {
                     ),
                 );
                 break;
+            case 'landing':
+                switch(self::GetPageData('landing')) {
+                    case 'what_is':
+                        $css_data_page = array(
+                            array(
+                                'path' => '/css/landing/info.css',
+                                'version' => 5,
+                                'browser' => false,
+                                'skip_path' => false
+                            ),
+                            array(
+                                'path' => '/css/landing/info-ie6.css',
+                                'version' => 5,
+                                'browser' => 'IE 6',
+                                'skip_path' => false
+                            )
+                        );
+                        break;
+                }
+                break;
         }
         $cssList = array_merge($css_data, $css_data_page);
         $cssList[] = array(
@@ -865,6 +885,12 @@ Class WoW_Template {
                 return WoW_Locale::GetString('template_management_main_title');
             case 'dashboard':
                 return sprintf('%s - Battle.Net', WoW_Locale::GetString('expansion_' . WoW_Account::GetExpansion()));
+            case 'landing':
+                switch(self::GetPageData('landing')) {
+                    case 'what_is':
+                        return sprintf('%s - Battle.Net', WoW_Locale::GetString('template_bn_what_is_it_title'));
+                }
+                break;
             default:
                 return false;
         }

@@ -1,5 +1,5 @@
 <head>
-<title>Battle.net</title>
+<title><?php echo WoW_Template::GetPageTitle() != null ? WoW_Template::GetPageTitle() : 'Battle.net'; ?></title>
 <meta content="false" http-equiv="imagetoolbar" />
 <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" />
 <link rel="shortcut icon" href="/static/local-common/images/favicons/root.ico" type="image/x-icon"/>

@@ -18,13 +18,17 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  **/
 
-// Redirect user to WoW Site
-// header('Location: /wow/');
-// exit;
-// [PH]
 include('includes/WoW_Loader.php');
 WoW_Template::SetTemplateTheme('bn');
 WoW_Template::SetMenuIndex('index');
-WoW_Template::SetPageIndex('index');
+if(isset($_GET['what-is'])) {
+    WoW_Template::SetPageIndex('landing');
+    WoW_Template::SetPageData('landing', 'what_is');
+    WoW_Template::LoadTemplate('page_landing');
+    exit;
+}
+else {
+    WoW_Template::SetPageIndex('index');
+}
 WoW_Template::LoadTemplate('page_index');
 ?>
