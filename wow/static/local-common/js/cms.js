@@ -500,7 +500,7 @@ var Cms = {
 			else 
 				cfr.slideToggle(50);
 
-			$('#replyTo').val(parent);
+			$('#replyTo').val(parent + ":" + cId);
 		},
 		validateComment:function(target){
 			var ta = $(target).find("textarea")

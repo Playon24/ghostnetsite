@@ -64,6 +64,17 @@ $WoW_Locale = array(
     'faction_alliance' => 'Альянс',
     'faction_horde' => 'Орда',
     
+    'creature_type_1' => 'Животное',
+    'creature_type_2' => 'Дракон',
+    'creature_type_3' => 'Демон',
+    'creature_type_4' => 'Элементаль',
+    'creature_type_5' => 'Великан',
+    'creature_type_6' => 'Нежить',
+    'creature_type_7' => 'Гуманоид',
+    'creature_type_8' => 'Существо',
+    'creature_type_9' => 'Механизм',
+    'creature_type_10' => 'Разное',
+    
     'template_menu_game' => 'Игра',
     'template_menu_items' => 'Предметы',
     
@@ -432,6 +443,14 @@ $WoW_Locale = array(
     'template_item_tab_header_reagents' => 'Реагенты',
     'template_item_tab_header_buy_back_price' => 'Выкупная цена',
     'template_item_tab_header_sell_price' => 'Цена продажи',
+    
+    'template_item_drop_rate_0' => 'Нет',
+    'template_item_drop_rate_1' => 'Крайне низкая',
+    'template_item_drop_rate_2' => 'Очень низкая',
+    'template_item_drop_rate_3' => 'Низкая',
+    'template_item_drop_rate_4' => 'Средняя',
+    'template_item_drop_rate_5' => 'Большая',
+    'template_item_drop_rate_6' => 'Высокая',
     
     'template_profile_summary' => 'Сводка',
     'template_profile_talents' => 'Таланты и символы',

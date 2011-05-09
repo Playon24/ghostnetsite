@@ -3,6 +3,7 @@
             <input type="hidden" id="replyTo" name="replyTo" value=""/>
             <input type="hidden" name="xstoken" value="<?php echo WoW_Account::GetSessionInfo('wow_sid'); ?>"/>
             <input type="hidden" name="sessionPersist" value="discussion.comment"/>
+            <input type="hidden" name="commentId" value=""/>
         </fieldset>
         <div class="new-post">
             <div class="comment">

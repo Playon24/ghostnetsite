@@ -67,6 +67,7 @@ Class WoW {
         }
         $count = count($url_array);
         $urldata = array();
+        //print_r($url_array);
         switch($type) {
             case 'item':
                 $urldata['tooltip'] = false;
@@ -115,6 +116,18 @@ Class WoW {
                             $urldata['blog_id'] = (isset($url_array[$i + 1])) ? $url_array[$i + 1] : -1;
                             if($tmp = explode('#', $urldata['blog_id'])) {
                                 $urldata['blog_id'] = $tmp[0];
+                            }
+                            break;
+                    }
+                }
+                break;
+            case 'discussion':
+                $urldata['blog_id'] = 0;
+                for($i = 0; $i < $count; $i++) {
+                    switch($url_array[$i]) {
+                        case 'discussion':
+                            if(isset($url_array[$i + 1]) ) {
+                                $urldata['blog_id'] = substr($url_array[$i + 1], 5);
                             }
                             break;
                     }

@@ -137,265 +137,123 @@ else {
     WoW_Template::LoadTemplate('block_post_blog_reply_not_logged');
 }
 ?>
-							<div style="z-index: 37;" class="comment" id="c-2037924340">
-								<div class="avatar portrait-b">
-										<a href="/wow/character/свежеватель-душ/%d0%9d%d0%b0%d0%b4%d0%b5%d0%b6%d0%b4%d0%b0/">
-											<img height="64" src="http://eu.battle.net/static-render/eu/свежеватель-душ/223/46830815-avatar.jpg?alt=/wow/static/images/2d/avatar/10-1.jpg" alt="" />
-										</a>
-								</div>
 <?php
-if(WoW_Account::IsLoggedIn()) {
-    // Karma
-    echo sprintf('<div class="karma" id="k-2037923922">
-            <div class="rate-btn-holder">
-                <a href="javascript:;" onclick="Cms.Topic.vote(2037923922,\'up\',1,\'comments\')" class="rateup rate-btn"><span>%s</span></a>
-            </div>
-            <div class="rate-btn-holder">
-                <a href="javascript:;" onclick="$(this).siblings(\'.rate-action\').show();" class="ratedown rate-btn"></a>
-                <div class="rate-action">
-                    <div class="ui-dropdown">
-                        <div class="dropdown-wrapper">
-                            <ul>
-                                <li><a href="javascript:;" onclick="Cms.Topic.vote(2037923922,\'down\',1,\'comments\')">%s</a></li>
-                                <li><a href="javascript:;" onclick="Cms.Topic.vote(2037923922,\'down\',2,\'comments\')">%s</a></li>
-                                <li><a href="javascript:;" onclick="Cms.Topic.vote(2037923922,\'down\',3,\'comments\')">%s</a></li>
-                                <li><a href="javascript:;" onclick="Cms.Topic.report(2037923922,\'Арикатамо\',\'c-2037923922\')" class="report">%s</a></li>
-                            </ul>
+$comments = WoW::GetBlogComments();
+if(is_array($comments)) {
+    $i = 0;
+    foreach($comments as $comment) {
+        // Load char
+        $character = DB::WoW()->selectRow("SELECT `guid`, `name`, `class`, `race`, `gender`, `level`, `realmName`, `url` FROM `DBPREFIX_user_characters` WHERE `guid` = %d AND `account` = %d AND `realmId` = %d", $comment['character_guid'], $comment['account'], $comment['realm_id']);
+        if(!$character) {
+            continue;
+        }
+        if($comment['answer_to'] > 0) {
+            echo '<div class="nested">';
+        }
+        echo sprintf('<div style="z-index: %d;" class="comment" id="c-%d">', $i, $comment['comment_id']);
+        // Portrait
+        echo sprintf('<div class="avatar portrait-b">
+            <a href="%s">
+                <img height="64" src="/wow/static/images/2d/avatar/%d-%d.jpg" alt="" />
+            </a>
+        </div>', $character['url'], $character['race'], $character['gender']);
+        if(WoW_Account::IsLoggedIn()) {
+            // Karma
+            echo sprintf('<div class="karma" id="k-%d">
+                    <div class="rate-btn-holder">
+                        <a href="javascript:;" onclick="Cms.Topic.vote(%d,\'up\',1,\'comments\')" class="rateup rate-btn"><span>%s</span></a>
+                    </div>
+                    <div class="rate-btn-holder">
+                        <a href="javascript:;" onclick="$(this).siblings(\'.rate-action\').show();" class="ratedown rate-btn"></a>
+                        <div class="rate-action">
+                            <div class="ui-dropdown">
+                                <div class="dropdown-wrapper">
+                                    <ul>
+                                        <li><a href="javascript:;" onclick="Cms.Topic.vote(%d,\'down\',1,\'comments\')">%s</a></li>
+                                        <li><a href="javascript:;" onclick="Cms.Topic.vote(%d,\'down\',2,\'comments\')">%s</a></li>
+                                        <li><a href="javascript:;" onclick="Cms.Topic.vote(%d,\'down\',3,\'comments\')">%s</a></li>
+                                        <li><a href="javascript:;" onclick="Cms.Topic.report(%d,\'%s\',\'c-%d\')" class="report">%s</a></li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                    <div class="prev-vote">%s</div>
+        	<span class="clear"><!-- --></span>
+            </div>', $comment['comment_id'], $comment['comment_id'],
+            WoW_Locale::GetString('template_blog_karma_up'),
+            $comment['comment_id'],
+            WoW_Locale::GetString('template_blog_karma_down'),
+            $comment['comment_id'],
+            WoW_Locale::GetString('template_blog_karma_trolling'), 
+            $comment['comment_id'],
+            WoW_Locale::GetString('template_blog_karma_spam'),
+            $comment['comment_id'],
+            WoW_Locale::GetString('template_blog_karma_report'),
+            $comment['comment_id'],
+            $character['name'],
+            $comment['comment_id'],
+            WoW_Locale::GetString('template_blog_karma_already_rated')
+            );
+        }
+        echo sprintf('<div class="comment-interior">
+                <div class="character-info user">
+                <div class="user-name">
+        		<span class="char-name-code" style="display: none">
+        			%s 
+        		</span>
+        	<div id="context-4" class="ui-context">
+        		<div class="context">
+        			<a href="javascript:;" class="close" onclick="return CharSelect.close(this);"></a>
+        			<div class="context-user">
+        				<strong>%s</strong><br /><span>%s</span>
+        			</div>
+        			<div class="context-links">
+        					<a href="%s" title="%s" rel="np" class="icon-profile link-first">
+        					%s
+        					</a>
+        					<a href="/wow/search?f=post&amp;a=%s&amp;s=time" title="%s" rel="np" class="icon-posts">
+        					</a>
+        					<a href="javascript:;" title="%s" rel="np" class="icon-ignore link-last" onclick="Cms.ignore(%d, false); return false;">
+        					</a>
+        			</div>
+        		</div>
+        	</div>
+                <a href="%s" class="context-link" rel="np">
+                	%s
+                </a>
+            </div>
+            <span class="time"><a href="#c-%d">%s</a></span>
+            </div>
+            <div class="content" >%s</div>
+                <div class="comment-actions">
+                    <a class="reply-link" href="#c-%d" onclick="Cms.Comments.replyTo(\'%d\',\'%d\',\'%s\'); return false;">%s</a>
                 </div>
             </div>
-            <div class="prev-vote">%s</div>
-	<span class="clear"><!-- --></span>
-    </div>', WoW_Locale::GetString('template_blog_karma_up'), WoW_Locale::GetString('template_blog_karma_down'),
-    WoW_Locale::GetString('template_blog_karma_trolling'), WoW_Locale::GetString('template_blog_karma_spam'),
-    WoW_Locale::GetString('template_blog_karma_report'), WoW_Locale::GetString('template_blog_karma_already_rated'));
+         </div>', $character['name'], $character['name'], $character['realmName'], $character['url'], WoW_Locale::GetString('template_profile_caption'), 
+            WoW_Locale::GetString('template_profile_caption'),
+            urlencode($character['name'] . ' @ ' . $character['realmName']),
+            WoW_Locale::GetString('template_blog_lookup_forum_messages'),
+            WoW_Locale::GetString('template_blog_add_to_black_list'),
+            $character['guid'], $character['url'], $character['name'], $comment['comment_id'],
+            date('d M Y H:i', $comment['postdate']),
+            $comment['comment_text'],
+            $comment['comment_id'],
+            $comment['comment_id'],
+            $character['guid'],
+            $character['name'],
+            WoW_Locale::GetString('template_blog_answer'),
+            WoW_Locale::GetString('template_profile_caption'));
+        if($comment['answer_to'] > 0) {
+            echo '</div>';
+        }
+        ++$i;
+    }
 }
 ?>
-    <div class="comment-interior">
-        <div class="character-info user">
-        <div class="user-name">
-		<span class="char-name-code" style="display: none">
-			Надежда 
-		</span>
-	<div id="context-4" class="ui-context">
-		<div class="context">
-			<a href="javascript:;" class="close" onclick="return CharSelect.close(this);"></a>
-			<div class="context-user">
-				<strong>Надежда</strong><br /><span>Свежеватель Душ</span>
-			</div>
-			<div class="context-links">
-					<a href="/wow/character/свежеватель-душ/%d0%9d%d0%b0%d0%b4%d0%b5%d0%b6%d0%b4%d0%b0/" title="<?php echo WoW_Locale::GetString('template_profile_caption'); ?>" rel="np" class="icon-profile link-first">
-					<?php echo WoW_Locale::GetString('template_profile_caption'); ?>
-					</a>
-					<a href="/wow/search?f=post&amp;a=%D0%9D%D0%B0%D0%B4%D0%B5%D0%B6%D0%B4%D0%B0%40%D0%A1%D0%B2%D0%B5%D0%B6%D0%B5%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%20%D0%94%D1%83%D1%88&amp;s=time" title="<?php echo WoW_Locale::GetString('template_blog_lookup_forum_messages'); ?>" rel="np" class="icon-posts">
-					</a>
-					<a href="javascript:;" title="<?php echo WoW_Locale::GetString('template_blog_add_to_black_list'); ?>" rel="np" class="icon-ignore link-last" onclick="Cms.ignore(13072262, false); return false;">
-					</a>
-			</div>
-		</div>
-	</div>
-        <a href="/wow/character/свежеватель-душ/%d0%9d%d0%b0%d0%b4%d0%b5%d0%b6%d0%b4%d0%b0/" class="context-link" rel="np">
-        	Надежда
-        </a>
-    </div>
-    <span class="time"><a href="#c-2037924340">2 ч 18 мин назад</a></span>
-    </div>
-    <div class="content" >Comment text</div>
-        <div class="comment-actions">
-            <a class="reply-link" href="#c-2037924340" onclick="Cms.Comments.replyTo('2037924340','1304216959564','Надежда'); return false;"><?php echo WoW_Locale::GetString('template_blog_answer'); ?></a>
-        </div>
-    </div>
- </div>
-
-
-
-
-                        <div class="nested">
-							<div style="z-index: 36;" class="comment" id="c-2037854484">
-
-								<div class="avatar portrait-c">
-
-										<a href="/wow/character/ясеневыи-лес/%d0%91%d0%bb%d1%83%d0%b4%d0%b8%d0%ba%d0%bb%d0%be%d0%bb/">
-											<img height="64" src="http://eu.battle.net/static-render/eu/ясеневыи-лес/111/60655215-avatar.jpg?alt=/wow/static/images/2d/avatar/1-0.jpg" alt="" />
-										</a>
-
-								</div>
-
-
-                            <div class="comment-interior">
-                                <div class="character-info user">
-
-
-
-
-    <div class="user-name">
-		<span class="char-name-code" style="display: none">
-			Блудиклол 
-		</span>
-
-
-
-	<div id="context-5" class="ui-context">
-		<div class="context">
-			<a href="javascript:;" class="close" onclick="return CharSelect.close(this);"></a>
-
-			<div class="context-user">
-				<strong>Блудиклол</strong>
-						<br />
-						<span>Ясеневый лес</span>
-			</div>
-
-
-
-
-
-
-
-
-			<div class="context-links">
-					<a href="/wow/character/ясеневыи-лес/%d0%91%d0%bb%d1%83%d0%b4%d0%b8%d0%ba%d0%bb%d0%be%d0%bb/" title="<?php echo WoW_Locale::GetString('template_profile_caption'); ?>" rel="np"
-					   class="icon-profile link-first"
-					   >
-						<?php echo WoW_Locale::GetString('template_profile_caption'); ?>
-					</a>
-					<a href="/wow/search?f=post&amp;a=%D0%91%D0%BB%D1%83%D0%B4%D0%B8%D0%BA%D0%BB%D0%BE%D0%BB%40%D0%AF%D1%81%D0%B5%D0%BD%D0%B5%D0%B2%D1%8B%D0%B9%20%D0%BB%D0%B5%D1%81&amp;s=time" title="<?php echo WoW_Locale::GetString('template_blog_lookup_forum_messages'); ?>" rel="np"
-					   class="icon-posts"
-					   >
-						
-					</a>
-					<a href="javascript:;" title="<?php echo WoW_Locale::GetString('template_blog_add_to_black_list'); ?>" rel="np"
-					   class="icon-ignore link-last"
-					   onclick="Cms.ignore(18725897, false); return false;">
-						
-					</a>
-			</div>
-		</div>
-
-	</div>
-
-
-        <a href="/wow/character/ясеневыи-лес/%d0%91%d0%bb%d1%83%d0%b4%d0%b8%d0%ba%d0%bb%d0%be%d0%bb/" class="context-link" rel="np">
-        	Блудиклол
-        </a>
-    </div>
-
-
-                                    <span class="time"><a href="#c-2037854484">1 ч 59 мин назад</a></span>
-
-                                </div>
-
-                                <div class="content" >
-                                    @Надежда: <br/>Answer 1
-                                </div>
-
-                                <div class="comment-actions">
-
-
-                                        <a class="reply-link" href="#c-2037854484" onclick="Cms.Comments.replyTo('2037854484','1304216959564','Блудиклол'); return false;"><?php echo WoW_Locale::GetString('template_blog_answer'); ?></a>
-                                </div>
-                            </div>
-                        </div>
-
-
-
-
-							<div style="z-index: 35;" class="comment" id="c-2037814493">
-
-								<div class="avatar portrait-c">
-
-										<a href="/wow/character/вечная-песня/%d0%a4%d1%83%d0%bd%d0%b5%d0%b1%d1%80%d0%b8%d1%83%d0%bc/">
-											<img height="64" src="http://eu.battle.net/static-render/eu/вечная-песня/74/36432202-avatar.jpg?alt=/wow/static/images/2d/avatar/11-1.jpg" alt="" />
-										</a>
-
-								</div>
-
-
-                            <div class="comment-interior">
-                                <div class="character-info user">
-
-
-
-
-    <div class="user-name">
-		<span class="char-name-code" style="display: none">
-			Фунебриум 
-		</span>
-
-
-
-	<div id="context-6" class="ui-context">
-		<div class="context">
-			<a href="javascript:;" class="close" onclick="return CharSelect.close(this);"></a>
-
-			<div class="context-user">
-				<strong>Фунебриум</strong>
-						<br />
-						<span>Вечная Песня</span>
-			</div>
-
-
-
-
-
-
-
-
-			<div class="context-links">
-					<a href="/wow/character/вечная-песня/%d0%a4%d1%83%d0%bd%d0%b5%d0%b1%d1%80%d0%b8%d1%83%d0%bc/" title="<?php echo WoW_Locale::GetString('template_profile_caption'); ?>" rel="np"
-					   class="icon-profile link-first"
-					   >
-						<?php echo WoW_Locale::GetString('template_profile_caption'); ?>
-					</a>
-					<a href="/wow/search?f=post&amp;a=%D0%A4%D1%83%D0%BD%D0%B5%D0%B1%D1%80%D0%B8%D1%83%D0%BC%40%D0%92%D0%B5%D1%87%D0%BD%D0%B0%D1%8F%20%D0%9F%D0%B5%D1%81%D0%BD%D1%8F&amp;s=time" title="<?php echo WoW_Locale::GetString('template_blog_lookup_forum_messages'); ?>" rel="np"
-					   class="icon-posts"
-					   >
-						
-					</a>
-					<a href="javascript:;" title="<?php echo WoW_Locale::GetString('template_blog_add_to_black_list'); ?>" rel="np"
-					   class="icon-ignore link-last"
-					   onclick="Cms.ignore(910912, false); return false;">
-						
-					</a>
-			</div>
-		</div>
-
-	</div>
-
-
-        <a href="/wow/character/вечная-песня/%d0%a4%d1%83%d0%bd%d0%b5%d0%b1%d1%80%d0%b8%d1%83%d0%bc/" class="context-link" rel="np">
-        	Фунебриум
-        </a>
-    </div>
-
-
-                                    <span class="time"><a href="#c-2037814493">10 мин назад</a></span>
-
-                                </div>
-
-                                <div class="content" >
-                                    @Блудиклол: <br/>Answer 2
-                                </div>
-
-                                <div class="comment-actions">
-
-
-                                        <a class="reply-link" href="#c-2037814493" onclick="Cms.Comments.replyTo('2037814493','1304216959564','Фунебриум'); return false;"><?php echo WoW_Locale::GetString('template_blog_answer'); ?></a>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        </div>
-
 
                 <div class="page-nav-container">
                     <div class="page-nav-int">
-
-
-
-
-
 
 
 

@@ -64,6 +64,17 @@ $WoW_Locale = array(
     'faction_alliance' => 'Alliance',
     'faction_horde' => 'Horde',
     
+    'creature_type_1' => 'Beast',
+    'creature_type_2' => 'Dragonkin',
+    'creature_type_3' => 'Demon',
+    'creature_type_4' => 'Elemental',
+    'creature_type_5' => 'Giant',
+    'creature_type_6' => 'Undead',
+    'creature_type_7' => 'Humanoid',
+    'creature_type_8' => 'Critter',
+    'creature_type_9' => 'Mechanical',
+    'creature_type_10' => 'Uncategorized',
+    
     'template_menu_game' => 'Game',
     'template_menu_items' => 'Items',
     
