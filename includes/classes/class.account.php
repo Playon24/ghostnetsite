@@ -668,10 +668,13 @@ Class WoW_Account {
         }
         else {
             self::$characters_loaded = true;
-            foreach(self::$characters_data as $char) {
-                if($char['isActive'] == true) {
-                    self::$active_character = $char;
-                    return true;
+            for($i = 0; $i < $total_chars_count; ++$i) {
+                // Rebuild *_text fields
+                self::$characters_data[$i]['class_text'] = WoW_Locale::GetString('character_class_' . self::$characters_data[$i]['class'], self::$characters_data[$i]['gender']);
+                self::$characters_data[$i]['race_text'] = WoW_Locale::GetString('character_race_' . self::$characters_data[$i]['race'], self::$characters_data[$i]['gender']);
+                self::$characters_data[$i]['faction_text'] = (WoW_Utils::GetFactionId(self::$characters_data[$i]['race']) == FACTION_ALLIANCE) ? 'alliance' : 'horde';
+                if(self::$characters_data[$i]['isActive']) {
+                    self::$active_character = self::$characters_data[$i];
                 }
             }
             return true;
