@@ -62,6 +62,7 @@ include(WOW_DIRECTORY . '/includes/classes/class.itemprototype.php');
 include(WOW_DIRECTORY . '/includes/classes/class.guild.php');
 include(WOW_DIRECTORY . '/includes/classes/class.search.php');
 include(WOW_DIRECTORY . '/includes/classes/class.reputation.php');
+include(WOW_DIRECTORY . '/includes/classes/class.auction.php');
 // Load data
 include(WOW_DIRECTORY . '/includes/data/data.classes.php');
 include(WOW_DIRECTORY . '/includes/data/data.races.php');
@@ -103,6 +104,8 @@ WoW_Log::Initialize(WoWConfig::$UseLog, WoWConfig::$LogLevel);
 DB::LoadConfigs();
 // Initialize connections to databases
 DB::ConnectToAllDBs();
+// Initialize auction handler
+WoW_Auction::InitAuction();
 if(isset($_GET['_DISPLAYVERSION_'])) {
     die(WOW_REVISION);
 }
