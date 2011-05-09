@@ -957,5 +957,27 @@ Class WoW_Account {
         }
         return false;
     }
+    
+    /**
+     * @todo Rewrite this method with responses and other tasty things. Write it only when you don't want to go sleep...
+     **/
+    public static function RegisterUser($user_data, $auto_session = false) {
+        if(!is_array($user_data)) {
+            return false;
+        }
+        if(!isset($user_data['username'])) {
+            return false;
+        }
+        if(DB::Realm()->selectCell("SELECT 1 FROM `account` WHERE `username` = '%s' LIMIT 1", $user_data['username'])) {
+            return false;
+        }
+        if(DB::Realm()->query("INSERT INTO `account` (`username`, `sha_pass_hash`, `gmlevel`, `email`, `expansion`) VALUES ('%s', '%s', 0, '', %d)", $user_data['username'], $user_data['sha'], (MAX_EXPANSION_LEVEL - 1))) {
+            
+        }
+        if($auto_session) {
+            self::PerformLogin($user_data['username'], $user_data['password']);
+        }
+        return true;
+    }
 }
 ?>

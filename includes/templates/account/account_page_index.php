@@ -74,6 +74,12 @@ switch(WoW_Template::GetPageIndex()) {
     case 'dashboard':
         WoW_Template::LoadTemplate('content_dashboard');
         break;
+    case 'creation_tos':
+        WoW_Template::LoadTemplate('content_creation_tos');
+        break;
+    case 'creation_success':
+        WoW_Template::LoadTemplate('content_creation_success');
+        break;
 }
 ?>
 <div id="layout-bottom">
@@ -105,6 +111,11 @@ switch(WoW_Template::GetPageIndex()) {
         echo '<script type="text/javascript" src="/account/local-common/js/third-party/swfobject.js?v17"></script>
 <script type="text/javascript" src="/account/js/management/dashboard.js?v19"></script>
 <script type="text/javascript" src="/account/js/management/wow/dashboard.js?v19"></script>';
+        break;
+    case 'creation_tos':
+    case 'creation_success':
+        echo '<script type="text/javascript" src="/account/js/inputs.js?v19"></script>
+<script type="text/javascript" src="/account/js/account-creation/streamlined-creation.js?v19"></script>';
         break;
 }
 ?>

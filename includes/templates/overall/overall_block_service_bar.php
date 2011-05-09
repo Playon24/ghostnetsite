@@ -19,13 +19,13 @@
 					<div class="explore-primary">
 						<ul class="explore-nav">
 							<li>
-								<a href="http://eu.battle.net/" tabindex="55">
+								<a href="/" tabindex="55">
 									<strong class="explore-caption"><?php echo WoW_Locale::GetString('template_servicebar_explore_menu_home_title'); ?></strong>
 									<?php echo WoW_Locale::GetString('template_servicebar_explore_menu_home_description'); ?>
 								</a>
 							</li>
 							<li>
-								<a href="https://eu.battle.net/account/management/?lnk=2" tabindex="55">
+								<a href="/account/management/?lnk=2" tabindex="55">
 									<strong class="explore-caption"><?php echo WoW_Locale::GetString('template_servicebar_explore_menu_account_title'); ?></strong>
 									<?php echo WoW_Locale::GetString('template_servicebar_explore_menu_account_description'); ?>
 								</a>
@@ -37,7 +37,7 @@
 									</a>
 								</li>
 								<li>
-									<a href="https://eu.battle.net/account/management/get-a-game.html" tabindex="55">
+									<a href="/account/management/get-a-game.html" tabindex="55">
 										<strong class="explore-caption"><?php echo WoW_Locale::GetString('template_servicebar_explore_menu_buy_title'); ?></strong>
 										<?php echo WoW_Locale::GetString('template_servicebar_explore_menu_buy_description'); ?>
 									</a>
@@ -48,9 +48,9 @@
 							<h2 class="explore-caption"><?php echo WoW_Locale::GetString('template_servicebar_explore_menu_more_title'); ?></h2>
 
 							<ul>
-									<li><a href="http://eu.battle.net/what-is/" tabindex="55"><?php echo WoW_Locale::GetString('template_servicebar_explore_menu_more_link1'); ?></a></li>
+									<li><a href="/what-is/" tabindex="55"><?php echo WoW_Locale::GetString('template_servicebar_explore_menu_more_link1'); ?></a></li>
 									<li><a href="http://eu.battle.net/realid/" tabindex="55"><?php echo WoW_Locale::GetString('template_servicebar_explore_menu_more_link2'); ?></a></li>
-									<li><a href="https://eu.battle.net/account/parental-controls/index.html" tabindex="55"><?php echo WoW_Locale::GetString('template_servicebar_explore_menu_more_link3'); ?></a></li>
+									<li><a href="/account/parental-controls/index.html" tabindex="55"><?php echo WoW_Locale::GetString('template_servicebar_explore_menu_more_link3'); ?></a></li>
 									<li><a href="http://eu.battle.net/security/" tabindex="55"><?php echo WoW_Locale::GetString('template_servicebar_explore_menu_more_link4'); ?></a></li>
 									<li><a href="http://eu.battle.net/games/classic" tabindex="55"><?php echo WoW_Locale::GetString('template_servicebar_explore_menu_more_link5'); ?></a></li>
 									<li><a href="https://eu.battle.net/account/support/index.html" tabindex="55"><?php echo WoW_Locale::GetString('template_servicebar_explore_menu_more_link6'); ?></a></li>

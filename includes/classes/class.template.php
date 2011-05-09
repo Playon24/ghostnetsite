@@ -254,6 +254,55 @@ Class WoW_Template {
                         break;
                 }
                 break;
+            case 'creation_tos':
+            case 'creation_success':
+                $css_data_page = array(
+                    array(
+                        'path' => '/css/bnet-print.css',
+                        'version' => 19,
+                        'media' => 'print',
+                        'browser' => false,
+                        'skip_path' => false
+                    ),
+                    array(
+                        'path' => '/css/inputs.css',
+                        'version' => 19,
+                        'browser' => false,
+                        'skip_path' => false
+                    ),
+                    array(
+                        'path' => '/css/inputs-ie6.css',
+                        'version' => 19,
+                        'browser' => 'IE 6',
+                        'skip_path' => false
+                    ),
+                    array(
+                        'path' => '/css/inputs-ie7.css',
+                        'version' => 19,
+                        'browser' => 'IE 7',
+                        'skip_path' => false
+                    ),
+                    array(
+                        'path' => '/css/account-creation/streamlined-creation.css',
+                        'version' => 19,
+                        'browser' => false,
+                        'skip_path' => false
+                    ),
+                    array(
+                        'path' => '/css/account-creation/streamlined-creation-ie6.css',
+                        'version' => 19,
+                        'browser' => 'IE 6',
+                        'skip_path' => false
+                    ),
+                    array(
+                        'path' => '/css/account-creation/streamlined-creation-ie7.css',
+                        'version' => 19,
+                        'browser' => 'IE 7',
+                        'skip_path' => false
+                    )
+                );
+                    
+                break;
         }
         $cssList = array_merge($css_data, $css_data_page);
         $cssList[] = array(
@@ -890,6 +939,10 @@ Class WoW_Template {
                     case 'what_is':
                         return sprintf('%s - Battle.Net', WoW_Locale::GetString('template_bn_what_is_it_title'));
                 }
+                break;
+            case 'creation_tos':
+            case 'creation_success':
+                return 'Battle.Net'; //[PH]
                 break;
             default:
                 return false;

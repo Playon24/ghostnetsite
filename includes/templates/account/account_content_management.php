@@ -23,6 +23,13 @@
 <div id="lobby-games">
 <h3 class="section-title"><?php echo WoW_Locale::GetString('template_management_your_games'); ?></h3>
 <div id="games-list">
+<?php
+/*    echo '<ul>
+<li class="cta border-4">
+К этой учетной записи Battle.net еще не прикреплено ни одной игры.<br /><a href="/account/management/add-game.html">Прикрепите игру</a> или <a href="/account/management/wow-account-conversion.html">прикрепите свою запись World of Warcraft®</a>.
+</li>
+</ul>';*/
+?>
 <a href="#wow" class="games-title border-2 opened" rel="game-list-wow">World of Warcraft</a>
 <ul id="game-list-wow">
 <li class="border-4" id="<?php echo strtoupper(WoW_Account::GetUserName()); ?>::EU">
