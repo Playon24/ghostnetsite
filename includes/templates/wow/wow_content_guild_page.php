@@ -138,6 +138,13 @@ World of Warcraft
 	</div>
 				</div>
 				<div class="summary-left">
+    <?php
+    if(WoW_Template::GetPageData('guild-authorized')) {
+        echo sprintf('<div class="summary-motd">
+			<div class="description"><span class="icon">%s</span></div>
+		</div>', WoW_Guild::GetGuildMOTD());
+    }
+    ?>
 	<div class="summary-activity">
 	<h3 class="category "><?php echo WoW_Locale::GetString('template_guild_feed_recent_news'); ?></h3>
 		<div class="profile-box-simple">

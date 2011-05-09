@@ -177,6 +177,14 @@ Class WoW_Guild {
         return self::$guild_professions;
     }
     
+    public static function GetGuildMOTD() {
+        return self::$guild_motd;
+    }
+    
+    public static function GetGuildInfo() {
+        return self::$guild_info;
+    }
+    
     private static function GenerateGuildMembersGUIDs() {
         if(!self::IsCorrect()) {
             WoW_Log::WriteError('%s : guild was not found.', __METHOD__);
