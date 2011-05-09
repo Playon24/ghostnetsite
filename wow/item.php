@@ -47,7 +47,7 @@ if(!$proto->IsCorrect()) {
 WoW_Template::SetPageData('item_entry', $item_entry);
 // SSD and SSV data
 $ssd = DB::WoW()->selectRow("SELECT * FROM `DBPREFIX_ssd` WHERE `entry` = %d", $proto->ScalingStatDistribution);
-$ssd_level = MAX_LEVEL_PLAYER;
+$ssd_level = MAX_PLAYER_LEVEL;
 if(isset($_GET['pl'])) {
     $ssd_level = (int) $_GET['pl'];
     if(is_array($ssd) && $ssd_level > $ssd['MaxLevel']) {

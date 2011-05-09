@@ -566,8 +566,9 @@ define('PLAYER_SLOT_ITEM_RANGED', PLAYER_FIELD_INV_SLOT_HEAD+34);
 define('PLAYER_SLOT_ITEM_TABARD', PLAYER_FIELD_INV_SLOT_HEAD+36);
 
 /* Player level */
-define('MAX_LEVEL_PLAYER', 80); // Wrath
+define('MAX_PLAYER_LEVEL', 80); // Wrath
 define('GT_MAX_LEVEL', 100);
+define('MAX_EXPANSION_LEVEL', 3); // Cataclysm
 
 /* Item Proto */
 define('MAX_ITEM_PROTO_DAMAGES', 2);                            // changed in 3.1.0
@@ -919,4 +920,5 @@ define('AUDIT_TYPE_USED_GEMS', 9);
 define('AUDIT_TYPE_STAT_BONUS', 10);
 define('MAX_AUDIT_TYPE', 11);
 define('BELT_BUCKLE_ID', 41611); // Eternal Belt Buckle for Wrath
+
 ?>
