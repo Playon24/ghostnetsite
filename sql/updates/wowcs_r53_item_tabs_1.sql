@@ -28,6 +28,7 @@
 -- related to "the Sources" Tabs in the item page of the 
 -- "wowcs"; 
 -- This data has to be dumped from the world/mangos DB.
+-- Part 1.
 --
 -- --------------------------------------------------------
 
@@ -124,49 +125,5 @@ CREATE TABLE `wow_item_tab_disenchants_into` (
   `drop_rate` int(5) NOT NULL,
   PRIMARY KEY  (`itemID`,`item2ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
---
--- Structure for the table `wow_item_tab_created_by`
---
-
--- TODO
-
---
--- Structure for the table `wow_item_tab_provided_for_quest`
---
-
--- TODO
-
---
--- Structure for the table `wow_item_tab_provided_objective_of_quest`
---
-
--- TODO
-
---
--- Structure for the table `wow_item_tab_provided_reward_from_quest`
---
-
--- TODO
-
--- Structure for the table `wow_item_tab_currency_for_items`
---
-
--- TODO
-
--- Structure for the table `wow_item_tab_skinned_from_creatures`
---
-
--- TODO
-
--- Structure for the table `wow_item_tab_pickpocket_from_creatures`
---
-
--- TODO
-
--- Structure for the table `wow_item_tab_mined_from_creatures`
---
-
--- TODO
 
 -- --------------------------------------------------------

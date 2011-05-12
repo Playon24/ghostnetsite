@@ -919,7 +919,6 @@ Class WoW_Items {
                 Dropped from creature...
                 Contained in object...
                 Sold by vendor...
-                Currency for item...
                 Reward from quest...
                 Skinned from...
                 Pick pocketed from...
@@ -927,6 +926,14 @@ Class WoW_Items {
                 Created by spell...
                 Reagent for spell...
                 Disenchants into...
+                Provided For Quest...
+                Objective Of Quest...
+                Reward From Quest...
+                Comments...
+
+            Missing DB Tables:
+                Currency for item...
+
         */
         $item_tabs = array();
         // WARNING: do not query something here! Only checks!
@@ -935,6 +942,7 @@ Class WoW_Items {
         if($count = DB::World()->selectCell("SELECT COUNT(*) FROM `creature_loot_template` WHERE `item` = %d", $entry)) {
             $item_tabs[] = array(
                 'type'  => 'dropCreatures',
+                'table' => 'dropped_from',
                 'count' => $count
             );
         }
@@ -942,6 +950,7 @@ Class WoW_Items {
         if($count = DB::World()->selectCell("SELECT COUNT(*) FROM `gameobject_loot_template` WHERE `item` = %d", $entry)) {
             $item_tabs[] = array(
                 'type'  => 'dropGameObjects',
+                'table' => 'contained_in',
                 'count' => $count
             );
         }
@@ -949,6 +958,7 @@ Class WoW_Items {
         if($count = DB::World()->selectCell("SELECT COUNT(*) FROM `npc_vendor` WHERE `item` = %d", $entry)) {
             $item_tabs[] = array(
                 'type'  => 'vendors',
+                'table' => 'sold_by',
                 'count' => $count
             );
         }
@@ -956,6 +966,7 @@ Class WoW_Items {
         if($count = DB::WoW()->selectCell("SELECT COUNT(*) FROM `DBPREFIX_extended_cost` WHERE `item1` = %d OR `item2` = %d OR `item3` = %d OR `item4` = %d OR `item5` = %d", $entry, $entry, $entry, $entry, $entry)) {
             $item_tabs[] = array(
                 'type'  => 'currencyForItems',
+                'table' => '', //Not defined yet
                 'count' => $count
             );
         }
@@ -963,6 +974,7 @@ Class WoW_Items {
         if($count = DB::World()->selectCell("SELECT COUNT(*) FROM `quest_template` WHERE `RewChoiceItemId1` = %d OR `RewChoiceItemId2` = %d OR `RewChoiceItemId3` = %d OR `RewChoiceItemId4` = %d OR `RewChoiceItemId5` = %d OR `RewChoiceItemId6` = %d OR `RewItemId1` = %d OR `RewItemId2` = %d OR `RewItemId3` = %d OR `RewItemId4` = %d", $entry, $entry, $entry, $entry, $entry, $entry, $entry, $entry, $entry, $entry)) {
             $item_tabs[] = array(
                 'type'  => 'rewardFromQuests',
+                'table' => 'reward_from_quest',
                 'count' => $count
             );
         }
@@ -970,6 +982,7 @@ Class WoW_Items {
         if($count = DB::World()->selectCell("SELECT COUNT(*) FROM `skinning_loot_template` WHERE `item` = %d", $entry)) {
             $item_tabs[] = array(
                 'type'  => 'skinnedFromCreatures',
+                'table' => 'skinned_from_creatures',
                 'count' => $count
             );
         }
@@ -977,6 +990,7 @@ Class WoW_Items {
         if($count = DB::World()->selectCell("SELECT COUNT(*) FROM `pickpocketing_loot_template` WHERE `item` = %d", $entry)) {
             $item_tabs[] = array(
                 'type'  => 'pickPocketCreatures',
+                'table' => 'pickpocket_from_creatures',
                 'count' => $count
             );
         }
@@ -984,6 +998,7 @@ Class WoW_Items {
         if($count = DB::WoW()->selectCell("SELECT COUNT(*) FROM `DBPREFIX_spell` WHERE `EffectItemType_1` = %d OR `EffectItemType_2` = %d OR `EffectItemType_3` = %d", $entry, $entry, $entry)) {
             $item_tabs[] = array(
                 'type'  => 'createdBySpells',
+                'table' => 'created_by',
                 'count' => $count
             );
         }
@@ -991,6 +1006,7 @@ Class WoW_Items {
         if($count = DB::WoW()->selectCell("SELECT COUNT(*) FROM `DBPREFIX_spell` WHERE `Reagent_1` = %d OR `Reagent_2` = %d OR `Reagent_3` = %d OR `Reagent_4` = %d OR `Reagent_5` = %d OR `Reagent_6` = %d OR `Reagent_7` = %d OR `Reagent_8` = %d", $entry, $entry, $entry, $entry, $entry, $entry, $entry, $entry)) {
             $item_tabs[] = array(
                 'type'  => 'reagentForSpells',
+                'table' => 'reagent_for',
                 'count' => $count
             );
         }
@@ -998,18 +1014,27 @@ Class WoW_Items {
         if($count = DB::World()->selectCell("SELECT COUNT(*) FROM `disenchant_loot_template` WHERE `item` = %d", $entry)) {
             $item_tabs[] = array(
                 'type'  => 'disenchantItems',
+                'table' => 'disenchants_into',
                 'count' => $count
             );
         }
-        $item_tabs[] = array(
+		// comments
+		$item_tabs[] = array(
             'type'  => 'comments',
             'count' => 0
         );
         return $item_tabs;
     }
     
+    //Tabs data is still missing into the DB tables, it has to be dumped from the world DB, in order to make it safer and faster...
     public function GetItemTabContents($entry) {
-        
+        foreach ($item_tabs as $tab) {
+		    if($tab['type'] != 'comments'){
+		        for($i=0;$i<$tab['count'];$i++){
+		            $lines[] = DB::WoW()->selectRow("SELECT * FROM `DBPREFIX_item_tabs_".$table."` WHERE `itemID` = %d", $entry);
+		        }
+		    }
+        }
     }
 }
 ?>
