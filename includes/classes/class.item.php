@@ -89,6 +89,15 @@ Class WoW_Item {
             }
             if(isset($this->tc_data['enchantments'])) {
                 $this->tc_ench = explode(' ', $this->tc_data['enchantments']);
+                // _LoadIntoDataField
+                $length = MAX_ENCHANTMENT_SLOT * MAX_ENCHANTMENT_OFFSET;
+                $count = ITEM_FIELD_ENCHANTMENT_1_1;
+                if($count == count($this->tc_ench)) {
+                    // Load enchantment fields into m_values field
+                    for($index = 0; $startOffset < $count; ++$index) {
+                        $this->m_values[$startOffset + $index] = $this->tc_ench[$index];
+                    }
+                }
             }
             $this->entry = $this->tc_data['itemEntry'];
             $item_data = DB::World()->selectRow("SELECT `ItemLevel`, `itemset`, `MaxDurability` FROM `item_template` WHERE `entry` = %d LIMIT 1", $this->GetEntry());
@@ -244,6 +253,18 @@ Class WoW_Item {
      **/
     public function GetEnchantmentId() {
         return $this->m_ench;
+    }
+    
+    public function GetEnchantmentIdBySlot($slot) {
+        return $this->GetUInt32Value(ITEM_FIELD_ENCHANTMENT_1_1 + $slot * MAX_ENCHANTMENT_OFFSET + ENCHANTMENT_ID_OFFSET);
+    }
+    
+    public function GetEnchantmentDurationBySlot($slot) {
+        return $this->GetUInt32Value(ITEM_FIELD_ENCHANTMENT_1_1 + $slot * MAX_ENCHANTMENT_OFFSET + ENCHANTMENT_DURATION_OFFSET);
+    }
+    
+    public function GetEnchantmentChargesBySlot($slot) {
+        return $this->GetUInt32Value(ITEM_FIELD_ENCHANTMENT_1_1 + $slot * MAX_ENCHANTMENT_OFFSET + ENCHANTMENT_CHARGES_OFFSET);
     }
     
     public function HasBonusEnchantmentSlot() {
