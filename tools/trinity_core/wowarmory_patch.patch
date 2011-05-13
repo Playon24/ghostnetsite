@@ -1,8 +1,8 @@
 diff --git a/src/server/game/Achievements/AchievementMgr.cpp b/src/server/game/Achievements/AchievementMgr.cpp
-index f3de237..1740d66 100755
+index b2d7cb7..376a5b1 100755
 --- a/src/server/game/Achievements/AchievementMgr.cpp
 +++ b/src/server/game/Achievements/AchievementMgr.cpp
-@@ -1951,6 +1951,7 @@ void AchievementMgr::CompletedAchievement(AchievementEntry const* achievement, b
+@@ -1979,6 +1979,7 @@ void AchievementMgr::CompletedAchievement(AchievementEntry const* achievement, b
          return;
  
      SendAchievementEarned(achievement);
@@ -11,10 +11,10 @@ index f3de237..1740d66 100755
      ca.date = time(NULL);
      ca.changed = true;
 diff --git a/src/server/game/Entities/Item/Item.cpp b/src/server/game/Entities/Item/Item.cpp
-index 29dff32..e29ee93 100755
+index 2fc5ccc..11ac0cb 100755
 --- a/src/server/game/Entities/Item/Item.cpp
 +++ b/src/server/game/Entities/Item/Item.cpp
-@@ -278,6 +278,13 @@ bool Item::Create(uint32 guidlow, uint32 itemid, Player const* owner)
+@@ -276,6 +276,13 @@ bool Item::Create(uint32 guidlow, uint32 itemid, Player const* owner)
  
      SetUInt32Value(ITEM_FIELD_DURATION, abs(itemProto->Duration));
      SetUInt32Value(ITEM_FIELD_CREATE_PLAYED_TIME, 0);
@@ -29,20 +29,20 @@ index 29dff32..e29ee93 100755
  }
  
 diff --git a/src/server/game/Entities/Player/Player.cpp b/src/server/game/Entities/Player/Player.cpp
-index 8f27455..def9773 100755
+index e6d38de..4d29247 100755
 --- a/src/server/game/Entities/Player/Player.cpp
 +++ b/src/server/game/Entities/Player/Player.cpp
-@@ -4908,6 +4908,8 @@ void Player::DeleteFromDB(uint64 playerguid, uint32 accountId, bool updateRealmC
-             trans->PAppend("DELETE FROM character_queststatus_daily WHERE guid = '%u'",guid);
-             trans->PAppend("DELETE FROM character_talent WHERE guid = '%u'",guid);
-             trans->PAppend("DELETE FROM character_skills WHERE guid = '%u'",guid);
-+            trans->PAppend("DELETE FROM armory_character_stats WHERE guid = '%u'",guid);
-+            trans->PAppend("DELETE FROM character_feed_log WHERE guid = '%u'",guid);
+@@ -4897,6 +4897,8 @@ void Player::DeleteFromDB(uint64 playerguid, uint32 accountId, bool updateRealmC
+             trans->PAppend("DELETE FROM character_queststatus_daily WHERE guid = '%u'", guid);
+             trans->PAppend("DELETE FROM character_talent WHERE guid = '%u'", guid);
+             trans->PAppend("DELETE FROM character_skills WHERE guid = '%u'", guid);
++            trans->PAppend("DELETE FROM armory_character_stats WHERE guid = '%u'", guid);
++            trans->PAppend("DELETE FROM character_feed_log WHERE guid = '%u'", guid);
  
              CharacterDatabase.CommitTransaction(trans);
              break;
-@@ -16435,6 +16437,8 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
-         CharacterDatabase.PExecute("UPDATE characters SET at_login = at_login | '%u' WHERE guid ='%u'", uint32(AT_LOGIN_RENAME),guid);
+@@ -16399,6 +16401,8 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
+         CharacterDatabase.PExecute("UPDATE characters SET at_login = at_login | '%u' WHERE guid ='%u'", uint32(AT_LOGIN_RENAME), guid);
          return false;
      }
 +    // Cleanup old Wowarmory feeds
@@ -50,7 +50,7 @@ index 8f27455..def9773 100755
  
      // overwrite possible wrong/corrupted guid
      SetUInt64Value(OBJECT_FIELD_GUID, MAKE_NEW_GUID(guid, 0, HIGHGUID_PLAYER));
-@@ -18365,6 +18369,30 @@ void Player::SaveToDB()
+@@ -18334,6 +18338,30 @@ void Player::SaveToDB()
  
      CharacterDatabase.CommitTransaction(trans);
  
@@ -81,7 +81,7 @@ index 8f27455..def9773 100755
      // save pet (hunter pet level and experience and all type pets health/mana).
      if (Pet* pet = GetPet())
          pet->SavePetToDB(PET_SAVE_AS_CURRENT);
-@@ -24641,3 +24669,42 @@ void Player::_SaveInstanceTimeRestrictions(SQLTransaction& trans)
+@@ -24616,3 +24644,42 @@ void Player::_SaveInstanceTimeRestrictions(SQLTransaction& trans)
          trans->Append(stmt);
      }
  }
@@ -126,10 +126,10 @@ index 8f27455..def9773 100755
 +}
 \ No newline at end of file
 diff --git a/src/server/game/Entities/Player/Player.h b/src/server/game/Entities/Player/Player.h
-index d22054f..129c2a2 100755
+index 4c0c640..0d32478 100755
 --- a/src/server/game/Entities/Player/Player.h
 +++ b/src/server/game/Entities/Player/Player.h
-@@ -1028,6 +1028,21 @@ private:
+@@ -1027,6 +1027,21 @@ private:
      uint32 _xp;
  };
  
@@ -151,7 +151,7 @@ index d22054f..129c2a2 100755
  class Player : public Unit, public GridObject<Player>
  {
      friend class WorldSession;
-@@ -2316,6 +2331,12 @@ class Player : public Unit, public GridObject<Player>
+@@ -2315,6 +2330,12 @@ class Player : public Unit, public GridObject<Player>
          void SendCinematicStart(uint32 CinematicSequenceId);
          void SendMovieStart(uint32 MovieId);
  
@@ -164,7 +164,7 @@ index d22054f..129c2a2 100755
          /*********************************************************/
          /***                 INSTANCE SYSTEM                   ***/
          /*********************************************************/
-@@ -2755,6 +2776,8 @@ class Player : public Unit, public GridObject<Player>
+@@ -2753,6 +2774,8 @@ class Player : public Unit, public GridObject<Player>
          uint32 m_timeSyncTimer;
          uint32 m_timeSyncClient;
          uint32 m_timeSyncServer;
@@ -174,10 +174,10 @@ index d22054f..129c2a2 100755
          InstanceTimeMap _instanceResetTimes;
          InstanceSave* _pendingBind;
 diff --git a/src/server/game/Entities/Unit/Unit.cpp b/src/server/game/Entities/Unit/Unit.cpp
-index de68aef..96960f0 100755
+index c2415dd..8f9ff76 100755
 --- a/src/server/game/Entities/Unit/Unit.cpp
 +++ b/src/server/game/Entities/Unit/Unit.cpp
-@@ -15177,7 +15177,10 @@ void Unit::Kill(Unit *pVictim, bool durabilityLoss)
+@@ -15321,7 +15321,10 @@ void Unit::Kill(Unit *pVictim, bool durabilityLoss)
                  if (m->IsRaidOrHeroicDungeon())
                  {
                      if (creature->GetCreatureInfo()->flags_extra & CREATURE_FLAG_EXTRA_INSTANCE_BIND)

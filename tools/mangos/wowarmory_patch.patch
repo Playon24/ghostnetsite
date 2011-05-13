@@ -11,7 +11,7 @@ index 9f7b687..9e63530 100644
      ca.date = time(NULL);
      ca.changed = true;
 diff --git a/src/game/Item.cpp b/src/game/Item.cpp
-index 47698b7..10e0d65 100644
+index fcb8efb..4558569 100644
 --- a/src/game/Item.cpp
 +++ b/src/game/Item.cpp
 @@ -258,7 +258,6 @@ bool Item::Create( uint32 guidlow, uint32 itemid, Player const* owner)
@@ -37,7 +37,7 @@ index 47698b7..10e0d65 100644
  }
  
 diff --git a/src/game/Player.cpp b/src/game/Player.cpp
-index 6f17a8c..87349c2 100644
+index 6201bdb..c545c58 100644
 --- a/src/game/Player.cpp
 +++ b/src/game/Player.cpp
 @@ -4319,13 +4319,15 @@ void Player::DeleteFromDB(ObjectGuid playerguid, uint32 accountId, bool updateRe
@@ -142,7 +142,7 @@ index 6f17a8c..87349c2 100644
 +    m_wowarmory_feeds.push_back(feed);
 +}
 diff --git a/src/game/Player.h b/src/game/Player.h
-index b2193e2..73e1d05 100644
+index 0e0d38c..6c9286f 100644
 --- a/src/game/Player.h
 +++ b/src/game/Player.h
 @@ -1027,6 +1027,21 @@ class TradeData
@@ -191,10 +191,10 @@ index b2193e2..73e1d05 100644
  
  void AddItemsSetItem(Player*player,Item *item);
 diff --git a/src/game/Unit.cpp b/src/game/Unit.cpp
-index 7feec35..525ab79 100644
+index fd61481..51bbd0d 100644
 --- a/src/game/Unit.cpp
 +++ b/src/game/Unit.cpp
-@@ -874,8 +874,10 @@ uint32 Unit::DealDamage(Unit *pVictim, uint32 damage, CleanDamage const* cleanDa
+@@ -873,8 +873,10 @@ uint32 Unit::DealDamage(Unit *pVictim, uint32 damage, CleanDamage const* cleanDa
                  {
                      if (m->IsRaidOrHeroicDungeon())
                      {
