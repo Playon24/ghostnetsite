@@ -777,7 +777,7 @@ Class WoW_Account {
                     'class_key' => Data_Classes::$classes[$char['class']]['key'],
                     'race' => $char['race'],
                     'race_text' => WoW_Locale::GetString('character_race_' . $char['race'], $char['gender']),
-                    'class_key' => Data_Races::$classes[$char['race']]['key'],
+                    'race_key' => Data_Races::$races[$char['race']]['key'],
                     'gender' => $char['gender'],
                     'level' => $char['level'],
                     'realmName' => $realm_info['name'],
