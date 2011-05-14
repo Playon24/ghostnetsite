@@ -138,16 +138,7 @@ Class WoW_Characters /*implements Interface_Characters*/ {
             return false;
         }
         // BINARY.
-        if($name === ucfirst($name)) {
-            // Cyrillic cases
-            $name = iconv('UTF-8', 'Windows-1251', $name);
-            $name = ucfirst($name);
-            $name = iconv('Windows-1251', 'UTF-8', $name);
-        }
-        else {
-            $name = ucfirst($name);
-        }
-        self::$name = $name;
+        self::$name = mb_convert_case($name, MB_CASE_TITLE, "UTF-8");;
         // If $full == true, we need to check `armory_character_stats` table.
         // Load character fields.
         if(!self::LoadCharacterFieldsFromDB()) {
