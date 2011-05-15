@@ -548,6 +548,7 @@ $WoW_Locale = array(
     'template_guild_menu_perks' => 'Perks',
     'template_guild_menu_rewards' => 'Rewards',
     
+    'template_guild_news_sidebar' => 'Guild news',
     'template_guild_news' => 'Guild news (%d)',
     'template_guild_feed_achievement' => '%s earned the achievement «%s» for %d points.',
     'template_guild_feed_fos' => '%s earned feat of strength «%s».',
@@ -585,6 +586,7 @@ $WoW_Locale = array(
     'template_guild_roster_only_max_skill' => 'Show max skill only (' . MAX_PROFESSION_SKILL_VALUE . ')',
     'template_guild_roster_profession_skill' => 'Skill',
     
+    'template_character_friends_sidebar' => 'Character friends',
     'template_character_friends_caption' => 'Character friends (%d)',
     'template_character_friends_character' => '%d %s %s',
     
@@ -751,6 +753,18 @@ $WoW_Locale = array(
     'template_game_expansion_2' => 'Wrath of the Lich King',
     'template_game_expansion_1' => 'The Burning Crusade',
     'template_game_expansion_0' => 'Classic',
+    
+    'template_auction_auction' => 'Auction House',
+    'template_auction_my_lots' => 'My Auctions',
+    'template_auction_sold' => 'Sold',
+    'template_auction_selling' => 'Selling',
+    'template_auction_ended' => 'Ended',
+    'template_auction_my_bids' => 'My Bids',
+    'template_auction_won' => 'Won',
+    'template_auction_winning' => 'Winning',
+    'template_auction_lost' => 'Lost',
+    'template_auction_earned' => 'Earned',
+    'template_auction_mailbox' => 'Mailbox',
     
     'template_account_status_posting_disabled' => 'Posting on this account is disabled.',
     'template_account_status_info_no_subscribe' => 'This game licence has expired or been frozen.',
@@ -996,5 +1010,74 @@ $WoW_Locale = array(
     'template_account_conversion_details_header' => 'Please read and consider the following before you finalize this merge:',
     'template_account_conversion_details_list' => '<li><span>Once finalized, you will need to use the Battle.net account name <strong>%s</strong> and its associated password to log in to World of Warcraft®.</span></li><li><span><strong>This merge is final.</strong> You will not be able to undo this merge once you complete this step.</span></li><li><span>For security reasons, you will not be able to transfer characters outside this Battle.net account for <strong>30 days</strong>. Click <a href="http://us.blizzard.com/support/article.xml?articleId=26163" onclick="window.open(this.href);return false;">here</a> for complete details.</span></li>',
     'template_account_conversion_complete' => 'Finalize Account Merge',
+    
+    'template_auction_title' => 'Auction House',
+    'template_auction_in_game' => 'In-Game',
+    'template_auction_menu_index' => 'Auction Summary',
+    'template_auction_menu_browse' => 'Browse Auctions',
+    'template_auction_menu_create' => 'Create Auctions',
+    'template_auction_menu_bids' => 'My Bids',
+    'template_auction_menu_lots' => 'My Auctions',
+    'template_auction_switch_to_neutral' => 'View neutral auctions',
+    'template_auction_active_auctions' => 'Active Auctions',
+    'template_auction_no_active_auctions' => 'You have no active auctions.',
+    'template_auction_sold_auctions' => 'Sold',
+    'template_auction_no_sold_auctions' => 'You have not sold any auctions.',
+    'template_auction_expired_auctions' => 'Ended',
+    'template_auction_no_expired_auctions' => 'You have no expired auctions.',
+    
+    'template_auction_bid' => 'Bid',
+    'template_auction_enter_bid' => 'Enter your bid:',
+    'template_auction_buyout' => 'Buyout',
+    'template_auction_buyout_confirm' => 'You are buying out this item for the following amount, are you sure?',
+    'template_auction_buyout_confirm_btn' => 'Confirm',
+    'template_auction_cancel_warning' => 'If you cancel this auction, the listing fee will not be refunded. Proceed?',
+    
+    'template_auction_js_bid' => 'Your bid has been placed.',
+    'template_auction_js_sold' => 'An auction has sold.',
+    'template_auction_js_won' => 'You have won an auction!',
+    'template_auction_js_cancelled' => 'Auction successfully cancelled.',
+    'template_auction_js_created' => 'Auction successfully created.',
+    'template_auction_js_outbid' => 'You have been outbid!',
+    'template_auction_js_expired' => 'An auction has expired.',
+    'template_auction_js_claim' => 'Money claimed successfully!',
+    'template_auction_js_subscription' => 'A World of Warcraft Remote subscription is required to commit this action.',
+    'template_auction_js_interrupted' => 'Process interrupted. Please try again.',
+    'template_auction_js_totalCreated' => '{0} auction(s) created.',
+    'template_auction_js_transaction' => '{0} remaining transaction(s).',
+    'template_auction_js_transactionMax' => 'Transaction limit reached.',
+    'template_auction_error_auc_not_found' => 'The specified auction could not found.',
+    
+    'template_auction_lots_table_name' => 'Name / Rarity',
+    'template_auction_lots_table_count' => 'Qty',
+    'template_auction_lots_table_time' => 'Time Left',
+    'template_auction_lots_table_high_bidder' => 'High Bidder',
+    'template_auction_lots_table_buyout' => 'Bid / Buyout',
+    
+    'template_auction_bid_price' => 'Bid Price',
+    'template_auction_bid_price_per_item' => 'Bid Price Per Item',
+    'template_auction_buyout_price' => 'Buyout Price',
+    'template_auction_buyout_price_per_item' => 'Buyout Price Per Item',
+    
+    'template_auction_buyout_total' => 'Сумма выкупа',
+    
+    'template_auction_title_time_1' => 'Less than 30 minutes',
+    'template_auction_text_time_1' => 'Short',
+    
+    'template_auction_title_time_2' => 'Between 2 and 12 hours',
+    'template_auction_text_time_2' => 'Long',
+    
+    'template_auction_title_time_3' => 'Greater than 24 hours',
+    'template_auction_text_time_3' => 'Very long',
+    
+    'template_auction_error_text' => 'This account is logged into the game. You can still browse the Auction House, but you must log off from the game to use other features such as bidding on or listing auctions.',
+    'template_auction_error_back' => 'Back',
+    'template_auction_error_title' => 'Error',
+    
+    'template_auction_you_are_the_seller' => 'You are the seller!',
+    'template_auction_no_bids' => 'No bids',
+    'template_auction_price_per_unit' => 'Price per unit:',
+    'template_auction_buyout_per_unit' => 'Buyout per unit:',
+    'template_auction_browse' => 'Browse',
 );
 ?>

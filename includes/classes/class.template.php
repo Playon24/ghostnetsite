@@ -841,6 +841,35 @@ Class WoW_Template {
                     )
                 );
                 break;
+            case 'auction_lots':
+                $css_data_page = array(
+                    array(
+                        'path' => '/wow/static/css/profile.css',
+                        'version' => 10,
+                        'browser' => false
+                    ),
+                    array(
+                        'path' => '/wow/static/css/profile-ie.css',
+                        'version' => 10,
+                        'browser' => 'IE'
+                    ),
+                    array(
+                        'path' => '/wow/static/css/profile-ie6.css',
+                        'version' => 10,
+                        'browser' => 'IE 6'
+                    ),
+                    array(
+                        'path' => '/wow/static/css/character/auction.css',
+                        'version' => 10,
+                        'browser' => false
+                    ),
+                    array(
+                        'path' => '/wow/static/css/character/auction-ie6.css',
+                        'version' => 10,
+                        'browser' => 'IE 6'
+                    )
+                );
+                break;
         }
         $cssList = array_merge($css_data, $css_data_page);
         $cssList[] = array(
@@ -944,6 +973,8 @@ Class WoW_Template {
             case 'creation_success':
                 return 'Battle.Net'; //[PH]
                 break;
+            case 'auction_lots':
+                return sprintf('%s - %s - ', WoW_Locale::GetString('template_auction_menu_lots'), WoW_Locale::GetString('template_menu_game'));
             default:
                 return false;
         }

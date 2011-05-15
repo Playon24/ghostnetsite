@@ -261,7 +261,7 @@ $WoW_Locale = array(
     'template_browse_auction_caption' => 'Просмотреть аукцион',
     'template_browse_events_caption' => 'Просмотреть события',
     'template_manage_characters_caption' => 'Управление персонажами<br /><span>Настройте выпадающее меню персонажа.</span>',
-    'template_characters_not_found' => 'Персонажей не найдено',
+    'template_characters_not_found' => 'Персонажи не найдены',
     'template_filter_caption' => 'Фильтр',
     'template_back_to_characters_list' => 'К списку персонажей',
     'template_change_character' => 'Сменить персонажа',
@@ -556,6 +556,7 @@ $WoW_Locale = array(
     'template_guild_menu_perks' => 'Бонусы',
     'template_guild_menu_rewards' => 'Награды',
     
+    'template_guild_news_sidebar' => 'Новости гильдии',
     'template_guild_news' => 'Новости гильдии (%d)',
     'template_guild_feed_achievement' => 'Персонаж %s $gполучил:получила; достижение «%s» стоимостью %d очк.',
     'template_guild_feed_fos' => 'Персонаж %s $gполучил:получила; великое достижение «%s».',
@@ -593,6 +594,7 @@ $WoW_Locale = array(
     'template_guild_roster_only_max_skill' => 'Показывать только макс. навык профессии (' . MAX_PROFESSION_SKILL_VALUE . ')',
     'template_guild_roster_profession_skill' => 'Навык',
     
+    'template_character_friends_sidebar' => 'Друзья персонажа',
     'template_character_friends_caption' => 'Друзья персонажа (%d)',
     'template_character_friends_character' => 'Уровень %d %s %s',
     
@@ -760,6 +762,18 @@ $WoW_Locale = array(
     'template_game_expansion_2' => 'Wrath of the Lich King',
     'template_game_expansion_1' => 'The Burning Crusade',
     'template_game_expansion_0' => 'Классика',
+    
+    'template_auction_auction' => 'Аукцион',
+    'template_auction_my_lots' => 'Мои лоты',
+    'template_auction_sold' => 'Продано',
+    'template_auction_selling' => 'Продажа',
+    'template_auction_ended' => 'Завершено',
+    'template_auction_my_bids' => 'Ставки',
+    'template_auction_won' => 'Выиграно',
+    'template_auction_winning' => 'Более высокая ставка',
+    'template_auction_lost' => 'Проиграно',
+    'template_auction_earned' => 'Заработано',
+    'template_auction_mailbox' => 'Почтовый ящик',
     
     'template_account_status_posting_disabled' => 'Вы не можете размещать сообщения с этой учетной записи.',
     'template_account_status_info_no_subscribe' => 'Срок действия игровой лицензии истек или нет текущей подписки.',
@@ -1002,5 +1016,75 @@ $WoW_Locale = array(
     'template_account_conversion_details_header' => 'Прежде чем завершать объединение, обратите, пожалуйста, особое внимание на следующее:',
     'template_account_conversion_details_list' => '<li><span>После объединения записей для входа в World of Warcraft® нужно будет вводить название (<strong style="padding:0 3px;">%s</strong>) и пароль учетной записи Battle.net.</span></li><li><span><strong>Объединение записей необратимо.</strong> «Разъединить» объединенные записи нельзя.</span></li><li><span>Из соображений безопасности перенос персонажей на другую учетную запись Battle.net будет закрыт в течение <strong>30 дней</strong> после объединения записей. Подробнее об этом читайте <a href="http://eu.blizzard.com/support/article.xml?locale=ru_RU&amp;articleId=36234" onclick="window.open(this.href);return false;">здесь</a>.</span></li>',
     'template_account_conversion_complete' => 'Завершить объединение',
+    
+    'template_auction_title' => 'Аукцион',
+    'template_auction_in_game' => 'В игре',
+    'template_auction_menu_index' => 'Сводка аукциона',
+    'template_auction_menu_browse' => 'Просмотр лотов',
+    'template_auction_menu_create' => 'Объявить торги',
+    'template_auction_menu_bids' => 'Ставки',
+    'template_auction_menu_lots' => 'Мои лоты',
+    'template_auction_switch_to_neutral' => 'Перейти на нейтральный аукцион',
+    'template_auction_active_auctions' => 'Выставленные лоты',
+    'template_auction_no_active_auctions' => 'У вас нет выставленных лотов.',
+    'template_auction_sold_auctions' => 'Проданные лоты',
+    'template_auction_no_sold_auctions' => 'У вас нет проданных лотов.',
+    'template_auction_expired_auctions' => 'Завершившиеся торги',
+    'template_auction_no_expired_auctions' => 'У вас нет торгов с истекшим сроком.',
+    
+    'template_auction_bid' => 'Ставка',
+    'template_auction_enter_bid' => 'Укажите свою ставку:',
+    'template_auction_buyout' => 'Выкуп',
+    'template_auction_buyout_confirm' => 'Вы выкупаете этот предмет за указанную сумму?',
+    'template_auction_buyout_confirm_btn' => 'Подтвердить',
+    'template_auction_cancel_warning' => 'Если вы отмените торги, залог будет удержан. Продолжить?',
+    
+    'template_auction_js_bid' => 'Вы сделали ставку.',
+    'template_auction_js_sold' => 'Лот был продан.',
+    'template_auction_js_won' => 'Вы выиграли торги!',
+    'template_auction_js_cancelled' => 'Торги были отменены.',
+    'template_auction_js_created' => 'Вы объявили торги.',
+    'template_auction_js_outbid' => 'Ваша ставка перекуплена!',
+    'template_auction_js_expired' => 'Лот снят с торгов.',
+    'template_auction_js_claim' => 'Вы забрали все золото!',
+    'template_auction_js_subscription' => 'Для этого требуется подписка на услугу «World of Warcraft без границ».',
+    'template_auction_js_interrupted' => 'Прервано. Повторите попытку.',
+    'template_auction_js_totalCreated' => '{0} лот(ов) выставлено',
+    'template_auction_js_transaction' => '{0} операция(ий) проведено',
+    'template_auction_js_transactionMax' => 'Достигнут лимит операций.',
+    
+    'template_auction_error_auc_not_found' => 'Указанный лот не найден.',
+    
+    'template_auction_lots_table_name' => 'Название / Редкость',
+    'template_auction_lots_table_count' => 'К-во',
+    'template_auction_lots_table_time' => 'Ост. время',
+    'template_auction_lots_table_high_bidder' => 'Наивысшая ставка',
+    'template_auction_lots_table_buyout' => 'Ставка / Выкуп',
+    
+    'template_auction_bid_price' => 'Сумма ставки',
+    'template_auction_bid_price_per_item' => 'Сумма ставки за лот',
+    'template_auction_buyout_price' => 'Выкупная цена',
+    'template_auction_buyout_price_per_item' => 'Выкуп/лот',
+    
+    'template_auction_buyout_total' => 'Сумма выкупа',
+    
+    'template_auction_title_time_1' => 'Менее 30 мин',
+    'template_auction_text_time_1' => 'Короткий',
+    
+    'template_auction_title_time_2' => 'От 2 до 12 ч',
+    'template_auction_text_time_2' => 'Долгий',
+    
+    'template_auction_title_time_3' => 'Более 24 ч',
+    'template_auction_text_time_3' => 'Оч. долгий',
+    
+    'template_auction_error_text' => 'В данный момент вы находитесь в игре с этой учетной записи. Вы можете просматрировать лоты, но прежде чем делать ставки и объявлять торги, выйдите, пожалуйста, из игры.',
+    'template_auction_error_back' => 'Назад',
+    'template_auction_error_title' => 'Ошибка',
+    
+    'template_auction_you_are_the_seller' => 'Вы — продавец',
+    'template_auction_no_bids' => 'Нет ставок',
+    'template_auction_price_per_unit' => 'Цена за предмет:',
+    'template_auction_buyout_per_unit' => 'Выкупная цена за предмет:',
+    'template_auction_browse' => 'Поиск',
 );
 ?>

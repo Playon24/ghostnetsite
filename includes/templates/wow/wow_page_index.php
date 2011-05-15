@@ -17,7 +17,12 @@ WoW_Template::LoadTemplate('block_header');
 <?php
 WoW_Template::PrintMainMenu();
 if(WoW_Account::IsLoggedIn()) {
-    WoW_Template::LoadTemplate('block_user_meta_auth');
+    if(WoW_Account::IsHaveActiveCharacter()) {
+        WoW_Template::LoadTemplate('block_user_meta_auth');
+    }
+    else {
+        WoW_Template::LoadTemplate('block_user_meta_no_chars');
+    }
 }
 else {
     WoW_Template::LoadTemplate('block_user_meta');
@@ -96,6 +101,9 @@ switch(WoW_Template::GetPageIndex()) {
         break;
     case 'account_status':
         WoW_Template::LoadTemplate('content_account_status');
+        break;
+    case 'auction_lots':
+        WoW_Template::LoadTemplate('content_auction_lots');
         break;
 }
 WoW_Template::LoadTemplate('block_footer', true);
@@ -191,6 +199,11 @@ switch(WoW_Template::GetPageData('page')) {
         break;
     case 'blog':
         echo '<script type="text/javascript" src="/wow/static/local-common/js/lightbox.js?v17"></script>';
+        break;
+    case 'auction_lots':
+        echo '<script type="text/javascript" src="/wow/static/js/profile.js?v10"></script>
+<script type="text/javascript" src="/wow/static/js/character/auction.js?v10"></script>
+<script type="text/javascript" src="/wow/static/local-common/js/table.js?v19"></script>';
         break;
 }
 ?>

@@ -24,6 +24,7 @@ Class WoW_Item {
     private $equipped     = false;
     private $loaded       = false;
     private $m_bag        = 0;
+    private $m_count      = 0;
     private $m_guid       = 0;
     private $m_ench       = array();
     private $m_ilvl       = 0;
@@ -78,6 +79,7 @@ Class WoW_Item {
             }
             $this->m_values = explode(' ', $m_values);
             $this->entry = $data['item_template'];
+            $this->m_count = $this->GetUInt32Value(ITEM_FIELD_STACK_COUNT);
             $item_data = DB::World()->selectRow("SELECT `ItemLevel`, `itemset` FROM `item_template` WHERE `entry` = %d LIMIT 1", $this->GetEntry());
         }
         elseif($this->m_server == SERVER_TRINITY) {
@@ -102,6 +104,7 @@ Class WoW_Item {
             $this->entry = $this->tc_data['itemEntry'];
             $item_data = DB::World()->selectRow("SELECT `ItemLevel`, `itemset`, `MaxDurability` FROM `item_template` WHERE `entry` = %d LIMIT 1", $this->GetEntry());
             $this->tc_data['maxdurability'] = $item_data['MaxDurability'];
+            $this->m_count = $this->tc_data['count'];
         }
         else {
             WoW_Log::WriteError('%s : unknown server type (%d), unable to handle item!', __METHOD__, $this->m_server);
@@ -147,6 +150,17 @@ Class WoW_Item {
         }
         $this->loaded = true;
         return true;
+    }
+    
+    public function LoadFromDBByEntry($item_guid, $item_template) {
+        $item_data = array(
+            'item' => $item_guid,
+            'slot' => 0,
+            'item_template' => $item_template,
+            'bag' => 0,
+            'enchants' => array()
+        );
+        $this->LoadFromDB($item_data, WoW_Account::GetActiveCharacterInfo('guid'));
     }
     
     /**
@@ -628,6 +642,10 @@ Class WoW_Item {
             }
         }
         return $this->bonuses;
+    }
+    
+    public function GetStackCount() {
+        return $this->m_count;
     }
 }
 ?>
