@@ -26,7 +26,13 @@ INSTALLATION STEPS:
     Open 'includes/configs/WoWConfig.php' and edit WoWConfig::Realms[{REALM_ID}]['type'] to SERVER_MANGOS or SERVER_TRINITY 
     (WITHOUT apostrophes!).
 
-NOTE: engine must be installed in DocumentRoot folder (site root)!
+WARNING: if your site is not in site root, you need to configure .htaccess files:
+"wow/.htaccess" file:
+Add /wowdirectory/ to every line in this file except "search", "status" and "account-status":
+   RewriteRule ^item/(.*) /wowdirectory/wow/item.php?%{QUERY_STRING}
+"account/.htaccess" file:
+Add /wowdirectory/ to every line in this file:
+   RewriteRule ^creation/(.*) /wowdirectory/account/creation.php?%{QUERY_STRING}
 
 =========================
 Установка World of Warcraft Community Site
@@ -58,4 +64,10 @@ NOTE: engine must be installed in DocumentRoot folder (site root)!
     на SERVER_MANGOS или SERVER_TRINITY !
     (БЕЗ АПОСТРОФОВ, т.к. это константы!!).
 
-ПРИМЕЧАНИЕ: движок должен быть установлен в корневую папку сайта!
+ВНИМАЕНИЕ: если ваш сайт установлен не в корневую папку, вы должны отредактировать файлы .htaccess:
+Файл "wow/.htaccess":
+Добавьте /wowdirectory/ к каждой линии, кроме "search", "status" and "account-status":
+   RewriteRule ^item/(.*) /wowdirectory/wow/item.php?%{QUERY_STRING}
+Файл "account/.htaccess":
+Добавьте /wowdirectory/ к каждой линии:
+   RewriteRule ^creation/(.*) /wowdirectory/account/creation.php?%{QUERY_STRING}

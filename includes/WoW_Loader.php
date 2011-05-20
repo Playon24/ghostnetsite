@@ -28,11 +28,6 @@ define('WOW_DIRECTORY', dirname(dirname(__FILE__)));
 if(!defined('WOW_DIRECTORY') || !WOW_DIRECTORY) {
     die('<strong>Fatal Error</strong>: unable to detect directory for system files!');
 }
-// Perform log in (if required)
-if(isset($_GET['login']) || preg_match('/\?login/', $_SERVER['REQUEST_URI'])) {
-    header('Location: /login/');
-    exit;
-}
 // Load defines
 include(WOW_DIRECTORY . '/includes/revision_nr.php');
 include(WOW_DIRECTORY . '/includes/UpdateFields.php');
@@ -66,6 +61,11 @@ include(WOW_DIRECTORY . '/includes/classes/class.auction.php');
 // Load data
 include(WOW_DIRECTORY . '/includes/data/data.classes.php');
 include(WOW_DIRECTORY . '/includes/data/data.races.php');
+// Perform log in (if required)
+if(isset($_GET['login']) || preg_match('/\?login/', $_SERVER['REQUEST_URI'])) {
+    header('Location: ' . WoW::GetWoWPath() . '/login/');
+    exit;
+}
 // Locale
 if(isset($_GET['locale']) && !preg_match('/lookup/', $_SERVER['REQUEST_URI'])) {
     $_SESSION['wow_locale'] = $_GET['locale'];
@@ -77,7 +77,7 @@ if(isset($_GET['locale']) && !preg_match('/lookup/', $_SERVER['REQUEST_URI'])) {
             exit;
         }
         else {
-            header('Location: /');
+            header('Location: ' . WoW::GetWoWPath());
             exit; 
         }
     }
@@ -86,7 +86,7 @@ if(isset($_GET['locale']) && !preg_match('/lookup/', $_SERVER['REQUEST_URI'])) {
 if(isset($_GET['logout']) || preg_match('/\?logout/', $_SERVER['REQUEST_URI'])) {
     // $_SERVER['REQUEST_URI'] check is required for mod_rewrited URL cases.
     WoW_Account::PerformLogout();
-    header('Location: /');
+    header('Location: ' . WoW::GetWoWPath());
     exit;
 }
 // Initialize account (if user already logged in we need to re-build his info from session data)

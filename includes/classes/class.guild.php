@@ -132,7 +132,7 @@ Class WoW_Guild {
     }
     
     public static function GetGuildURL() {
-        return sprintf('/wow/guild/%s/%s/', self::GetGuildRealmName(), self::GetGuildName());
+        return sprintf('%s/wow/guild/%s/%s/', WoW::GetWoWPath(), self::GetGuildRealmName(), self::GetGuildName());
     }
     
     public static function GetGuildFactionText() {
@@ -227,7 +227,7 @@ Class WoW_Guild {
         foreach($members as $member) {
             $member['race_text'] = WoW_Locale::GetString('character_race_' . $member['raceID']);
             $member['class_text'] = WoW_Locale::GetString('character_class_' . $member['classID']);
-            $member['url'] = sprintf('/wow/character/%s/%s/', self::GetGuildRealmName(), $member['name']);
+            $member['url'] = sprintf('%s/wow/character/%s/%s/', WoW::GetWoWPath(), self::GetGuildRealmName(), $member['name']);
             $achievement_ids = DB::Characters()->select("SELECT `achievement` FROM `character_achievement` WHERE `guid` = %d", $member['guid']);
             if(is_array($achievement_ids)) {
                 $ids = array();

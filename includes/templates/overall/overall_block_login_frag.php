@@ -1,11 +1,11 @@
-<link rel="stylesheet" type="text/css" href="/login/static/local-common/css/common.css?v15"/>
-		<link rel="stylesheet" type="text/css" href="/login/static/_themes/bam/css/master.css?v1"/>
-			<link rel="stylesheet" type="text/css" media="all" href="/login/static/local-common/css/locale/<?php echo WoW_Locale::GetLocale(LOCALE_DOUBLE); ?>.css?v15" />
-			<link rel="stylesheet" type="text/css" media="all" href="/login/static/_themes/bam/css/_lang/<?php echo WoW_Locale::GetLocale(LOCALE_DOUBLE); ?>.css?v1" />
-		<script type="text/javascript" src="/login/static/local-common/js/third-party/jquery-1.4.2.min.js?v15"></script>
-		<script type="text/javascript" src="/login/static/local-common/js/core.js?v15"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo WoW::GetWoWPath(); ?>/login/static/local-common/css/common.css?v15"/>
+		<link rel="stylesheet" type="text/css" href="<?php echo WoW::GetWoWPath(); ?>/login/static/_themes/bam/css/master.css?v1"/>
+			<link rel="stylesheet" type="text/css" media="all" href="<?php echo WoW::GetWoWPath(); ?>/login/static/local-common/css/locale/<?php echo WoW_Locale::GetLocale(LOCALE_DOUBLE); ?>.css?v15" />
+			<link rel="stylesheet" type="text/css" media="all" href="<?php echo WoW::GetWoWPath(); ?>/login/static/_themes/bam/css/_lang/<?php echo WoW_Locale::GetLocale(LOCALE_DOUBLE); ?>.css?v1" />
+		<script type="text/javascript" src="<?php echo WoW::GetWoWPath(); ?>/login/static/local-common/js/third-party/jquery-1.4.2.min.js?v15"></script>
+		<script type="text/javascript" src="<?php echo WoW::GetWoWPath(); ?>/login/static/local-common/js/core.js?v15"></script>
 		<script>
-			var targetOrigin = "/";
+			var targetOrigin = "<?php echo WoW::GetWoWPath(); ?>/";
 
 			function updateParent(action, key, value) {
 				var obj = { action: action };
@@ -29,8 +29,8 @@
 		<div id="embedded-login">
 			<h1>Battle.net</h1>
 
-	<form action="" method="post">
-		<a id="embedded-close" href="javascript:;" onclick="updateParent('close')"> </a>
+	<form action="<?php echo WoW::GetWoWPath(); ?>/login/login.frag" method="post">
+		<a id="embedded-close" href="javascript:;" onclick="javascript:window.close();"> </a>
 
 		<div>
 <?php
@@ -86,16 +86,16 @@ if(WoW_Account::GetLastErrorCode() != ERROR_NONE) {
         
 	<ul id="help-links">
 			<li class="icon-pass">
-				<a href="/account/support/password-reset.html"><?php echo WoW_Locale::GetString('login_help_title'); ?></a>
+				<a href="<?php echo WoW::GetWoWPath(); ?>/account/support/password-reset.html"><?php echo WoW_Locale::GetString('login_help_title'); ?></a>
 			</li>
 
 
 				<li class="icon-signup">
-					<?php echo WoW_Locale::GetString('have_no_account_title'); ?> <a href="/account/creation/tos.html?ref="> <?php echo WoW_Locale::GetString('create_account_title'); ?></a>
+					<?php echo WoW_Locale::GetString('have_no_account_title'); ?> <a href="<?php echo WoW::GetWoWPath(); ?>/account/creation/tos.html?ref="> <?php echo WoW_Locale::GetString('create_account_title'); ?></a>
 				</li>
 
 			<li class="icon-secure">
-				<a href="/security/?ref="><?php echo WoW_Locale::GetString('account_security_title'); ?></a>
+				<a href="<?php echo WoW::GetWoWPath(); ?>/security/?ref="><?php echo WoW_Locale::GetString('account_security_title'); ?></a>
 			</li>
 
 

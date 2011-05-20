@@ -6,12 +6,12 @@ $char = WoW_Account::GetActiveCharacter();
 <div class="content-trail">
 <ol class="ui-breadcrumb">
 <li>
-<a href="/wow/" rel="np">
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/" rel="np">
 World of Warcraft
 </a>
 </li>
 <li>
-<a href="/wow/game/" rel="np">
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/game/" rel="np">
 <?php echo WoW_Locale::GetString('template_menu_game'); ?>
 </a>
 </li>
@@ -21,12 +21,12 @@ World of Warcraft
 </a>
 </li>
 <li>
-<a href="/wow/vault/character/auction/<?php echo WoW_Template::GetPageData('auction_side'); ?>/" rel="np">
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/vault/character/auction/<?php echo WoW_Template::GetPageData('auction_side'); ?>/" rel="np">
 <?php echo WoW_Locale::GetString('template_auction_title'); ?>
 </a>
 </li>
 <li class="last">
-<a href="/wow/vault/character/auction/<?php echo WoW_Template::GetPageData('auction_side'); ?>/auctions" rel="np">
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/vault/character/auction/<?php echo WoW_Template::GetPageData('auction_side'); ?>/auctions" rel="np">
 <?php echo WoW_Locale::GetString('template_auction_menu_lots'); ?>
 </a>
 </li>
@@ -41,7 +41,7 @@ World of Warcraft
 
 		<div class="profile-sidebar-crest">
 
-			<a href="<?php echo $char['url']; ?>" rel="np" class="profile-sidebar-character-model" style="background-image: url(/wow/static/images/2d/inset/<?php echo $char['race']; ?>-<?php echo $char['gender']; ?>.jpg);">
+			<a href="<?php echo $char['url']; ?>" rel="np" class="profile-sidebar-character-model" style="background-image: url(<?php echo WoW::GetWoWPath(); ?>/wow/static/images/2d/inset/<?php echo $char['race']; ?>-<?php echo $char['gender']; ?>.jpg);">
 				<span class="hover"></span>
 				<span class="fade"></span>
 			</a>
@@ -50,7 +50,7 @@ World of Warcraft
 				<div class="name"><a href="<?php echo $char['url']; ?>" rel="np"><?php echo $char['name']; ?></a></div>
 				
 				<div class="under-name color-c<?php echo $char['class']; ?>">
-					<a href="/wow/game/race/<?php echo $char['race_key']; ?>" class="race"><?php echo $char['race_text']; ?></a>-<a href="/wow/game/class/<?php echo $char['class_key']; ?>" class="class"><?php echo $char['class_text']; ?></a> <span class="level"><strong><?php echo $char['level']; ?></strong></span> <?php echo WoW_Locale::GetString('template_lvl'); ?>
+					<a href="<?php echo WoW::GetWoWPath(); ?>/wow/game/race/<?php echo $char['race_key']; ?>" class="race"><?php echo $char['race_text']; ?></a>-<a href="<?php echo WoW::GetWoWPath(); ?>/wow/game/class/<?php echo $char['class_key']; ?>" class="class"><?php echo $char['class_text']; ?></a> <span class="level"><strong><?php echo $char['level']; ?></strong></span> <?php echo WoW_Locale::GetString('template_lvl'); ?>
 				</div>
 				
 					<?php
@@ -109,7 +109,7 @@ World of Warcraft
 			<div class="faction tabard-<?php echo WoW_Template::GetPageData('auction_side'); ?>">
 				<strong><?php echo WoW_Locale::GetString('faction_' . WoW_Account::GetActiveCharacterInfo('faction_text')); ?></strong><br />
 
-				<a href="/wow/vault/character/auction/neutral/"><?php echo WoW_Locale::GetString('template_auction_switch_to_neutral'); ?></a>
+				<a href="<?php echo WoW::GetWoWPath(); ?>/wow/vault/character/auction/neutral/"><?php echo WoW_Locale::GetString('template_auction_switch_to_neutral'); ?></a>
 			</div>
 		
 

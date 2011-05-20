@@ -3,13 +3,13 @@
 <div class="content-trail">
 <ol class="ui-breadcrumb">
 <li>
-<a href="/wow/" rel="np">
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/" rel="np">
 World of Warcraft
 </a>
 </li>
 <li class="last">
-<a href="/wow/game/" rel="np">
-Игра
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/game/" rel="np">
+<?php echo WoW::GetWoWPath(); ?>
 </a>
 </li>
 </ol>
@@ -19,7 +19,7 @@ World of Warcraft
 		<div class="title">
 			<h2><?php echo WoW_Locale::GetString('template_game_guide_title'); ?></h2>
 			<p class="desc"><?php echo WoW_Locale::GetString('template_game_subwelcome'); ?></p>
-			<a href="guide/" class="beginners-guide">
+			<a href="<?php echo WoW::GetWoWPath(); ?>/wow/guide/" class="beginners-guide">
 				<strong><?php echo WoW_Locale::GetString('template_game_beginners_guide_title'); ?></strong>
 				<span><?php echo WoW_Locale::GetString('template_game_guide_desc'); ?></span>
 			</a>
@@ -28,7 +28,7 @@ World of Warcraft
 			<div class="panel">
 	<div class="column" style="width: 295px;">
 		<div class="box first-child">
-				<h2 class="header "><a href="/wow/game/race/"><?php echo WoW_Locale::GetString('template_game_race_title'); ?></a></h2>
+				<h2 class="header "><a href="<?php echo WoW::GetWoWPath(); ?>/wow/game/race/"><?php echo WoW_Locale::GetString('template_game_race_title'); ?></a></h2>
 				<?php
                 $horde_races = array(
                     'goblin' => 9,
@@ -79,7 +79,7 @@ World of Warcraft
 	<span class="clear"><!-- --></span>
 		</div>
 		<div class="box">
-				<h2 class="header "><a href="/wow/game/class/"><?php echo WoW_Locale::GetString('template_game_class_title'); ?></a></h2>
+				<h2 class="header "><a href="<?php echo WoW::GetWoWPath(); ?>/wow/game/class/"><?php echo WoW_Locale::GetString('template_game_class_title'); ?></a></h2>
                 <?php
                 $classes = array(
                     'warrior' => CLASS_WARRIOR,
@@ -116,40 +116,40 @@ World of Warcraft
 
 	<div class="column" style="margin: 0 19px; width: 235px;">
 			<div class="box first-child">
-					<h2 class="header "><a href="/wow/zone/"><?php echo WoW_Locale::GetString('template_game_dungeons_and_raids'); ?></a></h2>
+					<h2 class="header "><a href="<?php echo WoW::GetWoWPath(); ?>/wow/zone/"><?php echo WoW_Locale::GetString('template_game_dungeons_and_raids'); ?></a></h2>
 				<ul>
                         <?php
                         for($i = 3; $i >= 0; --$i) {
-                            echo sprintf('<li><a href="/wow/zone/#expansion=%d">%s</a></li>', $i, WoW_Locale::GetString('template_game_expansion_' . $i));
+                            echo sprintf('<li><a href="%s/wow/zone/#expansion=%d">%s</a></li>', WoW::GetWoWPath(), $i, WoW_Locale::GetString('template_game_expansion_' . $i));
                         }
                         ?>
 				</ul>
 			</div>
 
 			<div class="box">
-					<h2 class="header "><a href="/wow/faction/"><?php echo WoW_Locale::GetString('template_game_factions'); ?></a></h2>
+					<h2 class="header "><a href="<?php echo WoW::GetWoWPath(); ?>/wow/faction/"><?php echo WoW_Locale::GetString('template_game_factions'); ?></a></h2>
 				<ul>
 						<?php
                         for($i = 3; $i >= 0; --$i) {
-                            echo sprintf('<li><a href="/wow/faction/#expansion=%d">%s</a></li>', $i, WoW_Locale::GetString('template_game_expansion_' . $i));
+                            echo sprintf('<li><a href="%s/wow/faction/#expansion=%d">%s</a></li>', WoW::GetWoWPath(), $i, WoW_Locale::GetString('template_game_expansion_' . $i));
                         }
                         ?>
 				</ul>
 			</div>
 
 			<div class="box">
-					<h2 class="header "><a href="lore/"><?php echo WoW_Locale::GetString('template_game_lore'); ?></a></h2>
+					<h2 class="header "><a href="<?php echo WoW::GetWoWPath(); ?>/wow/game/lore/"><?php echo WoW_Locale::GetString('template_game_lore'); ?></a></h2>
 				<ul>
-					<li><a href="lore/#latest-story-so-far"><?php echo WoW_Locale::GetString('template_game_lore_title'); ?></a></li>
-					<li><a href="lore/#leader-story"><?php echo WoW_Locale::GetString('template_game_lore_story'); ?></a></li>
-					<li><a href="lore/#latest-short-story"><?php echo WoW_Locale::GetString('template_game_lore_leaders'); ?></a></li>
+					<li><a href="<?php echo WoW::GetWoWPath(); ?>/wow/game/lore/#latest-story-so-far"><?php echo WoW_Locale::GetString('template_game_lore_title'); ?></a></li>
+					<li><a href="<?php echo WoW::GetWoWPath(); ?>/wow/game/lore/#leader-story"><?php echo WoW_Locale::GetString('template_game_lore_story'); ?></a></li>
+					<li><a href="<?php echo WoW::GetWoWPath(); ?>/wow/game/lore/#latest-short-story"><?php echo WoW_Locale::GetString('template_game_lore_leaders'); ?></a></li>
 				</ul>
 			</div>
 	</div>
 
 	<div class="column" style="width: 315px;">
 			<div class="box first-child">
-					<h2 class="header "><a href="/wow/profession/"><?php echo WoW_Locale::GetString('template_guild_roster_professions'); ?></a></h2>
+					<h2 class="header "><a href="<?php echo WoW::GetWoWPath(); ?>/wow/profession/"><?php echo WoW_Locale::GetString('template_guild_roster_professions'); ?></a></h2>
 
 
 					<?php
@@ -174,12 +174,12 @@ World of Warcraft
                             if($i == 0 || $i == round((count($professions) / 2))) {
                                 echo '<ul class="double">';
                             }
-                            echo sprintf('<li><a href="/wow/profession/%s">
+                            echo sprintf('<li><a href="%s/wow/profession/%s">
                             <span class="icon-frame frame-14 ">
                                 <img src="http://eu.media.blizzard.com/wow/icons/18/%s.jpg" alt="" width="14" height="14" />
                             </span>%s
                         </a>
-                    </li>', $prof['key'], $prof['icon'], $prof['name']);
+                    </li>', WoW::GetWoWPath(), $prof['key'], $prof['icon'], $prof['name']);
                             if($i == (round((count($professions) / 2)) - 1) || $i == (count($professions) - 1)) {
                                 echo '</ul>';
                             }
@@ -205,12 +205,12 @@ World of Warcraft
                             if($i == 0 || $i == round((count($professions) / 2))) {
                                 echo '<ul class="double">';
                             }
-                            echo sprintf('<li><a href="/wow/profession/%s">
+                            echo sprintf('<li><a href="%s/wow/profession/%s">
                             <span class="icon-frame frame-14 ">
                                 <img src="http://eu.media.blizzard.com/wow/icons/18/%s.jpg" alt="" width="14" height="14" />
                             </span>%s
                         </a>
-                    </li>', str_replace(' ', '-', $prof['key']), $prof['icon'], $prof['name']);
+                    </li>', WoW::GetWoWPath(), str_replace(' ', '-', $prof['key']), $prof['icon'], $prof['name']);
                             if($i == (round((count($professions) / 2)) - 1) || $i == (count($professions) - 1)) {
                                 echo '</ul>';
                             }
@@ -218,9 +218,6 @@ World of Warcraft
                         }
                     }
                     ?>
-
-
-		
 
 	<span class="clear"><!-- --></span>
 			</div>
@@ -232,21 +229,21 @@ World of Warcraft
 			<div class="extras">
 				<ul>
 						<li class="pvp">
-							<a href="/wow/pvp/arena/">
+							<a href="<?php echo WoW::GetWoWPath(); ?>/wow/pvp/arena/">
 								<span class="icon"></span>
 								PvP<br />
 								<span><?php echo WoW_Locale::GetString('template_game_arena_season_desc'); ?></span>
 							</a>
 						</li>
 						<li class="realm">
-							<a href="/wow/status">
+							<a href="<?php echo WoW::GetWoWPath(); ?>/wow/status">
 								<span class="icon"></span>
 								<?php echo WoW_Locale::GetString('template_game_realm_status_title'); ?><br />
 								<span><?php echo WoW_Locale::GetString('template_game_realm_status_desc'); ?></span>
 							</a>
 						</li>
 						<li class="patches">
-							<a href="patch-notes/">
+							<a href="<?php echo WoW::GetWoWPath(); ?>/game/patch-notes/">
 								<span class="icon"></span>
 								<?php echo WoW_Locale::GetString('template_game_patch_notes_title'); ?><br />
 								<span><?php echo WoW_Locale::GetString('template_game_patch_notes_desc'); ?></span>

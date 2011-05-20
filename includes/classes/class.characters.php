@@ -138,16 +138,7 @@ Class WoW_Characters /*implements Interface_Characters*/ {
             return false;
         }
         // BINARY.
-        if($name === ucfirst($name)) {
-            // Cyrillic cases
-            $name = iconv('UTF-8', 'Windows-1251', $name);
-            $name = ucfirst($name);
-            $name = iconv('Windows-1251', 'UTF-8', $name);
-        }
-        else {
-            $name = ucfirst($name);
-        }
-        self::$name = $name;
+        self::$name = mb_convert_case($name, MB_CASE_TITLE, "UTF-8");
         // If $full == true, we need to check `armory_character_stats` table.
         // Load character fields.
         if(!self::LoadCharacterFieldsFromDB()) {
@@ -617,7 +608,7 @@ Class WoW_Characters /*implements Interface_Characters*/ {
                 $pvp[$team['type']]['data'] = array(
                     'id' => $team['arenateamid'],
                     'name' => $team['name'],
-                    'url' => sprintf('/wow/arena/%s/%dv%d/%s/', self::GetRealmName(), $team['type'], $team['type'], $team['name']),
+                    'url' => sprintf('%s/arena/%s/%dv%d/%s/', WoW::GetWoWPath(), self::GetRealmName(), $team['type'], $team['type'], $team['name']),
                     'captain' => $team['captainguid'],
                     'type' => $team['type'],
                     'type_text' => sprintf('%dv%d', $team['type'], $team['type']),
@@ -647,7 +638,7 @@ Class WoW_Characters /*implements Interface_Characters*/ {
                 'class' => $team['class'],
                 'gender' => $team['gender'],
                 'level' => $team['level'],
-                'url' => sprintf('/wow/character/%s/%s/', self::GetRealmName(), $team['charName']),
+                'url' => sprintf('%s/character/%s/%s/', WoW::GetWoWPath(), self::GetRealmName(), $team['charName']),
                 'played_week' => $team['played_week'],
                 'wons_week' => $team['wons_week'],
                 'played_season' => $team['played_season'],
@@ -874,7 +865,7 @@ Class WoW_Characters /*implements Interface_Characters*/ {
     }
     
     public static function GetGuildURL() {
-        return sprintf('/wow/guild/%s/%s/', urlencode(self::GetRealmName()), urlencode(self::GetGuildName()));
+        return sprintf('%s/wow/guild/%s/%s/', WoW::GetWoWPath(), urlencode(self::GetRealmName()), urlencode(self::GetGuildName()));
     }
     
     public static function GetPowerType() {
@@ -886,7 +877,7 @@ Class WoW_Characters /*implements Interface_Characters*/ {
     }
     
     public static function GetURL() {
-        return sprintf('/wow/character/%s/%s/', urlencode(self::GetRealmName()), urlencode(self::GetName()));
+        return sprintf('%s/wow/character/%s/%s/', WoW::GetWoWPath(), urlencode(self::GetRealmName()), urlencode(self::GetName()));
     }
     
     public static function GetAverageItemLevel() {

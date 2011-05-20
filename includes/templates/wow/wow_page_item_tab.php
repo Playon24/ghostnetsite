@@ -27,6 +27,11 @@ $filtered_types = array(
 );
 $tab_type = WoW_Template::GetPageData('tab_type');
 $entry = WoW_Template::GetPageData('item_entry');
+$all_item_tabs = WoW_Items::GetItemTabsNames($entry);
+$allowed_item_tabs = array();
+foreach($all_item_tabs as $tab) {
+    $allowed_item_tabs[] = $tab['type'];
+}
 ?>
 <div class="related-content" id="related-<?php echo $tab_type; ?>">
 <?php
@@ -65,7 +70,7 @@ if(in_array($tab_type, $allowed_types)) {
 }
 ?>
     <?php
-    $result_table = WoW_Items::GetItemTabContents($entry, $tab_type);
+    $result_table = WoW_Items::GetItemTabContents($entry, $tab_type, $allowed_item_tabs);
     if(is_array($result_table)) {
         echo sprintf('<div class="table-options-top">
 	<div class="table-options">%s<span class="clear"><!-- --></span>
@@ -77,8 +82,8 @@ if(in_array($tab_type, $allowed_types)) {
         if(isset($result_table['table_headers']) && is_array($result_table['table_headers'])) {
             foreach($result_table['table_headers'] as $header) {
                 echo sprintf('<th>
-                    <a href="javascript:;" class="sort-%s"><span class="arrow">%s</span></a>
-                </th>', $header['class'], WoW_Locale::GetString('template_item_tab_header_' . $header));
+                    <a href="javascript:;" class="sort%s"><span class="arrow">%s</span></a>
+                </th>', $header['class'], WoW_Locale::GetString('template_item_tab_header_' . $header['type']));
             }
         }
         echo '</tr></thead>';

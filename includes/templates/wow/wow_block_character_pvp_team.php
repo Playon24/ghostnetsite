@@ -107,8 +107,8 @@ $team = WoW_Characters::GetPvPData();
                             -->
                             </a>
 							<a href="%s" class="color-c%d" rel="allow">
-								<img src="/wow/static/images/icons/race/%d-%d.gif" alt="" class="img" />
-								<img src="/wow/static/images/icons/class/%d.gif" alt="" class="img" />
+								<img src="%s/wow/static/images/icons/race/%d-%d.gif" alt="" class="img" />
+								<img src="%s/wow/static/images/icons/class/%d.gif" alt="" class="img" />
 								%s
 							</a>%s
                         </td>
@@ -131,8 +131,8 @@ $team = WoW_Characters::GetPvPData();
 							<span class="arenateam-percent">(0%%)</span>
 						</td>
 						<td class="align-center"><span class="arenateam-rating">%d</span></td>
-					</tr>', $toggleStyle % 2 ? 2 : 1, $member['name'], $member['url'], $member['url'], $member['class'], $member['race'], $member['gender'],
-                    $member['class'], $member['name'],
+					</tr>', $toggleStyle % 2 ? 2 : 1, $member['name'], $member['url'], $member['url'], $member['class'], WoW::GetWoWPath(), $member['race'], $member['gender'],
+                    WoW::GetWoWPath(), $member['class'], $member['name'],
                     $member['guid'] == $team['data']['captain'] ? '<span class="leader" data-tooltip="Капитан команды"></span>' : null,
                     $member['played_season'], round(WoW_Utils::GetPercent($team['data']['games_season'], $member['played_season'])),
                     $member['wons_season'], $member['wons_season'], $member['lost_season'],

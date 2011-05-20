@@ -23,9 +23,9 @@
                 echo sprintf('<div class="multi-type">
             <div class="result-title">
                 <div class="type-icon type-wowitem border-q%d" style="background-image:url(http://eu.battle.net/wow-assets/static/images/icons/36/%s.jpg)">
-                <a href="/wow/item/%d" rel="item:%d"><img width="32" height="32" src="http://eu.battle.net/wow-assets/static/images/icons/36/%s.jpg" alt=""/></a>
+                <a href="%s/wow/item/%d" rel="item:%d"><img width="32" height="32" src="http://eu.battle.net/wow-assets/static/images/icons/36/%s.jpg" alt=""/></a>
                 </div>
-                <a href="/wow/item/%d" class="search-title color-q%d">%s</a>
+                <a href="%s/wow/item/%d" class="search-title color-q%d">%s</a>
             </div>
             <div class="search-content">
             %s / %s / %s
@@ -38,7 +38,10 @@
             </span>
             </div>
             <div class="search-results-url">/wow/item/%d</div>
-        </div>', $item['Quality'], $itemIcon, $item['entry'], $item['entry'], $itemIcon, $item['entry'], $item['Quality'], $item['name'], $classSubClassString, sprintf(WoW_Locale::GetString('template_item_itemlevel'), $item['ItemLevel']), sprintf(WoW_Locale::GetString('template_item_required_level'), $item['RequiredLevel']), $sellPrice['gold'], $sellPrice['silver'], $sellPrice['copper'], $item['entry']);
+        </div>',
+            $item['Quality'], $itemIcon,
+            WoW::GetWoWPath(), $item['entry'], $item['entry'], $itemIcon,
+            WoW::GetWoWPath(), $item['entry'], $item['Quality'], $item['name'], $classSubClassString, sprintf(WoW_Locale::GetString('template_item_itemlevel'), $item['ItemLevel']), sprintf(WoW_Locale::GetString('template_item_required_level'), $item['RequiredLevel']), $sellPrice['gold'], $sellPrice['silver'], $sellPrice['copper'], $item['entry']);
                 $totalCount++;
             }
         }
@@ -52,16 +55,16 @@
             <div class="multi-type">
             <div class="result-title">
                 <div class="type-icon type-article"> </div>
-                <a href="/wow/blog/%d" class="search-title">%s</a>
+                <a href="%s/wow/blog/%d" class="search-title">%s</a>
             </div>
             <div class="by-line">
                 <a href="?a=%s&amp;s=time">%s</a> - %s
-                <a href="/wow/blog/%d#comments" class="comments-link">0</a>
+                <a href="%s/wow/blog/%d#comments" class="comments-link">0</a>
             </div>
             <div class="search-content">
                 <div class="result-image">
-                <a href="/wow/blog/%d">
-                    <img alt="%s" src="/cms/blog_thumbnail/%s"/>
+                <a href="%s/wow/blog/%d">
+                    <img alt="%s" src="%s/cms/blog_thumbnail/%s"/>
                 </a>
                 </div>
                 %s <br />
@@ -69,9 +72,15 @@
         <div class="search-results-url"> /wow/blog/%d</div>
         </div>
         <div class="clear"></div>
-        </div>', $article['id'], $article['title'], urlencode($article['author']), $article['author'],
-        date('d.m.Y H:i', $article['postdate']), $article['id'], $article['id'], $article['title'], $article['image'],
-        $article['desc'], $article['id']);
+        </div>',
+            WoW::GetWoWPath(), $article['id'], $article['title'],
+            urlencode($article['author']), $article['author'], date('d.m.Y H:i', $article['postdate']),
+            WoW::GetWoWPath(), $article['id'],
+            WoW::GetWoWPath(), $article['id'],
+            $article['title'], WoW::GetWoWPath(), $article['image'],
+            $article['desc'],
+            $article['id']
+                );
                 $totalCount++;
             }
         }

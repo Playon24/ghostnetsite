@@ -34,8 +34,8 @@
 			<?php
             if(WoW_Account::IsAccountCharacter()) {
                 echo sprintf('<li class="%s">
-	<a href="/wow/vault/character/friend" class=" vault" rel="np"><span class="arrow"><span class="icon">%s</span></span></a>
-			</li>', WoW_Template::GetPageData('page') == 'vault_friends' ? ' active' : null, WoW_Locale::GetString('template_profile_friends'));
+	<a href="%s/wow/vault/character/friend" class=" vault" rel="np"><span class="arrow"><span class="icon">%s</span></span></a>
+			</li>', WoW_Template::GetPageData('page') == 'vault_friends' ? ' active' : null, WoW::GetWoWPath(), WoW_Locale::GetString('template_profile_friends'));
             }
             if(WoW_Characters::GetGuildID() > 0) {
                 echo sprintf('<li class="%s">

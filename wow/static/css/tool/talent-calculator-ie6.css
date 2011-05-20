@@ -4,7 +4,7 @@
 
 .talentcalc-tree-header .icon-frame-treeheader .frame { background-image: url("../../images/tool/talent-calculator/tree-icon-frame.gif"); }
 
-.talentcalc-tree-header .icon-frame-treeheader .lock { background: none; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/wow/static/images/tool/talent-calculator/tree-locked-icon.png', sizingMethod='crop'); }
+.talentcalc-tree-header .icon-frame-treeheader .lock { background: none; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../../images/tool/talent-calculator/tree-locked-icon.png', sizingMethod='crop'); }
 
 .talentcalc-tree-overview ul.spells .icon-frame-ability .frame { background-image: url("../../images/tool/talent-calculator/tree-overview-icon-ability-frame.gif"); }
 

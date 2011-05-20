@@ -3,13 +3,13 @@
 <div class="content-trail">
 <ol class="ui-breadcrumb">
 <li>
-<a href="/wow/" rel="np">
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/" rel="np">
 World of Warcraft
 </a>
 </li>
 <li>
-<a href="/wow/game/" rel="np">
-Игра
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/game/" rel="np">
+<?php echo WoW_Locale::GetString('template_menu_game'); ?>
 </a>
 </li>
 <li class="last">
@@ -78,7 +78,7 @@ World of Warcraft
         $primary = WoW_Account::GetActiveCharacter();
         if(is_array($primary)) {
             echo sprintf('<div class="summary-characterspecific"><div class="summary-character">
-		<a class="avatar" href="%s" rel="np" style="background-image: url(\'/wow/static/images/2d/avatar/%d-%d.jpg\');"></a>
+		<a class="avatar" href="%s" rel="np" style="background-image: url(\'%s/wow/static/images/2d/avatar/%d-%d.jpg\');"></a>
 		<div class="rest">
 			<div class="name"><a href="%s" rel="np">%s</a></div>
 			<div class="reputation">
@@ -95,7 +95,7 @@ World of Warcraft
 		</div>
 	<span class="clear"><!-- --></span>
 	</div>
-</div>', $primary['url'], $primary['race'], $primary['gender'], $primary['url'], $primary['name'], WoW_Locale::GetString('template_reputation'), WoW_Locale::GetString('reputation_rank_3'));
+</div>', $primary['url'], WoW::GetWoWPath(), $primary['race'], $primary['gender'], $primary['url'], $primary['name'], WoW_Locale::GetString('template_reputation'), WoW_Locale::GetString('reputation_rank_3'));
         }
     }
     

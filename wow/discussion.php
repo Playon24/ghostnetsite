@@ -27,7 +27,7 @@ if(!$blog_id || !WoW_Account::IsLoggedIn()) {
         header('Location: ' . $_GET['d_ref']);
     }
     else {
-        header('Location: /wow/');
+        header('Location: ' . WoW::GetWoWPath());
     }
     exit;
 }
@@ -49,6 +49,6 @@ if(isset($_GET['d_ref'])) {
     header('Location: ' . $_GET['d_ref']);
 }
 else {
-    header('Location: /wow/');
+    header('Location: ' . WoW::GetWoWPath());
 }
 ?>

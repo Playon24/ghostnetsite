@@ -17,7 +17,7 @@
 
 			<br />
             <p class="align-center">
-                <a class="ui-button button1" href="/account/creation/tos.html"><span><span><?php echo WoW_Locale::GetString('template_bn_new_account'); ?></span></span></a>
+                <a class="ui-button button1" href="<?php echo WoW::GetWoWPath(); ?>/account/creation/tos.html"><span><span><?php echo WoW_Locale::GetString('template_bn_new_account'); ?></span></span></a>
                     <span style="padding-left: 10px">
                         <?php echo WoW_Locale::GetString('template_bn_got_account'); ?> <a href="?login" onclick="return Login.open('/login/login.frag')"><?php echo WoW_Locale::GetString('template_bn_log_in'); ?></a>
                     </span>

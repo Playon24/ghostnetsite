@@ -17,7 +17,7 @@
 
 /* header */
 #header { z-index: 90; position: relative; zoom: 1; }
-#header .header-plate-wrapper { background: none; filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="/wow/static/images/layout/header-border.png", sizingMethod="crop"); }
+#header .header-plate-wrapper { background: none; filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="../images/layout/header-border.png", sizingMethod="crop"); }
 #header .user-plate .user-meta { float: left; width: auto; z-index: 1; }
 #header .user-plate .character { zoom: 1; }
 #header .user-plate .profile-link { z-index: 2; background: none; }
@@ -39,7 +39,7 @@
 /* content */
 #content { background: url("../images/layout/content-bg.gif") 0 0 repeat-y; }
 #content .content-bot { height:570px }
-#slideshow .mask { background: none; filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="/wow/static/images/layout/slideshow-mask.png", sizingMethod="crop"); }
+#slideshow .mask { background: none; filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="../images/layout/slideshow-mask.png", sizingMethod="crop"); }
 
 /* footer */
 #sitemap h3 { background-image:url(../images/icons/footer.gif) }

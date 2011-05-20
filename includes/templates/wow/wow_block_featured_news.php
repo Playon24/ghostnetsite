@@ -7,11 +7,11 @@ for($i = 0; $i < 5; ++$i) {
         continue;
     }
     echo sprintf('<div class="featured">
-            <a href="/wow/blog/%d#blog">
-               <span class="featured-img" style="background-image: url(\'/cms/blog_thumbnail/%s\');"></span>
+            <a href="%s/wow/blog/%d#blog">
+               <span class="featured-img" style="background-image: url(\'%s/cms/blog_thumbnail/%s\');"></span>
                <span class="featured-desc">%s</span>
             </a>
-        </div>', $wow_news[$i]->id, $wow_news[$i]->image, $wow_news[$i]->title);
+        </div>', WoW::GetWoWPath(), $wow_news[$i]->id, WoW::GetWoWPath(), $wow_news[$i]->image, $wow_news[$i]->title);
 }
 ?>
         <span class="clear"></span>

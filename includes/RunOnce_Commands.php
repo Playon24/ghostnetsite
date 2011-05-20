@@ -27,24 +27,7 @@ WoW_Log::WriteLog('RunOnce : execute commands.');
  **/
 function ExecuteRunOnce() {
     ////////////////////////////////////////
-    foreach(WoWConfig::$Realms as $realm) {
-        if(!DB::ConnectToDB(DB_CHARACTERS, $realm['id'])) {
-            return false;
-        }
-        $item_ids = DB::Characters()->select("SELECT `guid`, `data`, `date` FROM `character_feed_log` WHERE `type` = %d", TYPE_ITEM_FEED);
-        if(!$item_ids) {
-            return false;
-        }
-        foreach($item_ids as $item) {
-            $quality = DB::World()->selectCell("SELECT `Quality` FROM `item_template` WHERE `entry` = %d", $item['data']);
-            if(!$quality) {
-                return false;
-            }
-            if(!DB::Characters()->query("UPDATE `character_feed_log` SET `item_quality` = %d WHERE `guid` = %d AND `data` = %d AND `date` = %d AND `type` = %d", $quality, $item['guid'], $item['date'], $item['data'], TYPE_ITEM_FEED)) {
-                return false;
-            }
-        }
-    }
+    DB::WoW()->query("TRUNCATE TABLE `DBPREFIX_user_characters`");
     return true;
     ////////////////////////////////////////
 }

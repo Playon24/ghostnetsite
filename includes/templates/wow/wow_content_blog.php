@@ -3,12 +3,12 @@
 <div class="content-trail">
 <ol class="ui-breadcrumb">
 <li>
-<a href="/wow/" rel="np">
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/" rel="np">
 World of Warcraft
 </a>
 </li>
 <li class="last">
-<a href="/wow/blog/<?php echo WoW::GetBlogData('id'); ?>" rel="np">
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/blog/<?php echo WoW::GetBlogData('id'); ?>" rel="np">
 <?php echo WoW::GetBlogData('title'); ?>
 </a>
 </li>
@@ -33,14 +33,14 @@ World of Warcraft
 					</h3>
 					<div class="byline">
 						<div class="blog-info">
-                    	<a href="/wow/search?a=<?php echo WoW::GetBlogData('author'); ?>&amp;f=article"><?php echo WoW::GetBlogData('author'); ?></a>
+                    	<a href="<?php echo WoW::GetWoWPath(); ?>/wow/search?a=<?php echo WoW::GetBlogData('author'); ?>&amp;f=article"><?php echo WoW::GetBlogData('author'); ?></a>
 							<span>//</span> <?php echo date('d M Y H:i', WoW::GetBlogData('postdate')); ?>
 						</div>
 							<a class="comments-link" href="#comments"><?php echo WoW::GetBlogData('comments_count'); ?></a>
 	<span class="clear"><!-- --></span>
 					</div>
 						<div class="header-image">
-							<img alt="<?php echo WoW::GetBlogData('title'); ?>" src="/cms/blog_header/<?php echo WoW::GetBlogData('header_image'); ?>" />
+							<img alt="<?php echo WoW::GetBlogData('title'); ?>" src="<?php echo WoW::GetWoWPath(); ?>/cms/blog_header/<?php echo WoW::GetBlogData('header_image'); ?>" />
 						</div>
 					<div class="detail"><div>
 	<?php echo WoW::GetBlogData('text'); ?>
@@ -154,9 +154,9 @@ if(is_array($comments)) {
         // Portrait
         echo sprintf('<div class="avatar portrait-b">
             <a href="%s">
-                <img height="64" src="/wow/static/images/2d/avatar/%d-%d.jpg" alt="" />
+                <img height="64" src="%s/wow/static/images/2d/avatar/%d-%d.jpg" alt="" />
             </a>
-        </div>', $character['url'], $character['race'], $character['gender']);
+        </div>', $character['url'], WoW::GetWoWPath(), $character['race'], $character['gender']);
         if(WoW_Account::IsLoggedIn()) {
             // Karma
             echo sprintf('<div class="karma" id="k-%d">
@@ -212,7 +212,7 @@ if(is_array($comments)) {
         					<a href="%s" title="%s" rel="np" class="icon-profile link-first">
         					%s
         					</a>
-        					<a href="/wow/search?f=post&amp;a=%s&amp;s=time" title="%s" rel="np" class="icon-posts">
+        					<a href="%s/wow/search?f=post&amp;a=%s&amp;s=time" title="%s" rel="np" class="icon-posts">
         					</a>
         					<a href="javascript:;" title="%s" rel="np" class="icon-ignore link-last" onclick="Cms.ignore(%d, false); return false;">
         					</a>
@@ -230,9 +230,11 @@ if(is_array($comments)) {
                     <a class="reply-link" href="#c-%d" onclick="Cms.Comments.replyTo(\'%d\',\'%d\',\'%s\'); return false;">%s</a>
                 </div>
             </div>
-         </div>', $character['name'], $character['name'], $character['realmName'], $character['url'], WoW_Locale::GetString('template_profile_caption'), 
-            WoW_Locale::GetString('template_profile_caption'),
-            urlencode($character['name'] . ' @ ' . $character['realmName']),
+         </div>',
+            $character['name'],
+            $character['name'], $character['realmName'],
+            $character['url'], WoW_Locale::GetString('template_profile_caption'), WoW_Locale::GetString('template_profile_caption'),
+            WoW::GetWoWPath(), urlencode($character['name'] . ' @ ' . $character['realmName']),
             WoW_Locale::GetString('template_blog_lookup_forum_messages'),
             WoW_Locale::GetString('template_blog_add_to_black_list'),
             $character['guid'], $character['url'], $character['name'], $comment['comment_id'],
@@ -262,13 +264,13 @@ if(is_array($comments)) {
             	<span class="active">1</span>
 
 
-						<a href="/wow/blog/<?php echo WoW::GetBlogData('id'); ?>?page=2#page-comments">2</a>
+						<a href="<?php echo WoW::GetWoWPath(); ?>/wow/blog/<?php echo WoW::GetBlogData('id'); ?>?page=2#page-comments">2</a>
 
 						<div class="page-sep"></div>
-						<a href="/wow/blog/<?php echo WoW::GetBlogData('id'); ?>?page=3#page-comments">3</a>
+						<a href="<?php echo WoW::GetWoWPath(); ?>/wow/blog/<?php echo WoW::GetBlogData('id'); ?>?page=3#page-comments">3</a>
 
 						<div class="page-sep"></div>
-						<a href="/wow/blog/<?php echo WoW::GetBlogData('id'); ?>?page=4#page-comments">4</a>
+						<a href="<?php echo WoW::GetWoWPath(); ?>/wow/blog/<?php echo WoW::GetBlogData('id'); ?>?page=4#page-comments">4</a>
 
 						<div class="page-sep"></div>
 
@@ -276,8 +278,8 @@ if(is_array($comments)) {
             		…
         		</div>
 
-	            <a href="/wow/blog/<?php echo WoW::GetBlogData('id'); ?>?page=14#page-comments">14</a>
-		            	<a href="/wow/blog/<?php echo WoW::GetBlogData('id'); ?>?page=2#page-comments"><?php echo WoW_Locale::GetString('template_articles_full_caption'); ?> &gt;</a>
+	            <a href="<?php echo WoW::GetWoWPath(); ?>/wow/blog/<?php echo WoW::GetBlogData('id'); ?>?page=14#page-comments">14</a>
+		            	<a href="<?php echo WoW::GetWoWPath(); ?>/wow/blog/<?php echo WoW::GetBlogData('id'); ?>?page=2#page-comments"><?php echo WoW_Locale::GetString('template_articles_full_caption'); ?> &gt;</a>
         </div>-->
 
 

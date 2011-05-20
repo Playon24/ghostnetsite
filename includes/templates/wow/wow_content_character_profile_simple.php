@@ -7,13 +7,13 @@ $talents = WoW_Characters::GetTalentsData();
 <div class="content-trail">
 <ol class="ui-breadcrumb">
 <li>
-<a href="/wow/" rel="np">
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/" rel="np">
 World of Warcraft
 </a>
 </li>
 <li>
-<a href="/wow/game/" rel="np">
-Игра
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/game/" rel="np">
+<?php echo WoW_Locale::GetString('template_menu_game'); ?>
 </a>
 </li>
 <li class="last">
@@ -41,7 +41,7 @@ World of Warcraft
 				</div>
 	<span class="clear"><!-- --></span>
 				<div class="under-name color-c<?php echo WoW_Characters::GetClassID(); ?>">
-						<a href="/wow/game/race/<?php echo WoW_Characters::GetRaceKey(); ?>" class="race"><?php echo WoW_Characters::GetRaceName(); ?></a>-<a href="/wow/game/class/<?php echo WoW_Characters::GetClassKey(); ?>" class="class"><?php echo WoW_Characters::GetClassName(); ?></a> (<span id="profile-info-spec" class="spec tip"><?php echo $talents['specsData'][WoW_Characters::GetActiveSpec()]['name']; ?></span>) <span class="level"><strong><?php echo WoW_Characters::GetLevel(); ?></strong></span> <?php echo WoW_Locale::GetString('template_lvl'); ?><span class="comma">,</span>
+						<a href="<?php echo WoW::GetWoWPath(); ?>/wow/game/race/<?php echo WoW_Characters::GetRaceKey(); ?>" class="race"><?php echo WoW_Characters::GetRaceName(); ?></a>-<a href="<?php echo WoW::GetWoWPath(); ?>/wow/game/class/<?php echo WoW_Characters::GetClassKey(); ?>" class="class"><?php echo WoW_Characters::GetClassName(); ?></a> (<span id="profile-info-spec" class="spec tip"><?php echo $talents['specsData'][WoW_Characters::GetActiveSpec()]['name']; ?></span>) <span class="level"><strong><?php echo WoW_Characters::GetLevel(); ?></strong></span> <?php echo WoW_Locale::GetString('template_lvl'); ?><span class="comma">,</span>
 					<span class="realm tip" id="profile-info-realm" data-battlegroup="<?php echo WoWConfig::$DefaultBGName; ?>">
 						<?php echo WoW_Characters::GetRealmName(); ?>
 					</span>
@@ -121,10 +121,10 @@ World of Warcraft
         else {
             echo sprintf('<div data-id="%d" data-type="%d" class="slot slot-%d %s item-quality-%d" style="%s">
             <div class="slot-inner">
-            <div class="slot-contents"><a href="/wow/item/%d" class="item" data-item="%s"><img src="http://eu.battle.net/wow-assets/static/images/icons/56/%s.jpg" alt="" /><span class="frame"></span></a>
+            <div class="slot-contents"><a href="%s/wow/item/%d" class="item" data-item="%s"><img src="http://eu.battle.net/wow-assets/static/images/icons/56/%s.jpg" alt="" /><span class="frame"></span></a>
             </div>
             </div>
-            </div>', ($data['slot']-1), $data['slot'], $data['slot'], ($slot >= 9 && $slot <= 15) ? 'slot-align-right' : null, $item_info['quality'], $data['style'], $item_info['item_id'], $item_info['data-item'], $item_info['icon']);
+            </div>', ($data['slot']-1), $data['slot'], $data['slot'], ($slot >= 9 && $slot <= 15) ? 'slot-align-right' : null, $item_info['quality'], $data['style'], WoW::GetWoWPath(), $item_info['item_id'], $item_info['data-item'], $item_info['icon']);
         }
     }
     
@@ -176,7 +176,7 @@ World of Warcraft
 		</div>
 	<span class="clear"><!-- --></span>
 	</div>
-	<script type="text/javascript" src="/wow/static/js/locales/summary_<?php echo WoW_Locale::GetLocale(); ?>.js"></script>
+	<script type="text/javascript" src="<?php echo WoW::GetWoWPath(); ?>/wow/static/js/locales/summary_<?php echo WoW_Locale::GetLocale(); ?>.js"></script>
 </div>
 </div>
 </div>

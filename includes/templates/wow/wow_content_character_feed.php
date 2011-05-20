@@ -3,13 +3,13 @@
 <div class="content-trail">
 <ol class="ui-breadcrumb">
 <li>
-<a href="/wow/" rel="np">
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/" rel="np">
 World of Warcraft
 </a>
 </li>
 <li>
-<a href="/wow/game/" rel="np">
-Игра
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/game/" rel="np">
+<?php WoW_Locale::GetString('template_menu_game'); ?>
 </a>
 </li>
 <li>
@@ -73,8 +73,8 @@ WoW_Template::LoadTemplate('block_profile_menu');
                     $i, $event['icon'], $event['name'], $event['desc'], $event['date']);
                     break;
                 case TYPE_ITEM_FEED:
-                    $item_link = sprintf('<a href="/wow/item/%d" class="color-q%d" data-item="%s">%s</a>', $event['id'], $event['quality'], $event['data-item'], $event['name']);
-                    echo sprintf('<li><dl><dd><a href="/wow/item/%d" class="color-q%d" data-item="%s">
+                    $item_link = sprintf('<a href="%s/wow/item/%d" class="color-q%d" data-item="%s">%s</a>', WoW::GetWoWPath(), $event['id'], $event['quality'], $event['data-item'], $event['name']);
+                    echo sprintf('<li><dl><dd><a href="%s/wow/item/%d" class="color-q%d" data-item="%s">
                     <span  class="icon-frame frame-18" style=\'background-image: url("http://eu.battle.net/wow-assets/static/images/icons/18/%s.jpg");\'>
                     </span>
                     </a>
@@ -82,7 +82,7 @@ WoW_Template::LoadTemplate('block_profile_menu');
                     </dd>
                     <dt>%s</dt>
                     </dl>
-                    </li>', $event['id'], $event['quality'], $event['data-item'],
+                    </li>', WoW::GetWoWPath(), $event['id'], $event['quality'], $event['data-item'],
                     $event['icon'],
                     sprintf(WoW_Locale::GetString('template_feed_obtained_item'), $item_link),
                     $event['date']

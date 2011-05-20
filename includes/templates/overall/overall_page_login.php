@@ -3,24 +3,24 @@
 <head>
 <title><?php echo WoW_Locale::GetString('login_page_title'); ?></title>
 <meta http-equiv="imagetoolbar" content="false"/>
-<link rel="stylesheet" type="text/css" href="/login/static/local-common/css/common.css?v"/>
-<!--[if IE]><link rel="stylesheet" type="text/css" href="/login/static/local-common/css/common-ie.css?v"/><![endif]-->
-<!--[if IE 6]><link rel="stylesheet" type="text/css" href="/login/static/local-common/css/common-ie6.css?v"/><![endif]-->
-<!--[if IE 7]><link rel="stylesheet" type="text/css" href="/login/static/local-common/css/common-ie7.css?v"/><![endif]-->
-<link rel="shortcut icon" href="/login/static/_themes/bam/img/favicon.ico" type="image/x-icon"/>
-<link rel="stylesheet" type="text/css" href="/login/static/_themes/bam/css/master.css?v"/>
-<!--[if IE 6]><link rel="stylesheet" type="text/css" href="/login/static/_themes/bam/css/master-ie6.css?v" /><![endif]-->
-<link rel="stylesheet" type="text/css" href="/login/static/_themes/bam/css/_lang/<?php echo WoW_Locale::GetLocale(LOCALE_DOUBLE); ?>.css?v"/>
-<script type="text/javascript" src="/login/static/local-common/js/third-party/jquery-1.4.2.min.js?v"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo WoW::GetWoWPath(); ?>/login/static/local-common/css/common.css?v"/>
+<!--[if IE]><link rel="stylesheet" type="text/css" href="<?php echo WoW::GetWoWPath(); ?>/login/static/local-common/css/common-ie.css?v"/><![endif]-->
+<!--[if IE 6]><link rel="stylesheet" type="text/css" href="<?php echo WoW::GetWoWPath(); ?>/login/static/local-common/css/common-ie6.css?v"/><![endif]-->
+<!--[if IE 7]><link rel="stylesheet" type="text/css" href="<?php echo WoW::GetWoWPath(); ?>/login/static/local-common/css/common-ie7.css?v"/><![endif]-->
+<link rel="shortcut icon" href="<?php echo WoW::GetWoWPath(); ?>/login/static/_themes/bam/img/favicon.ico" type="image/x-icon"/>
+<link rel="stylesheet" type="text/css" href="<?php echo WoW::GetWoWPath(); ?>/login/static/_themes/bam/css/master.css?v"/>
+<!--[if IE 6]><link rel="stylesheet" type="text/css" href="<?php echo WoW::GetWoWPath(); ?>/login/static/_themes/bam/css/master-ie6.css?v" /><![endif]-->
+<link rel="stylesheet" type="text/css" href="<?php echo WoW::GetWoWPath(); ?>/login/static/_themes/bam/css/_lang/<?php echo WoW_Locale::GetLocale(LOCALE_DOUBLE); ?>.css?v"/>
+<script type="text/javascript" src="<?php echo WoW::GetWoWPath(); ?>/login/static/local-common/js/third-party/jquery-1.4.2.min.js?v"></script>
 
-<script type="text/javascript" src="/login/static/local-common/js/core.js?"></script>
+<script type="text/javascript" src="<?php echo WoW::GetWoWPath(); ?>/login/static/local-common/js/core.js?"></script>
 <script type="text/javascript">
-Core.baseUrl = '/login/';
+Core.baseUrl = '<?php echo WoW::GetWoWPath(); ?>/login/';
 </script>
 </head>
 <body class="ru-ru">
 <div id="wrapper">
-<h1 id="logo"><a href="/">Battle.net</a></h1>
+<h1 id="logo"><a href="<?php echo WoW::GetWoWPath(); ?>/">Battle.net</a></h1>
 <div id="content" class="login">
 <?php
 if(WoW_Account::GetLastErrorCode() != ERROR_NONE) {
@@ -69,13 +69,13 @@ if(WoW_Account::GetLastErrorCode() != ERROR_NONE) {
 
 <ul id="help-links">
 <li class="icon-pass">
-<a href="/account/support/password-reset.html"><?php echo WoW_Locale::GetString('login_help_title'); ?></a>
+<a href="<?php echo WoW::GetWoWPath(); ?>/account/support/password-reset.html"><?php echo WoW_Locale::GetString('login_help_title'); ?></a>
 </li>
 <li class="icon-signup">
-<?php echo WoW_Locale::GetString('have_no_account_title'); ?> <a href="/account/creation/tos.html"><?php echo WoW_Locale::GetString('create_account_title'); ?></a>
+<?php echo WoW_Locale::GetString('have_no_account_title'); ?> <a href="<?php echo WoW::GetWoWPath(); ?>/account/creation/tos.html"><?php echo WoW_Locale::GetString('create_account_title'); ?></a>
 </li>
 <li class="icon-secure">
-<a href="/security/"><?php echo WoW_Locale::GetString('account_security_title'); ?></a>
+<a href="<?php echo WoW::GetWoWPath(); ?>/security/"><?php echo WoW_Locale::GetString('account_security_title'); ?></a>
 </li>
 </ul>
 
@@ -83,7 +83,7 @@ if(WoW_Account::GetLastErrorCode() != ERROR_NONE) {
 <div id="right">
 <h2><?php echo WoW_Locale::GetString('have_no_account_title');?> </h2>
 <h3><?php echo WoW_Locale::GetString('login_page_create_account_title'); ?></h3>
-<a class="ui-button button1 " href="/account/creation/tos.html">
+<a class="ui-button button1 " href="<?php echo WoW::GetWoWPath(); ?>/account/creation/tos.html">
 <span>
 <span><?php echo WoW_Locale::GetString('login_page_create_account_link_title'); ?></span>
 </span>

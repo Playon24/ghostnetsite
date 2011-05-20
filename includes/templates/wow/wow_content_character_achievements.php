@@ -3,12 +3,12 @@
 <div class="content-trail">
 <ol class="ui-breadcrumb">
 <li>
-<a href="/wow/" rel="np">
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/" rel="np">
 World of Warcraft
 </a>
 </li>
 <li>
-<a href="/wow/game/" rel="np">
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/game/" rel="np">
 Игра
 </a>
 </li>
@@ -102,8 +102,6 @@ WoW_Template::LoadTemplate('block_profile_crest');
 					<div class="desc">
 						<?php echo WoW_Locale::GetString('template_achievements_total_completed'); ?>
 					</div>
-	    
-	
     <?php
     $progressInfo = WoW_Achievements::GetProgressInfo();
     ?>
@@ -181,7 +179,7 @@ WoW_Template::LoadTemplate('block_profile_crest');
 	<span class="clear"><!-- --></span>
 	</div>
 
-	<script type="text/javascript" src="/wow/static/js/locales/summary_<?php echo WoW_Locale::GetLocale(); ?>.js"></script>
+	<script type="text/javascript" src="<?php echo WoW::GetWoWPath(); ?>/wow/static/js/locales/summary_<?php echo WoW_Locale::GetLocale(); ?>.js"></script>
 	
 	<script type="text/javascript">
 		$(document).ready(function () {

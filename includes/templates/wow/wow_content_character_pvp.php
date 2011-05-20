@@ -3,13 +3,13 @@
 <div class="content-trail">
 <ol class="ui-breadcrumb">
 <li>
-<a href="/wow/" rel="np">
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/" rel="np">
 World of Warcraft
 </a>
 </li>
 <li>
-<a href="/wow/game/" rel="np">
-Игра
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/game/" rel="np">
+<?php echo WoW_Locale::GetString('template_menu_game'); ?>
 </a>
 </li>
 <li>
@@ -41,17 +41,11 @@ PvP
 				</div>
 			</div>
 		</div>
-		
 		<div class="profile-contents">
-
-
 		<div class="profile-section-header">
 				<h3 class="category ">PvP</h3>
-
 		</div>
-
 		<div class="profile-section">
-
 			<div id="pvp-tabs" class="pvp-tabs">
         <?php
         $team_types = array(2, 3, 5);
@@ -90,7 +84,7 @@ PvP
 	</div>
 	</div>
 
-	<script type="text/javascript" src="/wow/static/js/locales/summary_<?php echo WoW_Locale::GetLocale(); ?>.js"></script>
+	<script type="text/javascript" src="<?php echo WoW::GetWoWPath(); ?>/wow/static/js/locales/summary_<?php echo WoW_Locale::GetLocale(); ?>.js"></script>
 </div>
 </div>
 </div>

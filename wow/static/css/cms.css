@@ -295,10 +295,10 @@ div.forum-options a.active { color:#fff; font-weight: bold; }
 #right .sidebar-module .sidebar-title h3 a { color: #FEF092; padding-right: 20px; background: url("../images/icons/next.gif") 100% 50% no-repeat; }
 #right .sidebar-module .sidebar-title h3 a:hover { color: #fff; }
 .sidebar-module .sidebar-content { padding: 0; }
-.sidebar-module .sidebar-content.loading { padding: 40px; background: url("/wow/static/images/loaders/canvas-loader.gif") 50% 50% no-repeat }
+.sidebar-module .sidebar-content.loading { padding: 40px; background: url("../images/loaders/canvas-loader.gif") 50% 50% no-repeat }
 .sidebar-module .sidebar-content .empty { color: #C09A67; }
 .sidebar-module .sidebar-all { text-align: right; padding-top: 10px }
-.sidebar-module .sidebar-all a { padding-right: 12px; background: url("/wow/static/images/icons/more-arrows.gif") 100% 2px no-repeat }
+.sidebar-module .sidebar-all a { padding-right: 12px; background: url("../images/icons/more-arrows.gif") 100% 2px no-repeat }
 .sidebar-module .sidebar-all a:hover { background-position: 100% -45px }
 .sidebar-module .sidebar-error { padding: 10px 0 5px 0; text-align: center; color: #C09A67;}
 .sidebar-module .date { color: #71401F; font-size: 11px; }

@@ -3,27 +3,27 @@
 $sidebar_data = "'sotd', 'forums'";
 ?>
 <?php
-if(WoW_Account::IsLoggedIn()) {
+if(WoW_Account::IsLoggedIn() && WoW_Account::IsHaveActiveCharacter()) {
     $sidebar_data = "'auctions','guild-news','friends','forums','sotd'";
 ?>
 
 <div class="sidebar-module" id="sidebar-auctions">
     <div class="sidebar-title">
-        <h3 class="title-auctions">Аукцион</h3>
+        <h3 class="title-auctions"><?php echo WoW_Locale::GetString('template_auction_auction'); ?></h3>
     </div>
     <div class="sidebar-content loading"></div>
 </div>
 
 <div class="sidebar-module" id="sidebar-guild-news">
     <div class="sidebar-title">
-        <h3 class="title-guild-news">Новости гильдии</h3>
+        <h3 class="title-guild-news"><?php echo WoW_Locale::GetString('template_guild_news_sidebar'); ?></h3>
     </div>
     <div class="sidebar-content loading"></div>
 </div>
 
 <div class="sidebar-module" id="sidebar-friends">
     <div class="sidebar-title">
-        <h3 class="title-friends">Друзья персонажа</h3>
+        <h3 class="title-friends"><?php echo WoW_Locale::GetString('template_character_friends_sidebar'); ?></h3>
     </div>
     <div class="sidebar-content loading"></div>
 </div>

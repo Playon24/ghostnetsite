@@ -1,5 +1,5 @@
 <?php
-define('WOW_REVISION', 72);
-define('RUNONCE_REVISION', 9);
+define('WOW_REVISION', 73);
+define('RUNONCE_REVISION', 73);
 define('DB_VERSION', 1);
 ?>

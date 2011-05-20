@@ -4,7 +4,7 @@
 <div id="page-header">
 <p class="privacy-message"><?php echo WoW_Locale::GetString('template_account_creation_privacy_notify'); ?></p>
 </div>
-<form action="/account/creation/tos.html" method="get" class="country-select">
+<form action="<?php echo WoW::GetWoWPath(); ?>/account/creation/tos.html" method="get" class="country-select">
 <div class="input-row input-row-select">
 <span class="input-left">
 <label for="country">
@@ -45,14 +45,14 @@ tabindex="1">
 <p>
 <a
 class="ui-button button1 "
-href="/account/creation/tos.html"
+href="<?php echo WoW::GetWoWPath(); ?>/account/creation/tos.html"
 tabindex="1">
 <span>
 <span><?php echo WoW_Locale::GetString('template_account_creation_change_country_confirm_yes'); ?></span>
 </span>
 </a>
 <a class="ui-cancel "
-href="/account/creation/tos.html"
+href="<?php echo WoW::GetWoWPath(); ?>/account/creation/tos.html"
 tabindex="1">
 <span>
 <?php echo WoW_Locale::GetString('template_wow_dashboard_upgrade_account_cancel'); ?> </span>
@@ -72,7 +72,7 @@ countrySubmit.style.display = 'none';
 //]]>
 </script>
 <div id="page-content">
-<form action="/account/creation/tos.html" method="post" id="creation">
+<form action="<?php echo WoW::GetWoWPath(); ?>/account/creation/tos.html" method="post" id="creation">
 <div class="input-hidden">
 <input type="hidden" name="csrftoken" value="e6612910-483b-48e5-8f12-c8b370277606" />
 <input name="country" value="
@@ -377,7 +377,7 @@ Core.loadDeferredScript('HTTPS://bs.serving-sys.com/BurstingPipe/ActivityServer.
 });
 //]]>
 </script>
-<!--[if IE 6]> <script type="text/javascript" src="/account/local-common/js/third-party/DD_belatedPNG.js?v17"></script>
+<!--[if IE 6]> <script type="text/javascript" src="<?php echo WoW::GetWoWPath(); ?>/account/local-common/js/third-party/DD_belatedPNG.js?v17"></script>
 <script type="text/javascript">
 //<![CDATA[
 DD_belatedPNG.fix('.icon-32');

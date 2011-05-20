@@ -787,8 +787,8 @@ Class WoW_Account {
                     'faction_text' => (WoW_Utils::GetFactionId($char['race']) == FACTION_ALLIANCE) ? 'alliance' : 'horde',
                     'guildId' => $char['guildId'],
                     'guildName' => $char['guildName'],
-                    'guildUrl' => sprintf('/wow/guild/%s/%s/', urlencode($realm_info['name']), urlencode($char['guildName'])),
-                    'url' => sprintf('/wow/character/%s/%s/', urlencode($realm_info['name']), urlencode($char['name']))
+                    'guildUrl' => sprintf('%s/wow/guild/%s/%s/', WoW::GetWoWPath(), urlencode($realm_info['name']), urlencode($char['guildName'])),
+                    'url' => sprintf('%s/wow/character/%s/%s/', WoW::GetWoWPath(), urlencode($realm_info['name']), urlencode($char['name']))
                 );
                 self::$characters_data[] = $tmp_char_data;
                 ++$index;
@@ -809,16 +809,16 @@ Class WoW_Account {
         switch($type) {
             case 'characters-wrapper':
             default:
-                $template = '<a href="/wow/character/%s/%s/" onclick="CharSelect.pin(%d, this); return false;" class="char%s" rel="np"><span class="pin"></span><span class="name">%s</span><span class="class color-c%d">%d %s %s</span><span class="realm">%s</span></a>';
-                $characters_string = sprintf($template, urlencode(self::GetActiveCharacterInfo('realmName')), urlencode(self::GetActiveCharacterInfo('name')), 0, ' pinned', self::GetActiveCharacterInfo('name'), self::GetActiveCharacterInfo('class'), self::GetActiveCharacterInfo('level'), self::GetActiveCharacterInfo('race_text'), self::GetActiveCharacterInfo('class_text'), self::GetActiveCharacterInfo('realmName'));
+                $template = '<a href="%s/wow/character/%s/%s/" onclick="CharSelect.pin(%d, this); return false;" class="char%s" rel="np"><span class="pin"></span><span class="name">%s</span><span class="class color-c%d">%d %s %s</span><span class="realm">%s</span></a>';
+                $characters_string = sprintf($template, WoW::GetWoWPath(), urlencode(self::GetActiveCharacterInfo('realmName')), urlencode(self::GetActiveCharacterInfo('name')), 0, ' pinned', self::GetActiveCharacterInfo('name'), self::GetActiveCharacterInfo('class'), self::GetActiveCharacterInfo('level'), self::GetActiveCharacterInfo('race_text'), self::GetActiveCharacterInfo('class_text'), self::GetActiveCharacterInfo('realmName'));
                 break;
             case 'characters-overview':
-                $template = '<a href="/wow/character/%s/%s/" class="color-c%d" rel="np" onclick="CharSelect.pin(%d, this); return false;" onmouseover="Tooltip.show(this, $(this).children(\'.hide\').text());"><img src="/wow/static/images/icons/race/%d-%d.gif" alt="" /><img src="/wow/static/images/icons/class/%d.gif" alt="" />%d %s<span class="hide">%s %s (%s)</span></a>';
-                $characters_string = sprintf($template, urlencode(self::GetActiveCharacterInfo('realmName')), urlencode(self::GetActiveCharacterInfo('name')), self::GetActiveCharacterInfo('class'), 0, self::GetActiveCharacterInfo('race'), self::GetActiveCharacterInfo('gender'), self::GetActiveCharacterInfo('class'), self::GetActiveCharacterInfo('level'), self::GetActiveCharacterInfo('name'), self::GetActiveCharacterInfo('race_text'), self::GetActiveCharacterInfo('class_text'), self::GetActiveCharacterInfo('realmName'));
+                $template = '<a href="%s/wow/character/%s/%s/" class="color-c%d" rel="np" onclick="CharSelect.pin(%d, this); return false;" onmouseover="Tooltip.show(this, $(this).children(\'.hide\').text());"><img src="%s/wow/static/images/icons/race/%d-%d.gif" alt="" /><img src="%s/wow/static/images/icons/class/%d.gif" alt="" />%d %s<span class="hide">%s %s (%s)</span></a>';
+                $characters_string = sprintf($template, WoW::GetWoWPath(), urlencode(self::GetActiveCharacterInfo('realmName')), urlencode(self::GetActiveCharacterInfo('name')), self::GetActiveCharacterInfo('class'), 0, WoW::GetWoWPath(), self::GetActiveCharacterInfo('race'), self::GetActiveCharacterInfo('gender'), WoW::GetWoWPath(), self::GetActiveCharacterInfo('class'), self::GetActiveCharacterInfo('level'), self::GetActiveCharacterInfo('name'), self::GetActiveCharacterInfo('race_text'), self::GetActiveCharacterInfo('class_text'), self::GetActiveCharacterInfo('realmName'));
                 break;
             case 'characters-list-js':
-                $template = '{type: "friend", id: "%d", locale: Core.formatLocale(2,\'_\'), term: "%s", title: "%s", url: "/wow/character/%s/%s/"}%s';
-                $characters_string = sprintf($template, self::GetActiveCharacterInfo('guid'), self::GetActiveCharacterInfo('name'), self::GetActiveCharacterInfo('name'), urlencode(self::GetActiveCharacterInfo('realmName')), urlencode(self::GetActiveCharacterInfo('name')), ', ');
+                $template = '{type: "friend", id: "%d", locale: Core.formatLocale(2,\'_\'), term: "%s", title: "%s", url: "%s/wow/character/%s/%s/"}%s';
+                $characters_string = sprintf($template, self::GetActiveCharacterInfo('guid'), self::GetActiveCharacterInfo('name'), self::GetActiveCharacterInfo('name'), WoW::GetWoWPath(), urlencode(self::GetActiveCharacterInfo('realmName')), urlencode(self::GetActiveCharacterInfo('name')), ', ');
                 break;
         }
         if($only_primary) {
@@ -935,7 +935,7 @@ Class WoW_Account {
             for($i = 0; $i < $count; $i++) {
                 self::$friends_data[$i]['class_string'] = WoW_Locale::GetString('character_class_' . self::$friends_data[$i]['class_id'], self::$friends_data[$i]['gender']);
                 self::$friends_data[$i]['race_string'] = WoW_Locale::GetString('character_race_' . self::$friends_data[$i]['race_id'], self::$friends_data[$i]['gender']);
-                self::$friends_data[$i]['url'] = sprintf('/wow/character/%s/%s', self::GetActiveCharacterInfo('realmName'), self::$friends_data[$i]['name']);
+                self::$friends_data[$i]['url'] = sprintf('%s/character/%s/%s', WoW::GetWoWPath(), self::GetActiveCharacterInfo('realmName'), self::$friends_data[$i]['name']);
             }
         }
         return self::$friends_data;

@@ -277,8 +277,8 @@ tr:hover .fansite-link,
 .section-title .view-all {letter-spacing: normal;}
 
 /* page sub nav */
-#sub-nav { width:942px; height:36px; border:1px solid #732c0c; margin:0 auto; background: url(/wow/static/images/layout/sub-navigation.gif) 0 0 repeat-x; -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius:5px; }
-#sub-nav ul a { font:normal 13px/36px Arial, Sans-serif; display:block; height:36px; float:left; padding:0 18px 0 15px; background: url(/wow/static/images/layout/sub-navigation.gif) 100% -45px no-repeat; border-right:1px solid #732c0c }
+#sub-nav { width:942px; height:36px; border:1px solid #732c0c; margin:0 auto; background: url(../images/layout/sub-navigation.gif) 0 0 repeat-x; -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius:5px; }
+#sub-nav ul a { font:normal 13px/36px Arial, Sans-serif; display:block; height:36px; float:left; padding:0 18px 0 15px; background: url(../images/layout/sub-navigation.gif) 100% -45px no-repeat; border-right:1px solid #732c0c }
 #sub-nav ul a.first-col { -moz-border-radius: 5px 0 0 5px; -webkit-border-radius: 5px 0 0 5px; border-radius: 5px 0 0 5px;}
 #sub-nav ul a:hover { background-color:#340c02; -moz-box-shadow: inset 5px 5px 5px #200601; -webkit-box-shadow:inset 5px 5px 5px #200601; box-shadow:inset 5px 5px 5px #200601; }
 #sub-nav ul a.active { background-color:#340c02; -moz-box-shadow: inset 5px 5px 5px #200601; -webkit-box-shadow:inset 5px 5px 5px #200601; box-shadow:inset 5px 5px 5px #200601; cursor:default }

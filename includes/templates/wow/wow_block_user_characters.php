@@ -43,15 +43,17 @@
 						<div class="overview">
                                     <?php
                                     echo sprintf('<a href="javascript:;" class="color-c%d pinned" rel="np" data-tooltip="%s %s (%s)">
-										<img src="/wow/static/images/icons/race/%d-%d.gif" alt="" />
-										<img src="/wow/static/images/icons/class/%d.gif" alt="" />
+										<img src="%s/wow/static/images/icons/race/%d-%d.gif" alt="" />
+										<img src="%s/wow/static/images/icons/class/%d.gif" alt="" />
 										%d %s
 									</a>', WoW_Account::GetActiveCharacterInfo('class'),
                                     WoW_Account::GetActiveCharacterInfo('race_text'),
                                     WoW_Account::GetActiveCharacterInfo('class_text'),
                                     WoW_Account::GetActiveCharacterInfo('realmName'),
+                                    WoW::GetWoWPath(),
                                     WoW_Account::GetActiveCharacterInfo('race'),
                                     WoW_Account::GetActiveCharacterInfo('gender'),
+                                    WoW::GetWoWPath(), 
                                     WoW_Account::GetActiveCharacterInfo('class'),
                                     WoW_Account::GetActiveCharacterInfo('level'),
                                     WoW_Account::GetActiveCharacterInfo('name'));
@@ -62,11 +64,11 @@
                                                 continue; // Skip active character
                                             }
                                             echo sprintf('<a href="%s" class="color-c%d" rel="np" onclick="CharSelect.pin(%d, this); return false;" data-tooltip="%s %s (%s)">
-										<img src="/wow/static/images/icons/race/%d-%d.gif" alt="" />
-										<img src="/wow/static/images/icons/class/%d.gif" alt="" />
+										<img src="%s/wow/static/images/icons/race/%d-%d.gif" alt="" />
+										<img src="%s/wow/static/images/icons/class/%d.gif" alt="" />
 										%d %s
 									</a>', $char['url'], $char['class'], $char['index'], $char['race_text'], $char['class_text'], $char['realmName'],
-                                    $char['race'], $char['gender'], $char['class'], $char['level'], $char['name']);
+                                    WoW::GetWoWPath(), $char['race'], $char['gender'], WoW::GetWoWPath(), $char['class'], $char['level'], $char['name']);
                                         }
                                     }
                                     ?>

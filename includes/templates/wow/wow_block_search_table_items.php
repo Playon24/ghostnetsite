@@ -15,16 +15,8 @@
                                     foreach($searchResults as $item) {
                                         echo sprintf('<tr class="row%d">
 									<td class="table-link" data-row="1 %s">
-										<a href="/wow/item/%d"
-											rel="item:%d"
-											class="color-q%d">
- 
-
-
-
-
-		<span  class="icon-frame frame-18" style=\'background-image: url("http://eu.battle.net/wow-assets/static/images/icons/18/%s.jpg");\'>
-		</span>
+										<a href="%s/wow/item/%d" rel="item:%d" class="color-q%d">
+                                            <span  class="icon-frame frame-18" style=\'background-image: url("http://eu.battle.net/wow-assets/static/images/icons/18/%s.jpg");\'> </span>
 											%s
 										</a>
 									</td>
@@ -34,8 +26,12 @@
 									<td></td>
 									<td>
 </td>
-								</tr>', $toggleStyle % 2 ? 1 : 0, $item['name'], $item['entry'], $item['entry'], $item['Quality'], WoW_Items::GetItemIcon($item['entry'], $item['displayid']),
-                                $item['name'], $item['ItemLevel']);
+								</tr>',
+                                    $toggleStyle % 2 ? 1 : 0,
+                                    $item['name'],
+                                    WoW::GetWoWPath(), $item['entry'],
+                                    $item['entry'], $item['Quality'], WoW_Items::GetItemIcon($item['entry'], $item['displayid']),
+                                    $item['name'], $item['ItemLevel']);
                                         ++$toggleStyle;
                                     }
                                 }

@@ -5,7 +5,7 @@ header('Content-type: text/xml');
 ?>
 <div class="character-tooltip">
     <span class="icon-frame frame-56">
-        <img src="/wow/static/images/2d/avatar/<?php echo sprintf('%d-%d', WoW_Characters::GetRaceID(), WoW_Characters::GetGender()); ?>.jpg" alt="" width="56" height="56" />
+        <img src="<?php echo WoW::GetWoWPath(); ?>/wow/static/images/2d/avatar/<?php echo sprintf('%d-%d', WoW_Characters::GetRaceID(), WoW_Characters::GetGender()); ?>.jpg" alt="" width="56" height="56" />
         <span class="frame"></span>
     </span>
     <h3><?php echo WoW_Characters::GetName(); ?></h3>

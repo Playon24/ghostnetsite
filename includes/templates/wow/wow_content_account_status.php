@@ -3,7 +3,7 @@
 <div class="content-trail">
 <ol class="ui-breadcrumb">
 <li class="last">
-<a href="/wow/" rel="np">
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/" rel="np">
 World of Warcraft
 </a>
 </li>

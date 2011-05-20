@@ -22,12 +22,12 @@ include('../includes/WoW_Loader.php');
 $url_data = WoW::GetUrlData('vault');
 // Check session
 if(!WoW_Account::IsLoggedIn()) {
-    header('Location: /login/');
+    header('Location: ' . WoW::GetWoWPath() . '/login/');
     exit;
 }
 if($url_data['action0'] != 'vault') {
     // Wrong URL parsing
-    header('Location: /wow/');
+    header('Location: ' . WoW::GetWoWPath() . '/wow/');
     exit;
 }
 WoW_Template::SetTemplateTheme('wow');
@@ -37,12 +37,12 @@ switch($url_data['action1']) {
             case 'auction':
                 $auction_side = $url_data['action3'];
                 if(!$auction_side || !in_array($auction_side, array('alliance', 'horde', 'neutral'))) {
-                    header('Location: /wow/');
+                    header('Location: ' . WoW::GetWoWPath());
                     exit;
                 }
                 // Check active character
                 if(WoW_Account::GetActiveCharacterInfo('guid') == 0) {
-                    header('Location: /wow/');
+                    header('Location: ' . WoW::GetWoWPath());
                     exit;
                 }
                 switch($url_data['action4']) {

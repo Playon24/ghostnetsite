@@ -77,11 +77,11 @@ if(WoW_Template::GetTemplateTheme() == 'wow') {
     echo '<div id="legal">
 <div id="legal-ratings" class="png-fix">
 <a href="http://www.pegi.info/" onclick="return Core.open(this);">
-<img class="legal-image" alt="" src="/wow/static/local-common/images/legal/eu/pegi-wow.png" />
+<img class="legal-image" alt="" src="' . WoW::GetWoWPath() . '/wow/static/local-common/images/legal/eu/pegi-wow.png" />
 </a>
 </div>
 <div id="blizzard" class="png-fix">
-<a href="http://blizzard.com" tabindex="100"><img src="/wow/static/local-common/images/logos/blizz-wow.png" alt="" /></a>
+<a href="http://blizzard.com" tabindex="100"><img src="' . WoW::GetWoWPath() . '/wow/static/local-common/images/logos/blizz-wow.png" alt="" /></a>
 </div>
 <span class="clear"><!-- --></span>
 </div>';

@@ -568,5 +568,101 @@ Class WoW_Utils {
                 return WoW_Locale::GetString('armor_plate');
         }
     }
+    
+    public function IsBossCreature(&$data) {
+        if($data['classification'] == 3) {
+            return true;
+        }
+        if($data['KillCredit1'] > 0) {
+            $kc_entry = $data['KillCredit1'];
+        }
+        elseif($data['KillCredit2'] > 0) {
+            $kc_entry = $data['KillCredit2'];
+        }
+        else {
+            $kc_entry = 0;
+        }
+        $entries = array($data['id'], $kc_entry);
+        return DB::WoW()->selectCell("SELECT 1 FROM `DBPREFIX_instance_data` WHERE `id` IN (%s) OR `name_id` IN (%s) OR `lootid_1` IN (%s) OR `lootid_2` IN (%s) OR `lootid_3` IN (%s) OR `lootid_4` IN (%s)", $entries, $entries, $entries, $entries, $entries, $entries);
+    }
+    
+    public function GetBossName(&$data) {
+        if($data['KillCredit1'] > 0) {
+            $kc_entry = $data['KillCredit1'];
+        }
+        elseif($data['KillCredit2'] > 0) {
+            $kc_entry = $data['KillCredit2'];
+        }
+        else {
+            $kc_entry = 0;
+        }
+        $entries = array($data['id'], $kc_entry);
+        return DB::WoW()->selectCell("SELECT `name_%s` FROM `DBPREFIX_instance_data` WHERE `id` IN (%s) OR `name_id` IN (%s) OR `lootid_1` IN (%s) OR `lootid_2` IN (%s) OR `lootid_3` IN (%s) OR `lootid_4` IN (%s) LIMIT 1", WoW_Locale::GetLocale(), $entries, $entries, $entries, $entries, $entries, $entries);
+    }
+    
+    public function GenerateLootPercent($boss_id, $db_table, $item_id) {
+        $allowed_tables = array(
+            'creature_loot_template'   => true,
+            'disenchant_loot_template' => true,
+            'fishing_loot_template'    => true,
+            'gameobject_loot_template' => true,
+            'item_loot_template'       => true,
+            'reference_loot_template'  => true
+        );
+        if(!isset($allowed_tables[$db_table])) {
+            return 0;
+        }
+        $lootTable = DB::WoW()->select("SELECT `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `item` FROM `%s` WHERE `entry`=%d", $db_table, $boss_id);
+        if(!$lootTable) {
+            return 0;
+        }
+        $percent = 0;
+        foreach($lootTable as $loot) {
+            if($loot['ChanceOrQuestChance'] > 0 && $loot['item'] == $item_id) {
+                $percent = $loot['ChanceOrQuestChance'];
+            }
+            elseif($loot['ChanceOrQuestChance'] == 0 && $loot['item'] == $item_id) {
+                $current_group = $loot['groupid'];
+                $percent = 0;
+                $i = 0;
+                foreach($lootTable as $tLoot) {
+                    if($tLoot['groupid'] == $current_group) {
+                        if($tLoot['ChanceOrQuestChance'] > 0) {
+                            $percent += $tLoot['ChanceOrQuestChance'];
+                        }
+                        else {
+                            $i++;
+                        }
+                    }
+                }
+                $percent = round((100 - $percent) / $i, 3);
+            }
+        }
+        return $percent;
+    }
+    
+    public function GetDropRate($percent) {
+        if($percent == 100) {
+            return 6;
+        }
+        elseif($percent > 51) {
+            return 5;
+        }
+        elseif($percent > 25) {
+            return 4;
+        }
+        elseif($percent > 15) {
+            return 3;
+        }
+        elseif($percent > 3) {
+            return 2;
+        }
+        elseif($percent > 0 && $percent < 1) {
+            return 1;
+        }
+        elseif($percent <= 0) {
+            return 0;
+        }
+    }
 }
 ?>

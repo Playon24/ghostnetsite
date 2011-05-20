@@ -6,12 +6,12 @@
 <div class="header">
 <h2 class="subcategory"><?php echo WoW_Locale::GetString('template_wow_dashboard_management'); ?></h2>
 <h3 class="headline">World of Warcraft®: Cataclysm</h3>
-<a href="/account/management/wow/dashboard.html?region=EU&amp;accountName=<?php echo WoW_Account::GetUserName(); ?>"><img src="/account/local-common/images/game-icons/wow<?php echo WoW_Account::GetExpansion() > 0 ? 'x' . WoW_Account::GetExpansion() : 'c'; ?>.png?v17" alt="World of Warcraft®" title="" width="48" height="48" /></a>
+<a href="<?php echo WoW::GetWoWPath(); ?>/account/management/wow/dashboard.html?region=EU&amp;accountName=<?php echo WoW_Account::GetUserName(); ?>"><img src="/account/local-common/images/game-icons/wow<?php echo WoW_Account::GetExpansion() > 0 ? 'x' . WoW_Account::GetExpansion() : 'c'; ?>.png?v17" alt="World of Warcraft®" title="" width="48" height="48" /></a>
 </div>
 <div class="account-summary">
 <div class="account-management">
 <div class="section box-art" id="box-art">
-<img src="/account/local-common/images/game-boxes/<?php echo WoW_Locale::GetLocale(LOCALE_DOUBLE); ?>/wow<?php echo WoW_Account::GetExpansion() > 0 ? 'x' . WoW_Account::GetExpansion() : 'c'; ?>-big.png?v17" alt="World of Warcraft®" title="" width="242" height="288" id="box-img" />
+<img src="<?php echo WoW::GetWoWPath(); ?>/account/local-common/images/game-boxes/<?php echo WoW_Locale::GetLocale(LOCALE_DOUBLE); ?>/wow<?php echo WoW_Account::GetExpansion() > 0 ? 'x' . WoW_Account::GetExpansion() : 'c'; ?>-big.png?v17" alt="World of Warcraft®" title="" width="242" height="288" id="box-img" />
 </div>
 <div class="section account-details">
 <dl>
@@ -39,22 +39,22 @@ for($i = WoW_Account::GetExpansion()-1; $i > -1; --$i) {
 <div class="section available-actions">
 <ul class="game-time">
 <li class="change-payment-method">
-<a href="/account/payment-method.html?accountName=<?php echo WoW_Account::GetUserName(); ?>"><?php echo WoW_Locale::GetString('template_wow_dashboard_buy_game_time'); ?></a>
+<a href="<?php echo WoW::GetWoWPath(); ?>/account/payment-method.html?accountName=<?php echo WoW_Account::GetUserName(); ?>"><?php echo WoW_Locale::GetString('template_wow_dashboard_buy_game_time'); ?></a>
 </li>
 <li class="add-game-card">
-<a href="account/gamecard.html?accountName=<?php echo WoW_Account::GetUserName(); ?>"><?php echo WoW_Locale::GetString('template_wow_dashboard_active_timecard'); ?></a>
+<a href="<?php echo WoW::GetWoWPath(); ?>/account/gamecard.html?accountName=<?php echo WoW_Account::GetUserName(); ?>"><?php echo WoW_Locale::GetString('template_wow_dashboard_active_timecard'); ?></a>
 </li>
 <li class="payment-history">
-<a href="/account/payment-history.html?accountName=<?php echo WoW_Account::GetUserName(); ?>"><?php echo WoW_Locale::GetString('template_wow_dashboard_view_account_history'); ?></a>
+<a href="<?php echo WoW::GetWoWPath(); ?>/account/payment-history.html?accountName=<?php echo WoW_Account::GetUserName(); ?>"><?php echo WoW_Locale::GetString('template_wow_dashboard_view_account_history'); ?></a>
 </li>
 <li class="download-client">
-<a href="/account/management/download/#wow-downloads"><?php echo WoW_Locale::GetString('template_wow_dashboard_download_game_client'); ?></a>
+<a href="<?php echo WoW::GetWoWPath(); ?>/account/management/download/#wow-downloads"><?php echo WoW_Locale::GetString('template_wow_dashboard_download_game_client'); ?></a>
 </li>
 </ul>
 </div>
 </div>
 <div class="dashboard-form" id="enter-game-key">
-<form action="/account/management/add-game.html?style=upgrade-wow" method="post">
+<form action="<?php echo WoW::GetWoWPath(); ?>/account/management/add-game.html?style=upgrade-wow" method="post">
 <div class="hiddenInputWrapper">
 <input type="hidden" name="confirmed" value="true" />
 <input type="hidden" name="codeType" value="WOW" />
@@ -167,7 +167,7 @@ echo sprintf('<strong>%s</strong>%s', WoW_Locale::GetString('template_wow_dashbo
 </a>
 </li>
 <li class="wow-service parental-controls">
-<a href="/account/parental-controls/index.html">
+<a href="<?php echo WoW::GetWoWPath(); ?>/account/parental-controls/index.html">
 <span class="icon glow-shadow-3"></span>
 <?php
 echo sprintf('<strong>%s</strong>%s', WoW_Locale::GetString('template_wow_dashboard_service_parental_title'), WoW_Locale::GetString('template_wow_dashboard_service_parental_title'));
@@ -179,7 +179,7 @@ echo sprintf('<strong>%s</strong>%s', WoW_Locale::GetString('template_wow_dashbo
 <div class="content referrals-rewards" id="referrals-rewards">
 <ul>
 <li class="wow-service raf">
-<a href="/account/management/wow/services/raf-invite.html?l=<?php echo WoW_Account::GetUserName(); ?>&amp;r=EU">
+<a href="<?php echo WoW::GetWoWPath(); ?>/account/management/wow/services/raf-invite.html?l=<?php echo WoW_Account::GetUserName(); ?>&amp;r=EU">
 <span class="icon glow-shadow-3"></span>
 <?php
 echo sprintf('<strong>%s</strong>%s', WoW_Locale::GetString('template_wow_dashboard_service_recruit_title'), WoW_Locale::GetString('template_wow_dashboard_service_recruit_title'));
@@ -187,7 +187,7 @@ echo sprintf('<strong>%s</strong>%s', WoW_Locale::GetString('template_wow_dashbo
 </a>
 </li>
 <li class="wow-service resurrection-scroll">
-<a href="/account/management/wow/services/sor-invite.html?l=<?php echo WoW_Account::GetUserName(); ?>&amp;r=EU">
+<a href="<?php echo WoW::GetWoWPath(); ?>/account/management/wow/services/sor-invite.html?l=<?php echo WoW_Account::GetUserName(); ?>&amp;r=EU">
 <span class="icon glow-shadow-3"></span>
 <?php
 echo sprintf('<strong>%s</strong>%s', WoW_Locale::GetString('template_wow_dashboard_service_scroll_title'), WoW_Locale::GetString('template_wow_dashboard_service_scroll_title'));
@@ -220,7 +220,7 @@ echo sprintf('<strong>%s</strong>%s', WoW_Locale::GetString('template_wow_dashbo
 </div>
 </div>
 </div>
-<!--[if lt IE 7]> <script type="text/javascript" src="/account/local-common/js/third-party/DD_belatedPNG.js?v17"></script>
+<!--[if lt IE 7]> <script type="text/javascript" src="<?php echo WoW::GetWoWPath(); ?>/account/local-common/js/third-party/DD_belatedPNG.js?v17"></script>
 <script type="text/javascript">
 //<![CDATA[
 DD_belatedPNG.fix('.download a .icon');

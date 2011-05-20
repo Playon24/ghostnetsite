@@ -722,7 +722,7 @@ Class WoW_Items {
             return false;
         }
         $breadcrumbs = array();
-        $global_url = '/wow/item/';
+        $global_url = sprintf('%s/wow/item/', WoW::GetWoWPath());
         $index = 0;
         if(isset($item_info['classId'])) {
             $global_url .= '?classId=' . $item_info['classId'];
@@ -919,6 +919,7 @@ Class WoW_Items {
                 Dropped from creature...
                 Contained in object...
                 Sold by vendor...
+                Currency for item...
                 Reward from quest...
                 Skinned from...
                 Pick pocketed from...
@@ -926,14 +927,6 @@ Class WoW_Items {
                 Created by spell...
                 Reagent for spell...
                 Disenchants into...
-                Provided For Quest...
-                Objective Of Quest...
-                Reward From Quest...
-                Comments...
-
-            Missing DB Tables:
-                Currency for item...
-
         */
         $item_tabs = array();
         // WARNING: do not query something here! Only checks!
@@ -942,7 +935,6 @@ Class WoW_Items {
         if($count = DB::World()->selectCell("SELECT COUNT(*) FROM `creature_loot_template` WHERE `item` = %d", $entry)) {
             $item_tabs[] = array(
                 'type'  => 'dropCreatures',
-                'table' => 'dropped_from',
                 'count' => $count
             );
         }
@@ -950,7 +942,6 @@ Class WoW_Items {
         if($count = DB::World()->selectCell("SELECT COUNT(*) FROM `gameobject_loot_template` WHERE `item` = %d", $entry)) {
             $item_tabs[] = array(
                 'type'  => 'dropGameObjects',
-                'table' => 'contained_in',
                 'count' => $count
             );
         }
@@ -958,7 +949,6 @@ Class WoW_Items {
         if($count = DB::World()->selectCell("SELECT COUNT(*) FROM `npc_vendor` WHERE `item` = %d", $entry)) {
             $item_tabs[] = array(
                 'type'  => 'vendors',
-                'table' => 'sold_by',
                 'count' => $count
             );
         }
@@ -966,7 +956,6 @@ Class WoW_Items {
         if($count = DB::WoW()->selectCell("SELECT COUNT(*) FROM `DBPREFIX_extended_cost` WHERE `item1` = %d OR `item2` = %d OR `item3` = %d OR `item4` = %d OR `item5` = %d", $entry, $entry, $entry, $entry, $entry)) {
             $item_tabs[] = array(
                 'type'  => 'currencyForItems',
-                'table' => '', //Not defined yet
                 'count' => $count
             );
         }
@@ -974,7 +963,6 @@ Class WoW_Items {
         if($count = DB::World()->selectCell("SELECT COUNT(*) FROM `quest_template` WHERE `RewChoiceItemId1` = %d OR `RewChoiceItemId2` = %d OR `RewChoiceItemId3` = %d OR `RewChoiceItemId4` = %d OR `RewChoiceItemId5` = %d OR `RewChoiceItemId6` = %d OR `RewItemId1` = %d OR `RewItemId2` = %d OR `RewItemId3` = %d OR `RewItemId4` = %d", $entry, $entry, $entry, $entry, $entry, $entry, $entry, $entry, $entry, $entry)) {
             $item_tabs[] = array(
                 'type'  => 'rewardFromQuests',
-                'table' => 'reward_from_quest',
                 'count' => $count
             );
         }
@@ -982,7 +970,6 @@ Class WoW_Items {
         if($count = DB::World()->selectCell("SELECT COUNT(*) FROM `skinning_loot_template` WHERE `item` = %d", $entry)) {
             $item_tabs[] = array(
                 'type'  => 'skinnedFromCreatures',
-                'table' => 'skinned_from_creatures',
                 'count' => $count
             );
         }
@@ -990,7 +977,6 @@ Class WoW_Items {
         if($count = DB::World()->selectCell("SELECT COUNT(*) FROM `pickpocketing_loot_template` WHERE `item` = %d", $entry)) {
             $item_tabs[] = array(
                 'type'  => 'pickPocketCreatures',
-                'table' => 'pickpocket_from_creatures',
                 'count' => $count
             );
         }
@@ -998,7 +984,6 @@ Class WoW_Items {
         if($count = DB::WoW()->selectCell("SELECT COUNT(*) FROM `DBPREFIX_spell` WHERE `EffectItemType_1` = %d OR `EffectItemType_2` = %d OR `EffectItemType_3` = %d", $entry, $entry, $entry)) {
             $item_tabs[] = array(
                 'type'  => 'createdBySpells',
-                'table' => 'created_by',
                 'count' => $count
             );
         }
@@ -1006,7 +991,6 @@ Class WoW_Items {
         if($count = DB::WoW()->selectCell("SELECT COUNT(*) FROM `DBPREFIX_spell` WHERE `Reagent_1` = %d OR `Reagent_2` = %d OR `Reagent_3` = %d OR `Reagent_4` = %d OR `Reagent_5` = %d OR `Reagent_6` = %d OR `Reagent_7` = %d OR `Reagent_8` = %d", $entry, $entry, $entry, $entry, $entry, $entry, $entry, $entry)) {
             $item_tabs[] = array(
                 'type'  => 'reagentForSpells',
-                'table' => 'reagent_for',
                 'count' => $count
             );
         }
@@ -1014,27 +998,123 @@ Class WoW_Items {
         if($count = DB::World()->selectCell("SELECT COUNT(*) FROM `disenchant_loot_template` WHERE `item` = %d", $entry)) {
             $item_tabs[] = array(
                 'type'  => 'disenchantItems',
-                'table' => 'disenchants_into',
                 'count' => $count
             );
         }
-		// comments
-		$item_tabs[] = array(
+        $item_tabs[] = array(
             'type'  => 'comments',
             'count' => 0
         );
         return $item_tabs;
     }
     
-    //Tabs data is still missing into the DB tables, it has to be dumped from the world DB, in order to make it safer and faster...
-    public function GetItemTabContents($entry) {
-        foreach ($item_tabs as $tab) {
-		    if($tab['type'] != 'comments'){
-		        for($i=0;$i<$tab['count'];$i++){
-		            $lines[] = DB::WoW()->selectRow("SELECT * FROM `DBPREFIX_item_tabs_".$table."` WHERE `itemID` = %d", $entry);
-		        }
-		    }
+    public function GetItemTabContents($entry, $tab_type, &$item_tabs) {
+        if($entry <= 0) {
+            WoW_Log::WriteError('%s : wrong item entry (%d)!', __METHOD__, $entry);
+            return false;
         }
+        if(!in_array($tab_type, $item_tabs)) {
+            WoW_Log::WriteError('%s : empty tab for item #%d (%s), ignore.', __METHOD__, $entry, $tab_type);
+            return false;
+        }
+        $allowed_types = array(
+            'dropCreatures',
+            'dropGameObjects',
+            'vendors',
+            'currencyForItems',
+            'rewardFromQuests',
+            'skinnedFromCreatures',
+            'pickPocketCreatures',
+            'minedFromCreatures',
+            'createdBySpells',
+            'reagentForSpells',
+            'disenchantItems'
+        );
+        if(!in_array($tab_type, $allowed_types)) {
+            WoW_Log::WriteError('%s : wrong tab type for item #%d: %s, ignore.', __METHOD__, $entry, $tab_type);
+            return false;
+        }
+        $item_tabs = array();
+        $item_tabs['table_headers'] = array(); // Table headers
+        $item_tabs['table_contents'] = array(); // Table contents
+        
+        // Generate headers
+        // Generate contents
+        switch($tab_type) {
+            case 'dropCreatures':
+                /*$item_tabs['table_headers'] = array(
+                    array(
+                        'class' => '-link',
+                        'type' => 'name'
+                    ),
+                    array(
+                        'class' => '-link',
+                        'type' => 'type',
+                    ),
+                    array(
+                        'class' => 'link numeric',
+                        'type' => 'level',
+                    ),
+                    array(
+                        'class' => '-link',
+                        'type' => 'zone'
+                    ),
+                    array(
+                        'class' => '-link numeric',
+                        'type' => 'droprate'
+                    )
+                );
+                $creature_loot = DB::World()->select("
+                SELECT
+                `a`.`entry` AS `id`,
+                `a`.`name`,
+                `a`.`minlevel` AS `minLevel`, 
+                `a`.`maxlevel` AS `maxLevel`, 
+                `a`.`rank` AS `classification`, 
+                `a`.`KillCredit1`, 
+                `a`.`KillCredit2`, 
+                `a`.`type`,
+                `b`.`ChanceOrQuestChance`, 
+                `b`.`groupid`,
+                `b`.`mincountOrRef`,
+                `b`.`item`
+                FROM `creature_template` AS `a`
+                JOIN `creature_loot_template` AS `b` ON `b`.`entry` = `a`.`entry`
+                WHERE `b`.`item` = %d", $entry);
+                if(!$creature_loot) {
+                    return false;
+                }
+                foreach($creature_loot as $creature) {
+                    if(WoW_Utils::IsBossCreature($creature)) {
+                        $drop_percent = WoW_Utils::GenerateLootPercent($creature['id'], 'creature_loot_template', $creature['item']);
+                        $drop_rate = WoW_Utils::GetDropRate($drop_percent);
+                        $item_tabs['table_contents'][] = array(
+                            array(
+                                'td' => '',
+                                'text' => $creature['name']
+                            ),
+                            array(
+                                'td' => '',
+                                'text' => WoW_Locale::GetString('creature_type_' . $creature['type'])
+                            ),
+                            array(
+                                'td' => '',
+                                'text' => $creature['maxLevel']
+                            ),
+                            array(
+                                'td' => ' data-raw=""',
+                                'text' => '',
+                            ),
+                            array(
+                                'td' => ' data-raw="' . $drop_rate . '"',
+                                'text' => WoW_Locale::GetString('template_item_drop_rate_' . $drop_rate)
+                            )
+                        );
+                    }
+                }*/
+                break;
+        }
+        return $item_tabs;
     }
 }
 ?>

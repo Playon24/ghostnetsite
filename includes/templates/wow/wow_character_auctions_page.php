@@ -1,20 +1,19 @@
-
 <div>
 	<div class="sidebar-title">
 		<h3 class="title-auctions">
-			<a href="/wow/vault/character/auction/horde/"><?php echo WoW_Locale::GetString('template_auction_auction'); ?></a>
+			<a href="<?php echo WoW::GetWoWPath(); ?>/wow/vault/character/auction/horde/"><?php echo WoW_Locale::GetString('template_auction_auction'); ?></a>
 		</h3>
 	</div>
 
 		<div class="sidebar-content">
 		
 		<div class="sidebar-cell">
-			<a href="/wow/vault/character/auction/horde/auctions"><?php echo WoW_Locale::GetString('template_auction_my_lots'); ?></a>
+			<a href="<?php echo WoW::GetWoWPath(); ?>/wow/vault/character/auction/horde/auctions"><?php echo WoW_Locale::GetString('template_auction_my_lots'); ?></a>
 
 			<ul>
 				<li>
 					<?php echo WoW_Locale::GetString('template_auction_sold'); ?>
-					<a href="/wow/vault/character/auction/horde/auctions">
+					<a href="<?php echo WoW::GetWoWPath(); ?>/wow/vault/character/auction/horde/auctions">
 						<span>
                         <?php
                         if(WoW_Auction::GetSoldItemsCount() > 0) {
@@ -28,7 +27,7 @@
 				</li>
 				<li>
 					<?php echo WoW_Locale::GetString('template_auction_selling'); ?>
-					<a href="/wow/vault/character/auction/horde/auctions">
+					<a href="<?php echo WoW::GetWoWPath(); ?>/wow/vault/character/auction/horde/auctions">
 						<span>
                         <?php
                         if(WoW_Auction::GetSellingItemsCount() > 0) {
@@ -42,7 +41,7 @@
 				</li>		
 				<li>
 					<?php echo WoW_Locale::GetString('template_auction_ended'); ?>
-					<a href="/wow/vault/character/auction/horde/auctions">
+					<a href="<?php echo WoW::GetWoWPath(); ?>/wow/vault/character/auction/horde/auctions">
 		
 							<span>0</span>
 					</a>
@@ -51,12 +50,12 @@
 		</div>		
 		
 		<div class="sidebar-cell">
-			<a href="/wow/vault/character/auction/horde/bids"><?php echo WoW_Locale::GetString('template_auction_my_bids'); ?></a>
+			<a href="<?php echo WoW::GetWoWPath(); ?>/wow/vault/character/auction/horde/bids"><?php echo WoW_Locale::GetString('template_auction_my_bids'); ?></a>
 			
 			<ul>
 				<li>
 					<?php echo WoW_Locale::GetString('template_auction_won'); ?>
-					<a href="/wow/vault/character/auction/horde/bids">
+					<a href="<?php echo WoW::GetWoWPath(); ?>/wow/vault/character/auction/horde/bids">
 						<span>
                         <?php
                         if(WoW_Auction::GetWonItemsCount() > 0) {
@@ -70,14 +69,14 @@
 				</li>
 				<li>
 					<?php echo WoW_Locale::GetString('template_auction_winning'); ?>
-					<a href="/wow/vault/character/auction/horde/bids">
+					<a href="<?php echo WoW::GetWoWPath(); ?>/wow/vault/character/auction/horde/bids">
 		
 							<span>0</span>
 					</a>
 				</li>	
 				<li>
 					<?php echo WoW_Locale::GetString('template_auction_lost'); ?>
-					<a href="/wow/vault/character/auction/horde/bids">
+					<a href="<?php echo WoW::GetWoWPath(); ?>/wow/vault/character/auction/horde/bids">
 							<span>0</span>
 					</a>
 				</li>
@@ -110,5 +109,4 @@
 			</li>
 		</ul>
 		</div>
-	
 </div>

@@ -149,12 +149,12 @@ $ssv = WoW_Template::GetPageData('ssv');
             if(isset($_GET['g' . $i])) {
                 $socket_info = WoW_Items::GetSocketInfo($_GET['g' . $i]);
                 if($socket_info) {
-                    $sockets_text .= sprintf('<a href="/wow/item/%d" class="gem">
+                    $sockets_text .= sprintf('<a href="%s/wow/item/%d" class="gem">
                     <img src="http://eu.battle.net/wow-assets/static/images/icons/18/%s.jpg" alt="" />
                     <span class="frame"></span>
                     </a>
                     </span>
-                    %s', $socket_info['item'], $socket_info['icon'], $socket_info['text']);
+                    %s', WoW::GetWoWPath(), $socket_info['item'], $socket_info['icon'], $socket_info['text']);
                     if(WoW_Items::IsGemMatchesSocketColor($socket_info['color'], $proto->Socket[$i]['color'])) {
                         $socketBonusEnabled[] = true;
                     }
@@ -212,7 +212,7 @@ $ssv = WoW_Template::GetPageData('ssv');
                     if($prev) {
                         $classes_text .= ', ';
                     }
-                    $classes_text .= sprintf(' <a href="/wow/ru/game/class/%s" class="color-c%d">%s</a>', $class['key'], $class_id, $class_name);
+                    $classes_text .= sprintf(' <a href="%s/wow/game/class/%s" class="color-c%d">%s</a>', WoW::GetWoWPath(), $class['key'], $class_id, $class_name);
                     $prev = true;
                 }
                 $classes_text .= '</li>';
@@ -234,7 +234,7 @@ $ssv = WoW_Template::GetPageData('ssv');
                     if($prev) {
                         $races_text .= ', ';
                     }
-                    $races_text .= sprintf(' <a href="/wow/ru/game/race/%s">%s</a>', $race['key'], $race_name);
+                    $races_text .= sprintf(' <a href="%s/wow/game/race/%s">%s</a>', WoW::GetWoWPath(), $race['key'], $race_name);
                     $prev = true;
                 }
                 $races_text .= '</li>';
@@ -293,10 +293,10 @@ $ssv = WoW_Template::GetPageData('ssv');
                     $pieces_text = null;
                     for($i = 1; $i < $totalItemsCount+1; $i++) {
                         if(in_array($setdata['item' . $i], $setpieces)) {
-                            $pieces_text .= sprintf('<li class="indent"><a class="color-tooltip-beige has-tip" href="/wow/item/%d">%s</li>', $setdata['item' . $i], WoW_Items::GetItemName($setdata['item' . $i]));
+                            $pieces_text .= sprintf('<li class="indent"><a class="color-tooltip-beige has-tip" href="%s/wow/item/%d">%s</li>', WoW::GetWoWPath(), $setdata['item' . $i], WoW_Items::GetItemName($setdata['item' . $i]));
                         }
                         else {
-                            $pieces_text .= sprintf('<li class="indent"><a class="color-d4 has-tip" href="/wow/item/%d">%s</li>', $setdata['item' . $i], WoW_Items::GetItemName($setdata['item' . $i]));
+                            $pieces_text .= sprintf('<li class="indent"><a class="color-d4 has-tip" href="%s/wow/item/%d">%s</li>', WoW::GetWoWPath(), $setdata['item' . $i], WoW_Items::GetItemName($setdata['item' . $i]));
                         }
                     }
                 }
@@ -306,7 +306,7 @@ $ssv = WoW_Template::GetPageData('ssv');
                 if(is_array($setdata)) {
                     $isItemSet = true;
                     for($i = 1; $i < 6; $i++) {
-                        $pieces_text .= sprintf('<li class="indent"><a class="color-d4 has-tip" href="/wow/item/%d">%s</li>', $setdata['item' . $i], WoW_Items::GetItemName($setdata['item' . $i]));
+                        $pieces_text .= sprintf('<li class="indent"><a class="color-d4 has-tip" href="%s/wow/item/%d">%s</li>', WoW::GetWoWPath(), $setdata['item' . $i], WoW_Items::GetItemName($setdata['item' . $i]));
                     }
                 }
             }

@@ -1,4 +1,4 @@
-<form action="/wow/discussion/blog.<?php echo WoW::GetBlogData('id'); ?>/comment?d_ref=%2Fwow%2Fblog%2F<?php echo WoW::GetBlogData('id'); ?>" method="post" onsubmit="return Cms.Comments.validateComment(this);" id="comment-form-reply" class="nested">
+<form action="<?php echo WoW::GetWoWPath(); ?>/wow/discussion/blog.<?php echo WoW::GetBlogData('id'); ?>/comment?d_ref=%2F<?php echo WoW::GetWoWPath(); ?>%2Fwow%2Fblog%2F<?php echo WoW::GetBlogData('id'); ?>" method="post" onsubmit="return Cms.Comments.validateComment(this);" id="comment-form-reply" class="nested">
     	<fieldset>
             <input type="hidden" id="replyTo" name="replyTo" value=""/>
             <input type="hidden" name="xstoken" value="<?php echo WoW_Account::GetSessionInfo('wow_sid'); ?>"/>
@@ -11,8 +11,8 @@
 								<div class="avatar-interior">
 									<?php
                                     echo sprintf('<a href="%s">
-										<img height="64" src="/wow/static/images/2d/avatar/%d-%d.jpg" alt="" />
-									</a>', WoW_Account::GetActiveCharacterInfo('url'), WoW_Account::GetActiveCharacterInfo('race'), WoW_Account::GetActiveCharacterInfo('gender'));
+										<img height="64" src="%s/wow/static/images/2d/avatar/%d-%d.jpg" alt="" />
+									</a>', WoW_Account::GetActiveCharacterInfo('url'), WoW::GetWoWPath(), WoW_Account::GetActiveCharacterInfo('race'), WoW_Account::GetActiveCharacterInfo('gender'));
                                     ?>
 								</div>
 					</div>
@@ -32,17 +32,15 @@
 			</div>
 			<div class="context-links">
 					<a href="%s" title="%s" rel="np" class="icon-profile link-first">%s</a>
-					<a href="/wow/search?f=post&amp;a=%s&amp;s=time" title="%s" rel="np" class="icon-posts"> </a>
-					<a href="/wow/vault/character/auction/horde/" title="%s" rel="np" class="icon-auctions"> </a>
-					<a href="/wow/vault/character/event" title="%s" rel="np" class="icon-events link-last"> </a>
+					<a href="%s/wow/search?f=post&amp;a=%s&amp;s=time" title="%s" rel="np" class="icon-posts"> </a>
+					<a href="%s/wow/vault/character/auction/horde/" title="%s" rel="np" class="icon-auctions"> </a>
+					<a href="%s/wow/vault/character/event" title="%s" rel="np" class="icon-events link-last"> </a>
 			</div>',
             WoW_Account::GetActiveCharacterInfo('name'), WoW_Account::GetActiveCharacterInfo('realmName'),
-            WoW_Account::GetActiveCharacterInfo('url'),
-            WoW_Locale::GetString('template_profile_caption'), WoW_Locale::GetString('template_profile_caption'),
-            urlencode(WoW_Account::GetActiveCharacterInfo('name') . '@' . WoW_Account::GetActiveCharacterInfo('realmName')),
-            WoW_Locale::GetString('template_my_forum_posts_caption'),
-            WoW_Locale::GetString('template_browse_auction_caption'),
-            WoW_Locale::GetString('template_browse_events_caption')
+            WoW_Account::GetActiveCharacterInfo('url'), WoW_Locale::GetString('template_profile_caption'), WoW_Locale::GetString('template_profile_caption'),
+            WoW::GetWoWPath(), urlencode(WoW_Account::GetActiveCharacterInfo('name') . '@' . WoW_Account::GetActiveCharacterInfo('realmName')), WoW_Locale::GetString('template_my_forum_posts_caption'),
+            WoW::GetWoWPath(), WoW_Locale::GetString('template_browse_auction_caption'),
+            WoW::GetWoWPath(), WoW_Locale::GetString('template_browse_events_caption')
             );
             echo $primary_character_context;
             ?>
@@ -82,7 +80,7 @@
 			var textAreaFocused = false;
 		//]]>
 	</script>
-    <form action="/wow/discussion/blog.<?php echo WoW::GetBlogData('id'); ?>/comment?d_ref=%2Fwow%2Fblog%2F<?php echo WoW::GetBlogData('id'); ?>" method="post" onsubmit="return Cms.Comments.validateComment(this);" id="comment-form">
+    <form action="<?php echo WoW::GetWoWPath(); ?>/wow/discussion/blog.<?php echo WoW::GetBlogData('id'); ?>/comment?d_ref=%2Fwow%2Fblog%2F<?php echo WoW::GetBlogData('id'); ?>" method="post" onsubmit="return Cms.Comments.validateComment(this);" id="comment-form">
     	<fieldset>
             <input type="hidden" name="xstoken" value="<?php echo WoW_Account::GetSessionInfo('wow_sid'); ?>"/>
             <input type="hidden" name="sessionPersist" value="discussion.comment"/>
@@ -93,8 +91,8 @@
 								<div class="avatar-interior">
 									<?php
                                     echo sprintf('<a href="%s">
-										<img height="64" src="/wow/static/images/2d/avatar/%d-%d.jpg" alt="" />
-									</a>', WoW_Account::GetActiveCharacterInfo('url'), WoW_Account::GetActiveCharacterInfo('race'), WoW_Account::GetActiveCharacterInfo('gender'));
+										<img height="64" src="%s/wow/static/images/2d/avatar/%d-%d.jpg" alt="" />
+									</a>', WoW_Account::GetActiveCharacterInfo('url'), WoW::GetWoWPath(), WoW_Account::GetActiveCharacterInfo('race'), WoW_Account::GetActiveCharacterInfo('gender'));
                                     ?>
 								</div>
 					</div>

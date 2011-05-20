@@ -35,7 +35,7 @@ if(isset($_POST['accountName'])) {
         WoW_Account::SetLastErrorCode(ERROR_EMPTY_PASSWORD);
     }
     if(WoW_Account::PerformLogin($username, $password)) {
-        header('Location: /login/login.frag');
+        header('Location: ' . WoW::GetWoWPath() . '/login/login.frag');
         exit;
     }
     // Other error messages will appear automaticaly.

@@ -66,12 +66,12 @@
                                 foreach($auction_items as $item) {
                                     echo sprintf('<tr id="auction-%d" class="row%d">
 											<td class="item" data-raw="-4 %s">
-												<a href="/wow/item/%d" data-item="t=true&amp;i=%d&amp;s=%d" class="icon-frame frame-36" style="background-image: url(\'http://eu.media.blizzard.com/wow/icons/36/%s.jpg\');"> </a>
-												<a href="/wow/item/%d" data-item="t=true&amp;i=%d&amp;s=%d" class="color-q%d"><strong>%s</strong></a><br />
+												<a href="%s/wow/item/%d" data-item="t=true&amp;i=%d&amp;s=%d" class="icon-frame frame-36" style="background-image: url(\'http://eu.media.blizzard.com/wow/icons/36/%s.jpg\');"> </a>
+												<a href="%s/wow/item/%d" data-item="t=true&amp;i=%d&amp;s=%d" class="color-q%d"><strong>%s</strong></a><br />
 												<a href="%s">%s</a>
 
 		<span class="png-fix" data-tooltip="%s">
-			<img src="/wow/static/images/character/auction/me.png" alt="" style="margin-bottom: -3px" />
+			<img src="%s/wow/static/images/character/auction/me.png" alt="" style="margin-bottom: -3px" />
 		</span>
 											</td>
 											<td class="quantity">%d</td>
@@ -115,10 +115,13 @@
 												<a href="browse?itemId=%d" class="ah-button">%s</a>
 												<a href="javascript:;" class="ah-button" onclick="Auction.openCancel(%d);">%s</a>
 											</td>
-										</tr>', $item['auction_id'], $toggleStyle % 2 ? '1' : '2', $item['name'], $item['id'], $item['id'], $item['guid'], $item['icon'],
-                                        $item['id'], $item['id'], $item['guid'], $item['quality'], $item['name'],
+										</tr>',
+                                        $item['auction_id'], $toggleStyle % 2 ? '1' : '2',
+                                        $item['name'], WoW::GetWoWPath(), $item['id'], $item['id'], $item['guid'], $item['icon'],
+                                        WoW::GetWoWPath(), $item['id'], $item['id'], $item['guid'], $item['quality'], $item['name'],
                                         WoW_Account::GetActiveCharacterInfo('url'), WoW_Account::GetActiveCharacterInfo('name'),
                                         WoW_Locale::GetString('template_auction_you_are_the_seller'),
+                                        WoW::GetWoWPath(),
                                         $item['count'], $item['time'], WoW_Locale::GetString('template_auction_title_time_' . $item['time']), WoW_Locale::GetString('template_auction_text_time_' . $item['time']),
                                         WoW_Locale::GetString('template_auction_no_bids'),
                                         $item['price_raw'], $item['auction_id'], $item['price']['gold'], $item['price']['silver'], $item['price']['copper'],

@@ -91,10 +91,10 @@ Class WoW_Template {
     public static function PrintCSSForBNPage() {
         switch(self::GetTemplateTheme()) {
             case 'account':
-                $root_path = '/account';
+                $root_path = WoW::GetWoWPath() . '/account';
                 break;
             default:
-                $root_path = '/static';
+                $root_path = WoW::GetWoWPath() . '/static';
                 break;
         }
         $css_data = array(
@@ -295,7 +295,7 @@ Class WoW_Template {
                         'skip_path' => false
                     ),
                     array(
-                        'path' => '/css/account-creation/streamlined-creation-ie7.css',
+                        'path' =>  '/css/account-creation/streamlined-creation-ie7.css',
                         'version' => 19,
                         'browser' => 'IE 7',
                         'skip_path' => false
@@ -330,42 +330,42 @@ Class WoW_Template {
     public static function PrintCSSForPage() {
         $css_data = array(
             array(
-                'path' => '/wow/static/local-common/css/common.css',
+                'path' => WoW::GetWoWPath() . '/wow/static/local-common/css/common.css',
                 'version' => 15,
                 'browser' => false,
             ),
             array(
-                'path' => '/wow/static/local-common/css/common-ie.css',
+                'path' => WoW::GetWoWPath() . '/wow/static/local-common/css/common-ie.css',
                 'version' => 15,
                 'browser' => 'IE',
             ),
             array(
-                'path' => '/wow/static/local-common/css/common-ie6.css',
+                'path' => WoW::GetWoWPath() . '/wow/static/local-common/css/common-ie6.css',
                 'version' => 15,
                 'browser' => 'IE 6',
             ),
             array(
-                'path' => '/wow/static/local-common/css/common-ie7.css',
+                'path' => WoW::GetWoWPath() . '/wow/static/local-common/css/common-ie7.css',
                 'version' => 15,
                 'browser' => 'IE 7',
             ),
             array(
-                'path' => '/wow/static/css/wow.css',
+                'path' => WoW::GetWoWPath() . '/wow/static/css/wow.css',
                 'version' => 3,
                 'browser' => false,
             ),
             array(
-                'path' => '/wow/static/css/wow-ie.css',
+                'path' => WoW::GetWoWPath() . '/wow/static/css/wow-ie.css',
                 'version' => 3,
                 'browser' => 'IE',
             ),
             array(
-                'path' => '/wow/static/css/wow-ie7.css',
+                'path' => WoW::GetWoWPath() . '/wow/static/css/wow-ie7.css',
                 'version' => 3,
                 'browser' => 'IE 7',
             ),
             array(
-                'path' => '/wow/static/css/wow-ie6.css',
+                'path' => WoW::GetWoWPath() . '/wow/static/css/wow-ie6.css',
                 'version' => 3,
                 'browser' => 'IE 6',
             )
@@ -375,27 +375,27 @@ Class WoW_Template {
             default:
                 $css_data_page = array(
                     array(
-                        'path' => '/wow/static/local-common/css/cms/homepage.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/local-common/css/cms/homepage.css',
                         'version' => 15,
                         'browser' => false,
                     ),
                     array(
-                        'path' => '/wow/static/local-common/css/cms/blog.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/local-common/css/cms/blog.css',
                         'version' => 15,
                         'browser' => false,
                     ),
                     array(
-                        'path' => '/wow/static/local-common/css/cms/cms-common.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/local-common/css/cms/cms-common.css',
                         'version' => 15,
                         'browser' => false,
                     ),
                     array(
-                        'path' => '/wow/static/css/cms.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/cms.css',
                         'version' => 3,
                         'browser' => false,
                     ),
                     array(
-                        'path' => '/wow/static/css/cms-ie6.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/cms-ie6.css',
                         'version' => 3,
                         'browser' => 'IE 6',
                     )
@@ -405,12 +405,12 @@ Class WoW_Template {
             case 'search_results':
                 $css_data_page = array(
                     array(
-                        'path' => '/wow/static/local-common/css/cms/search.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/local-common/css/cms/search.css',
                         'version' => 16,
                         'browser' => false
                     ),
                     array(
-                        'path' => '/wow/static/css/search.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/search.css',
                         'version' => 7,
                         'browser' => false
                     )
@@ -420,32 +420,32 @@ Class WoW_Template {
             case 'character_profile_advanced':
                 $css_data_page = array(
                     array(
-                        'path' => '/wow/static/css/profile.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile.css',
                         'version' => 4,
                         'browser' => false
                     ),
                     array(
-                        'path' => '/wow/static/css/profile-ie.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile-ie.css',
                         'version' => 4,
                         'browser' => 'IE'
                     ),
                     array(
-                        'path' => '/wow/static/css/profile-ie6.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile-ie6.css',
                         'version' => 4,
                         'browser' => 'IE 6'
                     ),
                     array(
-                        'path' => '/wow/static/css/character/summary.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/character/summary.css',
                         'version' => 4,
                         'browser' => false
                     ),
                     array(
-                        'path' => '/wow/static/css/character/summary-ie.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/character/summary-ie.css',
                         'version' => 4,
                         'browser' => 'IE'
                     ),
                     array(
-                        'path' => '/wow/static/css/character/summary-ie6.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/character/summary-ie6.css',
                         'version' => 4,
                         'browser' => 'IE 6'
                     )
@@ -454,47 +454,47 @@ Class WoW_Template {
             case 'character_talents':
                 $css_data_page = array(
                     array(
-                        'path' => '/wow/static/css/profile.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile.css',
                         'version' => 4,
                         'browser' => false
                     ),
                     array(
-                        'path' => '/wow/static/css/profile-ie.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile-ie.css',
                         'version' => 4,
                         'browser' => 'IE'
                     ),
                     array(
-                        'path' => '/wow/static/css/profile-ie6.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile-ie6.css',
                         'version' => 4,
                         'browser' => 'IE 6'
                     ),
                     array(
-                        'path' => '/wow/static/css/profile-ie6.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile-ie6.css',
                         'version' => 4,
                         'browser' => 'IE 6'
                     ),
                     array(
-                        'path' => '/wow/static/css/character/talent.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/character/talent.css',
                         'version' => 6,
                         'browser' => false
                     ),
                     array(
-                        'path' => '/wow/static/css/character/talent-ie6.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/character/talent-ie6.css',
                         'version' => 6,
                         'browser' => 'IE 6'
                     ),
                     array(
-                        'path' => '/wow/static/css/tool/talent-calculator.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/tool/talent-calculator.css',
                         'version' => 6,
                         'browser' => false
                     ),
                     array(
-                        'path' => '/wow/static/css/tool/talent-calculator-ie.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/tool/talent-calculator-ie.css',
                         'version' => 6,
                         'browser' => 'IE'
                     ),
                     array(
-                        'path' => '/wow/static/css/tool/talent-calculator-ie6.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/tool/talent-calculator-ie6.css',
                         'version' => 6,
                         'browser' => 'IE 6'
                     )
@@ -503,37 +503,37 @@ Class WoW_Template {
             case 'character_achievements':
                 $css_data_page = array(
                     array(
-                        'path' => '/wow/static/css/profile.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile.css',
                         'version' => 4,
                         'browser' => false
                     ),
                     array(
-                        'path' => '/wow/static/css/profile-ie.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile-ie.css',
                         'version' => 4,
                         'browser' => 'IE'
                     ),
                     array(
-                        'path' => '/wow/static/css/profile-ie6.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile-ie6.css',
                         'version' => 4,
                         'browser' => 'IE 6'
                     ),
                     array(
-                        'path' => '/wow/static/css/profile-ie6.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile-ie6.css',
                         'version' => 4,
                         'browser' => 'IE 6'
                     ),
                     array(
-                        'path' => '/wow/static/css/character/achievement.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/character/achievement.css',
                         'version' => 7,
                         'browser' => false
                     ),
                     array(
-                        'path' => '/wow/static/css/character/achievement-ie6.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/character/achievement-ie6.css',
                         'version' => 7,
                         'browser' => 'IE 6'
                     ),
                     array(
-                        'path' => '/wow/static/css/character/achievement-ie7.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/character/achievement-ie7.css',
                         'version' => 7,
                         'browser' => 'IE 7'
                     ),
@@ -542,27 +542,27 @@ Class WoW_Template {
             case 'character_statistics':
                 $css_data_page = array(
                     array(
-                        'path' => '/wow/static/css/profile.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile.css',
                         'version' => 4,
                         'browser' => false
                     ),
                     array(
-                        'path' => '/wow/static/css/profile-ie.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile-ie.css',
                         'version' => 4,
                         'browser' => 'IE'
                     ),
                     array(
-                        'path' => '/wow/static/css/profile-ie6.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile-ie6.css',
                         'version' => 4,
                         'browser' => 'IE 6'
                     ),
                     array(
-                        'path' => '/wow/static/css/profile-ie6.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile-ie6.css',
                         'version' => 4,
                         'browser' => 'IE 6'
                     ),
                     array(
-                        'path' => '/wow/static/css/character/statistic.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/character/statistic.css',
                         'version' => 7,
                         'browser' => false
                     )
@@ -571,22 +571,22 @@ Class WoW_Template {
             case 'character_feed':
                 $css_data_page = array(
                     array(
-                        'path' => '/wow/static/css/profile.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile.css',
                         'version' => 4,
                         'browser' => false
                     ),
                     array(
-                        'path' => '/wow/static/css/profile-ie.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile-ie.css',
                         'version' => 4,
                         'browser' => 'IE'
                     ),
                     array(
-                        'path' => '/wow/static/css/profile-ie6.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile-ie6.css',
                         'version' => 4,
                         'browser' => 'IE 6'
                     ),
                     array(
-                        'path' => '/wow/static/css/character/feed.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/character/feed.css',
                         'version' => 7,
                         'browser' => false
                     )
@@ -595,27 +595,27 @@ Class WoW_Template {
             case 'blog':
                 $css_data_page = array(
                     array(
-                        'path' => '/wow/static/css/lightbox.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/lightbox.css',
                         'version' => 7,
                         'browser' => false
                     ),
                     array(
-                        'path' => '/wow/static/local-common/css/cms/blog.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/local-common/css/cms/blog.css',
                         'version' => 17,
                         'browser' => false
                     ),
                     array(
-                        'path' => '/wow/static/local-common/css/cms/comments.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/local-common/css/cms/comments.css',
                         'version' => 17,
                         'browser' => false
                     ),
                     array(
-                        'path' => '/wow/static/css/cms.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/cms.css',
                         'version' => 7,
                         'browser' => false
                     ),
                     array(
-                        'path' => '/wow/static/css/cms-ie6.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/cms-ie6.css',
                         'version' => 7,
                         'browser' => 'IE 6'
                     )
@@ -627,22 +627,22 @@ Class WoW_Template {
             case 'forum_new_topic':
                 $css_data_page = array(
                     array(
-                        'path' => '/wow/static/local-common/css/cms/forums.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/local-common/css/cms/forums.css',
                         'version' => 15,
                         'browser' => false
                     ),
                     array(
-                        'path' => '/wow/static/local-common/css/cms/comments.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/local-common/css/cms/comments.css',
                         'version' => 15,
                         'browser' => false
                     ),
                     array(
-                        'path' => '/wow/static/css/cms.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/cms.css',
                         'version' => 15,
                         'browser' => false
                     ),
                     array(
-                        'path' => '/wow/static/css/cms-ie6.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/cms-ie6.css',
                         'version' => 15,
                         'browser' => 'IE 6'
                     )
@@ -652,17 +652,17 @@ Class WoW_Template {
             case 'item_list':
                 $css_data_page = array(
                     array(
-                        'path' => '/wow/static/css/wiki/wiki.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/wiki/wiki.css',
                         'version' => 10,
                         'browser' => false
                     ),
                     array(
-                        'path' => '/wow/static/css/wiki/wiki-ie6.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/wiki/wiki-ie6.css',
                         'version' => 10,
                         'browser' => 'IE'
                     ),
                     array(
-                        'path' => '/wow/static/css/wiki/item.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/wiki/item.css',
                         'version' => 10,
                         'browser' => false
                     )
@@ -675,61 +675,61 @@ Class WoW_Template {
             case 'guild_professions':
                 $css_data_page = array(
                     array(
-                        'path' => '/wow/static/css/profile.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile.css',
                         'version' => 4,
                         'browser' => false
                     ),
                     array(
-                        'path' => '/wow/static/css/profile-ie.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile-ie.css',
                         'version' => 4,
                         'browser' => 'IE'
                     ),
                     array(
-                        'path' => '/wow/static/css/profile-ie6.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile-ie6.css',
                         'version' => 4,
                         'browser' => 'IE 6'
                     ),
                     array(
-                        'path' => '/wow/static/css/profile-ie6.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile-ie6.css',
                         'version' => 4,
                         'browser' => 'IE 6'
                     ),
                     array(
-                        'path' => '/wow/static/css/guild/guild.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/guild/guild.css',
                         'version' => 6,
                         'browser' => false
                     ),
                     array(
-                        'path' => '/wow/static/css/guild/summary.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/guild/summary.css',
                         'version' => 6,
                         'browser' => false
                     ),
                     array(
-                        'path' => '/wow/static/css/guild/summary-ie6.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/guild/summary-ie6.css',
                         'version' => 6,
                         'browser' => 'IE 6'
                     )
                 );
                 if(self::GetPageIndex() == 'guild_perks') {
                     $css_data_page[] = array(
-                        'path' => '/wow/static/css/guild/perks.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/guild/perks.css',
                         'version' => 7,
                         'browser' => false
                     );
                 }
                 elseif(in_array(self::GetPageIndex(), array('guild_roster', 'guild_professions'))) {
                     $css_data_page[] = array(
-                        'path' => '/wow/static/css/guild/roster.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/guild/roster.css',
                         'version' => 7,
                         'browser' => false
                     );
                     $css_data_page[] = array(
-                        'path' => '/wow/static/css/guild/roster-ie.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/guild/roster-ie.css',
                         'version' => 7,
                         'browser' => 'IE'
                     );
                     $css_data_page[] = array(
-                        'path' => '/wow/static/css/guild/roster-ie6.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/guild/roster-ie6.css',
                         'version' => 7,
                         'browser' => 'IE 6'
                     );
@@ -738,7 +738,7 @@ Class WoW_Template {
             case 'realm_status':
                 $css_data_page = array(
                     array(
-                        'path' => '/wow/static/css/game/realmstatus.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/game/realmstatus.css',
                         'version' => 7,
                         'browser' => false
                     )
@@ -748,27 +748,27 @@ Class WoW_Template {
             case 'character_reputation_tabular':
                 $css_data_page = array(
                     array(
-                        'path' => '/wow/static/css/profile.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile.css',
                         'version' => 4,
                         'browser' => false
                     ),
                     array(
-                        'path' => '/wow/static/css/character/reputation.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/character/reputation.css',
                         'version' => 7,
                         'browser' => false
                     ),
                     array(
-                        'path' => '/wow/static/css/character/reputation-ie.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/character/reputation-ie.css',
                         'version' => 7,
                         'browser' => 'IE'
                     ),
                     array(
-                        'path' => '/wow/static/css/character/reputation-ie6.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/character/reputation-ie6.css',
                         'version' => 7,
                         'browser' => 'IE 6'
                     ),
                     array(
-                        'path' => '/wow/static/css/character/reputation-ie7.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/character/reputation-ie7.css',
                         'version' => 7,
                         'browser' => 'IE 7'
                     ),
@@ -777,32 +777,32 @@ Class WoW_Template {
             case 'character_pvp':
                 $css_data_page = array(
                     array(
-                        'path' => '/wow/static/css/profile.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile.css',
                         'version' => 4,
                         'browser' => false
                     ),
                     array(
-                        'path' => '/wow/static/css/profile-ie.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile-ie.css',
                         'version' => 4,
                         'browser' => 'IE'
                     ),
                     array(
-                        'path' => '/wow/static/css/profile-ie6.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile-ie6.css',
                         'version' => 4,
                         'browser' => 'IE 6'
                     ),
                     array(
-                        'path' => '/wow/static/css/character/pvp.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/character/pvp.css',
                         'version' => 7,
                         'browser' => false
                     ),
                     array(
-                        'path' => '/wow/static/css/character/pvp-ie.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/character/pvp-ie.css',
                         'version' => 7,
                         'browser' => 'IE'
                     ),
                     array(
-                        'path' => '/wow/static/css/arena/arena.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/arena/arena.css',
                         'version' => 7,
                         'browser' => false
                     )
@@ -811,17 +811,17 @@ Class WoW_Template {
             case 'game':
                 $css_data_page = array(
                     array(
-                        'path' => '/wow/static/css/wiki/wiki.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/wiki/wiki.css',
                         'version' => 10,
                         'browser' => false
                     ),
                     array(
-                        'path' => 'wow/static/css/wiki/wiki-ie.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/wiki/wiki-ie.css',
                         'version' => 10,
                         'browser' => 'IE'
                     ),
                     array(
-                        'path' => '/wow/static/css/game/game-index.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/game/game-index.css',
                         'version' => 10,
                         'browser' => false
                     )
@@ -830,12 +830,12 @@ Class WoW_Template {
             case 'account_status':
                 $css_data_page = array(
                     array(
-                        'path' => '/wow/static/local-common/css/cms/forums.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/local-common/css/cms/forums.css',
                         'version' => 17,
                         'browser' => false
                     ),
                     array(
-                        'path' => '/wow/static/local-common/css/cms/cms-common.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/local-common/css/cms/cms-common.css',
                         'version' => 17,
                         'browser' => false
                     )
@@ -844,27 +844,27 @@ Class WoW_Template {
             case 'auction_lots':
                 $css_data_page = array(
                     array(
-                        'path' => '/wow/static/css/profile.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile.css',
                         'version' => 10,
                         'browser' => false
                     ),
                     array(
-                        'path' => '/wow/static/css/profile-ie.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile-ie.css',
                         'version' => 10,
                         'browser' => 'IE'
                     ),
                     array(
-                        'path' => '/wow/static/css/profile-ie6.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile-ie6.css',
                         'version' => 10,
                         'browser' => 'IE 6'
                     ),
                     array(
-                        'path' => '/wow/static/css/character/auction.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/character/auction.css',
                         'version' => 10,
                         'browser' => false
                     ),
                     array(
-                        'path' => '/wow/static/css/character/auction-ie6.css',
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/character/auction-ie6.css',
                         'version' => 10,
                         'browser' => 'IE 6'
                     )
@@ -873,12 +873,12 @@ Class WoW_Template {
         }
         $cssList = array_merge($css_data, $css_data_page);
         $cssList[] = array(
-            'path' => sprintf('/wow/static/local-common/css/locale/%s.css', WoW_Locale::GetLocale(LOCALE_DOUBLE)),
+            'path' => sprintf('%s/wow/static/local-common/css/locale/%s.css', WoW::GetWoWPath(), WoW_Locale::GetLocale(LOCALE_DOUBLE)),
             'version' => 15,
             'browser' => false
         );
         $cssList[] = array(
-            'path' => sprintf('/wow/static/css/locale/%s.css', WoW_Locale::GetLocale(LOCALE_DOUBLE)),
+            'path' => sprintf('%s/wow/static/css/locale/%s.css', WoW::GetWoWPath(), WoW_Locale::GetLocale(LOCALE_DOUBLE)),
             'version' => 15,
             'browser' => false
         );

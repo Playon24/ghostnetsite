@@ -117,7 +117,7 @@ if(!$achievements) {
         }
         if(isset($ach['reward_item'])) {
             $tmp_str = explode(':', $ach['titleReward']);
-            $ach['titleReward'] = sprintf('%s: <a href="/wow/item/%d" class="color-q%d">%s</a>', $tmp_str[0], $ach['reward_item']['entry'], $ach['reward_item']['Quality'], $ach['reward_item']['name']);
+            $ach['titleReward'] = sprintf('%s: <a href="%s/wow/item/%d" class="color-q%d">%s</a>', $tmp_str[0], WoW::GetWoWPath(), $ach['reward_item']['entry'], $ach['reward_item']['Quality'], $ach['reward_item']['name']);
         }
         echo sprintf('
         <li class="achievement %s" data-id="%d" data-href="#%d:a%d">

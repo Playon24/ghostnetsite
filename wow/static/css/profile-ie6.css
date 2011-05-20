@@ -10,7 +10,7 @@ ul.profile-view-options a { background-image: url("../images/icons/view-options.
 
 ul.profile-sidebar-links a.wowhead { background-image: url("../images/icons/wowhead.gif"); }
 
-a.profile-sidebar-character-model .fade { background: none; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/wow/static/images/character/model-fade.png', sizingMethod='crop'); }
+a.profile-sidebar-character-model .fade { background: none; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/character/model-fade.png', sizingMethod='crop'); }
 a.profile-sidebar-character-model .hover { background: none; }
 
 .profile-sidebar-character-info .level-race-class { letter-spacing: 1px; }
@@ -27,7 +27,7 @@ a.profile-sidebar-character-model .hover { background: none; }
 
 /* sidebar tabard */
 .profile-info-anchor { background: none !important; }
-.profile-sidebar-tabard .guild-tabard .tabard-overlay { background: none; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/wow/static/images/guild/tabards/bg_overlay_01.png', sizingMethod='image');}
+.profile-sidebar-tabard .guild-tabard .tabard-overlay { background: none; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/guild/tabards/bg_overlay_01.png', sizingMethod='image');}
 .profile-sidebar-tabard .guild-tabard .crest { background: none; }
 
 /* tabard */

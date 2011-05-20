@@ -22,6 +22,7 @@ Class WoW {
     private static $last_news = array();
     private static $blog_contents = array();
     private static $carousel_data = array();
+    private static $wow_path = '';
     
     public static function GetCarouselData() {
         if(!self::$carousel_data) {
@@ -310,6 +311,10 @@ Class WoW {
             return false;
         }
         return self::$blog_contents['comments'];
+    }
+    
+    public static function GetWoWPath() {
+        return WoWConfig::$WoW_Path;
     }
 }
 ?>

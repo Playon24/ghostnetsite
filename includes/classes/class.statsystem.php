@@ -1100,7 +1100,105 @@ class WoW_StatSystem {
     }
     
     private static function UpdateStats($stat) {
-        //TODO: UpdateStats
+        if($stat > STAT_SPIRIT) {
+            return false;
+        }
+        
+        $value = self::GetTotalStatValue($stat);
+        
+        self::SetStat($stat, $value);
+        
+        switch($stat) {
+            case STAT_STRENGTH:
+                self::UpdateShieldBlockValue();
+                break;
+            case STAT_AGILITY:
+                self::UpdateArmor();
+                self::UpdateAllCritPercentages();
+                self::UpdateDodgePercentage();
+                break;
+            case STAT_STAMINA:
+            case STAT_INTELLECT:
+                self::UpdateMaxPower(POWER_MANA);
+                self::UpdateAllSpellCritChances();
+                self::UpdateArmor(); //SPELL_AURA_MOD_RESISTANCE_OF_INTELLECT_PERCENT, only armor currently
+                break;
+            case STAT_SPIRIT:
+                break;
+            default:
+                break;
+        }
+        // Need update (exist AP from stat auras)
+        self::UpdateAttackPowerAndDamage();
+        self::UpdateAttackPowerAndDamage(true);
+        
+        self::UpdateSpellDamageAndHealingBonus();
+        self::UpdateManaRegen();
+        return true;
+    }
+    
+    private static function UpdateManaRegen() {
+        $intellect = self::GetStat(STAT_INTELLECT);
+        // Mana regen from spirit and intellect
+        $power_regen = sqrt($intellect) * self::OCTRegenMPPerSpirit();
+        //TODO: UpdateManaRegen
+    }
+    
+    private static function OCTRegenMPPerSpirit() {
+        //TODO: OCTRegenMPPerSpirit
+    }
+    
+    private static function GetStat($stat) {
+        return self::GetInt32Value(UNIT_FIELD_STAT0 + $stat);
+    }
+    
+    private static function UpdateSpellDamageAndHealingBonus() {
+        //TODO: UpdateSpellDamageAndHealingBonus
+    }
+    
+    private static function UpdateAllSpellCritChances() {
+        //TODO: UpdateAllSpellCritChances
+    }
+    
+    private static function UpdateAllCritPercentages() {
+        $value = self::GetMeleeCritFromAgility();
+        
+        self::SetBaseModValue(CRIT_PERCENTAGE, PCT_MOD, $value);
+        self::SetBaseModValue(OFFHAND_CRIT_PERCENTAGE, PCT_MOD, $value);
+        self::SetBaseModValue(RANGED_CRIT_PERCENTAGE, PCT_MOD, $value);
+        
+        self::UpdateCritPercentage(BASE_ATTACK);
+        self::UpdateCritPercentage(OFF_ATTACK);
+        self::UpdateCritPercentage(RANGED_ATTACK);
+    }
+    
+    private static function SetBaseModValue($modGroup, $modType, $value) {
+        //TODO: SetBaseModValue
+    }
+    
+    private static function GetMeleeCritFromAgility() {
+        //TODO: GetMeleeCritFromAgility
+    }
+    
+    private static function UpdateDodgePercentage() {
+        //TODO: UpdateDodgePercentage
+    }
+    
+    private static function GetTotalStatValue($stat) {
+        $unitMod = UNIT_MOD_STAT_START + $stat;
+        if(self::$m_auraModifiersGroup[$unitMod][TOTAL_PCT] <= 0.0) {
+            return 0.0;
+        }
+        $value = self::$m_auraModifiersGroup[$unitMod][BASE_VALUE] + self::GetCreateStat($stat);
+        $value *= self::$m_auraModifiersGroup[$unitMod][BASE_PCT];
+        $value += self::$m_auraModifiersGroup[$unitMod][TOTAL_VALUE];
+        $value *= self::$m_auraModifiersGroup[$unitMod][TOTAL_PCT];
+
+        return $value;
+    }
+    
+    private static function GetCreateStat($stat) {
+        return self::$m_createStats[$stat];
     }
     
     private static function GetStatByAuraGroup($unitMod) {

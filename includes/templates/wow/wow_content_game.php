@@ -3,13 +3,13 @@
 <div class="content-trail">
 <ol class="ui-breadcrumb">
 <li>
-<a href="/wow/" rel="np">
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/" rel="np">
 World of Warcraft
 </a>
 </li>
 <li class="last">
-<a href="/wow/game/" rel="np">
-Игра
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/game/" rel="np">
+<?php echo WoW_Locale::GetString('template_menu_game'); ?>
 </a>
 </li>
 </ol>
@@ -25,11 +25,11 @@ World of Warcraft
 $pages_guides = array('guide', 'race', 'class', 'patch-notes', 'lore');
 $count = 1;
 foreach($pages_guides as $guide) {
-    echo sprintf('<a href="%s/" class="main-content-banner %s-bnr bnr0%d" style="background-image:url(\'/wow/static/images/game/landing/thumb-main-content-%d.jpg\');">
+    echo sprintf('<a href="%s/" class="main-content-banner %s-bnr bnr0%d" style="background-image:url(\'%s/wow/static/images/game/landing/thumb-main-content-%d.jpg\');">
 	<span class="banner-title">%s</span>
 	<span class="banner-desc">%s</span>
 </a>
-', $guide, $count % 2 ? 'left' : 'right', $count, $count, WoW_Locale::GetString('template_game_' . str_replace('-', '_', $guide) . '_title'), WoW_Locale::GetString('template_game_' . str_replace('-', '_', $guide) . '_desc'));
+', $guide, $count % 2 ? 'left' : 'right', $count, WoW::GetWoWPath(), $count, WoW_Locale::GetString('template_game_' . str_replace('-', '_', $guide) . '_title'), WoW_Locale::GetString('template_game_' . str_replace('-', '_', $guide) . '_desc'));
     ++$count;
 }
 ?>
@@ -44,13 +44,13 @@ foreach($pages_guides as $guide) {
 					</div>
 					<ul>
 							<li>
-								<a href="guide/">Руководство для начинающих<span>4 декабря 2010 г.</span></a>
+								<a href="<?php echo WoW::GetWoWPath(); ?>/wow/guide/">Руководство для начинающих<span>4 декабря 2010 г.</span></a>
 							</li>
 							<li>
-								<a href="race/">Расы World of Warcraft<span>4 декабря 2010 г.</span></a>
+								<a href="<?php echo WoW::GetWoWPath(); ?>/wow/race/">Расы World of Warcraft<span>4 декабря 2010 г.</span></a>
 							</li>
 							<li>
-								<a href="class/">Классы World of Warcraft<span>4 декабря 2010 г.</span></a>
+								<a href="<?php echo WoW::GetWoWPath(); ?>/wow/class/">Классы World of Warcraft<span>4 декабря 2010 г.</span></a>
 							</li>
 					</ul>
 				</div>
@@ -64,14 +64,14 @@ foreach($pages_guides as $guide) {
 						<ul>
 								<li>
 									<span class="block content-2">
-										<span class="content-title"><a href="/wow/pvp/arena/"><?php echo WoW_Locale::GetString('template_game_arena_season_title'); ?></a></span>
+										<span class="content-title"><a href="<?php echo WoW::GetWoWPath(); ?>/wow/pvp/arena/"><?php echo WoW_Locale::GetString('template_game_arena_season_title'); ?></a></span>
 										<span class="content-desc">
 											<?php echo WoW_Locale::GetString('template_game_arena_season_desc'); ?>
 											<span class="content-block-arenalinks">
                                             <?php
                                             for($i = 2; $i < 6; $i++) {
                                                 if($i == 2 || ($i > 2 && $i % 2)) {
-                                                    echo sprintf('<a href="/wow/pvp/arena/%dv%d/">%s</a>', $i, $i, sprintf(WoW_Locale::GetString('template_team_type_format'), $i, $i));
+                                                    echo sprintf('<a href="%s/wow/pvp/arena/%dv%d/">%s</a>', WoW::GetWoWPath(), $i, $i, sprintf(WoW_Locale::GetString('template_team_type_format'), $i, $i));
                                                     if($i < 5) {
                                                         echo ' - ';
                                                     }
@@ -83,13 +83,13 @@ foreach($pages_guides as $guide) {
 									</span>
 								</li>
 							<li>
-								<a href="/wow/status" class="content-1">
+								<a href="<?php echo WoW::GetWoWPath(); ?>/wow/status" class="content-1">
 									<span class="content-title"><?php echo WoW_Locale::GetString('template_game_realm_status_title'); ?></span>
 									<span class="content-desc"><?php echo WoW_Locale::GetString('template_game_realm_status_desc'); ?></span>
 								</a>
 							</li>
 							<li>
-								<a href="/wow/game/armory" class="content-3">
+								<a href="<?php echo WoW::GetWoWPath(); ?>/wow/game/armory" class="content-3">
 									<span class="content-title"><?php echo WoW_Locale::GetString('template_game_armory_title'); ?></span>
 									<span class="content-desc"><?php echo WoW_Locale::GetString('template_game_armory_desc'); ?></span>
 								</a>

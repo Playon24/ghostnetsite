@@ -3,17 +3,17 @@
 <div class="content-trail">
 <ol class="ui-breadcrumb">
 <li>
-<a href="/wow/" rel="np">
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/" rel="np">
 World of Warcraft
 </a>
 </li>
 <li>
-<a href="/wow/game/" rel="np">
-Игра
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/game/" rel="np">
+<?php echo WoW_Locale::GetString('template_menu_game'); ?>
 </a>
 </li>
 <li class="last">
-<a href="/wow/status" rel="np">
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/status" rel="np">
 <?php echo WoW_Locale::GetString('template_realm_status'); ?>
 </a>
 </li>

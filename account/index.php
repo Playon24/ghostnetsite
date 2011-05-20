@@ -21,11 +21,11 @@
 include('../includes/WoW_Loader.php');
 $url_data = WoW::GetUrlData('management');
 if(!is_array($url_data) || !isset($url_data['action1']) || $url_data['action1'] != 'management') {
-    header('Location: /account/management/');
+    header('Location: ' . WoW::GetWoWPath() . '/account/management/');
     exit;
 }
 if(!WoW_Account::IsLoggedIn()) {
-    header('Location: /login/');
+    header('Location: ' . WoW::GetWoWPath() . '/login/');
     exit;
 }
 WoW_Template::SetTemplateTheme('account');

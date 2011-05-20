@@ -1,9 +1,9 @@
-<link rel="stylesheet" type="text/css" href="/login/static/local-common/css/common.css?v15"/>
-		<link rel="stylesheet" type="text/css" href="/login/static/_themes/bam/css/master.css?v1"/>
-			<link rel="stylesheet" type="text/css" media="all" href="/login/static/local-common/css/locale/ru-ru.css?v15" />
-			<link rel="stylesheet" type="text/css" media="all" href="/login/static/_themes/bam/css/_lang/ru-ru.css?v1" />
-		<script type="text/javascript" src="/login/static/local-common/js/third-party/jquery-1.4.2.min.js?v15"></script>
-		<script type="text/javascript" src="/login/static/local-common/js/core.js?v15"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo WoW::GetWoWPath(); ?>/login/static/local-common/css/common.css?v15"/>
+		<link rel="stylesheet" type="text/css" href="<?php echo WoW::GetWoWPath(); ?>/login/static/_themes/bam/css/master.css?v1"/>
+			<link rel="stylesheet" type="text/css" media="all" href="<?php echo WoW::GetWoWPath(); ?>/login/static/local-common/css/locale/ru-ru.css?v15" />
+			<link rel="stylesheet" type="text/css" media="all" href="<?php echo WoW::GetWoWPath(); ?>/login/static/_themes/bam/css/_lang/ru-ru.css?v1" />
+		<script type="text/javascript" src="<?php echo WoW::GetWoWPath(); ?>/login/static/local-common/js/third-party/jquery-1.4.2.min.js?v15"></script>
+		<script type="text/javascript" src="<?php echo WoW::GetWoWPath(); ?>/login/static/local-common/js/core.js?v15"></script>
 		<script>
 			var targetOrigin = "/";
 
@@ -29,7 +29,7 @@
 		<div id="embedded-login">
 			<h1>Battle.net</h1>
 
-	<form action="" method="post">
+	<form action="<?php echo WoW::GetWoWPath(); ?>/login/login.frag" method="post">
 		<a id="embedded-close" href="javascript:;" onclick="updateParent('close')"> </a>
 
 		<div>
@@ -64,16 +64,16 @@
         
 	<ul id="help-links">
 			<li class="icon-pass">
-				<a href="/account/support/password-reset.html">Не можете войти?</a>
+				<a href="<?php echo WoW::GetWoWPath(); ?>/account/support/password-reset.html">Не можете войти?</a>
 			</li>
 
 
 				<li class="icon-signup">
-					У вас еще нет учетной записи? <a href="/account/creation/tos.html?ref="> Создайте ее!</a>
+					У вас еще нет учетной записи? <a href="<?php echo WoW::GetWoWPath(); ?>/account/creation/tos.html?ref="> Создайте ее!</a>
 				</li>
 
 			<li class="icon-secure">
-				<a href="/security/?ref=">Защитите свою запись от кражи и взлома!</a>
+				<a href="<?php echo WoW::GetWoWPath(); ?>/security/?ref=">Защитите свою запись от кражи и взлома!</a>
 			</li>
 
 

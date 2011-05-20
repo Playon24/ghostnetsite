@@ -55,6 +55,7 @@ Class DB implements DB_Interface {
         }
         $db = new WoW_DatabaseHandler($configs->host, $configs->user, $configs->password, $configs->db_name, $configs->charset, $configs->db_prefix);
         if(!$db || !$db->TestLink()) {
+            WoW_Log::WriteError('%s : unable to establish connection to MySQL server!', __METHOD__);
             return false;
         }
         if($add) {
@@ -84,6 +85,10 @@ Class DB implements DB_Interface {
     private static function GetDB($database_type) {
         if(!self::IsConnected($database_type)) {
             self::ConnectToDB($database_type);
+        }
+        if(!isset(self::$database_objects[$database_type])) {
+            WoW_Log::WriteError('%s : attempt to access non-existed %d database type!', __METHOD__, $database_type);
+            return null;
         }
         return self::$database_objects[$database_type];
     }

@@ -32,6 +32,7 @@ Class WoWConfig {
     public static $DefaultLocale     = 'ru';
     public static $DefaultLocaleID   = 8;
     public static $SkipBanned        = false;
+    public static $WoW_Path          = ''; // Without slash at the end of path. If your site is in root directory, leave this empty.
     
     public static $Realms            = array(
         1 => array(

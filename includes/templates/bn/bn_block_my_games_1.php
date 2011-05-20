@@ -9,7 +9,7 @@
 
 
 		<div class="game-selection " id="game-WOW<?php echo WoW_Account::GetExpansion() > 0 ? 'X' . WoW_Account::GetExpansion() : 'C'; ?>" onclick="openGameDialog(this, '#dialog-WOW<?php echo WoW_Account::GetExpansion() > 0 ? 'X' . WoW_Account::GetExpansion() : 'C'; ?>');" title="<?php echo WoW_Locale::GetString('expansion_' . WoW_Account::GetExpansion()); ?>">
-			<img class="box" src="/static/local-common/images/game-boxes/<?php echo WoW_Locale::GetLocale(LOCALE_DOUBLE); ?>/wow<?php echo WoW_Account::GetExpansion() > 0 ? 'x' . WoW_Account::GetExpansion() : 'C'; ?>.png" alt="" />
+			<img class="box" src="<?php echo WoW::GetWoWPath(); ?>/static/local-common/images/game-boxes/<?php echo WoW_Locale::GetLocale(LOCALE_DOUBLE); ?>/wow<?php echo WoW_Account::GetExpansion() > 0 ? 'x' . WoW_Account::GetExpansion() : 'C'; ?>.png" alt="" />
 			<span class="plus"></span>
 			<div class="game-label"><?php echo WoW_Locale::GetString('expansion_' . WoW_Account::GetExpansion()); ?></div>
 
@@ -25,12 +25,12 @@
 
 
 		<div class="game-selection unowned" id="game-S2" onclick="openGameDialog(this, '#dialog-S2');" title="StarCraft II">
-			<img class="box" src="/static/local-common/images/game-boxes/ru-ru/s2.png" alt="" />
+			<img class="box" src="<?php echo WoW::GetWoWPath(); ?>/static/local-common/images/game-boxes/ru-ru/s2.png" alt="" />
 			<span class="plus"></span>
 			<div class="game-label">StarCraft II</div>
 
 
-				<img class="plus" src="/static/images/homepage/plus.png" title="Прикрепить игру" alt="" />
+				<img class="plus" src="<?php echo WoW::GetWoWPath(); ?>/static/images/homepage/plus.png" title="Прикрепить игру" alt="" />
 
 			<span class="pointer"></span>
 		</div>
@@ -38,12 +38,12 @@
 
 
 		<div class="game-selection unowned" id="game-WAR3" onclick="openGameDialog(this, '#dialog-WAR3');" title="WarCraft III: Reign of Chaos">
-			<img class="box" src="/static/local-common/images/game-boxes/ru-ru/war3.png" alt="" />
+			<img class="box" src="<?php echo WoW::GetWoWPath(); ?>/static/local-common/images/game-boxes/ru-ru/war3.png" alt="" />
 			<span class="plus"></span>
 			<div class="game-label">WarCraft III: Reign of Chaos</div>
 
 
-				<img class="plus" src="/static/images/homepage/plus.png" title="Прикрепить игру" alt="" />
+				<img class="plus" src="<?php echo WoW::GetWoWPath(); ?>/static/images/homepage/plus.png" title="Прикрепить игру" alt="" />
 
 			<span class="pointer"></span>
 		</div>
@@ -51,12 +51,12 @@
 
 
 		<div class="game-selection unowned" id="game-W3XP" onclick="openGameDialog(this, '#dialog-W3XP');" title="WarCraft III: The Frozen Throne">
-			<img class="box" src="/static/local-common/images/game-boxes/ru-ru/w3xp.png" alt="" />
+			<img class="box" src="<?php echo WoW::GetWoWPath(); ?>/static/local-common/images/game-boxes/ru-ru/w3xp.png" alt="" />
 			<span class="plus"></span>
 			<div class="game-label">WarCraft III: The Frozen Throne</div>
 
 
-				<img class="plus" src="/static/images/homepage/plus.png" title="Прикрепить игру" alt="" />
+				<img class="plus" src="<?php echo WoW::GetWoWPath(); ?>/static/images/homepage/plus.png" title="Прикрепить игру" alt="" />
 
 			<span class="pointer"></span>
 		</div>
@@ -64,12 +64,12 @@
 
 
 		<div class="game-selection unowned" id="game-D2DV" onclick="openGameDialog(this, '#dialog-D2DV');" title="Diablo II">
-			<img class="box" src="/static/local-common/images/game-boxes/ru-ru/d2dv.png" alt="" />
+			<img class="box" src="<?php echo WoW::GetWoWPath(); ?>/static/local-common/images/game-boxes/ru-ru/d2dv.png" alt="" />
 			<span class="plus"></span>
 			<div class="game-label">Diablo II</div>
 
 
-				<img class="plus" src="/static/images/homepage/plus.png" title="Прикрепить игру" alt="" />
+				<img class="plus" src="<?php echo WoW::GetWoWPath(); ?>/static/images/homepage/plus.png" title="Прикрепить игру" alt="" />
 
 			<span class="pointer"></span>
 		</div>
@@ -77,12 +77,12 @@
 
 
 		<div class="game-selection unowned" id="game-D2XP" onclick="openGameDialog(this, '#dialog-D2XP');" title="Diablo II: Lord of Destruction">
-			<img class="box" src="/static/local-common/images/game-boxes/ru-ru/d2xp.png" alt="" />
+			<img class="box" src="<?php echo WoW::GetWoWPath(); ?>/static/local-common/images/game-boxes/ru-ru/d2xp.png" alt="" />
 			<span class="plus"></span>
 			<div class="game-label">Diablo II: Lord of Destruction</div>
 
 
-				<img class="plus" src="/static/images/homepage/plus.png" title="Прикрепить игру" alt="" />
+				<img class="plus" src="<?php echo WoW::GetWoWPath(); ?>/static/images/homepage/plus.png" title="Прикрепить игру" alt="" />
 
 			<span class="pointer"></span>
 		</div>
@@ -90,12 +90,12 @@
 
 
 		<div class="game-selection unowned" id="game-STAR" onclick="openGameDialog(this, '#dialog-STAR');" title="StarCraft">
-			<img class="box" src="/static/local-common/images/game-boxes/ru-ru/star.png" alt="" />
+			<img class="box" src="<?php echo WoW::GetWoWPath(); ?>/static/local-common/images/game-boxes/ru-ru/star.png" alt="" />
 			<span class="plus"></span>
 			<div class="game-label">StarCraft</div>
 
 
-				<img class="plus" src="/static/images/homepage/plus.png" title="Прикрепить игру" alt="" />
+				<img class="plus" src="<?php echo WoW::GetWoWPath(); ?>/static/images/homepage/plus.png" title="Прикрепить игру" alt="" />
 
 			<span class="pointer"></span>
 		</div>
@@ -114,12 +114,12 @@
 				<?php echo WoW_Locale::GetString('expansion_' . WoW_Account::GetExpansion()); ?>
 			</div>
 
-				<a href="/account/management/" class="dialog-button manage-game">
+				<a href="<?php echo WoW::GetWoWPath(); ?>/account/management/" class="dialog-button manage-game">
 					<span><?php echo WoW_Locale::GetString('template_bn_manage_game'); ?></span>
 				</a>
 
 
-				<a href="/wow/" class="dialog-button community">
+				<a href="<?php echo WoW::GetWoWPath(); ?>/wow/" class="dialog-button community">
 					<span><?php echo WoW_Locale::GetString('template_bn_community'); ?></span>
 				</a>
 

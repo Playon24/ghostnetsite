@@ -3,13 +3,13 @@
 <div class="content-trail">
 <ol class="ui-breadcrumb">
 <li>
-<a href="/wow/" rel="np">
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/" rel="np">
 World of Warcraft
 </a>
 </li>
 <li>
-<a href="/wow/game/" rel="np">
-Игра
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/game/" rel="np">
+<?php echo WoW_Locale::GetString('template_menu_game'); ?>
 </a>
 </li>
 <li>
@@ -222,10 +222,10 @@ World of Warcraft
                 echo sprintf('<tr class="row%d" data-level="%d">
 				<td class="name"><a href="%s" class="color-c%d">%s</a></td>
 				<td class="race" data-raw="%d">
-					<img src="/wow/static/images/icons/race/%d-%d.gif" class="img" alt="" data-tooltip="%s" />
+					<img src="%s/wow/static/images/icons/race/%d-%d.gif" class="img" alt="" data-tooltip="%s" />
 				</td>
 				<td class="cls" data-raw="%d">
-					<img src="/wow/static/images/icons/class/%d.gif" class="img" alt="" data-tooltip="%s" />
+					<img src="%s/wow/static/images/icons/class/%d.gif" class="img" alt="" data-tooltip="%s" />
 				</td>
 				<td class="lvl">%d</td>
 				<td class="rank" data-raw="%d">
@@ -235,8 +235,8 @@ World of Warcraft
 					<span class="ach-icon">%d</span>
 				</td>
 			</tr>', $toggleStyle % 2 ? '1' : '2', $char['level'], $char['url'], $char['classID'], $char['name'],
-            $char['raceID'], $char['raceID'], $char['genderID'], $char['race_text'],
-            $char['classID'], $char['classID'], $char['class_text'],
+            $char['raceID'], WoW::GetWoWPath(), $char['raceID'], $char['genderID'], $char['race_text'],
+            $char['classID'], WoW::GetWoWPath(), $char['classID'], $char['class_text'],
             $char['level'], $char['rankID'], $char['rankID'] > 0 ? sprintf(WoW_Locale::GetString('template_guild_roster_rank'), $char['rankID']) : WoW_Locale::GetString('template_guild_roster_guild_master'), $char['achievement_points']);
                 ++$toggleStyle;
             }

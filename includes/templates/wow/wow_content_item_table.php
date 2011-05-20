@@ -28,17 +28,17 @@ if(is_array($items)) {
 <div class="content-trail">
 <ol class="ui-breadcrumb">
 <li>
-<a href="/wow/" rel="np">
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/" rel="np">
 World of Warcraft
 </a>
 </li>
 <li>
-<a href="/wow/game/" rel="np">
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/game/" rel="np">
 <?php echo WoW_Locale::GetString('template_menu_game'); ?>
 </a>
 </li>
 <li<?php echo $breadcrumb_nav == '' ? ' class="last"' : null; ?>>
-<a href="/wow/item/" rel="np">
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/item/" rel="np">
 <?php echo WoW_Locale::GetString('template_menu_items'); ?>
 </a>
 </li>
@@ -186,7 +186,7 @@ World of Warcraft
                         echo sprintf('
                             <tr class="row%d">
                                 <td data-raw="0 %s">
-                                    <a href="/wow/item/%d" class="item-link color-q%d">
+                                    <a href="%s/wow/item/%d" class="item-link color-q%d">
                                         <span  class="icon-frame frame-18 " style=\'background-image: url("http://eu.media.blizzard.com/wow/icons/18/%s.jpg");\'> </span>
                                         <strong>%s</strong>
                                         %s
@@ -197,7 +197,7 @@ World of Warcraft
                                 <td class="align-center" data-raw="1">%d</td>
                                 <td>%s</td>
                                 <td>%s</em></td>
-                            </tr>', $toggleStyle % 2 ? 1 : 2, $item['name'], $item['entry'], $item['Quality'], $item['icon'], $item['name'], 
+                            </tr>', $toggleStyle % 2 ? 1 : 2, $item['name'], WoW::GetWoWPath(), $item['entry'], $item['Quality'], $item['icon'], $item['name'], 
                             $item['faction'] >= 0 ? sprintf('<span class="icon-faction-%d"></span>', $item['faction']) : null,
                             $item['heroic'] == 1 ? '<span class="icon-heroic-skull"></span>' : null,
                             $item['ItemLevel'], $item['RequiredLevel'], $item['source'], $item['type']);

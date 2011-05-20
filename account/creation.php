@@ -21,7 +21,7 @@
 include('../includes/WoW_Loader.php');
 $url_data = WoW::GetUrlData('management');
 if(!is_array($url_data) || !isset($url_data['action1']) || $url_data['action1'] != 'creation') {
-    header('Location: /account/creation/tos.html');
+    header('Location: ' . WoW::GetWoWPath() . '/account/creation/tos.html');
     exit;
 }
 WoW_Template::SetTemplateTheme('account');
@@ -34,7 +34,7 @@ if(preg_match('/tos.html/i', $url_data['action2'])) {
             'email' => $_POST['emailAddress']
         );
         if(WoW_Account::RegisterUser($user_data, true)) {
-            header('Location: /account/management/');
+            header('Location: ' . WoW::GetWoWPath() . '/account/management/');
             exit;
             //WoW_Template::SetPageIndex('creation_success');
             //WoW_Template::SetPageData('page', 'creation_success');

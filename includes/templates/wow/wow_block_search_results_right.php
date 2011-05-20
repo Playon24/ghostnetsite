@@ -8,17 +8,17 @@
             foreach($characters as $char) {
                 $guild_text = null;
                 if($char['guildId'] > 0) {
-                    $guild_text = sprintf('<a href="/wow/guild/%s/%s/">&lt;%s&gt;</a>', $char['realmName'], $char['guildName'], $char['guildName']);
+                    $guild_text = sprintf('<a href="%s/wow/guild/%s/%s/">&lt;%s&gt;</a>', WoW::GetWoWPath(), $char['realmName'], $char['guildName'], $char['guildName']);
                 }
                 echo sprintf('<div class="search-result">
         <div class="multi-type">
         <div class="result-title">
-        <div class="type-icon type-wowcharacter border-c%d" style="background-image:url(/wow/static/images/2d/avatar/%d-%d.jpg)">
-        <a href="/wow/character/%s/%s/">
-            <img width="32" height="32" src="/wow/static/images/2d/avatar/%d-%d.jpg" alt=""/>
+        <div class="type-icon type-wowcharacter border-c%d" style="background-image:url(%s/wow/static/images/2d/avatar/%d-%d.jpg)">
+        <a href="%s/wow/character/%s/%s/">
+            <img width="32" height="32" src="%s/wow/static/images/2d/avatar/%d-%d.jpg" alt=""/>
         </a>
         </div>
-        <a href="/wow/character/%s/%s/" class="search-title color-c%d">
+        <a href="%s/wow/character/%s/%s/" class="search-title color-c%d">
             %s @ %s
         </a>
         </div>
@@ -28,10 +28,16 @@
         <br />
         %s
         </div>
-        </div>', $char['classId'], $char['raceId'], $char['gender'], $char['realmName'], $char['name'],
-        $char['raceId'], $char['gender'], $char['realmName'], $char['name'], $char['classId'], $char['name'], $char['realmName'], $guild_text,
-        WoW_Locale::GetString('character_race_' . $char['raceId'], $char['gender']), WoW_Locale::GetString('character_class_' . $char['classId'], $char['gender']),
-        sprintf(WoW_Locale::GetString('tempalte_lvl_fmt'), $char['level']), $char['realmName']);
+        </div>',
+                $char['classId'],
+                WoW::GetWoWPath(), $char['raceId'], $char['gender'],
+                WoW::GetWoWPath(), $char['realmName'], $char['name'],
+                WoW::GetWoWPath(), $char['raceId'], $char['gender'],
+                WoW::GetWoWPath(), $char['realmName'], $char['name'], $char['classId'],
+                $char['name'], $char['realmName'],
+                $guild_text,
+                WoW_Locale::GetString('character_race_' . $char['raceId'], $char['gender']), WoW_Locale::GetString('character_class_' . $char['classId'], $char['gender']), sprintf(WoW_Locale::GetString('tempalte_lvl_fmt'), $char['level']),
+                $char['realmName']);
             }
             echo sprintf('<div class="more-results">
         <a href="?q=%s&amp;f=wowcharacter" class="more">
@@ -63,11 +69,11 @@
         <div class="multi-type">
         <div class="result-title">
         <div class="type-icon type-wowitem border-q%d" style="background-image:url(http://eu.battle.net/wow-assets/static/images/icons/36/%s.jpg)">
-        <a href="/wow/item/%d" rel="item:%d">
+        <a href="%s/wow/item/%d" rel="item:%d">
             <img width="32" height="32" src="http://eu.battle.net/wow-assets/static/images/icons/36/%s.jpg" alt=""/>
         </a>
         </div>
-        <a href="/wow/item/%d" class="search-title color-q%d">%s</a>
+        <a href="%s/wow/item/%d" class="search-title color-q%d">%s</a>
         </div>
         <div>%s</div>
         %s / %s / %s<br />
@@ -79,11 +85,17 @@
             <span class="icon-copper">%d</span>
         </span>
         </div>
-        </div>', $item['Quality'], $itemIcon,
-        $item['entry'], $item['entry'],
-        $itemIcon, $item['entry'], $item['Quality'], $item['name'],
-        $item['bonding'] > 0 ? WoW_Locale::GetString('template_item_bonding_' . $item['bonding']) : null,
-        $classSubClassString, sprintf(WoW_Locale::GetString('template_item_itemlevel'), $item['ItemLevel']), $item['RequiredLevel'] > 0 ? sprintf(WoW_Locale::GetString('template_item_required_level'), $item['RequiredLevel']) : null, WoW_Locale::GetString('template_item_sell_price'), $sellPrice['gold'], $sellPrice['silver'], $sellPrice['copper']
+        </div>', 
+            $item['Quality'], $itemIcon,
+            WoW::GetWoWPath(), $item['entry'], $item['entry'],
+            $itemIcon,
+            WoW::GetWoWPath(), $item['entry'], $item['Quality'], $item['name'],
+            $item['bonding'] > 0 ? WoW_Locale::GetString('template_item_bonding_' . $item['bonding']) : null,
+            $classSubClassString, sprintf(WoW_Locale::GetString('template_item_itemlevel'), $item['ItemLevel']), $item['RequiredLevel'] > 0 ? sprintf(WoW_Locale::GetString('template_item_required_level'), $item['RequiredLevel']) : null,
+            WoW_Locale::GetString('template_item_sell_price'),
+            $sellPrice['gold'],
+            $sellPrice['silver'],
+            $sellPrice['copper']
         );
             }
             echo sprintf('

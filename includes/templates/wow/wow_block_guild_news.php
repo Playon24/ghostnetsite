@@ -12,12 +12,12 @@
                                 else {
                                     $locale_string = 'template_guild_feed_achievement';
                                 }
-                                $feed_link = sprintf('<a href="/wow/character/%s/%s/achievement#%d:a%d" rel="np" onmouseover="Tooltip.show(this, \'#news-tooltip-%d\');">
+                                $feed_link = sprintf('<a href="%s/wow/character/%s/%s/achievement#%d:a%d" rel="np" onmouseover="Tooltip.show(this, \'#news-tooltip-%d\');">
                                 <span  class="icon-frame frame-18" style=\'background-image: url("http://eu.battle.net/wow-assets/static/images/icons/18/%s.jpg");\'></span>
-                            </a>', WoW_Guild::GetGuildRealmName(), $feed['charName'], $feed['category'], $feed['id'], $i, $feed['icon']);
-                                $char_link = sprintf('<a href="/wow/character/%s/%s/">%s</a>', WoW_Guild::GetGuildRealmName(), $feed['charName'], $feed['charName']);
+                            </a>', WoW::GetWoWPath(), WoW_Guild::GetGuildRealmName(), $feed['charName'], $feed['category'], $feed['id'], $i, $feed['icon']);
+                                $char_link = sprintf('<a href="%s/wow/character/%s/%s/">%s</a>', WoW::GetWoWPath(), WoW_Guild::GetGuildRealmName(), $feed['charName'], $feed['charName']);
                                 
-                                $achievement_link = sprintf('<a href="/wow/character/%s/%s/achievement#%d:a%d" rel="np" onmouseover="Tooltip.show(this, \'#news-tooltip-%d\');">%s</a>', WoW_Guild::GetGuildRealmName(), $feed['charName'], $feed['category'], $feed['id'], $i, $feed['name']);
+                                $achievement_link = sprintf('<a href="%s/wow/character/%s/%s/achievement#%d:a%d" rel="np" onmouseover="Tooltip.show(this, \'#news-tooltip-%d\');">%s</a>', WoW::GetWoWPath(), WoW_Guild::GetGuildRealmName(), $feed['charName'], $feed['category'], $feed['id'], $i, $feed['name']);
                                 echo sprintf('<li class="player-ach">
                     <dl>
                         <dd>
@@ -37,11 +37,11 @@
                                 $i++;
                                 break;
                             case TYPE_ITEM_FEED:
-                                $feed_link = sprintf('<a href="/wow/item/%d" class="color-q%d">
+                                $feed_link = sprintf('<a href="%s/wow/item/%d" class="color-q%d">
                                 <span  class="icon-frame frame-18" style=\'background-image: url("http://eu.battle.net/wow-assets/static/images/icons/18/%s.jpg");\'></span>
-                            </a>', $feed['id'], $feed['quality'], $feed['icon']);
-                                $char_link = sprintf('<a href="/wow/character/%s/%s/">%s</a>', WoW_Guild::GetGuildRealmName(), $feed['charName'], $feed['charName']);
-                                $item_link = sprintf('<a href="/wow/item/%d" class="color-q%d">%s</a>', $feed['id'], $feed['quality'], $feed['name']);
+                            </a>', WoW::GetWoWPath(), $feed['id'], $feed['quality'], $feed['icon']);
+                                $char_link = sprintf('<a href="%s/wow/character/%s/%s/">%s</a>', WoW::GetWoWPath(), WoW_Guild::GetGuildRealmName(), $feed['charName'], $feed['charName']);
+                                $item_link = sprintf('<a href="%s/wow/item/%d" class="color-q%d">%s</a>', WoW::GetWoWPath(), $feed['id'], $feed['quality'], $feed['name']);
                                 echo sprintf('<li class="item-purchased first">
                     <dl>
                         <dd>

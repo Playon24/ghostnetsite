@@ -9,13 +9,13 @@ $audit = WoW_Characters::GetAudit();
 <div class="content-trail">
 <ol class="ui-breadcrumb">
 <li>
-<a href="/wow/" rel="np">
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/" rel="np">
 World of Warcraft
 </a>
 </li>
 <li>
-<a href="/wow/game/" rel="np">
-Игра
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/game/" rel="np">
+<?php echo WoW_Locale::GetString('template_menu_game'); ?>
 </a>
 </li>
 <li class="last">
@@ -44,7 +44,7 @@ World of Warcraft
 				</div>
 	<span class="clear"><!-- --></span>
 				<div class="under-name color-c<?php echo WoW_Characters::GetClassID(); ?>">
-						<a href="/wow/game/race/<?php echo WoW_Characters::GetRaceKey(); ?>" class="race"><?php echo WoW_Characters::GetRaceName(); ?></a>-<a href="/wow/game/class/<?php echo WoW_Characters::GetClassKey(); ?>" class="class"><?php echo WoW_Characters::GetClassName(); ?></a> (<span id="profile-info-spec" class="spec tip"><?php echo $talents['specsData'][WoW_Characters::GetActiveSpec()]['name']; ?></span>) <span class="level"><strong><?php echo WoW_Characters::GetLevel(); ?></strong></span> <?php echo WoW_Locale::GetString('template_lvl'); ?><span class="comma">,</span>
+						<a href="<?php echo WoW::GetWoWPath(); ?>/wow/game/race/<?php echo WoW_Characters::GetRaceKey(); ?>" class="race"><?php echo WoW_Characters::GetRaceName(); ?></a>-<a href="<?php echo WoW::GetWoWPath(); ?>/wow/game/class/<?php echo WoW_Characters::GetClassKey(); ?>" class="class"><?php echo WoW_Characters::GetClassName(); ?></a> (<span id="profile-info-spec" class="spec tip"><?php echo $talents['specsData'][WoW_Characters::GetActiveSpec()]['name']; ?></span>) <span class="level"><strong><?php echo WoW_Characters::GetLevel(); ?></strong></span> <?php echo WoW_Locale::GetString('template_lvl'); ?><span class="comma">,</span>
 					<span class="realm tip" id="profile-info-realm" data-battlegroup="<?php echo WoWConfig::$DefaultBGName; ?>">
 						<?php echo WoW_Characters::GetRealmName(); ?>
 					</span>
@@ -122,18 +122,18 @@ World of Warcraft
         $socket_text = '';
         for($i = 0; $i < 3; ++$i) {
             if(is_array($item_info['g' . $i]) && isset($item_info['g' . $i]['item'])) {
-                $socket_text .= sprintf('<span class="icon-socket socket-%d"><a href="/wow/item/%d" class="gem"><img src="http://eu.battle.net/wow-assets/static/images/icons/18/%s.jpg" alt="" /><span class="frame"></span></a></span>', $item_info['g' . $i]['color'], $item_info['g' . $i]['item'], $item_info['g' . $i]['icon']);
+                $socket_text .= sprintf('<span class="icon-socket socket-%d"><a href="%s/wow/item/%d" class="gem"><img src="http://eu.battle.net/wow-assets/static/images/icons/18/%s.jpg" alt="" /><span class="frame"></span></a></span>', $item_info['g' . $i]['color'], WoW::GetWoWPath(), $item_info['g' . $i]['item'], $item_info['g' . $i]['icon']);
             }
         }
         echo sprintf('<div data-id="%d" data-type="%d" class="%s" style="%s">
         <div class="slot-inner">
             <div class="slot-contents">
-                <a href="/wow/item/%d" class="item" data-item="%s"><img src="http://eu.battle.net/wow-assets/static/images/icons/56/%s.jpg" alt="" /><span class="frame"></span></a>
+                <a href="%s/wow/item/%d" class="item" data-item="%s"><img src="http://eu.battle.net/wow-assets/static/images/icons/56/%s.jpg" alt="" /><span class="frame"></span></a>
                 <div class="details">
                     <span class="name-shadow">%s</span>
                     <span class="name color-q%d">
                         %s
-                        <a href="/wow/item/%d" data-item="%s">%s</a>
+                        <a href="%s/wow/item/%d" data-item="%s">%s</a>
                         %s
                     </span>
                     <span class="enchant-shadow">%s</span>
@@ -146,14 +146,15 @@ World of Warcraft
     </div>
 ', 
         ($data['slot'] - 1), $data['slot'], sprintf($data['class'], $item_info['quality']), $data['style'],
-        $item_info['item_id'], $item_info['data-item'], $item_info['icon'],
-        $item_info['name'], $item_info['quality'],
+        WoW::GetWoWPath(), $item_info['item_id'], $item_info['data-item'], $item_info['icon'],
+        $item_info['name'],
+        $item_info['quality'],
         (($data['slot'] >= 6 && $data['slot'] <= 12) && $item_info['enchid'] == 0 && $item_info['can_ench']) ? '<a href="javascript:;" class="audit-warning"></a>' : null,
-        $item_info['item_id'], $item_info['data-item'], $item_info['name'],
+        WoW::GetWoWPath(), $item_info['item_id'], $item_info['data-item'], $item_info['name'],
         (($data['slot'] < 6 || $data['slot'] > 12) && $item_info['enchid'] == 0 && $item_info['can_ench']) ? '<a href="javascript:;" class="audit-warning"></a>' : null, 
         isset($item_info['enchant_text']) ? $item_info['enchant_text'] : null, 
         isset($item_info['enchant_quality']) ? $item_info['enchant_quality'] : null, 
-        isset($item_info['enchant_item']) ? $item_info['enchant_item'] > 0 ? sprintf('<a href="/wow/item/%d">', $item_info['enchant_item']) : null : null, 
+        isset($item_info['enchant_item']) ? $item_info['enchant_item'] > 0 ? sprintf('<a href="%s/wow/item/%d">', WoW::GetWoWPath(), $item_info['enchant_item']) : null : null, 
         isset($item_info['enchant_text']) ? $item_info['enchant_text'] : null,
         isset($item_info['enchant_item']) ? $item_info['enchant_item'] > 0 ? '</a>' : null : null,
         $item_info['item_level'], $socket_text != null ? sprintf('<span class="sockets">%s</span>', $socket_text) : null);
@@ -317,10 +318,10 @@ World of Warcraft
                 }
                 $other_str = null;
                 if(is_array($weapon) && isset($weapon['enchant_item']) && $weapon['enchant_item'] > 0) {
-                    $other_str .= sprintf('<span class="name"><a href="/wow/item/%d">%s</a></span>%s ', $weapon['enchant_item'], $weapon['enchant_text'], (is_array($gem_data) && isset($gem_data['name'])) ? '<span class="comma">,</span>' : null);
+                    $other_str .= sprintf('<span class="name"><a href="%s/wow/item/%d">%s</a></span>%s ', WoW::GetWoWPath(), $weapon['enchant_item'], $weapon['enchant_text'], (is_array($gem_data) && isset($gem_data['name'])) ? '<span class="comma">,</span>' : null);
                 }
                 if(is_array($gem_data) && isset($gem_data['name'])) {
-                    $other_str .= sprintf('<span class="name"><a href="/wow/item/%d">%s</a></span>', $gem_data['id'], $gem_data['name']);
+                    $other_str .= sprintf('<span class="name"><a href="%s/wow/item/%d">%s</a></span>', WoW::GetWoWPath(), $gem_data['id'], $gem_data['name']);
                 }
                 if($other_str != null) {
                     echo sprintf('<div class="other">%s</div>', $other_str);
@@ -341,15 +342,15 @@ World of Warcraft
                     <span class="value">%d</span>
                     <span class="times">x</span>
                     <span class="icon">	<span class="icon-socket socket-%d">
-                    <a href="/wow/item/%d" class="gem">
+                    <a href="%s/wow/item/%d" class="gem">
                     <img src="http://eu.battle.net/wow-assets/static/images/icons/18/%s.jpg" alt="" />
                     <span class="frame"></span>
                     </a>
                     </span>
                     </span>
-                    <a href="/wow/item/%d" class="name color-q%d">%s</a>
+                    <a href="%s/wow/item/%d" class="name color-q%d">%s</a>
                     <span class="clear"><!-- --></span>
-                </li>', $gem['counter'], $gem['color'], $gem['item'], $gem['icon'], $gem['item'], $gem['quality'], $gem['name']);
+                </li>', $gem['counter'], $gem['color'], WoW::GetWoWPath(), $gem['item'], $gem['icon'], WoW::GetWoWPath(), $gem['item'], $gem['quality'], $gem['name']);
                     }
                     echo '</ul></div>';
                 }
@@ -432,7 +433,7 @@ World of Warcraft
 		</div>
 	<span class="clear"><!-- --></span>
 	</div>
-	<script type="text/javascript" src="/wow/static/js/locales/summary_<?php echo WoW_Locale::GetLocale(); ?>.js"></script>
+	<script type="text/javascript" src="<?php echo WoW::GetWoWPath(); ?>/wow/static/js/locales/summary_<?php echo WoW_Locale::GetLocale(); ?>.js"></script>
 </div>
 </div>
 </div>

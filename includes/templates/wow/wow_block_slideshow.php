@@ -8,16 +8,16 @@ $paging_text = null;
 $js_string = null;
 if(is_array($carousel)) {
     foreach($carousel as $carousel_item) {
-        echo sprintf('<div class="slide" id="slide-%d" style="background-image: url(\'/cms/carousel_header/%s\');%s">
-                    </div>', $i, $carousel_item->image, $i > 0 ? ' display: none;' : null);
+        echo sprintf('<div class="slide" id="slide-%d" style="background-image: url(\'%s/cms/carousel_header/%s\');%s">
+                    </div>', $i, WoW::GetWoWPath(), $carousel_item->image, $i > 0 ? ' display: none;' : null);
         $paging_text .= sprintf('<a href="javascript:;" id="paging-%d" onclick="Slideshow.jump(%d, this);" onmouseover="Slideshow.preview(%d);"%s></a>', $i, $i, $i, $i == 0 ? ' class="current"' : null);
         $js_string .= sprintf('{
-                        image: "/cms/carousel_header/%s",
+                        image: "%s/cms/carousel_header/%s",
                         desc: "%s",
                         title: "%s",
                         url: "%s",
                         id: "%d"
-                    },', $carousel_item->image, $carousel_item->desc, $carousel_item->title, $carousel_item->url, $carousel_item->id);
+                    },', WoW::GetWoWPath(), $carousel_item->image, $carousel_item->desc, $carousel_item->title, $carousel_item->url, $carousel_item->id);
         $i++;
     }
 }

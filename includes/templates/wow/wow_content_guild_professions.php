@@ -3,13 +3,13 @@
 <div class="content-trail">
 <ol class="ui-breadcrumb">
 <li>
-<a href="/wow/" rel="np">
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/" rel="np">
 World of Warcraft
 </a>
 </li>
 <li>
-<a href="/wow/game/" rel="np">
-Игра
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/game/" rel="np">
+<?php echo WoW_Locale::GetString('template_menu_game'); ?>
 </a>
 </li>
 <li>
@@ -54,7 +54,7 @@ World of Warcraft
 	</script>
 				<div class="tabard-overlay"></div>
 				<div class="crest"></div>
-				<a class="tabard-link" href="/wow/guild/ревущии-фьорд/%d0%97%d0%b0%d1%81%d1%82%d0%b0%d0%b2%d0%b0/"></a>
+				<a class="tabard-link" href="<?php echo WoW_Guild::GetGuildURL(); ?>"></a>
 			</div>
 			<div class="profile-sidebar-info">
 				<div class="name"><a href="<?php echo WoW_Guild::GetGuildURL(); ?>"><?php echo WoW_Guild::GetGuildName(); ?></a></div>
@@ -245,17 +245,17 @@ World of Warcraft
 											</a>
 										</td>
 										<td class="race" data-raw="%s">
-											<img src="/wow/static/images/icons/race/%d-%d.gif" class="img" alt="" data-tooltip="%s" />
+											<img src="%s/wow/static/images/icons/race/%d-%d.gif" class="img" alt="" data-tooltip="%s" />
 										</td>
 										<td class="cls" data-raw="%s">
-											<img src="/wow/static/images/icons/class/%d.gif" class="img" alt="" data-tooltip="%s" />
+											<img src="%s/wow/static/images/icons/class/%d.gif" class="img" alt="" data-tooltip="%s" />
 										</td>
 										<td class="lvl">%d</td>
 										<td class="skill" data-raw="%d">%d</td>
 									</tr>', $toggleStyle % 2 ? '1' : '2', $char['level'], $char['professions'][$index]['value'],
                                     $char['url'], $char['classID'], $char['name'],
-                                    $char['race_text'], $char['raceID'], $char['genderID'], $char['race_text'],
-                                    $char['class_text'], $char['classID'], $char['class_text'],
+                                    $char['race_text'], WoW::GetWoWPath(), $char['raceID'], $char['genderID'], $char['race_text'],
+                                    $char['class_text'], WoW::GetWoWPath(), $char['classID'], $char['class_text'],
                                     $char['level'],
                                     $char['professions'][$index]['value'], $char['professions'][$index]['value']
                             );

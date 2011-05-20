@@ -1,4 +1,3 @@
-<!-- START: News Updates -->
 <div id="news-updates">
 <?php
 $wow_news = WoW_Template::GetPageData('wow_news');
@@ -7,27 +6,32 @@ for($i = 0; $i < 11; $i++) {
         continue;
     }
     echo sprintf('<div class="news-article first-child">
-        <h3><a href="blog/%d#blog">%s</a></h3>
+        <h3><a href="%s/wow/blog/%d#blog">%s</a></h3>
             <div class="by-line">
-                <a href="/wow/search?f=article&amp;a=%s">%s</a>
+                <a href="%s/wow/search?f=article&amp;a=%s">%s</a>
                 <span class="spacer">//</span> %s
-                    <a href="blog/%d#comments" class="comments-link">%d</a>
+                    <a href="%s/wow/blog/%d#comments" class="comments-link">%d</a>
             </div>
-        <div class="article-left" style="background-image: url(\'/cms/blog_thumbnail/%s\');">
-            <a href="blog/%d"><img src="/wow/static/images/homepage/thumb-frame.gif" alt="" /></a>
+        <div class="article-left" style="background-image: url(\'%s/cms/blog_thumbnail/%s\');">
+            <a href="%s/wow/blog/%d"><img src="%s/wow/static/images/homepage/thumb-frame.gif" alt="" /></a>
         </div>
         <div class="article-right">
             <div class="article-summary">
                 %s
-                <a href="blog/%d#blog" class="more">%s</a>
+                <a href="%s/wow/blog/%d#blog" class="more">%s</a>
             </div>
         </div>
 	<span class="clear"><!-- --></span>
     </div>',
-    $wow_news[$i]->id, $wow_news[$i]->title, urlencode($wow_news[$i]->author), $wow_news[$i]->author,
+    WoW::GetWoWPath(),
+    $wow_news[$i]->id, $wow_news[$i]->title,
+    WoW::GetWoWPath(), urlencode($wow_news[$i]->author), $wow_news[$i]->author,
     date('d M Y H:i', $wow_news[$i]->postdate),
-    $wow_news[$i]->id, $wow_news[$i]->comments_count, $wow_news[$i]->image, $wow_news[$i]->id, $wow_news[$i]->desc,
-    $wow_news[$i]->id, WoW_Locale::GetString('template_articles_full_caption')
+    WoW::GetWoWPath(), $wow_news[$i]->id, $wow_news[$i]->comments_count,
+    WoW::GetWoWPath(), $wow_news[$i]->image,
+    WoW::GetWoWPath(), $wow_news[$i]->id, WoW::GetWoWPath(),
+    $wow_news[$i]->desc,
+    WoW::GetWoWPath(), $wow_news[$i]->id, WoW_Locale::GetString('template_articles_full_caption')
     );
 }
 ?>
@@ -37,4 +41,3 @@ for($i = 0; $i < 11; $i++) {
         <span class="clear"></span>
     </div>-->
 </div>
-<!-- END: News Updates -->

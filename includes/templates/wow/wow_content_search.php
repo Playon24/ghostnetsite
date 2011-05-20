@@ -3,13 +3,13 @@
 <div class="content-trail">
 <ol class="ui-breadcrumb">
 <li>
-<a href="/wow/" rel="np">
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/" rel="np">
 World of Warcraft
 </a>
 </li>
 <li class="last">
-<a href="/wow/search" rel="np">
-Поиск
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/search" rel="np">
+<?php echo WoW_Locale::GetString('template_search'); ?>
 </a>
 </li>
 </ol>

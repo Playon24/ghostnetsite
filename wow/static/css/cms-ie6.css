@@ -5,9 +5,9 @@
 
 #blog .keyword-list, #blog .community-share { padding-top: 10px; }
 
-#station-view .bt-set { overflow: hidden; background: none; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/wow/static/images/layout/cms/bt_lite_bg.png', sizingMethod='crop'); }
+#station-view .bt-set { overflow: hidden; background: none; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/layout/cms/bt_lite_bg.png', sizingMethod='crop'); }
 #station-view .bt-set a:hover { background: none; }
-#station-view .bt-mask-l { background: none; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/wow/static/images/layout/cms/bt_mask_bg.png', sizingMethod='crop'); }
+#station-view .bt-mask-l { background: none; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/layout/cms/bt_mask_bg.png', sizingMethod='crop'); }
 
 #station-view .bt-mask-r { background-image:url(../images/layout/cms/bt_mask_bg.gif); }
 
@@ -17,9 +17,9 @@
 
 .forum-link { background:#190E09; }
 
-#forum-content .forum-post-icon .blizzard_icon { background: none; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/wow/static/images/layout/cms/icon_blizzard.png', sizingMethod='crop'); }
-#forum-content .forum-post-icon { background: none; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/wow/static/images/layout/cms/post_active.png', sizingMethod='crop'); }
-#posts tr.read .forum-post-icon { background: none; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/wow/static/images/layout/cms/post_inactive.png', sizingMethod='crop'); }
+#forum-content .forum-post-icon .blizzard_icon { background: none; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/layout/cms/icon_blizzard.png', sizingMethod='crop'); }
+#forum-content .forum-post-icon { background: none; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/layout/cms/post_active.png', sizingMethod='crop'); }
+#posts tr.read .forum-post-icon { background: none; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/layout/cms/post_inactive.png', sizingMethod='crop'); }
 
 #poll-container { zoom:1; }
 #poll-container .poll-actions a { background-image:url(../images/layout/cms/twin_buttons.gif); }
@@ -29,7 +29,7 @@
 .post-user, .talkback .post-user { background: none; }
 
 
-.talkback-icon { background: none; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/wow/static/images/layout/cms/alert_img.png', sizingMethod='crop'); zoom: 1; }
+.talkback-icon { background: none; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/layout/cms/alert_img.png', sizingMethod='crop'); zoom: 1; }
 
 .karma .rate-btn, .karma .rate-btn span  {  background-image:url("../images/layout/cms/icon_rating.gif"); }
 #content .rate-action a.report { background-image:url("../images/layout/cms/alert_icon.gif"); }

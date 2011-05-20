@@ -48,15 +48,15 @@ if((WoW_Search::GetCharactersSearchResultsCount() > 0 || WoW_Search::GetItemsSea
     <div class="page-nav">
     <div class="pageNav">
         <span class="active">1</span>
-        <a href="/wow/search?q=<?php echo WoW_Template::GetPageData('searchQuery'); ?>&amp;page=2">2</a>
+        <a href="<?php echo WoW::GetWoWPath(); ?>/wow/search?q=<?php echo WoW_Template::GetPageData('searchQuery'); ?>&amp;page=2">2</a>
         <div class="page-sep"></div>
-        <a href="/wow/search?q=<?php echo WoW_Template::GetPageData('searchQuery'); ?>&amp;page=3">3</a>
+        <a href="<?php echo WoW::GetWoWPath(); ?>/wow/search?q=<?php echo WoW_Template::GetPageData('searchQuery'); ?>&amp;page=3">3</a>
         <div class="page-sep"></div>
-        <a href="/wow/search?q=<?php echo WoW_Template::GetPageData('searchQuery'); ?>&amp;page=4">4</a>
+        <a href="<?php echo WoW::GetWoWPath(); ?>/wow/search?q=<?php echo WoW_Template::GetPageData('searchQuery'); ?>&amp;page=4">4</a>
         <div class="page-sep"></div>
-        <a href="/wow/search?q=<?php echo WoW_Template::GetPageData('searchQuery'); ?>&amp;page=5">5</a>
-        <a href="/wow/search?q=<?php echo WoW_Template::GetPageData('searchQuery'); ?>&amp;page=6">6</a>
-        <a href="/wow/search?q=<?php echo WoW_Template::GetPageData('searchQuery'); ?>&amp;page=2">Далее &gt;</a>
+        <a href="<?php echo WoW::GetWoWPath(); ?>/wow/search?q=<?php echo WoW_Template::GetPageData('searchQuery'); ?>&amp;page=5">5</a>
+        <a href="<?php echo WoW::GetWoWPath(); ?>/wow/search?q=<?php echo WoW_Template::GetPageData('searchQuery'); ?>&amp;page=6">6</a>
+        <a href="<?php echo WoW::GetWoWPath(); ?>/wow/search?q=<?php echo WoW_Template::GetPageData('searchQuery'); ?>&amp;page=2">Далее &gt;</a>
     </div>
     </div>
 </div>
