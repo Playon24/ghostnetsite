@@ -21,7 +21,7 @@
 include('../includes/WoW_Loader.php');
 WoW_Template::SetPageIndex('login');
 if(WoW_Account::IsLoggedIn()) {
-    header('Location: ' . WoW::GetWoWPath());
+    header('Location: ' . WoW::GetWoWPath() . '/');
     exit;
 }
 if(isset($_POST['accountName'])) {
@@ -38,7 +38,7 @@ if(isset($_POST['accountName'])) {
         WoW_Account::SetLastErrorCode(ERROR_EMPTY_PASSWORD);
     }
     if(WoW_Account::PerformLogin($username, $password)) {
-        header('Location: ' . WoW::GetWoWPath());
+        header('Location: ' . WoW::GetWoWPath() . '/');
         exit;
     }
     // Other error messages will appear automaticaly.

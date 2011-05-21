@@ -37,12 +37,12 @@ switch($url_data['action1']) {
             case 'auction':
                 $auction_side = $url_data['action3'];
                 if(!$auction_side || !in_array($auction_side, array('alliance', 'horde', 'neutral'))) {
-                    header('Location: ' . WoW::GetWoWPath());
+                    header('Location: ' . WoW::GetWoWPath() . '/');
                     exit;
                 }
                 // Check active character
                 if(WoW_Account::GetActiveCharacterInfo('guid') == 0) {
-                    header('Location: ' . WoW::GetWoWPath());
+                    header('Location: ' . WoW::GetWoWPath() . '/');
                     exit;
                 }
                 switch($url_data['action4']) {

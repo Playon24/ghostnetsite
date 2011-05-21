@@ -67,6 +67,13 @@ if(isset($_GET['login']) || preg_match('/\?login/', $_SERVER['REQUEST_URI'])) {
     header('Location: ' . WoW::GetWoWPath() . '/login/');
     exit;
 }
+// Perform logout (if required)
+if(isset($_GET['logout']) || preg_match('/\?logout/', $_SERVER['REQUEST_URI'])) {
+    // $_SERVER['REQUEST_URI'] check is required for mod_rewrited URL cases.
+    WoW_Account::PerformLogout();
+    header('Location: ' . WoW::GetWoWPath() . '/');
+    exit;
+}
 // Locale
 if(isset($_GET['locale']) && !preg_match('/lookup/', $_SERVER['REQUEST_URI'])) {
     $_SESSION['wow_locale'] = $_GET['locale'];
@@ -78,17 +85,10 @@ if(isset($_GET['locale']) && !preg_match('/lookup/', $_SERVER['REQUEST_URI'])) {
             exit;
         }
         else {
-            header('Location: ' . WoW::GetWoWPath());
+            header('Location: ' . WoW::GetWoWPath() . '/');
             exit; 
         }
     }
-}
-// Perform logout
-if(isset($_GET['logout']) || preg_match('/\?logout/', $_SERVER['REQUEST_URI'])) {
-    // $_SERVER['REQUEST_URI'] check is required for mod_rewrited URL cases.
-    WoW_Account::PerformLogout();
-    header('Location: ' . WoW::GetWoWPath());
-    exit;
 }
 // Initialize account (if user already logged in we need to re-build his info from session data)
 WoW_Account::Initialize();

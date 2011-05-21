@@ -98,6 +98,10 @@ World of Warcraft
                                     $subcats = $category['subcategories'];
                                     echo sprintf('<a id="forum%d" href="javascript:;" onclick="Cms.Station.parentToggle(\'%d\',this)" class="forum-parent">%s</a>', $info['cat_id'], $info['cat_id'], $info['title']);
                                     if(is_array($subcats)) {
+                                        $realms_filter = '<div class="filter-options">
+													<a href="javascript:;" class="selected" onclick="Cms.Station.toggleFilter(this)">%s</a>
+													<a href="javascript:;" onclick="Cms.Station.toggleFilter(this,true)">%s</a>
+												</div>';
                                         echo sprintf('<div class="child-forums%s%s" id="child%d">', $info['realm_cat'] == 1 ? ' filtered-parent' : null, $info['short'] == 1 ? ' non-verbose' : null, $info['cat_id']);
                                         if($info['realm_cat'] == 1) {
                                             echo sprintf('<div class="child-filter">
@@ -105,13 +109,10 @@ World of Warcraft
 												<img width="27" src="%s/wow/static/images/icons/mag-glass.png" />
 												<input class=\'filter\' type="text"/>
 											</div>
-												<div class="filter-options">
-													<a href="javascript:;" class="selected" onclick="Cms.Station.toggleFilter(this)">%s</a>
-													<a href="javascript:;" onclick="Cms.Station.toggleFilter(this,true)">%s</a>
-												</div>
+												%s
                                                 <span class="clear"><!-- --></span>
 										</div>
-                                            <div class="forums-list">', WoW::GetWoWPath(), WoW_Locale::GetString('template_forums_my_realms'), WoW_Locale::GetString('template_forums_all_realms'));
+                                            <div class="forums-list">', WoW::GetWoWPath(), WoW_Account::IsLoggedIn() ? sprintf($realms_filter, WoW_Locale::GetString('template_forums_my_realms'), WoW_Locale::GetString('template_forums_all_realms')) : null);
                                             foreach($subcats as $subcat) {
                                                 if(!WoW::IsRealm($subcat['title'])) {
                                                     continue;
@@ -131,7 +132,7 @@ World of Warcraft
                                                             <span class="desc"></span>
 														</span>
 													</span>
-                                                </a>', $subcat['cat_id'], !$isMy ? ' pre-filtered' : null, $isMy ? ' alt="flagged"' : null, $subcat['title']);
+                                                </a>', $subcat['cat_id'], (!$isMy && WoW_Account::IsLoggedIn()) ? ' pre-filtered' : null, ($isMy && WoW_Account::IsLoggedIn()) ? ' alt="flagged"' : null, $subcat['title']);
                                             }
                                             echo '</div></div>';
                                         }
