@@ -105,6 +105,15 @@ switch(WoW_Template::GetPageIndex()) {
     case 'auction_lots':
         WoW_Template::LoadTemplate('content_auction_lots');
         break;
+    case 'forum_index':
+        WoW_Template::LoadTemplate('content_forum_index');
+        break;
+    case 'forum_category':
+        WoW_Template::LoadTemplate('content_forum_category');
+        break;
+    case 'forum_thread':
+        WoW_Template::LoadTemplate('content_forum_thread');
+        break;
 }
 WoW_Template::LoadTemplate('block_footer', true);
 WoW_Template::LoadTemplate('block_service', true);
@@ -204,6 +213,9 @@ switch(WoW_Template::GetPageData('page')) {
         echo '<script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/js/profile.js?v10"></script>
 <script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/js/character/auction.js?v10"></script>
 <script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/local-common/js/table.js?v19"></script>';
+        break;
+    case 'forum_index':
+        echo '<script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/local-common/js/cms.js?v19"></script>';
         break;
 }
 ?>

@@ -921,4 +921,10 @@ define('AUDIT_TYPE_STAT_BONUS', 10);
 define('MAX_AUDIT_TYPE', 11);
 define('BELT_BUCKLE_ID', 41611); // Eternal Belt Buckle for Wrath
 
+/** Forums **/
+define('THREAD_FLAG_CLOSED',    1);
+define('THREAD_FLAG_PINNED',    2);
+define('THREAD_FLAG_BLIZZARD',  4);
+define('THREAD_FLAG_MVP',       8);
+define('THREAD_FLAG_FEATURED', 16);
 ?>

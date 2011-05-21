@@ -93,19 +93,18 @@ Class WoW {
                 }
                 break;
             case 'forum':
-                $urldata['forum_id'] = 0;
-                $urldata['topic_id'] = 0;
+                $urldata['category_id'] = 0;
+                $urldata['thread_id'] = 0;
                 for($i = 0; $i < $count; $i++) {
                     switch($url_array[$i]) {
                         case 'forum':
-                            $urldata['forum_id'] = (isset($url_array[$i + 1])) ? $url_array[$i + 1] : 0;
+                            $urldata['category_id'] = (isset($url_array[$i + 1])) ? (int) $url_array[$i + 1] : 0;
                             break;
                         case 'topic':
-                            $urldata['topic_id'] = (isset($url_array[$i + 1])) ? $url_array[$i + 1] : 0;
+                            $urldata['thread_id'] = (isset($url_array[$i + 1])) ? (int) $url_array[$i + 1] : 0;
                             break;
                         default:
                             continue;
-                            break;
                         }
                     }
                 break;
@@ -315,6 +314,15 @@ Class WoW {
     
     public static function GetWoWPath() {
         return WoWConfig::$WoW_Path;
+    }
+    
+    public static function IsRealm($realmName) {
+        foreach(WoWConfig::$Realms as $realm) {
+            if($realm['name'] == $realmName) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 ?>

@@ -77,6 +77,7 @@ $WoW_Locale = array(
     
     'template_menu_game' => 'Game',
     'template_menu_items' => 'Items',
+    'template_menu_forums' => 'Forums',
     
     'template_locale_de' => 'German',
     'template_locale_en' => 'English',
@@ -1079,5 +1080,24 @@ $WoW_Locale = array(
     'template_auction_price_per_unit' => 'Price per unit:',
     'template_auction_buyout_per_unit' => 'Buyout per unit:',
     'template_auction_browse' => 'Browse',
+    
+    'template_forums_blizztracker_title' => 'Latest Blizzard Posts',
+    'template_forums_all_blizz_posts' => '(View all)',
+    'template_forums_blizztracker_all' => 'All Blizzard Posts',
+    'template_forums_in' => 'in',
+    'template_forums_my_realms' => 'My Realms',
+    'template_forums_all_realms' => 'All Realms',
+    'template_forums_popular_threads' => 'Popular Topics',
+    'template_forums_forum_rules' => 'Click here to view the Forums Code of Conduct.',
+    
+    'template_forums_type_simple' => 'Simple',
+    'template_forums_type_advanced' => 'Advanced',
+    'template_forums_create_thread' => 'Create Thread',
+    
+    'template_forums_table_thread' => 'Subject',
+    'template_forums_table_author' => 'Author',
+    'template_forums_table_views' => 'Views',
+    'template_forums_table_replies' => 'Replies',
+    'template_forums_table_last_post' => 'Last Poster',
 );
 ?>

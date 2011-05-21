@@ -654,6 +654,25 @@ Class WoW_Account {
         return true;
     }
     
+    public static function IsHaveCharacterOnRealm($realmName) {
+        if(!self::$characters_data && self::IsCharactersLoaded()) {
+            return false;
+        }
+        elseif(!self::$characters_data && !self::IsCharactersLoaded()) {
+            self::LoadCharacters();
+        }
+        if(!self::$characters_data) {
+            return false;
+        }
+        foreach(self::$characters_data as $char) {
+            if($char['realmName'] == $realmName) {
+                return true;
+            }
+        }
+        unset($char);
+        return false;
+    }
+    
     public static function GetActiveCharacterInfo($info) {
         if(!self::IsCharactersLoaded()) {
             self::LoadCharacters();

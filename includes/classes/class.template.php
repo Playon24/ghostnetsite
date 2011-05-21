@@ -628,22 +628,27 @@ Class WoW_Template {
                 $css_data_page = array(
                     array(
                         'path' => WoW::GetWoWPath() . '/wow/static/local-common/css/cms/forums.css',
-                        'version' => 15,
+                        'version' => 19,
                         'browser' => false
                     ),
                     array(
                         'path' => WoW::GetWoWPath() . '/wow/static/local-common/css/cms/comments.css',
-                        'version' => 15,
+                        'version' => 19,
+                        'browser' => false
+                    ),
+                    array(
+                        'path' => WoW::GetWoWPath() . '/wow/static/local-common/css/cms/cms-common.css',
+                        'version' => 19,
                         'browser' => false
                     ),
                     array(
                         'path' => WoW::GetWoWPath() . '/wow/static/css/cms.css',
-                        'version' => 15,
+                        'version' => 10,
                         'browser' => false
                     ),
                     array(
                         'path' => WoW::GetWoWPath() . '/wow/static/css/cms-ie6.css',
-                        'version' => 15,
+                        'version' => 10,
                         'browser' => 'IE 6'
                     )
                 );
@@ -972,11 +977,16 @@ Class WoW_Template {
             case 'creation_tos':
             case 'creation_success':
                 return 'Battle.Net'; //[PH]
-                break;
             case 'auction_lots':
                 return sprintf('%s - %s - ', WoW_Locale::GetString('template_auction_menu_lots'), WoW_Locale::GetString('template_menu_game'));
+            case 'forum_index':
+                return sprintf('%s - ', WoW_Locale::GetString('template_menu_forums'));
+            case 'forum_category':
+                return sprintf('%s - %s - ', self::GetPageData('forum_category_title'), WoW_Locale::GetString('template_menu_forums'));
+            case 'forum_thread':
+                return sprintf('%s - %s - ', self::GetPageData('forum_thread_title'), WoW_Locale::GetString('template_menu_forums'));
             default:
-                return false;
+                return '';
         }
     }
 }

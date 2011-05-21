@@ -77,6 +77,7 @@ $WoW_Locale = array(
     
     'template_menu_game' => 'Игра',
     'template_menu_items' => 'Предметы',
+    'template_menu_forums' => 'Форумы',
     
     'template_locale_de' => 'Немецкий',
     'template_locale_en' => 'Английский',
@@ -1086,5 +1087,24 @@ $WoW_Locale = array(
     'template_auction_price_per_unit' => 'Цена за предмет:',
     'template_auction_buyout_per_unit' => 'Выкупная цена за предмет:',
     'template_auction_browse' => 'Поиск',
+    
+    'template_forums_blizztracker_title' => 'Последние сообщения Blizzard',
+    'template_forums_all_blizz_posts' => '(Все)',
+    'template_forums_blizztracker_all' => 'Все сообщения Blizzard',
+    'template_forums_in' => 'в',
+    'template_forums_my_realms' => 'Мои игровые миры',
+    'template_forums_all_realms' => 'Все игровые миры',
+    'template_forums_popular_threads' => 'Популярные темы',
+    'template_forums_forum_rules' => 'Правила форумов',
+    
+    'template_forums_type_simple' => 'Простой',
+    'template_forums_type_advanced' => 'Расширенный',
+    'template_forums_create_thread' => 'Создать тему',
+    
+    'template_forums_table_thread' => 'Тема',
+    'template_forums_table_author' => 'Автор',
+    'template_forums_table_views' => 'Просмотры',
+    'template_forums_table_replies' => 'Ответы',
+    'template_forums_table_last_post' => 'Автор посл. сообщения',
 );
 ?>
