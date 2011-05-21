@@ -1595,7 +1595,7 @@ Class WoW_Characters /*implements Interface_Characters*/ {
             WoW_Log::WriteError('%s : character was not found.', __METHOD__);
             return false;
         }
-        return DB::WoW()->selectCell("SELECT `tank`, `healer`, `dps` FROM `DBPREFIX_talent_icons` WHERE `class` = %d AND `spec` = %d LIMIT 1", self::GetClassID(), $spec);
+        return DB::WoW()->selectRow("SELECT `tank`, `healer`, `dps` FROM `DBPREFIX_talent_icons` WHERE `class` = %d AND `spec` = %d LIMIT 1", self::GetClassID(), $spec);
     }
     
     public static function GetTalentsData() {
