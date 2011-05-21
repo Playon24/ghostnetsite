@@ -33,6 +33,7 @@ Add /wowdirectory/ to every line in this file except "search", "status" and "acc
 "account/.htaccess" file:
 Add /wowdirectory/ to every line in this file:
    RewriteRule ^creation/(.*) /wowdirectory/account/creation.php?%{QUERY_STRING}
+Also, you NEED to set $WoW_Path variable in "includes/configs/WoWConfig.php" file to your directory!
 
 =========================
 Установка World of Warcraft Community Site
@@ -71,3 +72,4 @@ Add /wowdirectory/ to every line in this file:
 Файл "account/.htaccess":
 Добавьте /wowdirectory/ к каждой линии:
    RewriteRule ^creation/(.*) /wowdirectory/account/creation.php?%{QUERY_STRING}
+Так же, вам НЕОБХОДИМО задать переменной $WoW_Path в файле "includes/configs/WoWConfig.php" значение вашей директории!

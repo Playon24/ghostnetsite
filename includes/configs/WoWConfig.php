@@ -33,6 +33,8 @@ Class WoWConfig {
     public static $DefaultLocaleID   = 8;
     public static $SkipBanned        = false;
     public static $WoW_Path          = ''; // Without slash at the end of path. If your site is in root directory, leave this empty.
+                                           // For example: site is available at http://example.org/wowcs/
+                                           // That means that you should set this variable as '/wowcs'.
     
     public static $Realms            = array(
         1 => array(
