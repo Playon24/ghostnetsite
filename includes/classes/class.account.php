@@ -938,7 +938,7 @@ Class WoW_Account {
             for($i = 0; $i < $count; $i++) {
                 self::$friends_data[$i]['class_string'] = WoW_Locale::GetString('character_class_' . self::$friends_data[$i]['class_id'], self::$friends_data[$i]['gender']);
                 self::$friends_data[$i]['race_string'] = WoW_Locale::GetString('character_race_' . self::$friends_data[$i]['race_id'], self::$friends_data[$i]['gender']);
-                self::$friends_data[$i]['url'] = sprintf('%s/character/%s/%s', WoW::GetWoWPath(), self::GetActiveCharacterInfo('realmName'), self::$friends_data[$i]['name']);
+                self::$friends_data[$i]['url'] = sprintf('%s/wow/character/%s/%s', WoW::GetWoWPath(), self::GetActiveCharacterInfo('realmName'), self::$friends_data[$i]['name']);
             }
         }
         return self::$friends_data;
