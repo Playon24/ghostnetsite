@@ -959,6 +959,117 @@ Class WoW_Characters /*implements Interface_Characters*/ {
         return false;
     }
     
+    /**
+     * Checks for talent ID in active or all specs
+     * @param    int $talent_id
+     * @param    bool $active_spec = true
+     * @param    int $rank = -1
+     * @return   bool
+     **/
+    public static function HasTalent($talent_id, $active_spec = false, $rank = -1) {
+        switch(self::GetServerType()) {
+            case SERVER_MANGOS:
+                $sql_data = array(
+                    'activeSpec' => array(
+                        sprintf('SELECT `current_rank` + 1 FROM `character_talent` WHERE `talent_id`=%d AND `guid`=%%d AND `spec`=%%d', $talent_id),
+                        sprintf('SELECT 1 FROM `character_talent` WHERE `talent_id`=%d AND `guid`=%%d AND `spec`=%%d AND `current_rank`=%d', $talent_id, $rank)
+                    ),
+                    'spec' => array(
+                        sprintf('SELECT `current_rank` + 1 FROM `character_talent` WHERE `talent_id`=%d AND `guid`=%%d', $talent_id),
+                        sprintf('SELECT 1 FROM `character_talent` WHERE `talent_id`=%d AND `guid`=%%d AND `current_rank`=%d', $talent_id, $rank)
+                    )
+                );
+                break;
+            case SERVER_TRINITY:
+                $talent_spells = DB::Characters()->selectRow("SELECT `Rank_1`, `Rank_2`, `Rank_3`, `Rank_4`, `Rank_5` FROM `ARMORYDBPREFIX_talents` WHERE `TalentID` = %d LIMIT 1", $talent_id);
+                if(!$talent_spells || !is_array($talent_spells) || ($rank >= 0 && !isset($talent_spells['Rank_' . $rank + 1]))) {
+                    WoW_Log::WriteError('%s : talent ranks for talent %d was not found in DB!', __METHOD__, $talent_id);
+                    return false;
+                }
+                $sql_data = array(
+                    'activeSpec' => array(
+                        sprintf('SELECT `spell` FROM `character_talent` WHERE `spell` IN (%s) AND `guid`=%%d AND `spec`=%%d LIMIT 1', $talent_spells['Rank_1'] . ', ' . $talent_spells['Rank_2'] . ', ' . $talent_spells['Rank_3'] . ', ' . $talent_spells['Rank_4'] . ', ' . $talent_spells['Rank_5']),
+                        sprintf('SELECT 1 FROM `character_talent` WHERE `spell`=%d AND `guid`=%%d AND `spec`=%%d', $rank == -1 ? $talent_spells['Rank_1'] : $talent_spells['Rank_' . ($rank + 1)])
+                    ),
+                    'spec' => array(
+                        sprintf('SELECT `spell` FROM `character_talent` WHERE `spell` IN (%s) AND `guid`=%%d LIMIT 1', $talent_spells['Rank_1'] . ', ' . $talent_spells['Rank_2'] . ', ' . $talent_spells['Rank_3'] . ', ' . $talent_spells['Rank_4'] . ', ' . $talent_spells['Rank_5']),
+                        sprintf('SELECT 1 FROM `character_talent` WHERE `spell`=%d AND `guid`=%%d', $rank == -1 ? $talent_spells['Rank_1'] : $talent_spells['Rank_' . ($rank + 1)])
+                    )
+                );
+                break;
+            default:
+                WoW_Log::WriteError('%s : unknown server type %d!', __METHOD__, self::GetServerType());
+                return false;
+                break;
+        }
+        if($active_spec) {
+            if($rank == -1) {
+                $has = DB::Characters()->selectCell($sql_data['activeSpec'][0], self::GetGUID(), self::GetActiveSpec());
+            }
+            elseif($rank >= 0) {
+                $has = DB::Characters()->selectCell($sql_data['activeSpec'][1], self::GetGUID(), self::GetActiveSpec());
+            }
+        }
+        else {
+            if($rank == -1) {
+                $has = DB::Characters()->selectCell($sql_data['spec'][0], self::GetGUID());
+            }
+            elseif($rank >= 0) {
+                $has = DB::Characters()->selectCell($sql_data['spec'][1], self::GetGUID());
+            }
+        }
+        if(self::GetServerType() == SERVER_TRINITY && $rank == -1 && $has != false) {
+            for($i = 0; $i < 5; $i++) {
+                if(isset($talent_spells['Rank_' . ($i + 1)]) && $talent_spells['Rank_' . ($i + 1)] == $has) {
+                    return $i;
+                }
+            }
+        }
+        if(self::GetServerType() == SERVER_MANGOS && $has) {
+            return $has - 1;
+        }
+        return $has;
+    }
+    
+    public static function HasSpell($spell_id) {
+        return (bool) DB::Characters()->selectCell("SELECT 1 FROM `character_spell` WHERE `spell` = %d AND `guid` = %d AND `active` = 1 AND `disabled` = 0 LIMIT 1", $spell_id, self::GetGUID());
+    }
+    
+    public static function HasGlyph($glyph_id, $active_spec = false) {
+        $slot = -1;
+        if(!$glyph_id) {
+            return $slot;
+        }
+        switch(self::GetServerType()) {
+            case SERVER_MANGOS:
+                $slot = DB::Characters()->selectCell("SELECT `slot` FROM `character_glyphs` WHERE `guid` = %d AND `glyph` = %d%s", self::GetGUID(), $glyph_id, $active_spec ? sprintf(" AND `spec` = %d", self::GetActiveSpec()) : null);
+                if(!$slot) {
+                    $slot = -1;
+                }
+                break;
+            case SERVER_TRINITY:
+                $glyphs = DB::Characters()->select("SELECT * FROM `character_glyphs` WHERE `guid` = %d", self::GetGUID());
+                if(!$glyphs || !is_array($glyphs)) {
+                    return $slot;
+                }
+                foreach($glyphs as $glyph) {
+                    for($i = 1; $i < 7; ++$i) {
+                        if($glyph['glyph' . $i] == $glyph_id) {
+                            if(($active_spec && $glyph['spec'] == self::GetActiveSpec()) || !$active_spec) {
+                                $slot = $i - 1;
+                            }
+                        }
+                    }
+                }
+                break;
+            default:
+                WoW_Log::WriteError('%s : unknown server type: %d!', __METHOD__, self::GetServerType());
+                return $slot;
+                break;
+        }
+        return $slot;
+    }
+    
     public static function GetCharacterEnchant($slot) {
         if(!self::IsCorrect()) {
             WoW_Log::WriteError('%s : character was not found.', __METHOD__);
@@ -1621,7 +1732,13 @@ Class WoW_Characters /*implements Interface_Characters*/ {
     }
     
     public static function GetPowerValue() {
-        return self::GetDataField(UNIT_FIELD_POWER1 + self::GetPowerType());
+        switch(self::GetClassID()) {
+            case CLASS_ROGUE:
+            case CLASS_DK:
+                return self::CalculateMaxEnergy();
+            default:
+                return self::GetDataField(UNIT_FIELD_POWER1 + self::GetPowerType());
+        }
     }
     
     private static function GetStat($stat) {
@@ -1657,6 +1774,42 @@ Class WoW_Characters /*implements Interface_Characters*/ {
     
     private static function GetStatsInfo($stat_type) {
         return isset(self::$info_stats[$stat_type]) ? self::$info_stats[$stat_type] : false;
+    }
+    
+    /**
+     * Max energy value calculator. Used for Rogues and DKs only.
+     **/
+    private static function CalculateMaxEnergy() {
+        if(!in_array(self::GetClassID(), array(CLASS_ROGUE, CLASS_DK))) {
+            return 0;
+        }
+        $maxPower = 100;
+        switch(self::GetClassID()) {
+            case CLASS_ROGUE:
+                // Check for 14983 spell (Vigor) in current talent spec
+                $tRank = self::HasTalent(382, true);
+                if($tRank) {
+                    $maxPower = 110;
+                }
+                // Also, check for Glyph of Vigor (id 408)
+                if(self::HasGlyph(408, true) >= 0) {
+                    $maxPower = 120;
+                }
+                break;
+            case CLASS_DK:
+                // Check for 50147, 49455 spells (Runic power mastery) in current talent spec
+                $tRank = self::HasTalent(2020, true);
+                if($tRank === 0) {
+                    // Runic power mastery (Rank 1)
+                    $maxPower = 115;
+                }
+                elseif($tRank == 1) {
+                    // Runic power mastery (Rank 2)
+                    $maxPower = 130;
+                }
+                break;
+        }
+        return $maxPower;
     }
     
     /* Base stats */
