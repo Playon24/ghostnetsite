@@ -9,7 +9,7 @@ World of Warcraft
 </li>
 <li>
 <a href="<?php echo WoW::GetWoWPath(); ?>/wow/game/" rel="np">
-Игра
+<?php echo WoW_Locale::GetString('template_menu_game'); ?>
 </a>
 </li>
 <li>

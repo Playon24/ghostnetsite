@@ -217,7 +217,7 @@ World of Warcraft
                 $unench_slots .= ',';
                 $unench_slots_js .= ",";
             }
-            $unench_slots .= $audit[AUDIT_TYPE_UNENCHANTED_ITEM][$i][0]-1;
+            $unench_slots .= $audit[AUDIT_TYPE_UNENCHANTED_ITEM][$i][0];
             $unench_slots_js .= $audit[AUDIT_TYPE_UNENCHANTED_ITEM][$i][0] . " : 1";
         }
         $unenchanted_items_js = sprintf($unench_slots_js_tpl, $unench_slots_js);
