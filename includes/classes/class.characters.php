@@ -1617,7 +1617,7 @@ Class WoW_Characters /*implements Interface_Characters*/ {
     }
     
     public static function GetHealth() {
-        return self::GetDataField(UNIT_FIELD_HEALTH);
+        return self::$health;
     }
     
     public static function GetPowerValue() {

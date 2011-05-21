@@ -696,6 +696,9 @@ Class WoW_Account {
                 self::$characters_data[$i]['class_text'] = WoW_Locale::GetString('character_class_' . self::$characters_data[$i]['class'], self::$characters_data[$i]['gender']);
                 self::$characters_data[$i]['race_text'] = WoW_Locale::GetString('character_race_' . self::$characters_data[$i]['race'], self::$characters_data[$i]['gender']);
                 self::$characters_data[$i]['faction_text'] = (WoW_Utils::GetFactionId(self::$characters_data[$i]['race']) == FACTION_ALLIANCE) ? 'alliance' : 'horde';
+                
+                // Rebuild character url
+                self::$characters_data[$i]['url'] = sprintf('%s/wow/character/%s/%s/', WoW::GetWoWPath(), self::$characters_data[$i]['realmName'], self::$characters_data[$i]['name']);
                 if(self::$characters_data[$i]['isActive']) {
                     self::$active_character = self::$characters_data[$i];
                 }
