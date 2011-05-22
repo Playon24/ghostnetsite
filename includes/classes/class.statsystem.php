@@ -39,6 +39,8 @@ class WoW_StatSystem {
     private static $m_modSpellHitChance = 0;
     private static $m_baseSpellCritChance = 0;
     private static $m_auraBaseMod = array();
+    private static $m_baseSpellPower = 0;
+    private static $m_baseRatingValue = array();
     
     public static function InitStatSystem() {
         if(!WoW_Characters::IsCorrect()) {
@@ -79,8 +81,13 @@ class WoW_StatSystem {
         self::$m_modSpellHitChance = 0.0;
         self::$m_baseSpellCritChance = 5;
         
+        for($i = CR_WEAPON_SKILL; $i < MAX_COMBAT_RATING; ++$i) {
+            self::$m_baseRatingValue[$i] = 0;
+        }
+        
         self::LoadInitialStats();
         self::LoadPlayerStats();
+        self::HandleStats();
     }
     
     private static function LoadInitialStats() {
@@ -97,6 +104,9 @@ class WoW_StatSystem {
         if(!self::$player_levelstats) {
             WoW_Log::WriteError('%s : unable to find player_classlevelstats data for player %s (GUID: %d, raceID: %d, classID: %d, level: %d)!', __METHOD__, WoW_Characters::GetName(), WoW_Characters::GetGUID(), WoW_Characters::GetRaceID(), WoW_Characters::GetClassID(), WoW_Characters::GetLevel());
             return false;
+        }
+        for($i = OBJECT_FIELD_GUID; $i <= PLAYER_END; ++$i) {
+            self::SetInt32Value($i, 0);
         }
         return true;
     }
@@ -120,7 +130,7 @@ class WoW_StatSystem {
     }
     
     private static function HandleStats() {
-        self::InitStatsForLevel();
+        self::InitStatsForLevel(true);
         //self::_LoadSkills(); // Already loaded in WoW_Characters::LoadSkills();
         self::_LoadAuras();
         self::_LoadSpells();
@@ -260,7 +270,7 @@ class WoW_StatSystem {
             if(!$item) {
                 continue;
             }
-            if(!$item->IsCorrect() || !$item->IsBroken()) {
+            if(!$item->IsCorrect() || $item->IsBroken()) {
                 continue;
             }
             $proto = $item->GetProto();
@@ -272,7 +282,7 @@ class WoW_StatSystem {
             }
             $attacktype = self::GetAttackBySlot($slot);
             if($attacktype < MAX_ATTACK) {
-                self::_ApplyWeaponDependentAuraMods($item, $attacktype, $true);
+                self::_ApplyWeaponDependentAuraMods($item, $attacktype, true);
             }
             self::_ApplyItemBonuses($proto, $slot, true);
             self::ApplyEnchantment($item, true);
@@ -607,7 +617,6 @@ class WoW_StatSystem {
         if($only_level_scale && !$ssv) {
             return false;
         }
-        
         for($i = 0; $i < MAX_ITEM_PROTO_STATS; ++$i) {
             $statType = 0;
             $val = 0;
@@ -1202,7 +1211,28 @@ class WoW_StatSystem {
     }
     
     private static function GetStatByAuraGroup($unitMod) {
-        //TODO: GetStatByAuraGroup
+        $stat = STAT_STRENGTH;
+        
+        switch($unitMod) {
+            case UNIT_MOD_STAT_STRENGTH:
+                $stat = STAT_STRENGTH;
+                break;
+            case UNIT_MOD_STAT_AGILITY:
+                $stat = STAT_AGILITY;
+                break;
+            case UNIT_MOD_STAT_STAMINA:
+                $stat = STAT_STAMINA;
+                break;
+            case UNIT_MOD_STAT_INTELLECT:
+                $stat = STAT_INTELLECT;
+                break;
+            case UNIT_MOD_STAT_SPIRIT:
+                $stat = STAT_SPIRIT;
+                break;
+            default:
+                break;
+        }
+        return $stat;
     }
     
     private static function UpdateArmor() {
@@ -1234,11 +1264,75 @@ class WoW_StatSystem {
     }
     
     private static function ApplyStatBuffMod($stat, $val, $apply) {
-        //TODO: ApplyStatBuffMod
+        self::ApplyModSignedFloatValue(($val > 0 ? UNIT_FIELD_POSSTAT0 + $stat : UNIT_FIELD_NEGSTAT0 + $stat), $val, $apply);
+    }
+    
+    private static function ApplyModSignedFloatValue($index, $val, $apply) {
+        self::ApplyModInt32Value($index, $val, $apply);
     }
     
     private static function ApplyRatingMod($cr, $value, $apply) {
-        //TODO: ApplyRatingMod
+        self::$m_baseRatingValue[$cr] += ($apply ? $value : -$value);
+        
+        // explicit affected values
+        switch($cr) {
+            case CR_HASTE_MELEE:
+                $RatingChange = $value * self::GetRatingMultiplier($cr);
+                self::ApplyAttackTimePercentMod(BASE_ATTACK, $RatingChange, $apply);
+                self::ApplyAttackTimePercentMod(OFF_ATTACK, $RatingChange, $apply);
+                break;
+            case CR_HASTE_RANGED:
+                $RatingChange = $value * self::GetRatingMultiplier($cr);
+                self::ApplyAttackTimePercentMod(RANGED_ATTACK, $RatingChange, $apply);
+                break;
+            case CR_HASTE_SPELL:
+                $RatingChange = $value * self::GetRatingMultiplier($cr);
+                self::ApplyCastTimePercentMod($RatingChange, $apply);
+                break;
+            default:
+                break;
+        }
+        self::UpdateRating($cr);
+    }
+    
+    private static function UpdateRating($cr) {
+        //TODO: UpdateRating
+    }
+    
+    private static function GetRatingMultiplier($cr) {
+        //TODO: GetRatingMultiplier
+    }
+    
+    private static function ApplyAttackTimePercentMod($att, $val, $apply) {
+        if($val > 0) {
+            self::ApplyPercentModFloatVar(self::$m_modAttackSpeedPct[$att], $val, !$apply);
+            self::ApplyPercentModFloatValue(UNIT_FIELD_BASEATTACKTIME + $att, $val, !$apply);
+        }
+        else {
+            self::ApplyPercentModFloatVar(self::$m_modAttackSpeedPct[$att], -$val, $apply);
+            self::ApplyPercentModFloatValue(UNIT_FIELD_BASEATTACKTIME + $att, -$val, $apply);
+        }
+    }
+    
+    private static function ApplyCastTimePercentMod($val, $apply) {
+        if($val > 0) {
+            self::ApplyPercentModFloatValue(UNIT_MOD_CAST_SPEED, $val, !$apply);
+        }
+        else {
+            self::ApplyPercentModFloatValue(UNIT_MOD_CAST_SPEED, -$val, $apply);
+        }
+    }
+    
+    private static function ApplyPercentModFloatVar(&$var, $val, $apply) {
+        if($val == -100.0) {
+            $val = -99.99;
+        }
+        $var *= ($apply ? (100.0 + $val) / 100.0 : 100.0 / (100.0 + $val));
+    }
+    
+    private static function ApplyPercentModFloatValue($index, $val, $apply) {
+        $val = $val != -100.0 ? $val : -99.9;
+        self::SetInt32Value($index, self::GetInt32Value($index) * ($apply ? (100.0 + $val) / 100.0 : 100.0 / (100 + $val)));
     }
     
     private static function ApplyManaRegenBonus($amount, $apply) {
@@ -1246,11 +1340,19 @@ class WoW_StatSystem {
     }
     
     private static function ApplySpellPowerBonus($amount, $apply) {
-        //TODO: ApplySpellPowerBonus
+        self::$m_baseSpellPower += $apply ? $amount : -$amount;
+        
+        // For speed just update for client
+        self::ApplyModInt32Value(PLAYER_FIELD_MOD_HEALING_DONE_POS, $amount, $apply);
+        for($i = SPELL_SCHOOL_HOLY; $i < MAX_SPELL_SCHOOL; ++$i) {
+            self::ApplyModInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + $i, $amount, $apply);
+        }
     }
     
     private static function ApplyModInt32Value($index, $val, $apply) {
-        //TODO: ApplyModInt32Value
+        $cur = self::GetInt32Value($index);
+        $cur += ($apply ? $val : -$val);
+        self::SetInt32Value($index, $cur);
     }
     
     private static function HandleBaseModValue($modGroup, $modType, $amount, $apply) {
@@ -1434,6 +1536,7 @@ class WoW_StatSystem {
             //reapply stats values only on .reset stats (level) command
             self::_ApplyAllStatBonuses();
         }
+        
         // set current level health and mana/energy to maximum after applying all mods.
         self::SetHealth(self::GetMaxHealth());
         self::SetPower(POWER_MANA, self::GetMaxPower(POWER_MANA));

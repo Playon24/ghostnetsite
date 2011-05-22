@@ -170,6 +170,7 @@ Class WoW_Item {
         if($this->m_guid > 0 && $this->entry > 0 && $this->loaded == true) {
             return true;
         }
+        WoW_Log::WriteLog('%s : item #%d failed (GUID: %d, owner: %d, loaded: %s)', __METHOD__, $this->GetEntry(), $this->GetGUID(), $this->loaded ? 'true' : 'false');
         return false;
     }
     
@@ -230,13 +231,10 @@ Class WoW_Item {
      * @return bool
      **/
     public function IsBroken() {
-        if($this->m_server == SERVER_MANGOS) {
-            return $this->GetUInt32Value(ITEM_FIELD_MAXDURABILITY) > 0 && $this->GetUInt32Value(ITEM_FIELD_DURABILITY) == 0;
+        if(in_array($this->GetSlot(), array(EQUIPMENT_SLOT_NECK, EQUIPMENT_SLOT_BODY, EQUIPMENT_SLOT_TABARD, EQUIPMENT_SLOT_TRINKET1, EQUIPMENT_SLOT_TRINKET2, EQUIPMENT_SLOT_FINGER1, EQUIPMENT_SLOT_FINGER2))) {
+            return false; // Can't be broken
         }
-        elseif($this->m_server == SERVER_TRINITY) {
-            return $this->tc_data['maxdurability'] > 0 && $this->tc_data['durability'] == 0;
-        }
-        return false;
+        return ($this->GetMaxDurability() > 0 && $this->GetCurrentDurability() == 0);
     }
     
     /**
