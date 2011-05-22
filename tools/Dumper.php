@@ -17,7 +17,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  **/
-
+$time_start = microtime();
 if(!@include('../includes/WoW_Loader.php')) {
     die('<b>Fatal error:</b> unable to load system files.');
 }
@@ -45,6 +45,13 @@ $allowed_tables = array(
     ),
     array(
         'name' => 'achievement_criteria',
+        'internalFile' => false,
+        'skipData' => false,
+        'drop' => true,
+        'onlyIfNotExists' => false,
+    ),
+    array(
+        'name' => 'areas',
         'internalFile' => false,
         'skipData' => false,
         'drop' => true,
@@ -357,6 +364,13 @@ $allowed_tables = array(
         'skipData' => true,
         'drop' => true,
         'onlyIfNotExists' => false,
+    ),
+    array(
+        'name' => 'zones',
+        'internalFile' => false,
+        'skipData' => true,
+        'drop' => true,
+        'onlyIfNotExists' => false,
     )
 );
 if($_GET['do'] == 'show') {
@@ -416,4 +430,7 @@ elseif($_GET['do'] == 'show') {
     echo $sql_dump_text;
 }
 unset($sql_dump_text);
+$time_end = microtime();
+$overall = ($time_end - $time_start);
+echo '<br/ ><br />Time: ' . $overall;
 ?>

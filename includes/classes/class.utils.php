@@ -664,5 +664,38 @@ Class WoW_Utils {
             return 0;
         }
     }
+    
+    public function GetNpcAreaInfo($entry) {
+        $npc_coordinates = DB::World()->selectRow("SELECT `guid`, `map`, `position_x`, `position_y` FROM `creature` WHERE `id` = %d LIMIT 1", $entry);
+        if(!is_array($npc_coordinates)) {
+            WoW_Log::WriteLog('%s : creature #%d was not found in `creature` table!', __METHOD__, $entry);
+            return false;
+        }
+        $area_data = DB::WoW()->selectRow("
+        SELECT
+        `a`.`id`,
+        `a`.`area`,
+        `b`.`name_en` AS `areaName_original`,
+        `b`.`name_%s` AS `areaName_locale`
+        FROM `DBPREFIX_zones` AS `a`
+        JOIN `DBPREFIX_areas` AS `b` ON `b`.`id` = `a`.`area`
+        WHERE `a`.`map` = %d AND `a`.`y_min` >= %d AND `a`.`y_max` <= %d AND `a`.`x_min` >= %d AND `a`.`x_max` <= %d
+        LIMIT 1", WoW_Locale::GetLocale(), $npc_coordinates['map'], $npc_coordinates['position_y'], $npc_coordinates['position_y'], $npc_coordinates['position_x'], $npc_coordinates['position_x']);
+        if(!is_array($area_data)) {
+            WoW_Log::WriteLog('%s : area data for creature #%d (GUID: %d) was not found!', __METHOD__, $entry, $npc_coordinates['guid']);
+            return false;
+        }
+        return array(
+            'entry' => $entry,
+            'guid'  => $npc_coordinates['guid'],
+            'mapID' => $npc_coordinates['map'],
+            'zoneID' => $area_data['id'],
+            'areaID' => $area_data['area'],
+            'zoneName' => $area_data['areaName_original'],
+            'zoneName_loc' => $area_data['areaName_locale'],
+            'pos_x' => $npc_coordinates['position_x'],
+            'pos_y' => $npc_coordinates['position_y']
+        );
+    }
 }
 ?>
