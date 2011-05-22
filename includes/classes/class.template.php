@@ -82,7 +82,7 @@ Class WoW_Template {
         $full_menu = null;
         $global_menu = self::GetMainMenu();
         foreach($global_menu as $menu) {
-            $full_menu .= sprintf($menu_item, $menu['key'], $menu['href'], (self::GetMenuIndex() == $menu['key']) ? 'active' : null, $menu['title']);
+            $full_menu .= sprintf($menu_item, $menu['key'], WoW::GetWoWPath() . $menu['href'], (self::GetMenuIndex() == $menu['key']) ? 'active' : null, $menu['title']);
             $full_menu .= "\n";
         }
         echo sprintf($main_menu, $full_menu);
