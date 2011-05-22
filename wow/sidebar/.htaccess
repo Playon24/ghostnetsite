@@ -1,6 +1,6 @@
 RewriteEngine On
 RewriteRule sotd sotd.xml
-RewriteRule forums forums.xml
+RewriteRule forums forums.php
 RewriteRule events events.xml
 RewriteRule guild-news guild-news.php
 RewriteRule auctions auctions.php

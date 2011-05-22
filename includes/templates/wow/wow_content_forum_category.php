@@ -75,14 +75,62 @@ World of Warcraft
 							<td class="poster"><?php echo WoW_Locale::GetString('template_forums_table_last_post'); ?></td>
 					</tr>
 				</thead>
-					<tbody class="featured">
-					</tbody>
-	
-					<tbody class="sticky">
-					</tbody>
-				
-					<tbody class="regular">
-                    </tbody>
+                <?php
+                $threads = WoW_Forums::GetCategoryThreads();
+                if(is_array($threads)) {
+                    $types = array(
+                        'featured' => null,
+                        'sticky' => 'stickied',
+                        'regular' => null
+                    );
+                    foreach($types as $type => $style) {
+                        echo sprintf('<tbody class="%s">', $type);
+                        if(is_array($threads[$type])) {
+                            foreach($threads[$type] as $thread) {
+                                echo sprintf('<tr id="postRow%d" class=" %s">
+                                <td class="post-icon">
+                                <div class="forum-post-icon">', $thread['thread_id'], $style);
+                                if($thread['blizz_post_id'] > 0) {
+                                    echo sprintf('<div class="blizzard_icon"><a href="../topic/%d#%d" data-tooltip="%s"></a></div>', $thread['thread_id'], $thread['blizz_post_id'], WoW_Locale::GetString('template_forums_first_blizz_post'));
+                                }
+                                echo '
+                                </div>
+                                </td>
+                                <td class="post-title">';
+                                echo sprintf('<div id="thread_tt_%d" style="display:none">
+                                <div class="tt_detail">«%s»</div>
+                                <div class="tt_time">%s</div>
+                                <div class="tt_info">
+                                %s<br />
+                                %s %s (%s)
+                                </div>
+                                </div>
+                                <a href="../topic/%d" data-tooltip="#thread_tt_%d" data-tooltip-options=\'{"location": "mouse"}\'>
+                                    %s
+                                </a>', $thread['thread_id'], $thread['message_short'], date('d/m/Y', $thread['post_date']), sprintf(WoW_Locale::GetString('template_forums_views_replies_category'), $thread['views'], $thread['replies']),
+                                WoW_Locale::GetString('template_forums_last_reply'), $thread['last_author'], date('d/m/Y', $thread['last_post_date']), $thread['thread_id'], $thread['thread_id'], $thread['title']);
+                                echo '</td>
+                                <td class="post-pageNav">
+                                <div class="pageNav">
+                                </div>
+                                </td>';
+                                echo sprintf('<td class="post-author">%s</td>
+                                <td class="post-replies">%d</td>
+                                <td class="post-views">%d</td>
+                                <td class="post-lastPost"><a href="../topic/%d%s#%s" data-tooltip="%s">%s</a>
+                                <span class="more-arrow"></span>
+                                </td>
+                                </tr>', $thread['author'], $thread['replies'], $thread['views'],
+                                $thread['thread_id'], true ? null : '?page=1', $thread['replies'] > 0 ? $thread['replies'] : null,
+                                date('d/m/Y', $thread['last_post_date']), $thread['last_author'] 
+                                );
+                            }
+                        }
+                        echo '</tbody>';
+                    }
+                    
+                }
+                ?>
 
 			</table>
     </div>

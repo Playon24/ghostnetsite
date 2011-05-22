@@ -65,6 +65,13 @@ Class WoW_Forums {
     }
     
     private static function LoadCategoryThreads() {
+        self::$category_threads = DB::WoW()->select("
+        SELECT
+        `a`.*,
+        `b`.`name` AS `author`
+        FROM `DBPREFIX_forum_threads` AS `a`
+        JOIN `DBPREFIX_user_characters` AS `b` ON `b`.`account` = `a`.`author_id` AND `b`.`guid` = `a`.`author_guid`
+        WHERE `a`.`cat_id` = %d", self::GetCategoryId());
         self::HandleCategoryThreads();
     }
     
@@ -173,7 +180,51 @@ Class WoW_Forums {
     }
     
     private static function HandleCategoryThreads() {
-        
+        if(!is_array(self::$category_threads)) {
+            return false;
+        }
+        $threads = array(
+            'featured' => array(),
+            'sticky' => array(),
+            'regular' => array()
+        );
+        foreach(self::$category_threads as $thread) {
+            $th_data = DB::WoW()->selectRow("SELECT * FROM `DBPREFIX_forum_posts` WHERE `thread_id` = %d AND `post_count` = 1", $thread['thread_id']);
+            $th_last_post = DB::WoW()->selectRow("
+            SELECT
+            `a`.*,
+            `b`.`name` AS `author`
+            FROM `DBPREFIX_forum_posts` AS `a`
+            JOIN `DBPREFIX_user_characters` AS `b` ON `b`.`account` = `a`.`author_id` AND `b`.`guid` = `a`.`author_guid` 
+            WHERE `a`.`thread_id` = %d AND `a`.`post_count` = (SELECT MAX(`post_count`) FROM `DBPREFIX_forum_posts` WHERE `thread_id` = %d)", $thread['thread_id'], $thread['thread_id']);
+            if(!$th_data || !$th_last_post) {
+                continue;
+            }
+            $thread['message'] = $th_data['message'];
+            if(mb_strlen($thread['message']) > 250) {
+                $thread['message_short'] = mb_substr($thread['message'], 0, 250) . '…';
+            }
+            else {
+                $thread['message_short'] = $thread['message'];
+            }
+            $thread['post_date'] = $th_data['post_date'];
+            $thread['last_author'] = $th_last_post['author'];
+            $thread['replies'] = DB::WoW()->selectCell("SELECT COUNT(*)-1 FROM `DBPREFIX_forum_posts` WHERE `thread_id` = %d", $thread['thread_id']);
+            $thread['last_post_date'] = $th_last_post['post_date'];
+            $thread['blizz_post_id'] = DB::WoW()->selectCell("SELECT `post_count` FROM `DBPREFIX_forum_posts` WHERE `thread_id` = %d AND `blizzpost` = 1 LIMIT 1", $thread['thread_id']);
+            if($thread['flags'] & THREAD_FLAG_FEATURED) {
+                $threads['featured'][] = $thread;
+            }
+            elseif($thread['flags'] & THREAD_FLAG_PINNED) {
+                $threads['sticky'][] = $thread;
+            }
+            else {
+                $threads['regular'][] = $thread;
+            }
+        }
+        self::$category_threads = $threads;
+        unset($threads, $thread, $th_data);
+        return true;
     }
     
     private static function HandleThreadPosts() {
@@ -242,6 +293,17 @@ Class WoW_Forums {
     
     public static function GetThreadTitle() {
         return self::$active_thread_title;
+    }
+    
+    public static function GetPopularThreads() {
+        return DB::WoW()->select("
+        SELECT
+        `a`.*,
+        `b`.`title_%s` AS `categoryTitle`
+        FROM `DBPREFIX_forum_threads` AS `a`
+        JOIN `DBPREFIX_forum_category` AS `b` ON `b`.`cat_id` = `a`.`cat_id`
+        ORDER BY `a`.`views` DESC
+        LIMIT 10", WoW_Locale::GetLocale());
     }
 }
 

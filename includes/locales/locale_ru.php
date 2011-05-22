@@ -1106,5 +1106,9 @@ $WoW_Locale = array(
     'template_forums_table_views' => 'Просмотры',
     'template_forums_table_replies' => 'Ответы',
     'template_forums_table_last_post' => 'Автор посл. сообщения',
+    
+    'template_forums_first_blizz_post' => 'Первое сообщение Blizzard',
+    'template_forums_views_replies_category' => '%d просмотров / %d ответов',
+    'template_forums_last_reply' => 'Последний ответ',
 );
 ?>
