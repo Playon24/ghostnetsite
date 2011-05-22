@@ -1,8 +1,8 @@
 diff --git a/src/server/game/Achievements/AchievementMgr.cpp b/src/server/game/Achievements/AchievementMgr.cpp
-index b2d7cb7..376a5b1 100755
+index fe5467d..86c87f0 100755
 --- a/src/server/game/Achievements/AchievementMgr.cpp
 +++ b/src/server/game/Achievements/AchievementMgr.cpp
-@@ -1979,6 +1979,7 @@ void AchievementMgr::CompletedAchievement(AchievementEntry const* achievement, b
+@@ -1983,6 +1983,7 @@ void AchievementMgr::CompletedAchievement(AchievementEntry const* achievement, b
          return;
  
      SendAchievementEarned(achievement);
@@ -11,7 +11,7 @@ index b2d7cb7..376a5b1 100755
      ca.date = time(NULL);
      ca.changed = true;
 diff --git a/src/server/game/Entities/Item/Item.cpp b/src/server/game/Entities/Item/Item.cpp
-index 2fc5ccc..11ac0cb 100755
+index 956add6..920b3db 100755
 --- a/src/server/game/Entities/Item/Item.cpp
 +++ b/src/server/game/Entities/Item/Item.cpp
 @@ -276,6 +276,13 @@ bool Item::Create(uint32 guidlow, uint32 itemid, Player const* owner)
@@ -29,10 +29,10 @@ index 2fc5ccc..11ac0cb 100755
  }
  
 diff --git a/src/server/game/Entities/Player/Player.cpp b/src/server/game/Entities/Player/Player.cpp
-index e6d38de..4d29247 100755
+index 017083e..75a23b2 100755
 --- a/src/server/game/Entities/Player/Player.cpp
 +++ b/src/server/game/Entities/Player/Player.cpp
-@@ -4897,6 +4897,8 @@ void Player::DeleteFromDB(uint64 playerguid, uint32 accountId, bool updateRealmC
+@@ -4902,6 +4902,8 @@ void Player::DeleteFromDB(uint64 playerguid, uint32 accountId, bool updateRealmC
              trans->PAppend("DELETE FROM character_queststatus_daily WHERE guid = '%u'", guid);
              trans->PAppend("DELETE FROM character_talent WHERE guid = '%u'", guid);
              trans->PAppend("DELETE FROM character_skills WHERE guid = '%u'", guid);
@@ -41,7 +41,7 @@ index e6d38de..4d29247 100755
  
              CharacterDatabase.CommitTransaction(trans);
              break;
-@@ -16399,6 +16401,8 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
+@@ -16407,6 +16409,8 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
          CharacterDatabase.PExecute("UPDATE characters SET at_login = at_login | '%u' WHERE guid ='%u'", uint32(AT_LOGIN_RENAME), guid);
          return false;
      }
@@ -50,7 +50,7 @@ index e6d38de..4d29247 100755
  
      // overwrite possible wrong/corrupted guid
      SetUInt64Value(OBJECT_FIELD_GUID, MAKE_NEW_GUID(guid, 0, HIGHGUID_PLAYER));
-@@ -18334,6 +18338,30 @@ void Player::SaveToDB()
+@@ -18342,6 +18346,30 @@ void Player::SaveToDB()
  
      CharacterDatabase.CommitTransaction(trans);
  
@@ -81,7 +81,7 @@ index e6d38de..4d29247 100755
      // save pet (hunter pet level and experience and all type pets health/mana).
      if (Pet* pet = GetPet())
          pet->SavePetToDB(PET_SAVE_AS_CURRENT);
-@@ -24616,3 +24644,42 @@ void Player::_SaveInstanceTimeRestrictions(SQLTransaction& trans)
+@@ -24625,3 +24653,42 @@ void Player::_SaveInstanceTimeRestrictions(SQLTransaction& trans)
          trans->Append(stmt);
      }
  }
@@ -126,7 +126,7 @@ index e6d38de..4d29247 100755
 +}
 \ No newline at end of file
 diff --git a/src/server/game/Entities/Player/Player.h b/src/server/game/Entities/Player/Player.h
-index 4c0c640..0d32478 100755
+index 5c3db62..e6e7bf4 100755
 --- a/src/server/game/Entities/Player/Player.h
 +++ b/src/server/game/Entities/Player/Player.h
 @@ -1027,6 +1027,21 @@ private:
@@ -174,15 +174,15 @@ index 4c0c640..0d32478 100755
          InstanceTimeMap _instanceResetTimes;
          InstanceSave* _pendingBind;
 diff --git a/src/server/game/Entities/Unit/Unit.cpp b/src/server/game/Entities/Unit/Unit.cpp
-index c2415dd..8f9ff76 100755
+index 7e1b2df..01e165f 100755
 --- a/src/server/game/Entities/Unit/Unit.cpp
 +++ b/src/server/game/Entities/Unit/Unit.cpp
-@@ -15321,7 +15321,10 @@ void Unit::Kill(Unit *pVictim, bool durabilityLoss)
-                 if (m->IsRaidOrHeroicDungeon())
+@@ -15381,7 +15381,10 @@ void Unit::Kill(Unit* victim, bool durabilityLoss)
+                 if (instanceMap->IsRaidOrHeroicDungeon())
                  {
                      if (creature->GetCreatureInfo()->flags_extra & CREATURE_FLAG_EXTRA_INSTANCE_BIND)
 +                    {
-                         ((InstanceMap *)m)->PermBindAllPlayers(creditedPlayer);
+                         ((InstanceMap*)instanceMap)->PermBindAllPlayers(creditedPlayer);
 +                        creditedPlayer->CreateWowarmoryFeed(3, creature->GetCreatureInfo()->Entry, 0, 0);
 +                    }
                  }

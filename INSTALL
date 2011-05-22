@@ -21,6 +21,9 @@ INSTALLATION STEPS:
 6. If there are some sql updates in 'sql/updates' dir (rev. {LATEST_REVISION} or higher), you need to upload it into DB, too.
 7. For full work you need to patch MaNGOS / TrinityCore core with "tools/{SERVER}/wowarmory_patch.patch" file
    and update your characters DB with provided SQL update (characters.sql - in the "tools/{SERVER}/sql" folder).
+   
+   Use "patch -p1 < wowarmory_patch.patch" GIT command to patch server source code.
+   
 8. If you are using UNIX system, you need to manage access rights to allow script write data to '_debug' folder.
 9. If you have diffirent servers (MaNGOS and Trinity Core):
     Open 'includes/configs/WoWConfig.php' and edit WoWConfig::Realms[{REALM_ID}]['type'] to SERVER_MANGOS or SERVER_TRINITY 
@@ -59,6 +62,9 @@ Also, you NEED to set $WoW_Path variable in "includes/configs/WoWConfig.php" fil
 7. Для полноценной работы нужно пропатчить исходные коды сервера MaNGOS / TrinityCore
    и рекомпилировать сервер. Код патча находятся в файле "tools/{СЕРВЕР}/wowarmory_patch.patch".
    так же, нужно обновить базу персонажей приведенными SQL-дампами *папка SQL*)
+   
+   Используйте команду GIT "patch -p1 < wowarmory_patch.patch" для патчинга исходного кода сервера.
+   
 8. Если вы используете UNIX-систему, вам необходимо изменить права доступа к папке _debug чтобы скрипт мог записывать логи сервера.
 9. Если у вас несколько разных реалмов:
     Откройте файл 'includes/configs/WoWConfig.php' и измените значение параметров WoWConfig::Realms[{REALM_ID}]['type']
