@@ -9,6 +9,7 @@ $(function() {
 	Page.initialize();
 	Input.initialize();
 	Explore.initialize();
+	Tickets.initialize();
 	Flash.initialize();
 	Locale.initialize();
 	CharSelect.initialize();
@@ -21,6 +22,11 @@ var Core = {
 	 * Base context URL for the project.
 	 */
 	baseUrl: '/',
+
+	/**
+	 * Battle.net support site URL.
+	 */
+	supportUrl: '/support/',
 
 	/**
 	 * The cached string for the browser.
@@ -41,6 +47,11 @@ var Core = {
 	 * Short date format
 	 */
 	shortDateFormat: 'MM/dd/Y',
+
+	/**
+	 * Date/time format
+	 */
+	dateTimeFormat: 'dd/MM/yyyy HH:mm',
 
 	/**
 	 * The current project.
@@ -86,24 +97,25 @@ var Core = {
 	 * @param width
 	 * @param height
 	 * @param parent
+	 * @param id
 	 */
-	appendFrame: function(url, width, height, parent) {
-		if (url === undefined)
+	appendFrame: function(url, width, height, parent, id) {
+		if (typeof url === 'undefined')
 			return;
 
-		if (width === undefined)
+		if (typeof width === 'undefined')
 			width = 1;
 
-		if (height === undefined)
+		if (typeof height === 'undefined')
 			height = 1;
 
-		if (parent === undefined)
+		if (typeof parent === 'undefined')
 			parent = $('body');
 
 		if (Core.isIE())
-			parent.append('<iframe src="' + url + '" width="' + width + '" height="' + height + '" scrolling="no" frameborder="0" allowTransparency="true"></iframe>');
+			parent.append('<iframe src="' + url + '" width="' + width + '" height="' + height + '" scrolling="no" frameborder="0" allowTransparency="true"'+ ((typeof id != 'undefined') ? ' id="'+ id +'"' : '') +'></iframe>');
 		else
-			parent.append('<object type="text/html" data="' + url + '" width="' + width + '" height="' + height + '"></object>');
+			parent.append('<object type="text/html" data="' + url + '" width="' + width + '" height="' + height + '"'+ ((typeof id != 'undefined') ? ' id="'+ id +'"' : '') +'></object>');
 	},
 
 	/**
@@ -178,6 +190,12 @@ var Core = {
 			// webkit
 			if (isNaN(localDate.getTime())) { // 2010-07-22 07:41 GMT-0700
 				datetime = datetime.substring(0,10) + ' ' + datetime.substring(11,16) + ':00 GMT' + datetime.substring(16,19) + datetime.substring(20,22);
+				localDate = new Date(datetime);
+			}
+
+			// safari… still thinking different
+			if (isNaN(localDate.getTime())) { // 2010/07/22 07:41 GMT-0700
+				datetime = datetime.substring(0,4) + '/' + datetime.substring(5,7) + '/' + datetime.substring(8,29);
 				localDate = new Date(datetime);
 			}
 
@@ -818,11 +836,7 @@ var Input = {
 	 * Initialize binds for search form.
 	 */
 	initialize: function() {
-		$('#search-form')
-			.attr('autocomplete', 'off')
-			.submit(function() {
-				return Input.submit('#search-field');
-			});
+		$('#search-form, #search-page-field').attr('autocomplete', 'off');
 
 		// Ensure alt text is displayed after empty search is submitted.
 		Input.bind('#search-field');
@@ -836,12 +850,17 @@ var Input = {
 	bind: function(target) {
 		Input.reset(target);
 
-		$(target)
+		var field = $(target);
+
+		field
 			.focus(function() {
 				Input.activate(this);
 			})
 			.blur(function() {
 				Input.reset(this);
+			})
+			.parentsUntil('form').parent().submit(function() {
+				return Input.submit(field);
 			});
 	},
 
@@ -883,11 +902,6 @@ var Input = {
 
 		if (node.val() == node.attr('alt'))
 			node.val("");
-
-		if (node.val().length < 2){
-			Overlay.open(Msg.cms.shortQuery)
-			return false;
-		}
 
 		return true;
 	}
@@ -983,8 +997,17 @@ var Explore = {
 				.css('cursor', 'pointer');
 		}
 
+		var supportLink = $('#support-link');
 		var exploreLink = $('#explore-link');
 		var newsLink = $('#breaking-link');
+
+		if (supportLink.length > 0) {
+			supportLink.unbind().click(function() {
+				Tickets.loadStatus();
+				Toggle.open(this, 'active', '#support-menu');
+				return false;
+			});
+		}
 
 		if (exploreLink.length > 0) {
 			exploreLink.unbind().click(function() {
@@ -1002,7 +1025,227 @@ var Explore = {
 	}
 };
 
-/*
+/**
+ * Gets and displays unread support tickets.
+ */
+var Tickets = {
+
+	/**
+	 * HTML elements.
+	 */
+	tag: null,
+	summary: null,
+	fragment: null,
+	ul: null,
+	doc: null,
+
+	/**
+	 * Total number of ticket statuses to show.
+	 */
+	 total: 3,
+
+	/**
+	 * Enable the enahanced support menu.
+	 *
+	 * @constructor
+	 */
+	initialize: function() {
+	    Tickets.doc = document;
+	    var doc = Tickets.doc;
+		Tickets.tag = doc.getElementById('support-ticket-count');
+		Tickets.summary = doc.getElementById('ticket-summary');
+		Tickets.fragment = doc.createDocumentFragment();
+		Tickets.ul = doc.createElement('ul');
+		Tickets.loadStatus();
+	},
+
+	/**
+	 * Update the service menu.
+	 *
+	 * @param json
+	 */
+	updateSummary: function(json) {
+
+		var doc = Tickets.doc;
+
+		Tickets.fragment = doc.createDocumentFragment();
+		Tickets.ul = doc.createElement('ul');
+		Tickets.summary.innerHTML = '';
+		Tickets.fragment.appendChild(Tickets.ul);
+
+		if (json.length < 1) {
+			return;
+        }
+
+		for (var i = 0, ticket; ticket = json[i]; i++) {
+		    Tickets.createListItem(ticket, i);
+		}
+
+		Tickets.summary.appendChild(Tickets.fragment);
+
+	},
+
+	/**
+	 * Creates a status summary for a ticket.
+	 *
+	 * @param ticket A ticket object.
+	 * @param index
+	 */
+	createListItem: function(ticket, index) {
+
+        if (typeof ticket !== 'object') {
+            return;
+        }
+
+		var doc = Tickets.doc,
+		    css = Core.isIE(6) || Core.isIE(7) ? 'className' : 'class',
+		    msgSupport = Msg.support,
+		    msg = {
+				created: msgSupport.ticketNew,
+				status: msgSupport.ticketStatus,
+				viewAll: msgSupport.ticketAll,
+				OPEN: msgSupport.ticketOpen,
+				ANSWERED: msgSupport.ticketAnswered,
+				RESOLVED: msgSupport.ticketResolved,
+				CANCELED: msgSupport.ticketCanceled,
+				ARCHIVED: msgSupport.ticketArchived,
+				INFO: msgSupport.ticketInfo
+			},
+			string = '',
+			prefix = '',
+			suffix = '',
+			icon = null,
+			li = null,
+			a = null,
+			span = null,
+			br = null,
+			datetime = null,
+			test = -1;
+
+        if (ticket.status === 'OPEN') {
+            string = msg.created.replace('{0}', Core.buildRegion.toUpperCase() + ticket.caseId);
+        } else {
+            string = msg.status.replace('{0}', Core.buildRegion.toUpperCase() + ticket.caseId);
+        }
+        datetime = doc.createElement('span');
+        datetime.setAttribute(css, 'ticket-datetime');
+        datetime.appendChild(doc.createTextNode(Tickets.localizeDatetime(ticket.lastUpdate)));
+        a = doc.createElement('a');
+        a.href = Core.secureSupportUrl + 'ticket/thread/' + ticket.caseId;
+        icon = doc.createElement('span'),
+        icon.setAttribute(css, 'icon-ticket-status');
+        a.appendChild(icon);
+        test = string.indexOf('{1}');
+        if (test > 0) {
+            prefix = string.substring(0, test);
+            suffix = string.substr(test + 3, string.length);
+            span = doc.createElement('span');
+            span.setAttribute(css, 'ticket-' + ticket.status.toLowerCase());
+            span.appendChild(doc.createTextNode(msg[ticket.status]));
+            a.appendChild(doc.createTextNode(prefix));
+            a.appendChild(span);
+            a.appendChild(doc.createTextNode(suffix));
+        } else {
+            a.appendChild(doc.createTextNode(string));
+        }
+        br = doc.createElement('br');
+        a.appendChild(br);
+        a.appendChild(datetime);
+        li = doc.createElement('li');
+        if (index === 0) {
+            li.setAttribute(css, 'first-ticket');
+        }
+        li.appendChild(a);
+        Tickets.ul.appendChild(li);
+
+		if (index === this.total) {
+		    li = doc.createElement('li');
+		    li.setAttribute(css, 'view-all-tickets');
+		    a = doc.createElement('a');
+		    a.href = Core.secureSupportUrl + 'ticket/status';
+            a.appendChild(doc.createTextNode(msg['viewAll']));
+		    li.appendChild(a);
+			Tickets.ul.appendChild(li);
+		}
+
+    },
+
+	/**
+	 * Update the service menu tag with the total number of tickets.
+	 *
+	 * @param count
+	 */
+	updateTotal: function(count) {
+
+		count = typeof count === 'number' ? count : 0;
+
+		var css = Core.isIE(6) || Core.isIE(7) ? 'className' : 'class';
+
+		if (count > 0) {
+			Tickets.tag.setAttribute(css, 'open-support-tickets');
+			Tickets.tag.innerHTML = count;
+		} else {
+			Tickets.tag.setAttribute(css, 'no-support-tickets');
+			Tickets.tag.innerHTML = '';
+		}
+
+	},
+
+	/**
+	 * Localize the date and time per the user's time zone and locale.
+	 *
+	 * @param timestamp
+	 */
+	localizeDatetime: function(timestamp) {
+
+		var format = Core.dateTimeFormat,
+			locale = Core.locale,
+			datetime = null;
+
+		datetime = Core.formatDatetime(format, timestamp);
+
+		if (!datetime)
+			return '';
+
+		if (locale === 'en-us' || locale === 'es-mx' || locale === 'zh-cn' || locale === 'zh-tw') {
+			datetime = datetime.replace('/0', '/');
+
+			if (datetime.substr(0, 1) === '0')
+				datetime = datetime.substr(1);
+		}
+
+		if (locale === 'en-us' || locale === 'es-mx')
+			datetime = datetime.replace(' 0', ' ');
+
+		return datetime;
+
+	},
+
+	/**
+	 * Load the ticket information through AJAX.
+	 */
+	loadStatus: function() {
+		var supportUrl = Core.supportUrl + 'update/json/' + this.total;
+		if (document.location.protocol === 'https:') {
+			supportUrl = Core.secureSupportUrl + 'update/json/' + this.total;
+		}
+
+		if (Tickets.summary !== null) {
+			$.ajax({
+				timeout: 60000,
+				url: supportUrl,
+				ifModified: true,
+				global: false,
+				success: function(json) {
+					Tickets.updateTotal(json.total);
+					Tickets.updateSummary(json.details, json.total);
+				}
+			});
+		}
+	}
+};
+
+/**
  * Simple open/hide toggle system.
  */
 var Toggle = {
@@ -1043,6 +1286,11 @@ var Toggle = {
 		Toggle.keepOpen = true;
 
 		var key = Toggle.key(targetPath);
+
+		for (var k in Toggle.cache) {
+			if (k !== key)
+				Toggle.close(Toggle.cache[k].trigger, Toggle.cache[k].activeClass, Toggle.cache[k].target, 0, true);
+		}
 
 		//bind events and cache
 		if (!Toggle.cache[key]) {
@@ -1092,14 +1340,18 @@ var Toggle = {
 	 * @param activeClass
 	 * @param targetPath
 	 * @param delay
+	 * @param force
 	 */
-	close: function(triggerNode, activeClass, targetPath, delay) {
+	close: function(triggerNode, activeClass, targetPath, delay, force) {
+
+		force = typeof force === 'boolean' ? force : false;
+
 		var key = Toggle.key(targetPath);
 
 		window.clearTimeout(Toggle.cache[key].timer);
 
 		Toggle.cache[key].timer = setTimeout(function() {
-			if (Toggle.keepOpen)
+			if (Toggle.keepOpen && !force)
 				return;
 
 			$(targetPath).hide();
@@ -1304,8 +1556,8 @@ var CharSelect = {
 	 * @param fallbackUrl
 	 */
 	pageUpdate: function(refreshUrl, fallbackUrl) {
-		var ck = Date.parse(new Date()),
 			refreshUrl = refreshUrl || location.href;
+		var ck = Date.parse(new Date());
 
 		if (Core.isIE() && refreshUrl == Core.baseUrl +'/') {
 			location.href = location.pathname +'?reload='+ ck;
@@ -1495,7 +1747,12 @@ var Flash = {
     /**
      * Express install location
      */
-    expressInstall: '/common/static/flash/expressInstall.swf',
+    expressInstall: 'expressInstall.swf',
+
+    /**
+     * Required version for Flash player
+     */
+    requiredVersion: '10.2.154',
 
     /**
      * Store values populated after load
@@ -1503,7 +1760,7 @@ var Flash = {
     initialize: function() {
          //set flash base and rating image
          Flash.defaultVideoParams.base          = Flash.videoBase;
-         Flash.defaultVideoFlashVars.ratingpath = Flash.ratingImage;
+         Flash.defaultVideoFlashVars.ratingPath = Flash.ratingImage;
          Flash.defaultVideoFlashVars.locale     = Core.locale;
          Flash.defaultVideoFlashVars.dateFormat = Core.shortDateFormat;
     },
@@ -1523,8 +1780,9 @@ var Flash = {
      * Default flash vars for videos
      */
     defaultVideoFlashVars: {
-        ratingfadetime: "2",
-        ratingshowtime: "1"
+        ratingFadeTime: "2",
+        ratingShowTime: "1",
+        autoPlay:       true
     }
 };
 
@@ -1558,9 +1816,8 @@ var Locale = {
      *
      * @param toggler
      * @param path
-     * @param contextPath
      */
-    openMenu: function(toggler, path, contextPath) {
+    openMenu: function(toggler, path) {
         var node = $('#international');
         toggler = $(toggler);
         path = path || '';
@@ -1577,7 +1834,7 @@ var Locale = {
                 $.ajax({
                     url: Core.baseUrl +'/'+ Locale.dataPath +'?path='+ path,
                     dataType: 'html',
-                    success: function(data, status) {
+                    success: function(data) {
                         if (data) {
                             node.replaceWith(data);
                             toggler.toggleClass('open');
@@ -1842,9 +2099,9 @@ var KeyCode = {
 	 * @return mixed
 	 */
 	get: function(type, lang) {
+	    lang = lang || Core.getLanguage();
 		var map = [],
-			types = [],
-			lang = lang || Core.getLanguage();
+			types = [];
 
 		if (typeof type == 'string')
 			types = [type];

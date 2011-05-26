@@ -23,6 +23,8 @@ var Table = Class.extend({
 	 * Configuration.
 	 */
 	config: {},
+	reprocess: false,
+	lastSort: null,
 
 	/**
 	 * Pagination overwrites.
@@ -168,6 +170,7 @@ var Table = Class.extend({
 		this.pager.page = 1;
 
 		// Process rows
+		this.reprocess = true;
 		this.cached = [];
 		this.process(true);
 	},
@@ -189,7 +192,7 @@ var Table = Class.extend({
 				this._mapFilter('row-'+ data[0], data[1], {
 					filter: 'row',
 					column: data[0],
-					match: _setNeedle(data[1])
+					match: this._setNeedle(data[1])
 				});
 			}
 
@@ -229,6 +232,7 @@ var Table = Class.extend({
 			this.pager.page = 1;
 
 			// Process rows
+			this.reprocess = true;
 			this.cached = [];
 			this.process(true);
 		}
@@ -262,7 +266,9 @@ var Table = Class.extend({
 	 * @param filtered
 	 */
 	process: function(filtered) {
-		var source = (this.cached.length) ? this.cached : this.source,
+		var result,
+			table = this.table,
+			source = (this.cached.length) ? this.cached : this.source,
 			i = source.length - 1,
 			l = i,
 			k;
@@ -298,7 +304,7 @@ var Table = Class.extend({
 					add = true;
 
 					// Filter down the rows
-					if (config.filtering) {
+					if (config.filtering && this.filters.rules.length) {
 						if (!this._processFilters(row, source[k])) {
 							continue;
 						}
@@ -357,15 +363,19 @@ var Table = Class.extend({
 				this._updatePagination(page);
 			}
 
+			result = true;
+
 			// Append document fragment
 			this.table.find('tbody').html(fragment);
 			this.cached = cache;
 
 		// No rows? Show no results
 		} else {
+			result = false;
 			if (this.none !== null)
 				this.table.find('tbody').append(this.none);
 		}
+		
 	},
 
 	/**
@@ -394,7 +404,7 @@ var Table = Class.extend({
 
 		// Sorting
 		var config = this.config;
-		
+
 		if (config.column !== false)
 			this.sort(config.column, config.method, config.type);
 
@@ -519,7 +529,7 @@ var Table = Class.extend({
 		// Avoid descending sort since reverse() is faster
 		var data = (this.cached.length) ? this.cached : this.source;
 
-		if (type !== 'reverse') {
+		if (this.reprocess || type !== 'reverse') {
 
 			// Numeric
 			if (method === 'numeric') {
@@ -559,6 +569,7 @@ var Table = Class.extend({
 		}
 
 		// Process rows
+		this.reprocess = false;
 		this.process();
 	},
 
@@ -604,8 +615,6 @@ var Table = Class.extend({
 
 	/**
 	 * Create the pagination links and save to a variable.
-	 *
-	 * @param resetData
 	 */
 	_buildPagination: function() {
 		if (!this.controls.length)
@@ -682,7 +691,6 @@ var Table = Class.extend({
 			rules = this.filters.rules;
 
 		if (value === "") {
-			delete rules[map[key]];
 			delete map[key];
 
 		} else {
@@ -706,6 +714,7 @@ var Table = Class.extend({
 	_processFilters: function(row, cache) {
 		var filters = this.filters.rules,
 			length = filters.length,
+			map = this.filters.map,
 			pass = true,
 			test,
 			text;
@@ -713,7 +722,7 @@ var Table = Class.extend({
 		for (var i = 0; i < length; i++) {
 			test = filters[i];
 
-			if (!test)
+			if (!test || !map[test.filter +'-'+ test.column] || i != map[test.filter +'-'+ test.column])
 				continue;
 
 			// Row
@@ -1007,4 +1016,4 @@ var TableStatic = {
 		return (text.substr(-match.length) === match);
 	}
 
-}
+};

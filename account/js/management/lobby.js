@@ -38,15 +38,15 @@ var Lobby = {
 
 		target.slideUp(0);
 		node.removeClass('opened').addClass('closed');
-        
+
         return false;
     },
 
     toggleGameList: function(node, target) {
-		var targetElement = $('#'+ target),
+		var targetElement = $('#' + target),
        		nodeElement = $(node);
 
-        if (target.is(':visible')) {
+        if (targetElement.is(':visible')) {
 			Cookie.create('bam.' + target,'closed',{ expires: 336 });
             (!Core.isIE(6) && !Core.isIE(7)) ? targetElement.slideUp() : targetElement.toggle();
             nodeElement.removeClass('opened').addClass('closed');
@@ -55,7 +55,7 @@ var Lobby = {
             (!Core.isIE(6) && !Core.isIE(7)) ? targetElement.slideDown() : targetElement.toggle();
             nodeElement.removeClass('closed').addClass('opened');
         }
-        
+
         return false;
     },
 
@@ -108,7 +108,7 @@ var Lobby = {
 
 		var length = unloaded.length;
 		var i = length - 1;
-	
+
 		if (i >= 0) { do {
 			Lobby.getPaymentDetails($(unloaded[i]));
 		} while (i--);}
@@ -133,7 +133,7 @@ var Lobby = {
 		var unloaded = $('#games-list ul li.unloaded');
 		var length = unloaded.length;
 		var i = length - 1;
-	
+
 		if (i >= 0) { do {
 			$(unloaded[i]).removeClass('disabled');
 		} while (i--);}
@@ -199,7 +199,7 @@ var Lobby = {
             }
 		});
     },
-    
+
     getPaymentDetails: function(div) {
         $.ajax({
 			timeout: 60000,
@@ -318,7 +318,7 @@ var Lobby = {
 								tip = IconTag['trialSingular'];
 							} else if (msg.trialMinutesLeft > 0){
 								tip = IconTag['trialPluralMinutes'].replace("XXX", msg.trialMinutesLeft);
-									
+
 							} else {
 								tip = IconTag['trialPlural'].replace("XXX", msg.trialDaysLeft);
 							}

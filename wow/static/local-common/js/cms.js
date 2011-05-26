@@ -7,7 +7,7 @@ $(document).ready(function(){
 });
 
 function consoleLog(data){
-	if(typeof (console.log) != 'undefined')
+	if(typeof (console) != 'undefined' && typeof (console.log) != 'undefined')
 		console.log(data)
 }
 
@@ -62,7 +62,15 @@ var Cms = {
 	Station: {
 		_WOFFSET : 921,
 		init: function(){
-			$('input.filter').bind('keyup',Cms.Station.forumFilter)
+			$('input.filter').bind('keyup',Cms.Station.forumFilter);
+			$.ajax({
+				url: Core.baseUrl +'/sidebar/forums',
+				type: 'GET',
+				dataType: 'html',
+				success: function(data) {
+					$('#popular-topics-inner').html(data);
+				}
+			});
 		},
 		
 		forumFilter: function(e){
@@ -323,16 +331,13 @@ var Cms = {
 				   });
 
 		},
-		topicInit: function(topicId) {
+		topicInit: function(topicId,forum,page) {
 			$('.rate-btn-holder').bind('mouseleave', function() {
 					$(this).children('.rate-action').hide();
 				})
-			$('.user-name').bind('mouseleave', function() {
-					//$(this).children('.character-options').hide();
-				})
-
+			
 			Cms.ajaxErrorInit();
-			Cms.Topic.readThread(topicId);
+			Cms.Topic.readThread(topicId,page);
 			if($.trim($('#post-errors > div').html())!= ''){
 				$('#post-errors').hide();
 				Overlay.open('#post-errors')
@@ -394,6 +399,10 @@ var Cms = {
 		
 		pollRefresh: function(bool, data) {
 			if($('.results').is(':visible')){
+				if($('.poll-interior .results td:first-child').outerWidth() > $('.results').width()/2) {
+					$('.results').addClass('verbose')
+				}
+				
 				if (bool) {
 					$("#poll-container .result-container .result").each(function() {
 							var targw = $(this).css('width');
@@ -443,20 +452,27 @@ var Cms = {
 					}
 				); //End Post
 		},
-		readThread:function(id){
+		readThread:function(id,page){
 			var threadRead = Cookie.read('visitedThread')
+			
 			threadRead = (threadRead != null)?decodeURIComponent(threadRead).split(','):[];
 
 			var d = new Date;
 			d = d.getTime()
 
-			var mod = false
+			var changed = false
+				
 			for(x in threadRead)
-			{ 	threadRead[x] = threadRead[x].split('//');
-				if(threadRead[x][0] == id) { threadRead[x][1] = d; mod = true; }
+			{ 	
+				threadRead[x] = threadRead[x].split('//');
+				if(threadRead[x][0] == id) { 
+					threadRead[x][1] = d; 
+					threadRead[x][2] = (!threadRead[x][2] || threadRead[x][2]<page)?page:threadRead[x][2]; 
+					changed = true; 
+				}
 			}
 
-			if(!mod) threadRead.push([id,d])
+			if(!changed) threadRead.push([id,d,page])
 			for(x in threadRead) { threadRead[x] = threadRead[x].join('//'); }
 
 			if(threadRead.length > 100) threadRead.shift()
@@ -500,15 +516,15 @@ var Cms = {
 			else 
 				cfr.slideToggle(50);
 
-			$('#replyTo').val(parent + ":" + cId);
+			$('#replyTo').val(parent);
 		},
 		validateComment:function(target){
 			var ta = $(target).find("textarea")
-			$(target).find('button[type=submit]').addClass('disabled')[0].disabled = true
+			$(target).find('.comment-submit').addClass('disabled')[0].disabled = true
 			if(ta.val().trim() == ''){
 				ta.css('borderColor',"red");
 				Overlay.open(Msg.cms.validationError);
-				$(target).find('button[type=submit]').removeClass('disabled')[0].disabled = false
+				$(target).find('.comment-submit').removeClass('disabled')[0].disabled = false
 				return false;
 			}
 			else return true;
@@ -534,11 +550,51 @@ var Cms = {
 		commentInitIe: function() {
 			$('#page-comments .comment').bind('mouseenter',function(){ $(this).addClass('iehover'); })
 										.bind('mouseleave',function(){ $(this).removeClass('iehover'); });
+		},
+		ajaxComment: function(button, callback) {
+			var form = $(button).parentsUntil('form').parent();
+
+			if (Cms.Comments.validateComment(form) && callback) {
+				$.ajax({
+					url: form.attr('action'),
+					type: 'POST',
+					data: form.serialize(),
+					dataType: 'json',
+					success: callback
+				});
+		}
+	},
+		deleteComment: function(id, notice) {
+			if (!confirm(notice))
+				return;
+			
+			$.ajax({
+				url: Core.baseUrl +'/discussion/comment/'+ id +'/delete',
+				type: 'POST',
+				data: {
+					xstoken: xsToken
+				},
+				dataType: 'json',
+				success: function(response) {
+					if (response.success) {
+						$('#c-'+ id).fadeOut('fast', function() {
+							$(this).remove();
+						});
+					}
+				}
+			});
 		}
 	},
 	Blog: {
-		getRelated: function(kw, excludeId) {
-			$.get(Core.baseUrl + '/sidebar/articles.frag?k=' + kw + '&exclude=' + excludeId,
+		init : function(){
+			$('#blog a.lightbox').click(function(){
+				var imgUrl = $(this).attr('href')
+				Lightbox.loadImage([ { src:imgUrl } ])
+				return false;
+			})
+		},
+		getRelated: function(excludeId) {
+			$.get(Core.baseUrl + '/sidebar/articles.frag?id=' + excludeId,
 					function(data){
 						$('#sidebar-related').show();
 						var dataContent = (typeof data == 'string')?data:data.documentElement.innerHTML

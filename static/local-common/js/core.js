@@ -38,6 +38,11 @@ var Core = {
 	locale: 'en-us',
 
 	/**
+	 * Short date format
+	 */
+	shortDateFormat: 'MM/dd/Y',
+
+	/**
 	 * The current project.
 	 */
 	project: '',
@@ -46,6 +51,7 @@ var Core = {
 	 * Path to static content.
 	 */
 	staticUrl: '/',
+	sharedStaticUrl: '/local-common/',
 
 	/**
 	 * The current host and protocol.
@@ -80,24 +86,25 @@ var Core = {
 	 * @param width
 	 * @param height
 	 * @param parent
+	 * @param id
 	 */
-	appendFrame: function(url, width, height, parent) {
-		if (url === undefined)
+	appendFrame: function(url, width, height, parent, id) {
+		if (typeof url === 'undefined')
 			return;
 
-		if (width === undefined)
+		if (typeof width === 'undefined')
 			width = 1;
 
-		if (height === undefined)
+		if (typeof height === 'undefined')
 			height = 1;
 
-		if (parent === undefined)
+		if (typeof parent === 'undefined')
 			parent = $('body');
 
 		if (Core.isIE())
-			parent.append('<iframe src="' + url + '" width="' + width + '" height="' + height + '" scrolling="no" frameborder="0" allowTransparency="true"></iframe>');
+			parent.append('<iframe src="' + url + '" width="' + width + '" height="' + height + '" scrolling="no" frameborder="0" allowTransparency="true"'+ ((typeof id != 'undefined') ? ' id="'+ id +'"' : '') +'></iframe>');
 		else
-			parent.append('<object type="text/html" data="' + url + '" width="' + width + '" height="' + height + '"></object>');
+			parent.append('<object type="text/html" data="' + url + '" width="' + width + '" height="' + height + '"'+ ((typeof id != 'undefined') ? ' id="'+ id +'"' : '') +'></object>');
 	},
 
 	/**
@@ -284,7 +291,7 @@ var Core = {
 	 */
 	goTo: function(url, base) {
 		window.location.href = (base ? Core.baseUrl : '') + url;
-		
+
 		if (window.event)
 			window.event.returnValue = false;
 	},
@@ -479,7 +486,7 @@ var Core = {
 
 		$($.browser.webkit ? 'body' : 'html').animate({
 			scrollTop: top
-		}, 
+		},
 		duration || 350,
 		callback || null);
 	},
@@ -812,11 +819,7 @@ var Input = {
 	 * Initialize binds for search form.
 	 */
 	initialize: function() {
-		$('#search-form')
-			.attr('autocomplete', 'off')
-			.submit(function() {
-				return Input.submit('#search-field');
-			});
+		$('#search-form, #search-page-field').attr('autocomplete', 'off');
 
 		// Ensure alt text is displayed after empty search is submitted.
 		Input.bind('#search-field');
@@ -830,12 +833,17 @@ var Input = {
 	bind: function(target) {
 		Input.reset(target);
 
-		$(target)
+		var field = $(target);
+
+		field
 			.focus(function() {
 				Input.activate(this);
 			})
 			.blur(function() {
 				Input.reset(this);
+			})
+			.parentsUntil('form').parent().submit(function() {
+				return Input.submit(field);
 			});
 	},
 
@@ -877,11 +885,6 @@ var Input = {
 
 		if (node.val() == node.attr('alt'))
 			node.val("");
-
-		if (node.val().length < 2){
-			Overlay.open(Msg.cms.shortQuery)
-			return false;
-		}
 
 		return true;
 	}
@@ -1489,7 +1492,12 @@ var Flash = {
     /**
      * Express install location
      */
-    expressInstall: '/common/static/flash/expressInstall.swf',
+    expressInstall: 'expressInstall.swf',
+
+    /**
+     * Required version for Flash player
+     */
+    requiredVersion: '10.2.154',
 
     /**
      * Store values populated after load
@@ -1497,7 +1505,9 @@ var Flash = {
     initialize: function() {
          //set flash base and rating image
          Flash.defaultVideoParams.base          = Flash.videoBase;
-         Flash.defaultVideoFlashVars.ratingpath = Flash.ratingImage;
+         Flash.defaultVideoFlashVars.ratingPath = Flash.ratingImage;
+         Flash.defaultVideoFlashVars.locale     = Core.locale;
+         Flash.defaultVideoFlashVars.dateFormat = Core.shortDateFormat;
     },
 
     /**
@@ -1515,8 +1525,9 @@ var Flash = {
      * Default flash vars for videos
      */
     defaultVideoFlashVars: {
-        ratingfadetime: "2",
-        ratingshowtime: "1"
+        ratingFadeTime: "2",
+        ratingShowTime: "1",
+        autoPlay:       true
     }
 };
 
@@ -2080,6 +2091,104 @@ var UserAgent = {
 
 		$('html').addClass(className);
 	}
+};
+
+/**
+ * Simple API for interacting with the browsers local storage.
+ */
+var Storage = {
+
+	/**
+	 * Does browser support local storage?
+	 */
+	initialized: (window.localStorage),
+
+	/**
+	 * Get item from storage.
+	 *
+	 * @param key
+	 * @return mixed
+	 */
+	get: function(key) {
+		if (Storage.initialized && key)
+			return localStorage.getItem(key);
+
+		return null;
+	},
+
+	/**
+	 * Get all items from storage.
+	 *
+	 * @return mixed
+	 */
+	getAll: function() {
+		var items = [];
+
+		if (!Storage.initialized)
+			return items;
+
+		for (var i = 0, l = localStorage.length, k = null; i < l; i++) {
+			k = localStorage.key(i);
+
+			items.push({
+				key: k,
+				value: localStorage[k]
+			});
+		}
+
+		return items;
+	},
+
+	/**
+	 * Add/set an item into storage.
+	 *
+	 * @param key
+	 * @param value
+	 * @return mixed
+	 */
+	set: function(key, value) {
+		if (Storage.initialized && key) {
+			try {
+				localStorage.setItem(key, value || '');
+			} catch (e) {
+				if (e == QUOTA_EXCEEDED_ERR) {
+					alert('Local storage quota exceeded, please clear your saved data.');
+				}
+			}
+
+			return true;
+		}
+
+		return false;
+	},
+
+	/**
+	 * Clear all stored data.
+	 */
+	clear: function() {
+		if (Storage.initialized)
+			localStorage.clear();
+	},
+
+	/**
+	 * Remove a single item from storage.
+	 *
+	 * @param key
+	 */
+	remove: function(key) {
+		if (Storage.initialized && key)
+			localStorage.removeItem(key);
+	},
+
+	/**
+	 * Get the total items stored.
+	 *
+	 * @return int
+	 */
+	size: function() {
+		return localStorage.length || 0;
+	}
+
 };
 
 /**

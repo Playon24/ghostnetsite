@@ -326,8 +326,10 @@ var Creation = Class.extend({
 
 	passwordInput1: null,
 	passwordMessage1: null,
+	passwordMessage1Default: null,
 	passwordInput2: null,
 	passwordMessage2: null,
+	passwordMessage2Default: null,
 	passwordRight: null,
 	passwordLeft: null,
 	passwordResult: null,
@@ -411,6 +413,8 @@ var Creation = Class.extend({
 		if (this.countrySelect.length) {
 			this.countryDefault = this.countrySelect.find(':selected')[0].value;
 			this.countryWarning = $('#country-warning');
+			this.countryGlobal = $('#countryGlobal');
+			this.countryCHINA = $('#countryCHINA');
 			this.countrySubmit = this.countryWarning.find('a.ui-button');
 			this.countryCancel = this.countryWarning.find('a.ui-cancel');
 	
@@ -437,8 +441,10 @@ var Creation = Class.extend({
 
 		this.passwordInput1 = $(this.config.passwordFields[0]);
 		this.passwordMessage1 = $(this.config.passwordFields[0] + '-message');
+		this.passwordMessage1Default = this.passwordMessage1.text();
 		this.passwordInput2 = $(this.config.passwordFields[1]);
 		this.passwordMessage2 = $(this.config.passwordFields[1] + '-message');
+		this.passwordMessage2Default = this.passwordMessage2.text();
 		this.passwordRight = this.passwordInput1.parents('span.input-right');
 		this.passwordLeft = this.passwordRight.siblings('span.input-left');
 		this.passwordResult = $('#password-result');
@@ -521,11 +527,11 @@ var Creation = Class.extend({
 		}
 
 		// Dynamic password strength rating.
-		this.passwordInput1.bind('focus blur input propertychange',
+		this.passwordInput1.bind('focus blur input',
 			$.proxy(this._validatePassword, this)
 		);
 
-		this.passwordInput2.bind('focus blur input propertychange',
+		this.passwordInput2.bind('focus blur input',
 			$.proxy(this._validatePassword, this)
 		);
 
@@ -591,6 +597,13 @@ var Creation = Class.extend({
 	changeCountry: function(country) {
 		this.countrySubmit[0].href = '?country=' + encodeURIComponent(country);
 		this.block();
+		if (country == "CHINA") {
+			this.countryGlobal.hide();
+			this.countryCHINA.show();
+		}else{
+			this.countryGlobal.show();
+			this.countryCHINA.hide();
+		}
 		this.countryWarning.slideDown(250);
 	},
 
@@ -604,7 +617,9 @@ var Creation = Class.extend({
 			target = e.target.id,
 			email1 = this.emailInput1[0].id;
 		if (domains.length) {
-			if (e.shiftKey && e.keyCode === 50) {
+			var atTest = new RegExp('^[0-9a-zA-Z+_.-]+@+$');
+
+			if (atTest.test(e.target.value)) {
 				var userName = e.target.value,
 					emailIDs = [];
 				for (var i = 0, domain; domain = domains[i]; i++) {
@@ -822,12 +837,11 @@ var Creation = Class.extend({
 			password1 = this.passwordInput1[0].id,
 			delay = (type === 'keyup' || type === 'input' || type === 'propertychange') ? 100 : 0,
 			bind = this;
-		
 		this.showPasswordGuidelines = type !== 'blur';
 		this.activePasswordInput = -1;
 		if (type !== 'blur') {
 			this.activePasswordInput = target === password1 ? 0 : 1;
-		}
+			}
 		if (this.passwordTimer === null) {
 			this.passwordTimer = setTimeout(function() {
 				bind.checkPassword();
@@ -850,6 +864,8 @@ var Creation = Class.extend({
 			rowLeft = this.passwordLeft,
 			message1 = this.passwordMessage1,
 			message2 = this.passwordMessage2,
+			default1 = this.passwordMessage1Default,
+			default2 = this.passwordMessage2Default,
 			email = this.emailInput1[0].value,
 			show = this.showPasswordGuidelines;
 
@@ -880,19 +896,20 @@ var Creation = Class.extend({
 
 			if (result || show) {
 				message1.html(' ');
-			} else if (message2.html() === ' ') {
+			} else if (!result || message2.html() === default2 || message2.html() === ' ') {
 				message1.html(FormMsg.passwordError1);
 			}
 
 		} else {
-			message1.html(' ');
-			message2.html(' ');
+			message1.html(default1);
+			message2.html(default2);
 			this.passwordLevels[0].removeClass();
 			this.passwordLevels[1].removeClass();
 			this.passwordLevels[2].removeClass();
 			this.passwordLevels[3].removeClass();
 			this.passwordLevels[4].removeClass();
 			result = false;
+			
 		}
 
 		this.ratePassword();
@@ -910,7 +927,9 @@ var Creation = Class.extend({
 			score = 0,
 			password1 = this.passwordInput1[0].type === 'password' ? this.passwordInput1[0].value : '',
 			rating = this.passwordRating,
-			result = this.passwordResult;
+			result = this.passwordResult,
+			message1 = this.passwordMessage1,
+			message2 = this.passwordMessage2;
 
 		rating.removeClass().addClass('rating rating-default');
 		result.html('').removeClass();
@@ -933,6 +952,8 @@ var Creation = Class.extend({
 		}
 
 		if (this.showPasswordGuidelines) {
+		    message1.html(' ');
+		    message2.html(' ');
 			var arrow = this.passwordGuidelines.find('div.input-note-arrow');
 			this.passwordGuidelines.slideDown(250);
 			if (this.activePasswordInput === 1) {

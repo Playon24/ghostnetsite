@@ -16,6 +16,8 @@ var AchievementsHandler = {
 
 		if(location.hash.length > 1 && location.hash.indexOf("summary") == -1) {
 			dm.openEntry(false);
+		} else {
+			$("#cat-summary").show();
 		}
 		
 		$(".achievement").live("click", function (event) {

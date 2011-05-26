@@ -139,7 +139,7 @@ var UpgradeBox = Class.extend({
 
 	}
 
-});
+}); 
 
 /**
  * Toggles display of previous Product Levels, including Standard or Collector's Edition status.
@@ -244,13 +244,14 @@ var DashboardForm = {
 		var codeInput = $(form).children('form').children('.simple-input').children('.input');
 		$(payOptions).bind({
 			'click': function() {
-				if (!$(this).hasClass('disabled')) {
+                if (!$(this).hasClass('disabled')) {
 					var product = $(this).attr('for').split('-')[0],
 						productId = $(this).find('input').val();
 					$('#product').val(product);
 					$('#productId').val(productId);
 					$(payOptions).removeClass('selected');
 					$(this).addClass('selected');
+                    $(this).find('input:radio').attr("checked", "checked");
 					UI.wakeButton($(this).parent().parent().children('.ui-controls').children('.ui-button'));
 				} else {
 					return false;

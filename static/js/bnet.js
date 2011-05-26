@@ -64,3 +64,38 @@ function highlightNote(zone, no) {
 		text.addClass('active');
 	}
 }
+
+/**
+ * Shows the hidden phishing email section on the security theft page
+ */
+function showPhishingMail() {
+    $('#hidden-mail').show();
+    $('#ingame-mail-header').addClass('adjusted-bg');
+    $('#ingame-mail-footer').show();
+
+    hideChat();
+}
+function hideMail() {
+    $('#hidden-mail').hide();
+    $('#ingame-mail-header').removeClass('adjusted-bg');
+    $('#ingame-mail-footer').hide();
+}
+function showPhishingIngame() {
+    $('#hidden-chat').show();
+    $('#ingame-chat-header').addClass('adjusted-bg');
+    $('#ingame-chat-footer').show();
+
+   hideMail();
+}
+function hideChat() {
+    $('#hidden-chat').hide();
+    $('#ingame-chat-header').removeClass('adjusted-bg');
+    $('#ingame-chat-footer').hide();
+}
+/**
+ * Shows / hides phishing mail description
+ */
+function toggleMailDescription() {
+    $('#true-mail-fade').toggle();
+    $('#true-mail-normal').toggle();
+}

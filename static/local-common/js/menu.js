@@ -135,6 +135,16 @@ var Menu = {
 				Menu.data[set] = data;
 				Menu.dataIndex[set] = {};
 				Menu._populate(data, set);
+
+				// Add dotted underline to last breadcrumb node if it has children
+				var lastNode = $('.ui-breadcrumb li:last-child a');
+				if(lastNode.length) {
+					var url = lastNode.attr('href').replace(Core.baseUrl, '');
+					var idx = Menu.dataIndex[set][url];
+					if(idx && idx.children) {
+						lastNode.parent().addClass('children');
+			}
+				}
 			}
 		});
 
@@ -226,7 +236,8 @@ var Menu = {
 				li.hover(
 					function() {
 						var self = $(this);
-						self.find('a:first').addClass('opened');
+						self.children('a:first, span:first').addClass('opened');
+
 
 						if (self.find('.'+ Menu.className).length === 0)
 							Menu._build(this, data, false);
@@ -235,7 +246,7 @@ var Menu = {
 					},
 					function() {
 						$(this)
-							.find('a:first').removeClass('opened').end()
+							.children('a:first, span:first').removeClass('opened').end()
 							.children('.'+ Menu.className).hide();
 					}
 				);
@@ -340,7 +351,7 @@ var Menu = {
 	 */
 	_populate: function(node, set) {
 		if (!Menu.dataIndex[set][node.url]) {
-			node.id = node.url.replace(/[^\-a-zA-Z0-9\/]/ig, '');
+			node.id = (node.url ? node.url.replace(/[^\-a-zA-Z0-9\/]/ig, '') : '');
 			node.id = node.id.replace(/\//ig, '-');
 
 			if (node.id.substr(-1) === '-')

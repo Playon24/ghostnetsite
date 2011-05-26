@@ -120,9 +120,6 @@ var Wiki = {
 					Wiki.query = {};
 					
 					Core.fixTableHeaders('#related-'+ key);
-
-					if (Core.isIE(6))
-						$('#related-'+ key +' .png-fix').pngFix();
 				}
 			}
 		});

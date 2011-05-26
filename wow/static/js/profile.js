@@ -74,6 +74,7 @@ var DynamicMenu = {
 			}
 
 			event.preventDefault();
+			return true;
 		});
 
 		dm._generateSlideContainer();
@@ -223,16 +224,9 @@ var DynamicMenu = {
 
 		var isParentCategory = (categoryObj.length == 1),
 			 categoryId = (isParentCategory) ? categoryObj[0] : categoryObj[categoryObj.length - 1],
-			 url = window.location.pathname + "/" + categoryId,
+			 url = Profile.url + "/" + categoryId,
 			 categoryExists = $("#cat-" + categoryId).length > 0,
 			 isOverview = (categoryId == 'summary');
-
-		// hacky way to only encode for IE, since other browsers do it by default
-		if (Core.isIE()) {
-			url = url.replace(new RegExp('/', 'ig'), '---');
-			url = encodeURIComponent(url);
-			url = url.replace(new RegExp('---', 'ig'), '/');
-		}
 
 		if (DynamicMenu.cache.filtering) {
 			if(dm.config.section == "statistic") {
@@ -266,7 +260,7 @@ var DynamicMenu = {
 					url: url,
 					success: function (data) {
 						$("#" + dm.config.section + "-list").removeClass("loading").append(data);
-						$("#" + dm.config.section + "-list > div:last #cat-" + categoryId + ".container").show();
+						$("#" + dm.config.section + "-list #cat-" + categoryId).show();
 						$(".search-container:first, #" + dm.config.section + "-list > div:last").fadeIn("fast");
 
 						if (entryId)
@@ -285,10 +279,9 @@ var DynamicMenu = {
 
 	/*
 	 * Handles styles and content loading for cross linking
-	 * @param string url
 	 */
 	openEntry: function (direct) {
-		url = window.location.hash;
+		var url = window.location.hash;
 
 		//find link in navigation, do highlighting and list loading
 		var hash = DynamicMenu._parseCategoryFromURL(url),
@@ -316,6 +309,8 @@ var DynamicMenu = {
 var dm = DynamicMenu;
 
 var Profile = {
+
+	url: '',
 
 	init: function() {
 		$('#profile-sidebar-menu').delegate('li.disabled a', 'mouseover', function() {

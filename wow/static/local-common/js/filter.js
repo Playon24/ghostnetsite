@@ -120,10 +120,10 @@ var Filter = {
 		$(target).find('.input[data-filter]').each(function() {
 			var self = $(this),
 				data = {
-					name: this.id.replace('filter-', ''),
+					name: (typeof self.data('name') != 'undefined') ? self.data('name') : this.id.replace('filter-', ''),
 					filter: self.data('filter'),
 					column: self.data('column'),
-					field: (this.tagName == 'input') ? this.type : this.tagName
+					field: (this.tagName.toLowerCase() == 'input') ? this.type : this.tagName.toLowerCase()
 				};
 
 			if (data.field == 'text' || data.field == 'textarea') {
@@ -226,7 +226,7 @@ var Filter = {
 
 			self.removeClass('active').removeAttr('checked');
 
-			if (this.tagName == 'input' && (this.type == 'checkbox' || this.type == 'radio'))
+			if (this.tagName.toLowerCase() == 'input' && (this.type == 'checkbox' || this.type == 'radio'))
 				this.checked = false;
 		});
 	},

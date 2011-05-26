@@ -22,9 +22,6 @@ var Guild = {
 					Roster.changeView(null, params.view);
 			});
 		}
-		
-		// Setup tooltips
-		Tooltip.bind('#roster .img');
 	},
 
 	/**

@@ -825,25 +825,25 @@ Summary.Stats = function(data) {
 		},
 		fireres: function() {
 			return [
-				'<h3>' + Core.msg(MsgSummary.stats.arcaneRes.title, data.fireResist) + '</h3>',
+				'<h3>' + Core.msg(MsgSummary.stats.fireRes.title, data.fireResist) + '</h3>',
 				Core.msg(MsgSummary.stats.fireRes.description, (0).toFixed(PERCENT_DECIMALS))
 			];
 		},
 		frostres: function() {
 			return [
-				'<h3>' + Core.msg(MsgSummary.stats.arcaneRes.title, data.frostResist) + '</h3>',
+				'<h3>' + Core.msg(MsgSummary.stats.frostRes.title, data.frostResist) + '</h3>',
 				Core.msg(MsgSummary.stats.frostRes.description, (0).toFixed(PERCENT_DECIMALS))
 			];
 		},
 		natureres: function() {
 			return [
-				'<h3>' + Core.msg(MsgSummary.stats.arcaneRes.title, data.natureResist) + '</h3>',
+				'<h3>' + Core.msg(MsgSummary.stats.natureRes.title, data.natureResist) + '</h3>',
 				Core.msg(MsgSummary.stats.natureRes.description, (0).toFixed(PERCENT_DECIMALS))
 			];
 		},
 		shadowres: function() {
 			return [
-				'<h3>' + Core.msg(MsgSummary.stats.arcaneRes.title, data.shadowResist) + '</h3>',
+				'<h3>' + Core.msg(MsgSummary.stats.shadowRes.title, data.shadowResist) + '</h3>',
 				Core.msg(MsgSummary.stats.shadowRes.description, (0).toFixed(PERCENT_DECIMALS))
 			];
 		}
@@ -977,43 +977,46 @@ Summary.RaidProgression = function(options, data) {
 
 		var name = raid.name;
 		var $tooltip = $('<ul />').addClass('summary-raid-tooltip');
-		if(raid.heroicEncounters != null) {
+		if(raid.heroicMode) {
 			name += ' ' + (heroicMode ? MsgSummary.raid.tooltip.heroic : MsgSummary.raid.tooltip.normal);
 		}
 		$('<li/>').append($('<h3/>').text(name)).appendTo($tooltip);
 
-		var encounters = (heroicMode ? raid.heroicEncounters : raid.normalEncounters);
-		var nBosses = encounters.length;
+		var killCountProperty = heroicMode ? 'nHeroicKills' : 'nKills';
+		var bosses = [];
 		var nBossedKilled = 0;
 
-		for(var i = 0; i < encounters.length; ++i) {
-			var encounter = encounters[i];
-
-			if(encounter.nKills != 0) {
+		for(var i = 0; i < raid.bosses.length; ++i) {
+			var boss = raid.bosses[i];
+			if(boss[killCountProperty] != null) {
+				bosses.push(boss);
+				if(boss[killCountProperty] != 0) {
 				++nBossedKilled;
 			}
 		}
+		}
 
+		var nBosses = bosses.length;
 		var percentKilled = Math.round(nBossedKilled / nBosses * 100);
 
 		$tooltip.append($('<li/>').addClass('color-tooltip-yellow').text(Core.msg(MsgSummary.raid.tooltip.complete, percentKilled, nBossedKilled, nBosses)));
 
-		for(var i = 0; i < encounters.length; ++i) {
+		for(var i = 0; i < bosses.length; ++i) {
 
-			var encounter = encounters[i];
+			var boss = bosses[i];
 
-			var $line = $('<li/>').addClass(encounter.nKills == 0 ? 'incomplete' : 'completed');
+			var $line = $('<li/>').addClass(boss[killCountProperty] == 0 ? 'incomplete' : 'completed');
 
 			var $count = $('<span/>').addClass('count');
-			if(encounter.nKills == -1) {
+			if(boss[killCountProperty] == -1) {
 				$count.text(String.fromCharCode(10004)); // Tick
 			} else {
-				$count.text(encounter.nKills);
+				$count.text(boss[killCountProperty]);
 			}
 			$count.appendTo($line);
 
 			$('<span/>').addClass('times').text('x').appendTo($line);
-			$('<span/>').addClass('name').text(encounter.name + (encounter.optional ? ' ' + MsgSummary.raid.tooltip.optional : '')).appendTo($line);
+			$('<span/>').addClass('name').text(boss.name + (boss.optional ? ' ' + MsgSummary.raid.tooltip.optional : '')).appendTo($line);
 			$('<span/>').addClass('clear').appendTo($line);
 
 			$line.appendTo($tooltip);

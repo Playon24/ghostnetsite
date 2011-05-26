@@ -20,7 +20,7 @@ var Login = {
 	/**
 	 * Embedded login URL.
 	 */
-	embeddedUrl: "login/login.frag",
+	embeddedUrl: "/login/login.frag",
 
 	/**
 	 * Use token to log in behind the scenes.

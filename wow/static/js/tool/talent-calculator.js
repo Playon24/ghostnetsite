@@ -222,7 +222,7 @@ function TalentCalculator(options) {
 			tree.$button       = $button;
 
 			$button.bind('click', { treeNo: treeNo }, treeButtonClick);
-			$treeOverview.children('ul.spells').delegate('li', 'mouseover', overviewSpellMouseOver);
+			//$treeOverview.children('ul.spells').delegate('li', 'mouseover', overviewSpellMouseOver);
 
 			$cellsWrapper.delegate('a.interact', 'mouseover',   iconMouseOver);
 			$cellsWrapper.delegate('a.interact', 'mouseout',    iconMouseOut);

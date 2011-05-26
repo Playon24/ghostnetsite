@@ -14,6 +14,7 @@ var Lightbox = {
     contentType:    "image",
     DEFAULT_WIDTH:  480,
     DEFAULT_HEIGHT: 360,
+    anchorClose:    true,
     /**
      * Initializes lightbox and caches relevant DOM elements
      */
@@ -139,9 +140,9 @@ var Lightbox = {
      */
     setVideo: function(video) {
         var currentFlashVars = {
-            flvpath:   Flash.videoBase + video.flvPath,
-            flvwidth:  video.width,
-            flvheight: video.height
+            flvPath:   Flash.videoBase + video.flvPath,
+            flvWidth:  video.width,
+            flvHeight: video.height
         };
 
         //add rating values
@@ -161,7 +162,7 @@ var Lightbox = {
 
 
         swfobject.embedSWF(Flash.videoPlayer + (noCache || ""), "flash-target", video.width, video.height,
-                "9", Flash.expressInstall, currentFlashVars, Flash.defaultVideoParams);
+                Flash.requiredVersion, Flash.expressInstall, currentFlashVars, Flash.defaultVideoParams);
 
         Lightbox.setFrameDimensions(video.width, video.height);
         Lightbox.show();
@@ -217,8 +218,13 @@ var Lightbox = {
 
         return tempImage;
     },
+	/**
+	 * Show the lightbox.
+	 */
     show: function() {
-        Blackout.show( function() { Lightbox.container[0].style.display = "block" },  Lightbox.close);
+        Blackout.show(function() {
+			Lightbox.container[0].style.display = "block";
+		},  Lightbox.close);
     },
     /**
      * Hides the lightbox
@@ -266,9 +272,20 @@ var Lightbox = {
      */
     build: function() {
 
-        Lightbox.anchor =     $('<div id="lightbox-anchor" />');
-        Lightbox.container =  $('<div id="lightbox-container" />').appendTo(Lightbox.anchor);
-        Lightbox.content =    $('<div id="lightbox-content" />').appendTo(Lightbox.container).click(Lightbox.next);
+        Lightbox.anchor =     $('<div id="lightbox-anchor" />')
+                                    .click(function() {
+                                        if (Lightbox.anchorClose) {
+                                            Lightbox.close();
+                                        }
+                                    });
+        Lightbox.container =  $('<div id="lightbox-container" />')
+                                    .mouseover(function() { Lightbox.anchorClose = false })
+                                    .mouseout(function() { Lightbox.anchorClose = true })
+                                    .appendTo(Lightbox.anchor);
+        Lightbox.content =    $('<div id="lightbox-content" />')
+                                    .mouseover(function() { Lightbox.anchorClose = false })
+                                    .mouseout(function() { Lightbox.anchorClose = true })
+                                    .appendTo(Lightbox.container).click(Lightbox.next);
 
         //ui-element link element template
         var uiElementLink = $("<a />").addClass("ui-element").attr("href", "javascript:;");

@@ -82,7 +82,7 @@ var ModelRotator = Class.extend({
 		}, config);
 
 		// Grab objects
-		this.node   = node;
+		this.node = node;
 		this.viewer = node.find(this.config.viewerClass);
 		this.document = $(document);
 		this.zoomButton = node.find(this.config.zoomClass);
@@ -199,6 +199,21 @@ var ModelRotator = Class.extend({
 		this._drag();
 
 		return true;
+	},
+
+	/**
+	 * Reset the viewer to defaults.
+	 */
+	reset: function() {
+		this.stop();
+		this.dragging = false;
+		this.frame = 0;
+		this.lastFrame = 0;
+		this.offset = null;
+		this.lastOffset = null;
+		this.coords = null;
+		this.xPosition = 0;
+		this.yPosition = 0;
 	},
 
 	/**
@@ -330,7 +345,7 @@ var ModelRotator = Class.extend({
 		/*var delta = delta = Math.round((this.lastOffset.x - this.offset.x) / config.velocity);
 		if(delta == 0) { // Ignore movement unless a non-zero delta is reached
 			return;
-	}
+		}
 
 		this.lastOffset = this.offset;
 		this._deltaFrame(delta * (config.invert ? -1 : 1));*/

@@ -33,15 +33,6 @@ function GuildTabard(canvas, tabard) {
 		if (canvas === null || !document.createElement('canvas').getContext || !_isInteger(tabard.bg[0]) || !_isInteger(tabard.border[0]) || !_isInteger(tabard.emblem[0]))
 			return false;
 
-		_src = [
-			_path + 'ring-' + tabard.ring + '.png',
-			_path + 'shadow_' + Core.zeroFill(tabard.bg[0], 2) + '.png',
-			_path + 'bg_' + Core.zeroFill(tabard.bg[0], 2) + '.png',
-			_path + 'overlay_' + Core.zeroFill(tabard.bg[0], 2) + '.png',
-			_path + 'border_' + Core.zeroFill(tabard.border[0], 2) + '.png',
-			_path + 'emblem_' + Core.zeroFill(tabard.emblem[0], 2) + '.png',
-			_path + 'hooks.png'
-		];
 		_colorMap = [
 			null,
 			null,
@@ -50,15 +41,7 @@ function GuildTabard(canvas, tabard) {
 			[[97,42,44],[109,69,46],[119,101,36],[118,114,36],[108,118,36],[85,108,48],[76,109,48],[48,108,66],[48,105,107],[48,80,108],[55,60,100],[87,54,100],[100,55,76],[103,51,53],[153,159,149],[38,46,38],[155,94,28]],
 			[[102,0,32],[103,35,0],[103,69,0],[103,86,0],[98,102,0],[80,102,0],[54,102,0],[0,102,30],[0,102,86],[0,72,102],[9,42,94],[86,9,94],[93,10,79],[84,54,10],[177,183,176],[16,20,22],[221,163,90]]
 		];
-		_color = [
-			null,
-			null,
-			[ _colorMap[2][tabard.bg[1]][0], _colorMap[2][tabard.bg[1]][1], _colorMap[2][tabard.bg[1]][2] ],
-			null,
-			[ _colorMap[4][tabard.border[1]][0], _colorMap[4][tabard.border[1]][1], _colorMap[4][tabard.border[1]][2] ],
-			[ _colorMap[5][tabard.emblem[1]][0], _colorMap[5][tabard.emblem[1]][1], _colorMap[5][tabard.emblem[1]][2] ],
-			null
-		];
+
 		_position = [
 			[ 0, 0, (_width*216/240), (_width*216/240) ],
 			[ (_width*18/240), (_width*27/240), (_width*179/240), (_width*216/240) ],
@@ -68,10 +51,45 @@ function GuildTabard(canvas, tabard) {
 			[ (_width*33/240), (_width*57/240), (_width*125/240), (_width*125/240) ],
 			[ (_width*18/240), (_width*27/240), (_width*179/240), (_width*32/240) ]
 		];
-		_img = [ new Image(), new Image(), new Image(), new Image(), new Image(), new Image(), new Image() ];
+
+		// If the tabard values exist
+		if (_colorMap[2][tabard.bg[1]] && _colorMap[4][tabard.border[1]] && _colorMap[5][tabard.emblem[1]]) {
+			_src = [
+				_path + 'ring-' + tabard.ring + '.png',
+				_path + 'shadow_' + Core.zeroFill(tabard.bg[0], 2) + '.png',
+				_path + 'bg_' + Core.zeroFill(tabard.bg[0], 2) + '.png',
+				_path + 'overlay_' + Core.zeroFill(tabard.bg[0], 2) + '.png',
+				_path + 'border_' + Core.zeroFill(tabard.border[0], 2) + '.png',
+				_path + 'emblem_' + Core.zeroFill(tabard.emblem[0], 2) + '.png',
+				_path + 'hooks.png'
+			];
+
+			_color = [
+				null,
+				null,
+				[ _colorMap[2][tabard.bg[1]][0], _colorMap[2][tabard.bg[1]][1], _colorMap[2][tabard.bg[1]][2] ],
+				null,
+				[ _colorMap[4][tabard.border[1]][0], _colorMap[4][tabard.border[1]][1], _colorMap[4][tabard.border[1]][2] ],
+				[ _colorMap[5][tabard.emblem[1]][0], _colorMap[5][tabard.emblem[1]][1], _colorMap[5][tabard.emblem[1]][2] ],
+				null
+			];
+
+			_img = [ new Image(), new Image(), new Image(), new Image(), new Image(), new Image(), new Image() ];
+
+		// Else fallback to default tabard
+		} else {
+			_src = [
+				_path + 'ring-' + tabard.ring + '.png',
+				_path + 'shadow_00.png',
+				_path + 'bg_00.png',
+				_path + 'overlay_00.png',
+				_path + 'hooks.png'
+			];
+
+			_img = [ new Image(), new Image(), new Image(), new Image(), new Image() ];
+		}
 
 		$(canvas).hide();
-
 		context = canvas.getContext('2d');
 
 		_loadImage(0);
@@ -105,7 +123,7 @@ function GuildTabard(canvas, tabard) {
 			canvas.width = _width;
 			context.drawImage(_img[index], _position[index][0], _position[index][1], _position[index][2], _position[index][3]);
 
-			if (_color[index] !== null) {
+			if (typeof _color[index] !== 'undefined' && _color[index] !== null) {
 				_colorize(_color[index][0], _color[index][1], _color[index][2]);
 			}
 
@@ -116,6 +134,7 @@ function GuildTabard(canvas, tabard) {
 		_newCanvas.onload = function() {
 			context.drawImage(_newCanvas, 0, 0, _width, _height);
 			index++;
+			
 			if (index < _src.length) {
 				_render(index);
 			} else {

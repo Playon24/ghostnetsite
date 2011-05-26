@@ -1,11 +1,28 @@
 
 $(function() {
-	Wow.bindItemTooltips();
-	Wow.bindCharacterTooltips();
+	Wow.initialize();
 	Fansite.initialize();
 });
 
 var Wow = {
+
+	/**
+	 * Initialize all wow tooltips.
+	 *
+	 * @constructor
+	 */
+	initialize: function() {
+		setTimeout(Wow.initTooltips, 1);
+	},
+
+	initTooltips: function() {
+		Wow.bindTooltips('achievement');
+		Wow.bindTooltips('spell');
+		Wow.bindTooltips('quest');
+		Wow.bindTooltips('currency');
+		Wow.bindItemTooltips();
+		Wow.bindCharacterTooltips();
+	},
 
 	/**
 	 * Display or hide the video.
@@ -20,23 +37,19 @@ var Wow = {
 	 * Gathers the item ID from the href, and the optional params from the data-item attribute.
 	 */
 	bindItemTooltips: function() {
-		var doc = $(document);
-		var callback = function() {
+		Tooltip.bind('a[href*="/item/"]', false, function() {
 			if (this.href == 'javascript:;' || this.href.indexOf('#') == 0 || this.rel == 'np')
 				return;
 
 			var self = $(this),
 				data = self.data('item'),
-				href = self.attr('href').replace(Core.baseUrl +'/item/', ""),
-				id = parseInt(href),
+				href = self.attr('href').split(Core.baseUrl +'/item/'),
+				id = parseInt(href[1]),
 				query = (data) ? '?'+ data : "";
 
 			if (id && id > 0)
 				Tooltip.show(this, '/item/'+ id +'/tooltip'+ query, true);
-		};
-
-		doc.undelegate('a[href*="/item/"]', 'mouseover.tooltip', callback);
-		doc.delegate('a[href*="/item/"]', 'mouseover.tooltip', callback);
+		});
 	},
 
 	/**
@@ -44,22 +57,34 @@ var Wow = {
 	 * Add rel="np" to disable character tooltips on links.
 	 */
 	bindCharacterTooltips: function() {
-		var doc = $(document);
-		var callback = function() {
+		Tooltip.bind('a[href*="/character/"]', false, function() {
 			if (this.href == 'javascript:;' || this.href.indexOf('#') == 0 || this.rel == 'np' || this.href.indexOf('/vault/') != -1)
 				return;
 
-			var self = $(this),
-				href = self.attr('href').replace(Core.baseUrl +'/character/', "").split('/');
+			var href = $(this).attr('href').replace(Core.baseUrl +'/character/', "").split('/');
 
 			if (location.href.toLowerCase().indexOf('/'+ href[1] +'/') != -1 && this.rel != 'allow')
 				return;
 
-			Tooltip.show(this, '/character/'+ href[0] +'/'+ href[1] +'/tooltip', true);
-		};
+			Tooltip.show(this, '/character/'+ encodeURIComponent(href[0]) +'/'+ href[1] +'/tooltip', true);
+		});
+	},
 
-		doc.undelegate('a[href*="/character/"]', 'mouseover.tooltip', callback);
-		doc.delegate('a[href*="/character/"]', 'mouseover.tooltip', callback);
+	/**
+	 * Bind a tooltip to a specific wiki type.
+	 *
+	 * @param type
+	 */
+	bindTooltips: function(type) {
+		Tooltip.bind('[data-'+ type +']', false, function() {
+			if (this.rel == 'np')
+				return;
+
+			var data = $(this).data(type);
+
+			if (typeof data != 'undefined')
+				Tooltip.show(this, '/'+ type +'/'+ data +'/tooltip', true);
+		});
 	},
 
 	/**
@@ -149,7 +174,7 @@ Wow.Icon = {
 	/**
 	 * CDN for images.
 	 */
-	cdn: 'http://us.battle.net/wow-assets/static/images',
+	cdn: 'http://battle.net/wow-assets/static/images',
 
 	/**
 	 * Generate icon path.
@@ -223,7 +248,7 @@ var Fansite = {
 			urls: {
 				achievement: ['achievements', 'achievement={0}'],
 				character: ['profiles', function(params) {
-					return 'profile='+ params[1] + '.' + params[3] + '.' + params[2].toLowerCase();
+					return 'profile='+ encodeURIComponent(params[1]) + '.' + encodeURIComponent(params[3]) + '.' + encodeURIComponent(params[2].toLowerCase());
 				}],
 				faction: ['factions', 'faction={0}'],
 				'class': ['classes', 'class={0}'],
@@ -246,7 +271,12 @@ var Fansite = {
 		wowpedia: {
 			name: 'Wowpedia',
 			site: 'http://www.wowpedia.org/',
-			locales: [],
+			locales: ['fr', 'es', 'de', 'ru', 'it'],
+			domains: {
+				ru: 'http://wowpedia.ru/wiki/',
+				de: 'http://de.wow.wikia.com/wiki/',
+				it: 'http://it.wow.wikia.com/wiki/'
+			},
 			urls: {
 				faction: ['Factions', '{1}'],
 				'class': ['Classes', '{1}'],
@@ -334,13 +364,18 @@ var Fansite = {
 	createLinks: function(params) {
 		var type = params[0],
 			map = Fansite.map[type],
-			links = [];
+			links = [],
+			lang = Core.getLanguage();
 
 		if (map.length > 0) {
 			var site, url, urls;
 
 			for (var i = 0, len = map.length; i < len; ++i) {
 				site = Fansite.sites[map[i]];
+
+				if ((lang != 'en') && ($.inArray(lang, site.locales) < 0))
+					continue;
+
 				url = Fansite.createUrl(site),
 				urls = site.urls[type];
 
@@ -356,7 +391,7 @@ var Fansite = {
 							url += urlPattern(params);
 						} else {
 							for (var j = 1; j < params.length; ++j) {
-								urlPattern = urlPattern.replace('{' + (j - 1) + '}', params[j]);
+								urlPattern = urlPattern.replace('{' + (j - 1) + '}', encodeURIComponent(params[j]));
 							}
 							url += urlPattern;
 						}
@@ -380,8 +415,12 @@ var Fansite = {
 		var url = site.site,
 			lang = Core.getLanguage();
 
-		if ($.inArray(lang, site.locales) >= 0)
-			url = url.replace('www', lang);
+		if ($.inArray(lang, site.locales) >= 0) {
+			if (site.domains && site.domains[lang])
+				url = site.domains[lang];
+			else
+				url = url.replace('www', lang);
+		}
 
 		return url;
 	},

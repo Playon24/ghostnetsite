@@ -15,6 +15,8 @@ var StatisticHandler = {
 
 		if(location.hash.length > 1 && location.hash.indexOf("summary") == -1) {
 			dm.openEntry();
+		} else {
+			$("#cat-summary").show();
 		}
 	},
 

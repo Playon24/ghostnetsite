@@ -51,6 +51,12 @@ var BML = {
 			close: '</li>',
 			filter: true
 		}, {
+			type: 'code',
+			tag: 'code',
+			open: '<code>',
+			close: '</code>',
+			filter: true
+		}, {
 			type: 'quote',
 			tag: 'quote',
 			filter: true,
@@ -195,7 +201,7 @@ var BML = {
 	 * @param string
 	 */
 	encode: function(string) {
-		return string.replace(/</gi, '&lt;').replace(/>/gi, '&gt;').replace(/&/gi, '&amp;');
+		return string.replace(/&/gi, '&amp;').replace(/</gi, '&lt;').replace(/>/gi, '&gt;');
 	},
 
 	/**
@@ -269,7 +275,10 @@ var BML = {
 	preview: function(content, target, callback) {
 		$.ajax({
 			dataType: 'json',
-			data: { post: content },
+			data: {
+				post: content,
+				xstoken: Cookie.read('xstoken')
+			},
 			type: 'POST',
 			url: Core.baseUrl +'/forum/topic/post/preview',
 			global: false,
@@ -282,6 +291,10 @@ var BML = {
 			error: function(xhr, status, thrown) {
 				if (status == 'parsererror')
 					Core.goTo('/account-status', true);
+
+				// Attempt to detect a redirect. Redirect throws no headers, others do.
+				else if (status == 'error' && xhr.getAllResponseHeaders() == null)
+					Login.openOrRedirect();
 			}
 		});
 	},

@@ -261,8 +261,8 @@ var Tooltip = {
         var width = Tooltip.wrapper.outerWidth(),
 			height = Tooltip.wrapper.outerHeight();
 
-		if (Core.isIE(6) && width >= 200)
-			width = 200;
+		if (Core.isIE(6) && width >= 250)
+			width = 250;
 
 		var coords = Tooltip['_'+ location](width, height, node);
 

@@ -34,9 +34,6 @@ var Professions = {
 			});
 		});
 
-		// Setup tooltips
-		Tooltip.bind('#profession-tables .img');
-
 		// Setup filters
 		Filter.bindInputs('#roster-form', Professions.bindFilters);
 		Filter.initialize(Professions.applyFilters);

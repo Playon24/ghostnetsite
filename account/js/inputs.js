@@ -15,6 +15,7 @@ var Inputs = Class.extend({
 	requiredInputs: [],
 	validationTimer: null,
 	textInputs: [],
+	textareaInputs: [],
 	passwordInputs: [],
 	checkboxInputs: [],
 	checkboxLabels: [],
@@ -37,7 +38,7 @@ var Inputs = Class.extend({
 	 */
 	init: function(form, config) {
 
-		config = typeof config !== 'undefined' ? config : {};		
+		config = typeof config !== 'undefined' ? config : {};
 		form = $(form);
 
 		if (form.length) {
@@ -51,7 +52,7 @@ var Inputs = Class.extend({
 			// Merge configuration.
 			this.config = $.extend({
 				checkbox: true, // skinnable checkboxes
-				radio: true, // skinable radio buttons
+				radio: true, // skinnable radio buttons
 				placeholder: true, // HTML5 placeholder attribute
 				novalidate: true, // HTML5 novalidate attribute (recommended since we do our own validation)
 				required: true // HTML5 required attribute
@@ -84,11 +85,12 @@ var Inputs = Class.extend({
 			}
 		}
 
-		// Fancy radioInputs. NB: IE returns "FORM", so it gets regular inputs.
-		if (config.checkbox && this.form[0].tagName === 'form') {
+		// Fancy radioInputs.
+		if (config.checkbox && this.form[0].tagName.toLowerCase() === 'form') {
 			this.radioInputs = this.form.find('input:radio');
 
-			if (this.radioInputs.length) {
+			// NB: IE returns "FORM", so it gets regular inputs, but we still need this array for validation.
+			if (this.radioInputs.length && this.form[0].tagName === 'form') {
 				this.setupRadios();
 			}
 		}
@@ -96,15 +98,24 @@ var Inputs = Class.extend({
 		// JavaScript fallbacks for new HTML5 attributes.
 		if (this.form[0].tagName.toLowerCase() === 'form') {
 			this.textInputs = this.form.find('input[type="text"], input[type="email"], input[type="tel"]');
+			this.textareaInputs = this.form.find('textarea');
 			this.passwordInputs = this.form.find('input[type="password"]');
 			this.requiredInputs = this.form.find('input[required], select[required], textarea[required]');
 
-			if (this.textInputs.length && config.placeholder && !this.supportsPlaceholder(false)) {
+			if (this.textInputs.length && config.placeholder && !this.supportsPlaceholder()) {
 				this.addPlaceholder(this.textInputs);
 			}
 
-			if (this.passwordInputs.length && config.placeholder && !this.supportsPlaceholder(true) && !this.isReadOnly()) {
-				this.addPlaceholder(this.passwordInputs, true);
+			if (this.textareaInputs.length && config.placeholder && !this.supportsPlaceholder()) {
+				this.addPlaceholder(this.textareaInputs);
+			}
+
+			if (this.passwordInputs.length && config.placeholder && !this.supportsPlaceholder()) {
+			    if (!this.isReadOnly()) {
+				    this.addPlaceholder(this.passwordInputs, true);
+                } else {
+                    this.addPlaceholderMessage(this.passwordInputs);
+                }
 			}
 
 			if (config.novalidate) {
@@ -157,7 +168,7 @@ var Inputs = Class.extend({
 	},
 
 	/**
-	 * Check the <iput required="required" /> elements for values.
+	 * Check the <iput required="required"/> elements for values.
 	 *
 	 * @param	e The event data.
 	 */
@@ -201,6 +212,7 @@ var Inputs = Class.extend({
 				value = $(field).find('option:selected').val();
 			} else if (tag === 'textarea') {
 				value = $(field).val();
+				placeholder = $(field).attr('placeholder');
 			} else if (tag === 'input') {
 				type = $(field)[0].type;
 				if (type === 'checkbox') {
@@ -250,7 +262,7 @@ var Inputs = Class.extend({
 	},
 
 	/**
-	 * Apply new functionality to <input type="text" /> when not natively supported by the browser.
+	 * Apply new functionality to <input type="text"/> when not natively supported by the browser.
 	 *
 	 * @param	inputs An array of jQuery-extended <input/> elements.
 	 * @param	isPassword Indicates whether or not the <input/> is a password input.
@@ -264,26 +276,26 @@ var Inputs = Class.extend({
 
 			var placeholder;
 
-			placeholder = $(text).attr('placeholder');
+			text = $(text);
+			placeholder = text.attr('placeholder');
 
 			if (typeof placeholder === 'undefined') {
 				continue;
 			}
 
-			if (text.value === '') {
-				text.value = placeholder;
-				$(text).addClass('placeholder');
-				if (isPassword) {
-					text.type = 'text';
-				}
-			}
-
+            if (text.val() === '' || isPassword) {
+                text.val(placeholder);
+                text.addClass('placeholder');
+                if (isPassword) {
+                    text.attr('type', 'text');
+                }
+            }
 			if (isPassword) {
-				$(text).bind('focus blur',
+				text.bind('focus blur',
 					$.proxy(this._togglePassword, this)
 				);
 			} else {
-				$(text).bind('focus blur',
+				text.bind('focus blur',
 					$.proxy(this._toggleText, this)
 				);
 			}
@@ -293,7 +305,39 @@ var Inputs = Class.extend({
 	},
 
 	/**
-	 * Toggle the placeholder="" with the value="" and vice versa for <input type="text" />.
+	 * Display placeholder text underneath an input field for browsers that don’t support changing the input type (IE).
+	 *
+	 * @param	inputs An array of jQuery-extended <input/> elements.
+	 */
+	addPlaceholderMessage: function(inputs) {
+
+		for (var i = 0, text; text = inputs[i]; i++) {
+
+			var placeholder,
+			    message;
+
+			text = $(text);
+			placeholder = text.attr('placeholder');
+			message = $('#' + text[0].id + '-message');
+
+			if (typeof placeholder === 'undefined') {
+				continue;
+			}
+
+            if (text.val() === '' || isPassword) {
+                message.text(placeholder);
+            }
+
+            text.bind('focus blur',
+                $.proxy(this._toggleMessage, this)
+            );
+
+		}
+
+	},
+
+	/**
+	 * Toggle the placeholder="" with the value="" and vice versa for <input type="text"/>.
 	 *
 	 * @param	e The event data.
 	 */
@@ -313,7 +357,7 @@ var Inputs = Class.extend({
 	},
 
 	/**
-	 * Toggle the placeholder="" with the value="" and vice versa for <input type="text" />.
+	 * Toggle the placeholder="" with the value="" and vice versa for <input type="text"/>.
 	 *
 	 * @param	e The event data.
 	 */
@@ -322,20 +366,39 @@ var Inputs = Class.extend({
 			value = e.target.value,
 			placeholder = $(e.target).attr('placeholder');
 		if (type === 'blur' && value.length === 0) {
-			e.target.value = placeholder;
-			e.target.type = 'text';
-			$(e.target).addClass('placeholder');
+            e.target.value = placeholder;
+            e.target.type = 'text';
+            $(e.target).addClass('placeholder');
 		} else if (type === 'focus') {
 			if (value === placeholder) {
-				e.target.value = '';
-				e.target.type = 'password';
+                e.target.value = '';
+                e.target.type = 'password';
 			}
 			$(e.target).removeClass('placeholder');
 		}
 	},
 
 	/**
-	 * Hide each <input type="checkbox" />, replace it with a styleable <a/> element, and bind events to its corresponding <label/>.
+	 * Toggle the inline message for an <input/> element.
+	 *
+	 * @param	e The event data.
+	 */
+	_toggleMessage: function(e) {
+		var type = e.type,
+			value = e.target.value,
+			placeholder = $(e.target).attr('placeholder'),
+			message = $('#' + e.target.id + '-message');;
+		if (type === 'blur' && value.length === 0) {
+			message.text(placeholder);
+		} else if (type === 'focus') {
+			if (value === placeholder) {
+				message.text('');
+			}
+		}
+	},
+
+	/**
+	 * Hide each <input type="checkbox"/>, replace it with a styleable <a/> element, and bind events to its corresponding <label/>.
 	 */
 	setupCheckboxes: function() {
 
@@ -428,7 +491,7 @@ var Inputs = Class.extend({
 	},
 
 	/**
-	 * Toggle the placeholder="" with the value="" and vice versa for <input type="text" />.
+	 * Toggle the placeholder="" with the value="" and vice versa for <input type="text"/>.
 	 *
 	 * @param	e The event data.
 	 */
@@ -448,35 +511,34 @@ var Inputs = Class.extend({
 	},
 
 	/**
-	 * Hide each <input type="radio" />, replace it with a styleable <a> element, and bind events to its corresponding <label>.
+	 * Hide each <input type="radio"/>, replace it with a styleable <a/> element, and bind events to its corresponding <label/>.
 	 */
 	setupRadios: function() {
 
-        var checked = radio.checked,
-            id,
-            href,
-            rel,
-            className = 'input-radio',
-            tabindex,
-            disabled,
-            label,
-            a,
-            s,
-            i,
-            radio;
+		var i = 0,
+			radio,
+			checked,
+			id,
+			href,
+			rel,
+			className,
+			tabindex,
+			disabled,
+			label,
+			a;
 
 		for (i = 0; radio = this.radioInputs[i]; i++) {
 
 			checked = radio.checked;
-            className = 'input-radio';
-
+			className = 'input-radio';
 			radio = $(radio);
 			id = radio.attr('id');
-			href = '#' + id;
+			href = '#' + id.replace('[', '').replace(']', '');
 			rel = radio.attr('name');
 			className = checked ? className + ' input-radio-checked' : className;
 			tabindex = radio.attr('tabindex');
 			disabled = typeof radio.attr('disabled') !== 'undefined';
+
 			if (checked) {
 				className = disabled ? className + ' input-radio-checked-disabled' : className;
 			} else {
@@ -489,13 +551,14 @@ var Inputs = Class.extend({
 		}
 
 		// Making a second loop for radios so we can find the siblings.
-		for (i = 0, radio; radio = this.radioInputs[i]; i++) {
+		for (i = 0; radio = this.radioInputs[i]; i++) {
 
+			var s;
 			checked = radio.checked;
 
 			radio = $(radio);
 			id = radio.attr('id');
-			href = '#' + id;
+			href = '#' + id.replace('[', '').replace(']', '');
 			rel = radio.attr('name');
 			className = checked ? className + ' input-radio-checked' : className;
 			tabindex = radio.attr('tabindex');
