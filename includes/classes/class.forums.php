@@ -30,6 +30,9 @@ Class WoW_Forums {
     private static $active_category_title = '';
     private static $active_thread_id = 0;
     private static $active_thread_title = '';
+    private static $active_thread_blizzard_posts_max = 0;
+    private static $active_thread_blizzard_posts_current = 0;
+    private static $active_thread_blizzard_posts = array();
     
     public static function InitForums() {
         if(self::GetCategoryId() == 0 && self::GetThreadId() == 0) {
@@ -39,7 +42,7 @@ Class WoW_Forums {
             self::$active_category_title = DB::WoW()->selectCell("SELECT `title_%s` FROM `DBPREFIX_forum_category` WHERE `cat_id` = %d AND `header` = 0", WoW_Locale::GetLocale(), self::GetCategoryId());
             self::LoadCategoryThreads();
         }
-        elseif(self::GetCategoryId() > 0 && self::GetThreadId() > 0) {
+        elseif(self::GetCategoryId() == 0 && self::GetThreadId() > 0) {
             self::LoadThreadPosts();
         }
         else {
@@ -76,6 +79,19 @@ Class WoW_Forums {
     }
     
     private static function LoadThreadPosts() {
+        self::$thread_posts = DB::WoW()->select("
+        SELECT
+        `a`.*,
+        `b`.`title` AS `threadTitle`,
+        `c`.`title_%s` AS `categoryTitle`,
+        `d`.`name` AS `author`
+        FROM `DBPREFIX_forum_posts` AS `a`
+        JOIN `DBPREFIX_forum_threads` AS `b` ON `b`.`thread_id` = `a`.`thread_id`
+        JOIN `DBPREFIX_forum_category` AS `c` ON `c`.`cat_id` = `a`.`cat_id`
+        JOIN `DBPREFIX_user_characters` AS `d` ON `d`.`account` = `a`.`author_id` AND `d`.`guid` = `a`.`author_guid`
+        WHERE `a`.`thread_id` = %d
+        ORDER BY `a`.`post_date` DESC
+        ", WoW_Locale::GetLocale(), self::GetThreadId());
         self::HandleThreadPosts();
     }
     
@@ -228,7 +244,21 @@ Class WoW_Forums {
     }
     
     private static function HandleThreadPosts() {
-        
+        if(!is_array(self::$thread_posts)) {
+            return false;
+        }
+        self::$active_thread_title = self::$thread_posts[0]['threadTitle'];
+        self::SetCategoryId(self::$thread_posts[0]['cat_id']);
+        self::$active_category_title = self::$thread_posts[0]['categoryTitle'];
+        $postnum = 1;
+        foreach(self::$thread_posts as $post) {
+            if($post['blizzpost'] == 1) {
+                self::$active_thread_blizzard_posts[] = $postnum;
+                ++self::$active_thread_blizzard_posts_max;
+            }
+            ++$postnum;
+        }
+        self::$active_thread_blizzard_posts_current = 0;
     }
     
     public static function SetBlizzTrackerActive() {
@@ -304,6 +334,14 @@ Class WoW_Forums {
         JOIN `DBPREFIX_forum_category` AS `b` ON `b`.`cat_id` = `a`.`cat_id`
         ORDER BY `a`.`views` DESC
         LIMIT 10", WoW_Locale::GetLocale());
+    }
+    
+    public static function GetNextBlizzPostIdInThread() {
+        if(!isset(self::$active_thread_blizzard_posts[self::$active_thread_blizzard_posts_current])) {
+            return 0;
+        }
+        ++self::$active_thread_blizzard_posts_current;
+        return self::$active_thread_blizzard_posts[self::$active_thread_blizzard_posts_current - 1];
     }
 }
 
