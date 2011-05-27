@@ -66,6 +66,9 @@ class WoW_Auction {
     }
     
     private static function HandleAuctionData() {
+        if(!is_array(self::$mail_storage)) {
+            return false;
+        }
         foreach(self::$mail_storage as $mail) {
             if($mail['has_items'] == 1 && $mail['money'] == 0) {
                 self::$won_count++;
@@ -81,7 +84,7 @@ class WoW_Auction {
     }
     
     private static function HandleSellingItems() {
-        if(self::$selling_count <= 0) {
+        if(self::$selling_count <= 0 || !is_array(self::$myitems_storage)) {
             return false;
         }
         $item_ids = array();
