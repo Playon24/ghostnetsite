@@ -174,7 +174,9 @@ for($i = date('Y'); $i >= 1900; --$i) {
 <span class="input-select input-select-small">
 <select name="gender" id="gender" class="small border-5 glow-shadow-2" tabindex="1" required="required">
 <option value="1" selected="selected"><?php echo WoW_Locale::GetString('template_account_creation_treatment_1'); ?></option>
-<option value=" 2"><?php echo WoW_Locale::GetString('template_account_creation_treatment_2'); ?></option>
+<option value="2"><?php echo WoW_Locale::GetString('template_account_creation_treatment_2'); ?></option>
+<option value="3"><?php echo WoW_Locale::GetString('template_account_creation_treatment_3'); ?></option>
+<option value="4"><?php echo WoW_Locale::GetString('template_account_creation_treatment_4'); ?></option>
 </select>
 <span class="inline-message" id="gender-message"> </span>
 </span>

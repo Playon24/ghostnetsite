@@ -105,17 +105,17 @@ Locale.dataPath = '<?php echo WoW::GetWoWPath(); ?>/data/i18n.frag';
 <?php
 switch(WoW_Template::GetPageIndex()) {
     case 'management':
-        echo '<script type="text/javascript" src="/' . WoW::GetWoWPath() . '/account/js/management/lobby.js?v19"></script>';
+        echo '<script type="text/javascript" src="' . WoW::GetWoWPath() . '/account/js/management/lobby.js?v19"></script>';
         break;
     case 'dashboard':
-        echo '<script type="text/javascript" src="/' . WoW::GetWoWPath() . '/account/local-common/js/third-party/swfobject.js?v17"></script>
-<script type="text/javascript" src="/' . WoW::GetWoWPath() . '/account/js/management/dashboard.js?v19"></script>
-<script type="text/javascript" src="/' . WoW::GetWoWPath() . '/account/js/management/wow/dashboard.js?v19"></script>';
+        echo '<script type="text/javascript" src="' . WoW::GetWoWPath() . '/account/local-common/js/third-party/swfobject.js?v17"></script>
+<script type="text/javascript" src="' . WoW::GetWoWPath() . '/account/js/management/dashboard.js?v19"></script>
+<script type="text/javascript" src="' . WoW::GetWoWPath() . '/account/js/management/wow/dashboard.js?v19"></script>';
         break;
     case 'creation_tos':
     case 'creation_success':
-        echo '<script type="text/javascript" src="/' . WoW::GetWoWPath() . '/account/js/inputs.js?v19"></script>
-<script type="text/javascript" src="/' . WoW::GetWoWPath() . '/account/js/account-creation/streamlined-creation.js?v19"></script>';
+        echo '<script type="text/javascript" src="' . WoW::GetWoWPath() . '/account/js/inputs.js?v19"></script>
+<script type="text/javascript" src="' . WoW::GetWoWPath() . '/account/js/account-creation/streamlined-creation.js?v19"></script>';
         break;
 }
 ?>

@@ -4,8 +4,8 @@
 			<link rel="stylesheet" type="text/css" media="all" href="<?php echo WoW::GetWoWPath(); ?>/login/static/_themes/bam/css/_lang/<?php echo WoW_Locale::GetLocale(LOCALE_DOUBLE); ?>.css?v1" />
 		<script type="text/javascript" src="<?php echo WoW::GetWoWPath(); ?>/login/static/local-common/js/third-party/jquery-1.4.2.min.js?v15"></script>
 		<script type="text/javascript" src="<?php echo WoW::GetWoWPath(); ?>/login/static/local-common/js/core.js?v15"></script>
-		<script>
-			var targetOrigin = "<?php echo WoW::GetWoWPath(); ?>/";
+    <script>
+			var targetOrigin = "http://<?php echo $_SERVER['HTTP_HOST'].WoW::GetWoWPath(); ?>/";
 
 			function updateParent(action, key, value) {
 				var obj = { action: action };
@@ -30,7 +30,7 @@
 			<h1>Battle.net</h1>
 
 	<form action="<?php echo WoW::GetWoWPath(); ?>/login/login.frag" method="post">
-		<a id="embedded-close" href="javascript:;" onclick="javascript:window.close();"> </a>
+		<a id="embedded-close" href="javascript:;" onclick="updateParent('close')"> </a>
 
 		<div>
 <?php

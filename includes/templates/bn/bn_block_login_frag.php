@@ -5,7 +5,7 @@
 		<script type="text/javascript" src="<?php echo WoW::GetWoWPath(); ?>/login/static/local-common/js/third-party/jquery-1.4.2.min.js?v15"></script>
 		<script type="text/javascript" src="<?php echo WoW::GetWoWPath(); ?>/login/static/local-common/js/core.js?v15"></script>
 		<script>
-			var targetOrigin = "/";
+			var targetOrigin = "http://<?php echo $_SERVER['HTTP_HOST'].WoW::GetWoWPath(); ?>/";
 
 			function updateParent(action, key, value) {
 				var obj = { action: action };

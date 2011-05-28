@@ -117,7 +117,7 @@ $WoW_Locale = array(
     'template_bn_got_account' => 'У вас уже есть запись?',
     'template_bn_log_in' => 'Вход',
     'template_bn_what_is_caption' => 'Присоединяйтесь к <strong>миллионам игроков</strong> и получайте незабываемое удовольствие от игры! <span>Подробнее</span>',
-    'template_servicebar_auth_caption' => '<a href="?login" onclick="return Login.open(\'' . WoW::GetWoWPath() . '/login/login.frag\')">Авторизуйтесь</a> или <a href="/' . WoW::GetWoWPath() . '/account/creation/tos.html">создайте новую запись</a>',
+    'template_servicebar_auth_caption' => '<a href="?login" onclick="return Login.open(\'' . WoW::GetWoWPath() . '/login/login.frag\')">Авторизуйтесь</a> или <a href="' . WoW::GetWoWPath() . '/account/creation/tos.html">создайте новую запись</a>',
     'template_servicebar_account' => 'Учетная запись',
 	'template_servicebar_support' => 'Поддержка',
 	'template_servicebar_explore' => 'подробнее',
