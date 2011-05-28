@@ -35,9 +35,27 @@ include(WOW_DIRECTORY . '/includes/SharedDefines.php');
 // Load Interfaces
 include(WOW_DIRECTORY . '/includes/interfaces/interface.db.php');
 include(WOW_DIRECTORY . '/includes/interfaces/interface.log.php');
-// Load configs
-include(WOW_DIRECTORY . '/includes/configs/DatabaseConfig.php');
-include(WOW_DIRECTORY . '/includes/configs/WoWConfig.php');
+/**
+ * Load configs
+ * There is two same config files for Database and WoWCS with only one difference:
+ * In *.local.php set your configuration for your localhost server where you are testing
+ * your changes. In files without .local suffix set your configuration to your public server.
+ * Now, if your configurations (like db login and pass) are different on your localhost
+ * and public server you can configurate it only once - not with each reup on your public
+ * server. Files with suffix .local can be deleted from public server and files without
+ * it can be deleted from localhost test server.
+ * 
+ * IMPORTANT:
+ * 1) create file named ".public" in "WOW_DIRECTORY./includes/configs/" ONLY in your public server, NOT in localhost
+ **/
+if(file_exists(WOW_DIRECTORY . '/includes/configs/.public') ) {
+  include(WOW_DIRECTORY . '/includes/configs/DatabaseConfig.php');
+  include(WOW_DIRECTORY . '/includes/configs/WoWConfig.php');
+}
+else{
+  include(WOW_DIRECTORY . '/includes/configs/DatabaseConfig.local.php');
+  include(WOW_DIRECTORY . '/includes/configs/WoWConfig.local.php');
+}
 // Load libraries
 include(WOW_DIRECTORY . '/includes/classes/libs/mysqldatabase.php');
 include(WOW_DIRECTORY . '/includes/classes/libs/log.php');

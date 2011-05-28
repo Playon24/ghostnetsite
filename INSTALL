@@ -11,7 +11,9 @@ INSTALLATION STEPS:
 1. Create new MySQL database (`wowcs`, for expample) with utf8_general_ci encoding;
 2. Unzip sql/wowcs_r{LATEST_REVISION}.7z to any folder;
 3. Upload unpacked wowcs_r{LATEST_REVISION}.sql and wowcs_spell_r{LATEST_REVISION}.sql into `wowcs` database.
-4. Edit "includes/configs/DatabaseConfig.php" and "WoWConfig.php" files (read comments).
+4. Edit "includes/configs/DatabaseConfig.php" and "WoWConfig.php" files with configuration for your public server (read comments).
+   Edit "includes/configs/DatabaseConfig.local.php" and "WoWConfig.local.php" files with configuration for your localhost test server (read comments).
+   Read comments in all this files for understand how it works.
    Characters DB configs are stored in
        DatabaseConfig::$characters[1]['*']
    And World DB configs are stored in
@@ -26,8 +28,10 @@ INSTALLATION STEPS:
    
 8. If you are using UNIX system, you need to manage access rights to allow script write data to '_debug' folder.
 9. If you have diffirent servers (MaNGOS and Trinity Core):
-    Open 'includes/configs/WoWConfig.php' and edit WoWConfig::Realms[{REALM_ID}]['type'] to SERVER_MANGOS or SERVER_TRINITY 
+    Open 'includes/configs/WoWConfig.php' and 'includes/configs/WoWConfig.local.php' and edit WoWConfig::Realms[{REALM_ID}]['type'] to SERVER_MANGOS or SERVER_TRINITY 
     (WITHOUT apostrophes!).
+10.If you want run wowcs on your public server create 'inludes/configs/.public' file ONLY in your public server.
+   If you want run wowcs on your test localhost server DON'T CREATE THIS FILE! See point 4 for details.
 
 WARNING: if your site is not in site root, you need to configure .htaccess files:
 "wow/.htaccess" file:
