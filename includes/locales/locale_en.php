@@ -109,7 +109,8 @@ $WoW_Locale = array(
     'armor_mail' => 'Mail',
     'armor_plate' => 'Plate',
     
-    'template_search' => 'Search',
+    'template_buy_now' => 'or <a href="'. WoW::GetWoWPath() .'/account/management/digital-purchase.html?product=WOWC&amp;gameRegion=en">Buy</a> Now',
+	'template_search' => 'Search',
     'template_bn_search' => 'Search Battle.net',
     'template_search_site' => 'Search the Armory, forums and more...',
     'template_bn_description' => 'Connect, compete and achieve',

@@ -109,7 +109,8 @@ $WoW_Locale = array(
     'armor_mail' => 'Кольчуга',
     'armor_plate' => 'Латы',
     
-    'template_search' => 'Поиск',
+    'template_buy_now' => 'или <a href="'. WoW::GetWoWPath() .'/account/management/digital-purchase.html?product=WOWC&amp;gameRegion=ru">купите</a> игру!',
+	'template_search' => 'Поиск',
     'template_bn_search' => 'Поиск по Battle.net',
     'template_search_site' => 'Поиск в Оружейной, на форуме и т.д.',
     'template_bn_description' => 'Заводите друзей, соревнуйтесь и побеждайте',
