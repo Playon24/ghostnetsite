@@ -27,19 +27,25 @@ if(!is_array($url_data) || !isset($url_data['action1']) || $url_data['action1'] 
 WoW_Template::SetTemplateTheme('account');
 if(preg_match('/tos.html/i', $url_data['action2'])) {
     if(isset($_POST['csrftoken'])) {
+        $user_gender = array(
+            1 => 'Mr',
+            2 => 'Ms',
+            3 => 'Mrs',
+            4 => 'Miss');
         $user_data = array(
             'username' => $_POST['firstname'],
             'password' => $_POST['password'],
             'sha' => sha1(strtoupper($_POST['firstname']) . ':' . strtoupper($_POST['password'])),
-            'email' => $_POST['emailAddress'],
-            'country' => $_POST['country'],
-            'dob' => $_POST['dobYear'].'-'.$_POST['dobDay'].'-'.$_POST['dobMonth'],
-            'gender' => $_POST['gender'],
-            'firstname' => $_POST['firstname'],
+            
             'lastname' => $_POST['lastname'],
-            'password' => $_POST['password'],
+            'gender' => $user_gender[$_POST['gender']],
+            'email' => $_POST['emailAddress'],
             'question1' => $_POST['question1'],
-            'answer1' => $_POST['answer1']
+            'answer1' => $_POST['answer1'],
+            'dob' => $_POST['dobYear'].'-'.$_POST['dobDay'].'-'.$_POST['dobMonth'],
+            'country' => $_POST['country']
+            
+            
         );
         if(WoW_Account::RegisterUser($user_data, true)) {
             header('Location: ' . WoW::GetWoWPath() . '/account/management/');

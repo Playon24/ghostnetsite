@@ -32,6 +32,11 @@ INSTALLATION STEPS:
     (WITHOUT apostrophes!).
 10.If you want run wowcs on your public server create 'inludes/configs/.public' file ONLY in your public server.
    If you want run wowcs on your test localhost server DON'T CREATE THIS FILE! See point 4 for details.
+   
+INSTRUCTIONS FOR CREATE ACCOUNTS:
+1. Register new user account from main page;
+2. Go to account management and create how many game accounts you want by button "Add a Game";
+NOTE: User account is not playable account, it is web account associating playable game accounts.
 
 WARNING: if your site is not in site root, you need to configure .htaccess files:
 "wow/.htaccess" file:

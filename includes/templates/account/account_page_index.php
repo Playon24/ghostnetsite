@@ -80,6 +80,9 @@ switch(WoW_Template::GetPageIndex()) {
     case 'creation_success':
         WoW_Template::LoadTemplate('content_creation_success');
         break;
+    case 'add_game':
+        WoW_Template::LoadTemplate('content_add_game');
+        break;
 }
 ?>
 <div id="layout-bottom">
@@ -116,6 +119,9 @@ switch(WoW_Template::GetPageIndex()) {
     case 'creation_success':
         echo '<script type="text/javascript" src="' . WoW::GetWoWPath() . '/account/js/inputs.js?v19"></script>
 <script type="text/javascript" src="' . WoW::GetWoWPath() . '/account/js/account-creation/streamlined-creation.js?v19"></script>';
+        break;
+    case 'add_game':
+        echo '<script type="text/javascript" src="' . WoW::GetWoWPath() . '/account/js/management/add-game.js?v19"></script>';
         break;
 }
 ?>

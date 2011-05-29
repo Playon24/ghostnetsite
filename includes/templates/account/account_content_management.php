@@ -32,30 +32,28 @@
 ?>
 <a href="#wow" class="games-title border-2 opened" rel="game-list-wow">World of Warcraft</a>
 <ul id="game-list-wow">
-<li class="border-4" id="<?php echo strtoupper(WoW_Account::GetUserName()); ?>::EU">
+
+<?php
+$UserGames = WoW_Account::GetUserGames();
+for($i=0;$i<count($UserGames);$i++)
+{
+?>
+<li class="border-4" id="<?php echo strtoupper($UserGames[$i]['username']); ?>::EU">
 <span class="game-icon">
-<img src="<?php echo WoW::GetWoWPath(); ?>/account/local-common/images/game-icons/wow<?php echo WoW_Account::GetExpansion() > 0 ? 'x' . WoW_Account::GetExpansion() : 'c'; ?>-32.png" alt="" width="32" height="32" />
+<img src="<?php echo WoW::GetWoWPath(); ?>/account/local-common/images/game-icons/wow<?php echo $UserGames[$i]['expansion'] > 0 ? 'x' . $UserGames[$i]['expansion'] : 'c'; ?>-32.png" alt="" width="32" height="32" />
 </span>
 <span class="account-info">
 <span class="account-link">
-<strong><a href="<?php echo WoW::GetWoWPath(); ?>/account/management/wow/dashboard.html?accountName=<?php echo WoW_Account::GetUserName(); ?>&amp;region=EU"><?php echo WoW_Locale::GetString('expansion_' . WoW_Account::GetExpansion()); ?></a></strong>
-<span class="account-id">[<?php echo WoW_Account::GetUserName(); ?>] </span>
+<strong><a href="<?php echo WoW::GetWoWPath(); ?>/account/management/wow/dashboard.html?accountName=<?php echo $UserGames[$i]['username']; ?>&amp;region=EU"><?php echo WoW_Locale::GetString('expansion_' . $UserGames[$i]['expansion']); ?></a></strong>
+<span class="account-id">[<?php echo $UserGames[$i]['username']; ?>] </span>
 <span class="account-region"><?php echo sprintf('%s (EU)', WoW_Locale::GetString('locale_region')); ?></span>
 </span>
 </span>
 </li>
-<li id="addWowTrial" class="trial no-subtitle border-4" data-tooltip="<?php echo WoW_Locale::GetString('template_management_tooltip_add_trial'); ?>" data-tooltip-options='{"location": "mouse"}'>
-<span class="game-icon">
-<img src="<?php echo WoW::GetWoWPath(); ?>/account/local-common/images/game-icons/wowc-32.png" alt="" width="32" height="32" />
-</span>
-<span class="account-info">
-<span class="account-link">
-<strong><a href="<?php echo WoW::GetWoWPath(); ?>/account/management/add-game-trial.html?type=WOWC&amp;gameRegion=RU&amp;locale=ru_RU">World of Warcraft®</a></strong>
-<span class="account-region"><?php echo sprintf('%s (EU)', WoW_Locale::GetString('locale_region')); ?></span>
-</span>
-</span>
-<strong class="action add-trial"><?php echo WoW_Locale::GetString('template_management_add_trial'); ?></strong>
-</li>
+<?php
+}
+?>
+
 </ul>
 </div>
 <div id="games-tools">
