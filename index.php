@@ -28,6 +28,7 @@ if(isset($_GET['what-is'])) {
     exit;
 }
 else {
+    WoW_Account::UserGames();
     WoW_Template::SetPageIndex('index');
 }
 WoW_Template::LoadTemplate('page_index');
