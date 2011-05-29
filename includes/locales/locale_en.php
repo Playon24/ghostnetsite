@@ -109,7 +109,8 @@ $WoW_Locale = array(
     'armor_mail' => 'Mail',
     'armor_plate' => 'Plate',
     
-    'template_search' => 'Search',
+    'template_buy_now' => 'or <a href="'. WoW::GetWoWPath() .'/account/management/digital-purchase.html?product=WOWC&amp;gameRegion=en">Buy</a> Now',
+	'template_search' => 'Search',
     'template_bn_search' => 'Search Battle.net',
     'template_search_site' => 'Search the Armory, forums and more...',
     'template_bn_description' => 'Connect, compete and achieve',
@@ -256,6 +257,8 @@ $WoW_Locale = array(
     'template_userbox_auth_caption' => '<strong>Log in now</strong> to enhance and personalize your experience!',
     'template_articles_full_caption' => 'More',
     'template_sotd_sidebar_title' => 'Screenshot of the Day',
+	'template_sotd_sidebar_submit' => 'Submit screenshot',
+	'template_sotd_sidebar_all' => 'All screenshots',
     'template_forums_sidebar_title' => 'Popular Topics',
     'template_profile_caption' => 'Profile',
     'template_my_forum_posts_caption' => 'View my posts',

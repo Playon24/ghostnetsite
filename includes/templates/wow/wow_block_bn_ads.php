@@ -9,7 +9,7 @@
 			</a>
 
 			<span class="buy-now">
-				или <a href="<?php echo WoW::GetWoWPath(); ?>/account/management/digital-purchase.html?product=WOWC&amp;gameRegion=<?php echo WoW_Locale::GetLocale(); ?>">купите</a> игру!
+				<?php echo WoW_Locale::GetString('template_buy_now'); ?>
 			</span>
 		</div>
 

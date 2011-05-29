@@ -109,7 +109,8 @@ $WoW_Locale = array(
     'armor_mail' => 'Кольчуга',
     'armor_plate' => 'Латы',
     
-    'template_search' => 'Поиск',
+    'template_buy_now' => 'или <a href="'. WoW::GetWoWPath() .'/account/management/digital-purchase.html?product=WOWC&amp;gameRegion=ru">купите</a> игру!',
+	'template_search' => 'Поиск',
     'template_bn_search' => 'Поиск по Battle.net',
     'template_search_site' => 'Поиск в Оружейной, на форуме и т.д.',
     'template_bn_description' => 'Заводите друзей, соревнуйтесь и побеждайте',
@@ -256,6 +257,8 @@ $WoW_Locale = array(
     'template_userbox_auth_caption' => '<strong>Авторизуйтесь</strong> чтобы настраивать страницы!',
     'template_articles_full_caption' => 'Далее',
     'template_sotd_sidebar_title' => 'Скриншот дня',
+	'template_sotd_sidebar_submit' => 'Отправить скриншот',
+	'template_sotd_sidebar_all' => 'Смотреть все скриншоты',
     'template_forums_sidebar_title' => 'Форумы',
     'template_profile_caption' => 'Профиль',
     'template_my_forum_posts_caption' => 'Мои сообщения на форуме',
