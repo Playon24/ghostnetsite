@@ -733,6 +733,7 @@ Class WoW_Account {
         if(!self::$characters_data) {
             return false;
         }
+
         return true;
     }
     
@@ -785,7 +786,14 @@ Class WoW_Account {
     
     private static function LoadCharacters() {
         self::$characters_loaded = false;
-        $total_chars_count = DB::Realm()->selectCell("SELECT SUM(`numchars`) FROM `realmcharacters` WHERE `acctid` = %d", self::GetUserID());
+
+        self::$myGamesList = DB::WoW()->select("SELECT `account_id` FROM `DBPREFIX_users_accounts` WHERE `id` = %d", self::GetUserID());
+        $account_ids = array();
+        for($i=0;$i<count(self::$myGamesList);$i++) { 
+          $account_ids[] = self::$myGamesList[$i]['account_id'];
+        }
+
+        $total_chars_count = DB::Realm()->selectCell("SELECT SUM(`numchars`) FROM `realmcharacters` WHERE `acctid` IN (%s)", implode(', ', $account_ids) );
         self::$characters_data = DB::WoW()->select("SELECT * FROM `DBPREFIX_user_characters` WHERE `account` = %d ORDER BY `index`", self::GetUserID());
         if(!self::$characters_data || count(self::$characters_data) < $total_chars_count) {
             self::LoadCharactersFromWorld();
