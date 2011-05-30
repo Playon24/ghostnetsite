@@ -66,5 +66,5 @@ if(preg_match('/tos.html/i', $url_data['action2'])) {
 }
 else {
 }
-WoW_Template::LoadTemplate('page_index');
+WoW_Template::LoadTemplate('creation_index');
 ?>

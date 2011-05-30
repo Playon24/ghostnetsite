@@ -949,4 +949,3 @@ define('INSTANCE_FLAG_RAID1_MODE_ONLY', 1024); // 10 players mode only
 define('INSTANCE_FLAG_RAID2_MODE_ONLY', 2048); // 25 players mode only
 define('INSTANCE_FLAG_RAID3_MODE_ONLY', 4096); // 40 players mode only
 ?>
-

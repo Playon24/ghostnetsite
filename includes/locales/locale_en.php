@@ -785,6 +785,7 @@ $WoW_Locale = array(
     'template_management_main_title' => 'Battle.Net Account',
     
     'template_management_account_management' => 'Account',
+    'template_management_account_creation' => 'Account Creation',
     'template_management_menu_information' => 'Summary',
     'template_management_menu_parameters' => 'Settings',
     'template_management_menu_games' => 'Games & Codes',
