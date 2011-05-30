@@ -234,6 +234,14 @@ Class WoW_Account {
     private static $userGames = array();
     
     /**
+     * Return Q&A, userdatas for recovery password
+     * @access    private
+     * @staticvar array $password_recovery_data;
+     * @return    array
+     **/
+    private static $password_recovery_data = array();
+    
+    /**
      * Class constructor.
      * 
      * @access   public
@@ -1097,5 +1105,50 @@ Class WoW_Account {
         }
         return true;
     }
+    
+    public static function RecoverPasswordSelect($user_data) {
+        if(self::$password_recovery_data = DB::WoW()->selectRow("SELECT `secredQ`, `secredA`, `first_name` AS `username`, `email` FROM `DBPREFIX_users` WHERE `first_name` = '%s' AND `email` = '%s' LIMIT 1", $user_data['username'], $user_data['email']) ) {
+            return true;
+        }
+        else {
+            return false;
+        }
+        
+    }
+    
+    public static function GetRecoverPasswordData()
+    {
+      return self::$password_recovery_data;
+    }
+    
+    public static function SetRecoverPasswordData($data_from_session)
+    {
+      self::$password_recovery_data = $data_from_session;
+      return true;
+    }
+    
+    /**
+     * @todo RecoveryPasswordSuccess have fully functional password change script, but there is no mail sender object.
+     * Also there is no random password generator.     
+     * Because of this, script to change password is commented.
+     * 
+     * UNCOMMENT THIS ONLY WHEN EMAIL SENDER OBJECT AND RANDOM PASSWORD GENERATOR WILL BE SCRIPTED               
+     **/
+    public static function RecoverPasswordSuccess($secretAnswer)
+    {
+      if(strtolower(self::$password_recovery_data['secredA']) == strtolower($secretAnswer)) {
+          
+          //$new_password = set here random password generator function
+          //if(DB::WoW()->query("UPDATE `DBPREFIX_users` SET `password` = '%s' WHERE `first_name` = '%s' AND `email` = '%s' LIMIT 1", sha1(strtoupper(self::$password_recovery_data['username']) . ':' . strtoupper($new_password), $password_recovery_data['username'], $password_recovery_data['email'])) {
+          //}
+          
+          //make here email sender with new password generator
+          return true;
+      }
+      else {
+          return false;
+      }
+    }
+    
 }
 ?>

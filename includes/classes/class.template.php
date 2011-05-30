@@ -314,6 +314,44 @@ Class WoW_Template {
                 );
                     
                 break;
+            case 'password_reset':
+                $css_data_page = array(
+                    array(
+                        'path' => '/css/bnet-print.css',
+                        'version' => 19,
+                        'media' => 'print',
+                        'browser' => false,
+                        'skip_path' => false
+                    ),
+                    array(
+                        'path' => '/css/cant-login/cant-login.css',
+                        'version' => 19,
+                        'browser' => false,
+                        'skip_path' => false
+                    ),
+                );
+                    
+                break;
+            case 'password_reset_select':
+            case 'password_reset_secred_answer':
+            case 'password_reset_success':
+                $css_data_page = array(
+                    array(
+                        'path' => '/css/bnet-print.css',
+                        'version' => 19,
+                        'media' => 'print',
+                        'browser' => false,
+                        'skip_path' => false
+                    ),
+                    array(
+                        'path' => '/css/support/support.css',
+                        'version' => 19,
+                        'browser' => false,
+                        'skip_path' => false
+                    ),
+                );
+                    
+                break;
         }
         $cssList = array_merge($css_data, $css_data_page);
         $cssList[] = array(

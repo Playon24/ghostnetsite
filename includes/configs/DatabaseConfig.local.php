@@ -17,22 +17,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  **/
-  
-/**
- * How works *.local config files?
- *  
- * There is two same config files for Database and WoWCS with only one difference:
- * In *.local.php set your configuration for your localhost server where you are testing
- * your changes. In files without .local suffix set your configuration to your public server.
- * This is usefull if your configurations as dblogin, dbpass, dbname, etc.. are different
- * on your test and public servers. All 4 files (DatabaseConfig.php, DatabaseConfig.local.php,
- * WoWConfig.php and WoWConfig.local.php) can exists on both your servers configuration dirs,
- * but for property works there is one file which must be created only in public server
- * configuration dir. This file name is ".public" and it is not included.
- * 
- * IMPORTANT:
- * 1) create file named ".public" in "WOW_DIRECTORY./includes/configs/" ONLY in your public server, NOT in localhost
- **/
+ 
 Class DatabaseConfig {
     
     /**
@@ -41,9 +26,9 @@ Class DatabaseConfig {
      **/
     public static $world = array(
         'host'      => 'localhost',
-        'user'      => 'root',
-        'password'  => '',
-        'db_name'   => 'mangos',
+        'user'      => 'trinity',
+        'password'  => 'trinity',
+        'db_name'   => 'trinity_world',
         'charset'   => 'UTF8',
         'db_prefix' => ''
     );
@@ -56,17 +41,17 @@ Class DatabaseConfig {
     public static $characters = array(
         1 => array(
             'host'      => 'localhost',
-            'user'      => 'root',
-            'password'  => '',
-            'db_name'   => 'characters',
+            'user'      => 'trinity',
+            'password'  => 'trinity',
+            'db_name'   => 'trinity_characters',
             'charset'   => 'UTF8',
             'db_prefix' => ''
         ),
         2 => array(
             'host'      => 'localhost',
-            'user'      => 'root',
-            'password'  => '',
-            'db_name'   => 'characters_trinity',
+            'user'      => 'trinity',
+            'password'  => 'trinity',
+            'db_name'   => 'trinity_characters',
             'charset'   => 'UTF8',
             'db_prefix' => ''
         )
@@ -78,9 +63,9 @@ Class DatabaseConfig {
      **/
     public static $realm = array(
         'host'      => 'localhost',
-        'user'      => 'root',
-        'password'  => '',
-        'db_name'   => 'realmd',
+        'user'      => 'trinity',
+        'password'  => 'trinity',
+        'db_name'   => 'trinity_realmd',
         'charset'   => 'UTF8',
         'db_prefix' => ''
     );
@@ -91,9 +76,9 @@ Class DatabaseConfig {
      **/
     public static $wow = array(
         'host'      => 'localhost',
-        'user'      => 'root',
-        'password'  => '',
-        'db_name'   => 'wow_cs',
+        'user'      => 'trinity',
+        'password'  => 'trinity',
+        'db_name'   => 'trinity_web',
         'charset'   => 'UTF8',
         'db_prefix' => 'wow'
     );

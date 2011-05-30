@@ -7,3 +7,4 @@ RewriteRule ^management/settings/change-password.html /account/change-password.h
 
 RewriteRule ^management/(.*) /account/index.php?%{QUERY_STRING}
 RewriteRule ^creation/(.*) /account/creation.php?%{QUERY_STRING}
+RewriteRule ^support/(.*) /account/support.php?%{QUERY_STRING}
