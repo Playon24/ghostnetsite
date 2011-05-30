@@ -1,0 +1,64 @@
+/**
+ * THIS IS SIMPLE TODO LIST
+ * 
+ * If you want to write here your own TODO items, please write it in appropriate
+ * section under your nick.
+ * If you want script some functionality (it means one or more TODO points)
+ * whitch is not associated to you add your nick in bars before that item.
+ * Do it only if this script will be pushed to repository in one of your next few
+ * commits. You can create your own section in TODO list. TODO section is based
+ * on project url (like root/wow/ or root/account/ or / [/ simple means root]).
+ * 
+ * Section / means page loaded immediately after visit site and all common
+ * functionalities like top navigation bar(login, create acc, account, explore...),
+ * footer, and all other common places.
+ * NOTE: it means places that have same functionality from user's perspective,
+ * same functionality on server side script is not condition. 
+**/
+
+<section>/
+<!-- AndzinSan -->
+  * locale selector on bottom of page
+  * full site search
+  * autologin by "Keep me logged in" checkbox
+  * login by name or email
+  * update section "My Games" on main pege after login for view registered game
+    accounts associated to webcs account with their names, not expansion name
+</section>
+
+<section>account/management
+<!-- AndzinSan -->
+  * add more account details (account id, email, registration date,
+    last login date) under ACCOUNT DETAILS section
+  * set details about associated game accounts (gmlevel, join date, last ip,
+    last login, status locked and online, mutetime and expansion by image)
+  
+  <section>account/management/add-game
+  <!-- AndzinSan -->
+    * redirect this link to new game accoount creation: account/creation/wow/signup/
+      with same functionality but better design and organization    
+  </section>
+  <section>account/management/settings/change-email
+  <!-- AndzinSan -->
+    * make it fully functional  
+  </section>
+  <section>account/management/settings/change-password
+  <!-- AndzinSan -->
+    * make it fully functional  
+  </section>
+  <section>account/management/wow-account-conversion
+  <!-- AndzinSan -->
+    * make it fully functional in 3 steps for associate unassociated game
+      accounts with webcs account    
+  </section>
+</section>
+
+<section>account/support/password-reset
+                        /password-reset-select
+                        /password-reset-secred-answer
+                        /password-reset-success
+<!-- AndzinSan -->
+  * add texts to en localization
+</section>
+
+
