@@ -303,17 +303,6 @@ Class WoW_Template {
                 );
                     
                 break;
-            case 'add_game':
-                $css_data_page = array(
-                    array(
-                        'path' => '/css/management/add-game.css',
-                        'version' => 19,
-                        'browser' => false,
-                        'skip_path' => false
-                    ),
-                );
-                    
-                break;
         }
         $cssList = array_merge($css_data, $css_data_page);
         $cssList[] = array(
@@ -886,6 +875,64 @@ Class WoW_Template {
                     )
                 );
                 break;
+            case 'zones':
+                $css_data_page =array(
+                    array(
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/wiki/wiki.css',
+                        'version' => 10,
+                        'browser' => false
+                    ),
+                    array(
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/wiki/wiki-ie.css',
+                        'version' => 10,
+                        'browser' => 'IE'
+                    ),
+                    array(
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/wiki/zone.css',
+                        'version' => 10,
+                        'browser' => false
+                    )
+                );
+                break;
+            case 'zone':
+                $css_data_page =array(
+                    array(
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/wiki/wiki.css',
+                        'version' => 10,
+                        'browser' => false
+                    ),
+                    array(
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/wiki/wiki-ie.css',
+                        'version' => 10,
+                        'browser' => 'IE'
+                    ),
+                    array(
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/wiki/zone.css',
+                        'version' => 10,
+                        'browser' => false
+                    ),
+                    array(
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/lightbox.css',
+                        'version' => 10,
+                        'browser' => false
+                    ),
+                    array(
+                        'path' => WoW::GetWoWPath() . '/wow/static/local-common/css/cms/comments.css',
+                        'version' => 20,
+                        'browser' => false
+                    ),
+                    array(
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/cms.css',
+                        'version' => 10,
+                        'browser' => false,
+                    ),
+                    array(
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/cms-ie6.css',
+                        'version' => 10,
+                        'browser' => 'IE 6',
+                    )
+                );
+                break;
         }
         $cssList = array_merge($css_data, $css_data_page);
         $cssList[] = array(
@@ -996,6 +1043,10 @@ Class WoW_Template {
                 return sprintf('%s - %s - ', self::GetPageData('forum_category_title'), WoW_Locale::GetString('template_menu_forums'));
             case 'forum_thread':
                 return sprintf('%s - %s - ', self::GetPageData('forum_thread_title'), WoW_Locale::GetString('template_menu_forums'));
+            case 'zones':
+                return sprintf('%s - %s - ', WoW_Locale::GetString('template_game_dungeons_and_raids'), WoW_Locale::GetString('template_menu_game'));
+            case 'zone':
+                return sprintf('%s - %s - ' , self::GetPageData('zone_name'), WoW_Locale::GetString('template_menu_game'));
             default:
                 return '';
         }

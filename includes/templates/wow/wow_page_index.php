@@ -114,6 +114,12 @@ switch(WoW_Template::GetPageIndex()) {
     case 'forum_thread':
         WoW_Template::LoadTemplate('content_forum_thread');
         break;
+    case 'zones':
+        WoW_Template::LoadTemplate('content_zones');
+        break;
+    case 'zone':
+        WoW_Template::LoadTemplate('content_zone');
+        break;
 }
 WoW_Template::LoadTemplate('block_footer', true);
 WoW_Template::LoadTemplate('block_service', true);
@@ -216,6 +222,18 @@ switch(WoW_Template::GetPageData('page')) {
         break;
     case 'forum_index':
         echo '<script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/local-common/js/cms.js?v19"></script>';
+        break;
+    case 'zones':
+        echo '<script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/js/wiki/wiki.js?v10"></script>
+<script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/local-common/js/filter.js?v20"></script>';
+        break;
+    case 'zone':
+        echo '<script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/js/wiki/wiki.js?v10"></script>
+<script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/js/wiki/zone.js?v10"></script>
+<script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/local-common/js/table.js?v20"></script>
+<script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/local-common/js/cms.js?v20"></script>
+<script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/local-common/js/filter.js?v20"></script>
+<script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/local-common/js/lightbox.js?v20"></script>';
         break;
 }
 ?>

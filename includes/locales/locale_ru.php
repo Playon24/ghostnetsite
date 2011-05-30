@@ -1113,5 +1113,28 @@ $WoW_Locale = array(
     'template_forums_first_blizz_post' => 'Первое сообщение Blizzard',
     'template_forums_views_replies_category' => '%d просмотров / %d ответов',
     'template_forums_last_reply' => 'Последний ответ',
+    
+    'template_zones_desc' => 'От Штормграда до самых до окраин мир Warcraft полон тайн, опасностей и более всего — мест сражений. Корода кишат вооруженными кинжалами наемниками и жадными политиками, темные пещеры хранят древние и в равной степени ужасные тайны, на полях боя разворачиваются битвы, в которых сталкиваются лицом к лицу внуки тех, кто развязал эту войну. Немногие отважатся отправиться в столь далекие и опасные места. Еще меньше смельчаков вернутся. Ты — один из них.',
+    'template_zones_dungeons' => 'Подземелья',
+    'template_zones_raids' => 'Рейды',
+    
+    'template_zones_heroic_mode_available' => 'Предлагается героический режим (%d)',
+    'template_zones_normal_mode_available' => 'Предлагается нормальный режим (%d-%d)',
+    'template_zones_heroic_mode_only' => 'Только героический режим',
+    'template_zones_since_patch' => '(с обновления %s)',
+    
+    'template_zone_dungeon' => 'Подземелье',
+    'template_zone_raid' => 'Рейд',
+    'template_zone_type' => 'Тип:',
+    'template_zone_players' => 'Игроки:',
+    'template_zone_suggested_level' => 'Рекомендуемый уровень:',
+    'template_zone_item_level' => 'Требуемый уровень экипировки:',
+    'template_zone_location' => 'Место:',
+    'template_zone_heroic_mode_available' => 'Предлагается героический режим',
+    'template_zone_map' => 'Карта',
+    'template_zone_fansites' => 'Подробнее',
+    'template_zone_bosses' => 'Боссы',
+    'template_zone_expansion_required' => 'Требуется',
+    'template_zone_introduced_in_patch' => 'Появилось в обновлении:',
 );
 ?>
