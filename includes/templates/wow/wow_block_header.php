@@ -29,17 +29,20 @@ Flash.ratingImage = '<?php echo WoW::GetWoWPath(); ?>/wow/player/rating-pegi.jpg
 //]]>
 </script>
 <meta name="title" content="<?php echo WoW_Template::GetPageData('overall_meta_title') != null ? WoW_Template::GetPageData('overall_meta_title') : 'World of Warcraft'; ?>" />
-<link rel="image_src" href="<?php echo WoW_Template::GetPageData('overall_meta_img') != null ? WoW_Template::GetPageData('overall_meta_img') : '/wow/static/images/icons/facebook/game.jpg'; ?>" />
+<link rel="image_src" href="<?php echo WoW_Template::GetPageData('overall_meta_img') != null ? WoW_Template::GetPageData('overall_meta_img') :  WoW::GetWoWPath() . '/wow/static/images/icons/facebook/game.jpg'; ?>" />
 <?php
 switch(WoW_Template::GetPageData('page')) {
     case 'character_profile':
-        echo sprintf('<style type="text/css">#content .content-top { background: url("' . WoW::GetWoWPath() . '/wow/static/images/character/summary/backgrounds/race/%d.jpg") left top no-repeat; }.profile-wrapper { background-image: url("' . WoW::GetWoWPath() . '/wow/static/images/2d/profilemain/race/%d-%d.jpg"); }</style>', WoW_Characters::GetRaceID(), WoW_Characters::GetRaceID(), WoW_Characters::GetGender());
+        echo sprintf('<style type="text/css">#content .content-top { background: url("%s/wow/static/images/character/summary/backgrounds/race/%d.jpg") left top no-repeat; }.profile-wrapper { background-image: url("%s/wow/static/images/2d/profilemain/race/%d-%d.jpg"); }</style>', WoW::GetWoWPath(), WoW_Characters::GetRaceID(), WoW::GetWoWPath(), WoW_Characters::GetRaceID(), WoW_Characters::GetGender());
         break;
     case 'character_talents':
-        echo sprintf('<style type="text/css">.talentcalc-cell .icon .texture { background-image: url(' . WoW::GetWoWPath() . '/wow/wow-assets/static/images/talents/icons/%d-greyscale.jpg); }</style>', WoW_Characters::GetClassID());
+        echo sprintf('<style type="text/css">.talentcalc-cell .icon .texture { background-image: url(%s/wow/wow-assets/static/images/talents/icons/%d-greyscale.jpg); }</style>', WoW::GetWoWPath(), WoW_Characters::GetClassID());
         break;
     case 'guild':
-        echo sprintf('<style type="text/css">#content .content-top { background: url("' . WoW::GetWoWPath() . '/wow/static/images/guild/summary/bg-%s.jpg") left top no-repeat; }</style>', WoW_Guild::GetGuildFactionText());
+        echo sprintf('<style type="text/css">#content .content-top { background: url("%s/wow/static/images/guild/summary/bg-%s.jpg") left top no-repeat; }</style>', WoW::GetWoWPath(), WoW_Guild::GetGuildFactionText());
+        break;
+    case 'zone':
+        echo sprintf('<style type="text/css">#content .content-top { background: url("%s/wow/static/images/wiki/zone/bgs/%s.jpg") 0 0 no-repeat; }</style>', WoW::GetWoWPath(), WoW_Template::GetPageData('zone_key'));
         break;
 }
 ?>

@@ -28,6 +28,11 @@ $WoW_Locale = array(
     'expansion_2' => 'World of Warcraft&reg;: Wrath of the Lich King',
     'expansion_3' => 'World of Warcraft&reg;: Cataclysm',
     
+    'template_expansion_0' => 'Classic',
+    'template_expansion_1' => 'The Burning Crusade',
+    'template_expansion_2' => 'Wrath of the Lich King',
+    'template_expansion_3' => 'Cataclysm',
+    
     'character_class_1' => 'Warrior',
     'character_class_2' => 'Paladin',
     'character_class_3' => 'Hunter',
@@ -1104,5 +1109,32 @@ $WoW_Locale = array(
     'template_forums_table_views' => 'Views',
     'template_forums_table_replies' => 'Replies',
     'template_forums_table_last_post' => 'Last Poster',
+    
+    'template_forums_first_blizz_post' => 'First Blizzard Post',
+    'template_forums_views_replies_category' => '%d views/ %d replies',
+    'template_forums_last_reply' => 'Last post',
+    
+    'template_zones_desc' => 'From its undiscovered corners to its most prominent landmarks, the world of Warcraft is filled with mystery, peril, and, most of all, conflict. Cities teem with backstabbing mercenaries and greedy politicians, dark caverns hold ancient and terrible secrets, and warzones play host to generations-old clashes between armies. Few would dare explore these distant and dangerous places; fewer still would expect to return. You are one of those few.',
+    'template_zones_dungeons' => 'Dungeons',
+    'template_zones_raids' => 'Raids',
+    
+    'template_zones_heroic_mode_available' => 'Heroic mode available (%d)',
+    'template_zones_normal_mode_available' => 'Normal mode available (%d-%d)',
+    'template_zones_heroic_mode_only' => 'Heroic only',
+    'template_zones_since_patch' => '(new in patch %s)',
+    
+    'template_zone_dungeon' => 'Dungeon',
+    'template_zone_raid' => 'Raid',
+    'template_zone_type' => 'Type:',
+    'template_zone_players' => 'Players:',
+    'template_zone_suggested_level' => 'Suggested level:',
+    'template_zone_item_level' => 'Required item level:',
+    'template_zone_location' => 'Location:',
+    'template_zone_heroic_mode_available' => 'Heroic mode available',
+    'template_zone_map' => 'Map',
+    'template_zone_fansites' => 'Learn More',
+    'template_zone_bosses' => 'Bosses',
+    'template_zone_expansion_required' => 'Requires',
+    'template_zone_introduced_in_patch' => 'Introduced in patch:',
 );
 ?>

@@ -149,6 +149,20 @@ $allowed_tables = array(
         'onlyIfNotExists' => false,
     ),
     array(
+        'name' => 'instances',
+        'internalFile' => false,
+        'skipData' => false,
+        'drop' => true,
+        'onlyIfNotExists' => false,
+    ),
+    array(
+        'name' => 'instances_groups',
+        'internalFile' => false,
+        'skipData' => false,
+        'drop' => true,
+        'onlyIfNotExists' => false,
+    ),
+    array(
         'name' => 'item_equivalents',
         'internalFile' => false,
         'skipData' => false,

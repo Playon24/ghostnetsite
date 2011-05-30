@@ -223,6 +223,22 @@ Class WoW {
                     }
                 }
                 break;
+            case 'zone':
+                for($i = 0; $i < $count; $i++) {
+                    switch($url_array[$i]) {
+                        case 'zone':
+                            for($j = 0; $j < 10; $j++) {
+                                if(isset($url_array[ $i + ($j ) ]) && $url_array[ $i + ($j) ] != null) {
+                                    $urldata['action' . $j] = $url_array[$i + ($j )];
+                                }
+                                else {
+                                    $urldata['action' . $j] = null;
+                                }
+                            }
+                            break;
+                    }
+                }
+                break;
         }
         return $urldata;
     }
