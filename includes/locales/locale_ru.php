@@ -28,6 +28,11 @@ $WoW_Locale = array(
     'expansion_2' => 'World of Warcraft&reg;: Wrath of the Lich King',
     'expansion_3' => 'World of Warcraft&reg;: Cataclysm',
     
+    'template_expansion_0' => 'Классика',
+    'template_expansion_1' => 'The Burning Crusade',
+    'template_expansion_2' => 'Wrath of the Lich King',
+    'template_expansion_3' => 'Cataclysm',
+    
     'character_class_1' => 'Воин',
     'character_class_2' => 'Паладин',
     'character_class_3' => '$gОхотник:Охотница;',

@@ -301,7 +301,16 @@ Class WoW_Template {
                         'skip_path' => false
                     )
                 );
-                    
+                break;
+            case 'add_game':
+                $css_data_page = array(
+                    array(
+                        'path' => '/css/management/add-game.css',
+                        'version' => 19,
+                        'browser' => false,
+                        'skip_path' => false
+                   )
+                );
                 break;
         }
         $cssList = array_merge($css_data, $css_data_page);
