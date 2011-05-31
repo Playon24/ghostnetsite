@@ -108,6 +108,8 @@ Search.init('/ta/lookup');
 <script type="text/javascript">
 //<![CDATA[
 Core.load("<?php echo WoW::GetWoWPath(); ?>/static/local-common/js/third-party/jquery-ui-1.8.6.custom.min.js?v15");
+Core.load("<?php echo WoW::GetWoWPath(); ?>/static/local-common/js/third-party/jquery.mousewheel.min.js?v15");
+Core.load("<?php echo WoW::GetWoWPath(); ?>/static/local-common/js/third-party/jquery.tinyscrollbar.min.js?v15");
 Core.load("<?php echo WoW::GetWoWPath(); ?>/static/local-common/js/overlay.js?v15");
 Core.load("<?php echo WoW::GetWoWPath(); ?>/static/local-common/js/search.js?v15");
 Core.load("<?php echo WoW::GetWoWPath(); ?>/static/local-common/js/login.js?v15", false, function() {

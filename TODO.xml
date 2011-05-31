@@ -18,7 +18,7 @@
 
 <section>/
 <!-- AndzinSan -->
-  * locale selector on bottom of page
+    √ locale selector on bottom of page   DONE
   * full site search
   * autologin by "Keep me logged in" checkbox
   * login by name or email
