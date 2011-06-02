@@ -630,7 +630,7 @@ Class WoW_Account {
         self::CreateShaPassHash();
         // No SQL injection
         //$user_data = DB::Realm()->selectRow("SELECT `id`, `username`, `sha_pass_hash`, `email`, `expansion` FROM `account` WHERE `username` = '%s' LIMIT 1", self::GetUserName());
-        $user_data = DB::WoW()->selectRow("SELECT `id`, `first_name`, `password`, `email` FROM `DBPREFIX_users` WHERE `first_name` = '%s' LIMIT 1", self::GetUserName());
+        $user_data = DB::WoW()->selectRow("SELECT `id`, `first_name`, `last_name`, `password`, `email` FROM `DBPREFIX_users` WHERE `first_name` = '%s' LIMIT 1", self::GetUserName());
         if(!$user_data) {
             WoW_Log::WriteError('%s : user account %s was not found in `DBPREFIX_users` table!', __METHOD__, self::GetUserName());
             self::SetLastErrorCode(ERROR_WRONG_USERNAME_OR_PASSWORD);
@@ -643,9 +643,9 @@ Class WoW_Account {
         }
         self::$userid = $user_data['id'];
         self::$email = $user_data['email'];
-        self::$first_name = self::$username;
-        self::$last_name = self::$username;
-        
+        self::$first_name = $user_data['first_name'];
+        self::$last_name = $user_data['last_name'];
+        self::SetUserName(self::$first_name);
         //self::$is_banned = DB::Realm()->selectCell("SELECT 1 FROM `account_banned` WHERE `id` = %d AND `active` = 1", self::GetUserID());
         //self::$expansion = 1;
         self::UserGames();
@@ -670,7 +670,9 @@ Class WoW_Account {
         for($i=0;$i<count(self::$myGamesList);$i++) { 
           $account_ids[] = self::$myGamesList[$i]['account_id'];
         }
-        self::$userGames = DB::Realm()->select("SELECT * FROM `account` WHERE `id` IN (%s)", implode(', ', $account_ids) );        
+        if(!empty($account_ids)) {
+          self::$userGames = DB::Realm()->select("SELECT * FROM `account` WHERE `id` IN (%s)", implode(', ', $account_ids) );        
+        }
         return true;
     }
     
@@ -800,9 +802,15 @@ Class WoW_Account {
         for($i=0;$i<count(self::$myGamesList);$i++) { 
           $account_ids[] = self::$myGamesList[$i]['account_id'];
         }
-
-        $total_chars_count = DB::Realm()->selectCell("SELECT SUM(`numchars`) FROM `realmcharacters` WHERE `acctid` IN (%s)", implode(', ', $account_ids) );
-        self::$characters_data = DB::WoW()->select("SELECT * FROM `DBPREFIX_user_characters` WHERE `account` = %d ORDER BY `index`", self::GetUserID());
+        
+        if(!empty($account_ids)) {
+          $total_chars_count = DB::Realm()->selectCell("SELECT SUM(`numchars`) FROM `realmcharacters` WHERE `acctid` IN (%s)", implode(', ', $account_ids) );
+          self::$characters_data = DB::WoW()->select("SELECT * FROM `DBPREFIX_user_characters` WHERE `account` IN (%s) ORDER BY `index`", implode(', ', $account_ids));
+        }
+        else {
+          $total_chars_count = 0;
+        }
+        
         if(!self::$characters_data || count(self::$characters_data) < $total_chars_count) {
             self::LoadCharactersFromWorld();
         }
@@ -867,6 +875,12 @@ Class WoW_Account {
         $chars_data = array();
         self::$characters_data = array();
         $index = 0;
+        
+        $account_ids = array();
+        for($i=0;$i<count(self::$myGamesList);$i++) { 
+          $account_ids[] = self::$myGamesList[$i]['account_id'];
+        }
+        
         foreach(WoWConfig::$Realms as $realm_info) {
             $db = DB::ConnectToDB(DB_CHARACTERS, $realm_info['id']);
             $chars_data = DB::Characters()->select("
@@ -882,7 +896,7 @@ Class WoW_Account {
                 FROM `characters` AS `characters`
                 LEFT JOIN `guild_member` AS `guild_member` ON `guild_member`.`guid`=`characters`.`guid`
                 LEFT JOIN `guild` AS `guild` ON `guild`.`guildid`=`guild_member`.`guildid`
-                WHERE `account` = %d", self::GetUserID());
+                WHERE `account` IN (%s)",  implode(', ', $account_ids));
             if(!$chars_data) {
                 continue;
             }
@@ -1032,7 +1046,7 @@ Class WoW_Account {
                 return false;
             }
         }
-        DB::ConnectToDB(DB_CHARACTERS, self::GetActiveCharacterInfo('realmId'));
+        DB::ConnectToDB(DB_CHARACTERS, (self::GetActiveCharacterInfo('realmId') | 1 ));
         self::$friends_data = DB::Characters()->select("
         SELECT
         `character_social`.`friend`,
