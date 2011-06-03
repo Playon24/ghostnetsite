@@ -122,8 +122,6 @@ else {
 WoW_Log::Initialize(WoWConfig::$UseLog, WoWConfig::$LogLevel);
 // Load databases configs
 DB::LoadConfigs();
-// Initialize connections to databases
-DB::ConnectToAllDBs();
 // Initialize auction handler
 WoW_Auction::InitAuction();
 if(isset($_GET['_DISPLAYVERSION_'])) {
