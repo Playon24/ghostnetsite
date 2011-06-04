@@ -29,7 +29,7 @@ if($searchQuery != null && mb_strlen($searchQuery) < 3) {
 if(preg_match('/\@/', $searchQuery)) {
     $fast_access = explode('@', $searchQuery);
     if(isset($fast_access[0], $fast_access[1])) {
-        header('Location: ' . WoW::GetWoWPath() . '/character/' . trim($fast_access[1]) . '/' . trim($fast_access[0]) . '/simple');
+        header('Location: ' . WoW::GetWoWPath() . '/wow/character/' . trim($fast_access[1]) . '/' . trim($fast_access[0]) . '/');
         exit;
     }
 }

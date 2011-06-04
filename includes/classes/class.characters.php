@@ -608,7 +608,7 @@ Class WoW_Characters /*implements Interface_Characters*/ {
                 $pvp[$team['type']]['data'] = array(
                     'id' => $team['arenateamid'],
                     'name' => $team['name'],
-                    'url' => sprintf('%s/arena/%s/%dv%d/%s/', WoW::GetWoWPath(), self::GetRealmName(), $team['type'], $team['type'], $team['name']),
+                    'url' => sprintf('%s/wow/arena/%s/%dv%d/%s/', WoW::GetWoWPath(), self::GetRealmName(), $team['type'], $team['type'], $team['name']),
                     'captain' => $team['captainguid'],
                     'type' => $team['type'],
                     'type_text' => sprintf('%dv%d', $team['type'], $team['type']),
