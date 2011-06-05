@@ -1,5 +1,5 @@
 diff --git a/src/game/AchievementMgr.cpp b/src/game/AchievementMgr.cpp
-index 9f7b687..9e63530 100644
+index 1c86c9d..c1a94ed 100644
 --- a/src/game/AchievementMgr.cpp
 +++ b/src/game/AchievementMgr.cpp
 @@ -2065,6 +2065,7 @@ void AchievementMgr::CompletedAchievement(AchievementEntry const* achievement)
@@ -10,8 +10,9 @@ index 9f7b687..9e63530 100644
      CompletedAchievementData& ca =  m_completedAchievements[achievement->ID];
      ca.date = time(NULL);
      ca.changed = true;
+
 diff --git a/src/game/Item.cpp b/src/game/Item.cpp
-index 828c73c..7391f80 100644
+index 791bb25..87bd44d 100644
 --- a/src/game/Item.cpp
 +++ b/src/game/Item.cpp
 @@ -258,7 +258,6 @@ bool Item::Create( uint32 guidlow, uint32 itemid, Player const* owner)
@@ -37,10 +38,10 @@ index 828c73c..7391f80 100644
  }
  
 diff --git a/src/game/Player.cpp b/src/game/Player.cpp
-index ce55621..fa7742a 100644
+index 4e75e33..c47a759 100644
 --- a/src/game/Player.cpp
 +++ b/src/game/Player.cpp
-@@ -4319,13 +4319,15 @@ void Player::DeleteFromDB(ObjectGuid playerguid, uint32 accountId, bool updateRe
+@@ -4328,13 +4328,15 @@ void Player::DeleteFromDB(ObjectGuid playerguid, uint32 accountId, bool updateRe
                  } while (resultFriend->NextRow());
                  delete resultFriend;
              }
@@ -57,7 +58,7 @@ index ce55621..fa7742a 100644
              CharacterDatabase.PExecute("DELETE FROM character_gifts WHERE guid = '%u'", lowguid);
              CharacterDatabase.PExecute("DELETE FROM character_glyphs WHERE guid = '%u'", lowguid);
              CharacterDatabase.PExecute("DELETE FROM character_homebind WHERE guid = '%u'", lowguid);
-@@ -15340,6 +15342,8 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder )
+@@ -15367,6 +15369,8 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder )
              uint32(AT_LOGIN_RENAME), guid.GetCounter());
          return false;
      }
@@ -66,7 +67,7 @@ index ce55621..fa7742a 100644
  
      // overwrite possible wrong/corrupted guid
      SetGuidValue(OBJECT_FIELD_GUID, guid);
-@@ -17306,6 +17310,30 @@ void Player::SaveToDB()
+@@ -17340,6 +17344,30 @@ void Player::SaveToDB()
      _SaveTalents();
  
      CharacterDatabase.CommitTransaction();
@@ -97,7 +98,7 @@ index ce55621..fa7742a 100644
  
      // check if stats should only be saved on logout
      // save stats can be out of transaction
-@@ -22800,3 +22828,43 @@ void Player::SetRestType( RestType n_r_type, uint32 areaTriggerId /*= 0*/)
+@@ -22892,3 +22920,43 @@ void Player::SetRestType( RestType n_r_type, uint32 areaTriggerId /*= 0*/)
              SetFFAPvP(false);
      }
  }
@@ -142,7 +143,7 @@ index ce55621..fa7742a 100644
 +    m_wowarmory_feeds.push_back(feed);
 +}
 diff --git a/src/game/Player.h b/src/game/Player.h
-index a7b3a9f..d096a56 100644
+index 8954ece..b04a82b 100644
 --- a/src/game/Player.h
 +++ b/src/game/Player.h
 @@ -1027,6 +1027,21 @@ class TradeData
@@ -167,7 +168,7 @@ index a7b3a9f..d096a56 100644
  class MANGOS_DLL_SPEC Player : public Unit
  {
      friend class WorldSession;
-@@ -2251,6 +2266,12 @@ class MANGOS_DLL_SPEC Player : public Unit
+@@ -2254,6 +2269,12 @@ class MANGOS_DLL_SPEC Player : public Unit
          void SendCinematicStart(uint32 CinematicSequenceId);
          void SendMovieStart(uint32 MovieId);
  
@@ -180,7 +181,7 @@ index a7b3a9f..d096a56 100644
          /*********************************************************/
          /***                 INSTANCE SYSTEM                   ***/
          /*********************************************************/
-@@ -2643,6 +2664,9 @@ class MANGOS_DLL_SPEC Player : public Unit
+@@ -2646,6 +2667,9 @@ class MANGOS_DLL_SPEC Player : public Unit
          uint32 m_timeSyncTimer;
          uint32 m_timeSyncClient;
          uint32 m_timeSyncServer;
@@ -190,11 +191,12 @@ index a7b3a9f..d096a56 100644
  };
  
  void AddItemsSetItem(Player*player,Item *item);
+
 diff --git a/src/game/Unit.cpp b/src/game/Unit.cpp
-index 583ba81..6c3d103 100644
+index a23d370..5cd0639 100644
 --- a/src/game/Unit.cpp
 +++ b/src/game/Unit.cpp
-@@ -873,8 +873,10 @@ uint32 Unit::DealDamage(Unit *pVictim, uint32 damage, CleanDamage const* cleanDa
+@@ -876,8 +876,10 @@ uint32 Unit::DealDamage(Unit *pVictim, uint32 damage, CleanDamage const* cleanDa
                  {
                      if (m->IsRaidOrHeroicDungeon())
                      {

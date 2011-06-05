@@ -981,7 +981,7 @@ Class WoW_Characters /*implements Interface_Characters*/ {
                 );
                 break;
             case SERVER_TRINITY:
-                $talent_spells = DB::Characters()->selectRow("SELECT `Rank_1`, `Rank_2`, `Rank_3`, `Rank_4`, `Rank_5` FROM `ARMORYDBPREFIX_talents` WHERE `TalentID` = %d LIMIT 1", $talent_id);
+                $talent_spells = DB::WoW()->selectRow("SELECT `Rank_1`, `Rank_2`, `Rank_3`, `Rank_4`, `Rank_5` FROM `DBPREFIX_talents` WHERE `TalentID` = %d LIMIT 1", $talent_id);
                 if(!$talent_spells || !is_array($talent_spells) || ($rank >= 0 && !isset($talent_spells['Rank_' . $rank + 1]))) {
                     WoW_Log::WriteError('%s : talent ranks for talent %d was not found in DB!', __METHOD__, $talent_id);
                     return false;
