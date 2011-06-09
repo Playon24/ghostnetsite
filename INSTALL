@@ -11,7 +11,8 @@ INSTALLATION STEPS:
 1. Create new MySQL database (`wowcs`, for expample) with utf8_general_ci encoding;
 2. Unzip sql/wowcs_r{LATEST_REVISION}.7z to any folder;
 3. Upload unpacked wowcs_r{LATEST_REVISION}.sql and wowcs_spell_r{LATEST_REVISION}.sql into `wowcs` database.
-4. Edit "includes/configs/DatabaseConfig.php" and "WoWConfig.php" files with configuration for your public server (read comments).
+4. Rename "includes/configs/DatabaseConfig.php.default" to DatabaseConfig.php and "includes/configs/WoWConfig.php.default" to WoWConfig.php
+5. Edit "includes/configs/DatabaseConfig.php" and "WoWConfig.php" files with configuration for your public server (read comments).
    Edit "includes/configs/DatabaseConfig.local.php" and "WoWConfig.local.php" files with configuration for your localhost test server (read comments).
    Read comments in all this files for understand how it works.
    Characters DB configs are stored in
@@ -19,18 +20,18 @@ INSTALLATION STEPS:
    And World DB configs are stored in
        DatabaseConfig::$world[1]['*']
    You should edit these values according with your MySQL configs (host/user/password/DB name).
-5. Unzip htaccess.zip archive and place unpacked .htaccess file to root site dir for correct work.
-6. If there are some sql updates in 'sql/updates' dir (rev. {LATEST_REVISION} or higher), you need to upload it into DB, too.
-7. For full work you need to patch MaNGOS / TrinityCore core with "tools/{SERVER}/wowarmory_patch.patch" file
+6. Unzip htaccess.zip archive and place unpacked .htaccess file to root site dir for correct work.
+7. If there are some sql updates in 'sql/updates' dir (rev. {LATEST_REVISION} or higher), you need to upload it into DB, too.
+8. For full work you need to patch MaNGOS / TrinityCore core with "tools/{SERVER}/wowarmory_patch.patch" file
    and update your characters DB with provided SQL update (characters.sql - in the "tools/{SERVER}/sql" folder).
    
    Use "patch -p1 < wowarmory_patch.patch" GIT command to patch server source code.
    
-8. If you are using UNIX system, you need to manage access rights to allow script write data to '_debug' folder.
-9. If you have diffirent servers (MaNGOS and Trinity Core):
+9. If you are using UNIX system, you need to manage access rights to allow script write data to '_debug' folder.
+10. If you have diffirent servers (MaNGOS and Trinity Core):
     Open 'includes/configs/WoWConfig.php' and 'includes/configs/WoWConfig.local.php' and edit WoWConfig::Realms[{REALM_ID}]['type'] to SERVER_MANGOS or SERVER_TRINITY 
     (WITHOUT apostrophes!).
-10.If you want run wowcs on your public server create 'inludes/configs/.public' file ONLY in your public server.
+11.If you want run wowcs on your public server create 'inludes/configs/.public' file ONLY in your public server.
    If you want run wowcs on your test localhost server DON'T CREATE THIS FILE! See point 4 for details.
    
 INSTRUCTIONS FOR CREATE ACCOUNTS:
@@ -60,22 +61,23 @@ Also, you NEED to set $WoW_Path variable in "includes/configs/WoWConfig.php" fil
 1. Создайте новую базу данных MySQL (`wowcs`, например) с кодировкой utf8_general_ci encoding;
 2. Распакуйте архив sql/wowcs_r{ПОСЛЕДНЯЯ_РЕВИЗИЯ}.7z в любую папку;
 3. Загрузите распакованный дамп "wowcs_r{ПОСЛЕДНЯЯ_РЕВИЗИЯ}.sql" и "wowcs_spell_r{ПОСЛЕДНЯЯ_РЕВИЗИЯ}.sql" в базу `wowcs`.
-4. Отредактируйте файлы "includes/configs/DatabaseConfig.php" and "WoWConfig.php" (см. комментарии).
+4. Переименуйте файл "includes/configs/DatabaseConfig.php.default" в DatabaseConfig.php и "includes/configs/WoWConfig.php.default" в WoWConfig.php
+5. Отредактируйте файлы "includes/configs/DatabaseConfig.php" and "WoWConfig.php" (см. комментарии).
    Настройки подключения к базам персонажей хранятся в
        DatabaseConfig::$characters[1]['*']
    Настройки подключения к базам мира хранятся в
        DatabaseConfig::$world[1]['*']
    Вам следует изменить эти значения в соответствии со своими параметрами пользователя MySQL (хост, пользователь/пароль).
-5. Распакуйте архив htaccess.zip и поместите распаковаенные файлы .htaccess file в корень  сайта.
-6. Если в папке 'sql/updates' есть какие-либо обновления, (ревизии {ПОСЛЕДНЯЯ_РЕВИЗИЯ} или выше), вам так же необходимо залить их в базу.
-7. Для полноценной работы нужно пропатчить исходные коды сервера MaNGOS / TrinityCore
+6. Распакуйте архив htaccess.zip и поместите распаковаенные файлы .htaccess file в корень  сайта.
+7. Если в папке 'sql/updates' есть какие-либо обновления, (ревизии {ПОСЛЕДНЯЯ_РЕВИЗИЯ} или выше), вам так же необходимо залить их в базу.
+8. Для полноценной работы нужно пропатчить исходные коды сервера MaNGOS / TrinityCore
    и рекомпилировать сервер. Код патча находятся в файле "tools/{СЕРВЕР}/wowarmory_patch.patch".
    так же, нужно обновить базу персонажей приведенными SQL-дампами *папка SQL*)
    
    Используйте команду GIT "patch -p1 < wowarmory_patch.patch" для патчинга исходного кода сервера.
    
-8. Если вы используете UNIX-систему, вам необходимо изменить права доступа к папке _debug чтобы скрипт мог записывать логи сервера.
-9. Если у вас несколько разных реалмов:
+9. Если вы используете UNIX-систему, вам необходимо изменить права доступа к папке _debug чтобы скрипт мог записывать логи сервера.
+10. Если у вас несколько разных реалмов:
     Откройте файл 'includes/configs/WoWConfig.php' и измените значение параметров WoWConfig::Realms[{REALM_ID}]['type']
     на SERVER_MANGOS или SERVER_TRINITY !
     (БЕЗ АПОСТРОФОВ, т.к. это константы!!).

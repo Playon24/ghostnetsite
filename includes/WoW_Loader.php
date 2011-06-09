@@ -36,6 +36,7 @@ include(WOW_DIRECTORY . '/includes/SharedDefines.php');
 include(WOW_DIRECTORY . '/includes/interfaces/interface.db.php');
 include(WOW_DIRECTORY . '/includes/interfaces/interface.log.php');
 /**
+ * Temporary disabled // Shadez
  * Load configs
  * There is two same config files for Database and WoWCS with only one difference:
  * In *.local.php set your configuration for your localhost server where you are testing
@@ -48,14 +49,14 @@ include(WOW_DIRECTORY . '/includes/interfaces/interface.log.php');
  * IMPORTANT:
  * 1) create file named ".public" in "WOW_DIRECTORY./includes/configs/" ONLY in your public server, NOT in localhost
  **/
-if(file_exists(WOW_DIRECTORY . '/includes/configs/.public') ) {
-  include(WOW_DIRECTORY . '/includes/configs/DatabaseConfig.php');
-  include(WOW_DIRECTORY . '/includes/configs/WoWConfig.php');
-}
+//if(file_exists(WOW_DIRECTORY . '/includes/configs/.public') ) {
+include(WOW_DIRECTORY . '/includes/configs/DatabaseConfig.php');
+include(WOW_DIRECTORY . '/includes/configs/WoWConfig.php');
+/*}
 else{
   include(WOW_DIRECTORY . '/includes/configs/DatabaseConfig.local.php');
   include(WOW_DIRECTORY . '/includes/configs/WoWConfig.local.php');
-}
+}*/
 // Load libraries
 include(WOW_DIRECTORY . '/includes/classes/libs/mysqldatabase.php');
 include(WOW_DIRECTORY . '/includes/classes/libs/log.php');
@@ -65,6 +66,7 @@ include(WOW_DIRECTORY . '/includes/classes/class.wow.php');
 include(WOW_DIRECTORY . '/includes/classes/class.locale.php');
 include(WOW_DIRECTORY . '/includes/classes/class.template.php');
 // Custom classes
+// TODO: Load only necessary classes for opened page
 include(WOW_DIRECTORY . '/includes/classes/class.account.php');
 include(WOW_DIRECTORY . '/includes/classes/class.utils.php');
 include(WOW_DIRECTORY . '/includes/classes/class.characters.php');
@@ -122,10 +124,12 @@ else {
 WoW_Log::Initialize(WoWConfig::$UseLog, WoWConfig::$LogLevel);
 // Load databases configs
 DB::LoadConfigs();
+// Do not create DB connections here - it will be created automatically at first query request!
+
 // Initialize auction handler
-WoW_Auction::InitAuction();
+WoW_Auction::InitAuction(); // TODO: this initialization should be moved in some other place.
 if(isset($_GET['_DISPLAYVERSION_'])) {
-    die(WOW_REVISION);
+    die('WOW_REVISION: ' . WOW_REVISION);
 }
 // RunOnce.
 define('__RUNONCE__', true);
