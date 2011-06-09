@@ -56,11 +56,6 @@ Class WoWConfig {
             'id'   => 1,
             'name' => 'Armory Realm',
             'type' => SERVER_MANGOS
-        ),
-        2 => array(
-            'id'   => 2,
-            'name' => 'Armory Realm 2',
-            'type' => SERVER_TRINITY
         )
     );
 }

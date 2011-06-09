@@ -1,5 +1,5 @@
 RewriteEngine On
-RewriteRule sotd sotd.xml
+RewriteRule sotd sotd.php
 RewriteRule forums forums.php
 RewriteRule events events.xml
 RewriteRule guild-news guild-news.php

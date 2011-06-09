@@ -61,14 +61,6 @@ Class DatabaseConfig {
             'db_name'   => 'characters',
             'charset'   => 'UTF8',
             'db_prefix' => ''
-        ),
-        2 => array(
-            'host'      => 'localhost',
-            'user'      => 'root',
-            'password'  => '',
-            'db_name'   => 'characters_trinity',
-            'charset'   => 'UTF8',
-            'db_prefix' => ''
         )
     );
     

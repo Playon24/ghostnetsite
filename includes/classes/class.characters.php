@@ -1221,7 +1221,7 @@ Class WoW_Characters /*implements Interface_Characters*/ {
             'g0'         => $item->GetSocketInfo(1),
             'g1'         => $item->GetSocketInfo(2),
             'g2'         => $item->GetSocketInfo(3),
-            'can_ench'   => !in_array($item->GetSlot(), array(INV_SHIRT, INV_RANGED_RELIC, INV_TABARD, INV_TRINKET_1, INV_TRINKET_2, INV_TYPE_NECK, INV_OFF_HAND, INV_RING_1, INV_RING_2, INV_NECK, INV_BELT))
+            'can_ench'   => !in_array($item->GetSlot(), array(INV_SHIRT, INV_RANGED_RELIC, INV_TABARD, INV_TRINKET_1, INV_TRINKET_2, INV_NECK, INV_OFF_HAND, INV_RING_1, INV_RING_2, INV_NECK, INV_BELT))
         );
         if($advanced) {
             $item_data['enchant_text'] = '';
@@ -2897,7 +2897,7 @@ Class WoW_Characters /*implements Interface_Characters*/ {
                 }
                 self::UpdateAudit(AUDIT_TYPE_STAT_BONUS, $item->GetItemBonuses()); // Add some stats from ench/gem.
                 // Non optimal armor
-                if(!in_array($item->GetSlot(), array(INV_MAIN_HAND, INV_OFF_HAND, INV_BELT, INV_SHIRT, INV_RANGED_RELIC, INV_TABARD, INV_TRINKET_1, INV_TRINKET_2, INV_TYPE_NECK, INV_OFF_HAND, INV_RING_1, INV_RING_2, INV_NECK)) && !self::IsOptimalArmorForClass($item->GetEntry())) {
+                if(!in_array($item->GetSlot(), array(INV_MAIN_HAND, INV_OFF_HAND, INV_BELT, INV_SHIRT, INV_RANGED_RELIC, INV_TABARD, INV_TRINKET_1, INV_TRINKET_2, INV_NECK, INV_OFF_HAND, INV_RING_1, INV_RING_2, INV_NECK)) && !self::IsOptimalArmorForClass($item->GetEntry())) {
                     self::UpdateAudit(AUDIT_TYPE_NONOPTIMAL_ARMOR, array($item->GetSlot(), $item->GetEntry()));
                 }
                 // Enchant bonus
@@ -2905,7 +2905,7 @@ Class WoW_Characters /*implements Interface_Characters*/ {
                     //self::UpdateAudit(AUDIT_TYPE_STAT_BONUS, $item->GetEnchantmentId());
                 }
                 // Unenchanted items
-                if($item->GetEnchantmentId() == 0 && !in_array($item->GetSlot(), array(INV_BELT, INV_SHIRT, INV_RANGED_RELIC, INV_TABARD, INV_TRINKET_1, INV_TRINKET_2, INV_TYPE_NECK, INV_OFF_HAND, INV_RING_1, INV_RING_2, INV_NECK))) {
+                if($item->GetEnchantmentId() == 0 && !in_array($item->GetSlot(), array(INV_BELT, INV_SHIRT, INV_RANGED_RELIC, INV_TABARD, INV_TRINKET_1, INV_TRINKET_2, INV_NECK, INV_OFF_HAND, INV_RING_1, INV_RING_2, INV_NECK))) {
                     self::UpdateAudit(AUDIT_TYPE_UNENCHANTED_ITEM, array($item->GetSlot(), $item->GetEntry()));
                 }
                 // Missing belt buckle
