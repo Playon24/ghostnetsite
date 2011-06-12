@@ -45,8 +45,8 @@ define('RACE_DRAENEI',  11);
 define('MAX_RACES',     12);
 
 /* Factions */
-define('FACTION_HORDE',    0);
-define('FACTION_ALLIANCE', 1);
+define('FACTION_HORDE',    1);
+define('FACTION_ALLIANCE', 0);
 
 /* Genders */
 define('GENDER_MALE',   0);

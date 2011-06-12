@@ -63,8 +63,9 @@
                                     WoW_Locale::GetString('character_class_' . $char['classId'], $char['gender']),
                                     WoW::GetWoWPath(), $char['classId'],
                                     WoW_Utils::GetFactionId($char['raceId']),
-                                    WoW_Locale::GetString('faction_' . WoW_Utils::GetFactionId($char['raceId']) == FACTION_ALLIANCE ? 'alliance' : 'horde'),
-                                    WoW::GetWoWPath(), WoW_Utils::GetFactionId($char['raceId']),
+                                    WoW_Locale::GetString('faction_' . (WoW_Utils::GetFactionId($char['raceId']) == FACTION_ALLIANCE ? 'alliance' : 'horde')),
+                                    WoW::GetWoWPath(),
+                                    WoW_Utils::GetFactionId($char['raceId']),
                                     WoW::GetWoWPath(), $char['realmName'], $char['guildName'], $char['guildName'],
                                     $char['realmName'],
                                     WoWConfig::$DefaultBGName
