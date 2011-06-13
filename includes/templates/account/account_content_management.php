@@ -24,11 +24,9 @@
 <h3 class="section-title"><?php echo WoW_Locale::GetString('template_management_your_games'); ?></h3>
 <div id="games-list">
 <?php
-/*    echo '<ul>
-<li class="cta border-4">
-К этой учетной записи Battle.net еще не прикреплено ни одной игры.<br /><a href="<?php echo WoW::GetWoWPath(); ?>/account/management/add-game.html">Прикрепите игру</a> или <a href="/account/management/wow-account-conversion.html">прикрепите свою запись World of Warcraft®</a>.
-</li>
-</ul>';*/
+if(WoW_Account::GetGameAccountsCount() == 0) {
+    echo '<ul><li class="cta border-4">' . WoW_Locale::GetString('template_account_no_wow_games') . '</li></ul>';
+}
 ?>
 <a href="#wow" class="games-title border-2 opened" rel="game-list-wow">World of Warcraft</a>
 <ul id="game-list-wow">
@@ -57,7 +55,7 @@ for($i=0;$i<count($UserGames);$i++)
 </ul>
 </div>
 <div id="games-tools">
-<a href="<?php echo WoW::GetWoWPath(); ?>/account/management/add-game.html" id="add-game" class="border-5"><?php echo WoW_Locale::GetString('template_management_add_a_game'); ?></a>
+<a href="<?php echo WoW::GetWoWPath(); ?>/account/creation/wow/signup/index.xml" id="add-game" class="border-5"><?php echo WoW_Locale::GetString('template_management_add_a_game'); ?></a>
 <p>
 <a href="get-a-game.html" class="" onclick="">
 <span class="icon-16 icon-account-buy"></span>

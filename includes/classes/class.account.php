@@ -677,7 +677,7 @@ Class WoW_Account {
             $account_ids[] = self::$myGamesList[$i]['account_id'];
         }
         if(!empty($account_ids)) {
-            self::$userGames = DB::Realm()->select("SELECT * FROM `account` WHERE `id` IN (%s)", implode(', ', $account_ids) );        
+            self::$userGames = DB::Realm()->select("SELECT * FROM `account` WHERE `id` IN (%s)", implode(', ', $account_ids));        
         }
         return true;
     }
@@ -694,9 +694,10 @@ Class WoW_Account {
             return false;
         }
         if(DB::Realm()->selectCell("SELECT 1 FROM `account` WHERE `username` = '%s' LIMIT 1", $account_data['username'])) {
+            WoW_Template::SetPageData('creation_error', true);
             return false;
         }
-        if(DB::Realm()->query("INSERT INTO `account` (`username`, `sha_pass_hash`, `email`, `expansion`) VALUES ('%s', '%s', 0, '', %d)", $account_data['username'], $account_data['sha'], (MAX_EXPANSION_LEVEL - 1))) {
+        if(DB::Realm()->query("INSERT INTO `account` (`username`, `sha_pass_hash`, `email`, `expansion`) VALUES ('%s', '%s', '%s', %d)", $account_data['username'], $account_data['sha'], self::GetUserName(), (MAX_EXPANSION_LEVEL - 1))) {
             $account_data['id'] = DB::Realm()->selectCell("SELECT `id` FROM `account` WHERE `username` = '%s' LIMIT 1", $account_data['username']);
             DB::WoW()->query("INSERT INTO `DBPREFIX_users_accounts` (`id`, `account_id`) VALUES ('%s', '%s')", self::GetUserID(), $account_data['id']);
         }
@@ -1197,6 +1198,10 @@ Class WoW_Account {
     
     public static function GetAccountName() {
         return isset(self::$dashboard_account['username']) ? self::$dashboard_account['username'] : null;
+    }
+    
+    public static function GetGameAccountsCount() {
+        return self::$myGames;
     }
 }
 ?>

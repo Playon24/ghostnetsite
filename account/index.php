@@ -36,32 +36,33 @@ if($url_data['action2'] == 'wow' && preg_match('/dashboard.html/i', $url_data['a
     WoW_Template::SetMenuIndex('games');
     WoW_Template::SetPageData('page', 'dashboard');
 }
-elseif($url_data['action2'] == 'add-game.html'){
+/*
+elseif($url_data['action2'] == 'add-game.html') {
     if(isset($_POST['gameAcountName']) && isset($_POST['gameAcountPass'])) {
         $account_data = array(
-          'username' => $_POST['gameAcountName'],
-          'sha' => sha1(strtoupper($_POST['gameAcountName']) . ':' . strtoupper($_POST['gameAcountPass']))
+            'username' => $_POST['gameAcountName'],
+            'sha' => sha1(strtoupper($_POST['gameAcountName']) . ':' . strtoupper($_POST['gameAcountPass']))
         );
         if(WoW_Account::RegisterGameAccount($account_data)) {
-          header('Location: ' . WoW::GetWoWPath() . '/account/management/');
-          exit;
+            header('Location: ' . WoW::GetWoWPath() . '/account/management/');
+            exit;
         }
         else {
-          WoW_Template::SetPageIndex('add_game');
-          WoW_Template::SetMenuIndex('games');
-          WoW_Template::SetPageData('page', 'add_game');
+            WoW_Template::SetPageIndex('add_game');
+            WoW_Template::SetMenuIndex('games');
+            WoW_Template::SetPageData('page', 'add_game');
         }
-      
-      WoW_Template::SetPageIndex('management');
-      WoW_Template::SetMenuIndex('management');
-      WoW_Template::SetPageData('page', 'management');
+        WoW_Template::SetPageIndex('management');
+        WoW_Template::SetMenuIndex('management');
+        WoW_Template::SetPageData('page', 'management');
     }
     else{
-      WoW_Template::SetPageIndex('add_game');
-      WoW_Template::SetMenuIndex('games');
-      WoW_Template::SetPageData('page', 'add_game');
+        WoW_Template::SetPageIndex('add_game');
+        WoW_Template::SetMenuIndex('games');
+        WoW_Template::SetPageData('page', 'add_game');
     }
 }
+*/
 else {
     WoW_Template::SetPageIndex('management');
     WoW_Template::SetMenuIndex('management');

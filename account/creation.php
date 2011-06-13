@@ -25,6 +25,23 @@ if(!is_array($url_data) || !isset($url_data['action1']) || $url_data['action1'] 
     exit;
 }
 WoW_Template::SetTemplateTheme('account');
+if($url_data['action2'] == 'wow' && $url_data['action3'] == 'signup') {
+    if(!WoW_Account::IsLoggedIn()) {
+        header('Location: ' . WoW::GetWoWPath() . '/login/?ref=' . urlencode('http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI']));
+    }
+    if(isset($_POST['emailAddress'])) {
+        $account_data = array(
+            'username' => $_POST['emailAddress'],
+            'sha' => sha1(strtoupper($_POST['emailAddress']) . ':' . strtoupper($_POST['password']))
+        );
+        if(WoW_Account::RegisterGameAccount($account_data)) {
+            header('Location: ' . WoW::GetWoWPath() . '/account/management/wow/dashboard.html?accountName=' . $account_data['username']);
+            exit;
+        }
+    }
+    WoW_Template::LoadTemplate('creation_wow');
+    exit;
+}
 if(preg_match('/tos.html/i', $url_data['action2'])) {
     if(isset($_POST['csrftoken'])) {
         $registration_allowed = true;

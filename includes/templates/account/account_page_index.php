@@ -11,7 +11,7 @@
 </div>
 </form>
 </div>
-<h1 id="logo"><a href="<?php echo WoW::GetWoWPath(); ?>" tabindex="50" accesskey="h">Battle.net</a></h1>
+<h1 id="logo"><a href="<?php echo WoW::GetWoWPath() . '/account/management/'; ?>" tabindex="50" accesskey="h">Battle.net</a></h1>
 <div id="navigation">
 <div id="page-menu" class="large">
 <h2><a href="<?php echo WoW::GetWoWPath(); ?>/account/management/"> <?php echo WoW_Locale::GetString('template_management_account_management'); ?>
@@ -40,7 +40,7 @@
 <span></span>
 <div class="flyout-menu" id="games-menu" style="display: none">
 <ul>
-<li><a href="<?php echo WoW::GetWoWPath(); ?>/account/management/add-game.html"><?php echo WoW_Locale::GetString('template_management_menu_games_add_game'); ?></a></li>
+<li><a href="<?php echo WoW::GetWoWPath(); ?>/account/creation/wow/signup/index.xml"><?php echo WoW_Locale::GetString('template_management_menu_games_add_game'); ?></a></li>
 <li><a href="<?php echo WoW::GetWoWPath(); ?>/account/management/get-a-game.html"><?php echo WoW_Locale::GetString('template_management_menu_games_get_a_game'); ?></a></li>
 <li><a href="<?php echo WoW::GetWoWPath(); ?>/account/management/wow-account-conversion.html"><?php echo WoW_Locale::GetString('template_management_menu_games_wow_conversion'); ?></a></li>
 <li><a href="<?php echo WoW::GetWoWPath(); ?>/account/management/download/"><?php echo WoW_Locale::GetString('template_management_menu_games_download'); ?></a></li>

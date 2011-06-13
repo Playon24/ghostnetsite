@@ -38,6 +38,11 @@ if(isset($_POST['accountName'])) {
         WoW_Account::SetLastErrorCode(ERROR_EMPTY_PASSWORD);
     }
     if(WoW_Account::PerformLogin($username, $password)) {
+        if(isset($_POST['ref'])) {
+            die($_POST['ref']);
+            header('Location: ' . $_POST['ref']);
+            exit;
+        }
         header('Location: ' . WoW::GetWoWPath() . '/');
         exit;
     }

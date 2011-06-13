@@ -47,6 +47,11 @@ if(WoW_Account::GetLastErrorCode() != ERROR_NONE) {
 <div id="left">
 <h2><?php echo WoW_Locale::GetString('login_page_auth_title'); ?></h2>
 <form method="post" id="form" action="">
+<?php
+if(isset($_GET['ref'])) {
+    echo '<input type="hidden" name="ref" value="' . $_GET['ref'] . '" />';
+}
+?>
 <p><label for="accountName" class="label"><?php echo WoW_Locale::GetString('login_title'); ?></label>
 <input id="accountName" value="<?php echo WoW_Account::GetUserName(); ?>" name="accountName" maxlength="320" type="text" tabindex="1" class="input" /></p>
 
