@@ -800,22 +800,20 @@ Class WoW_Account {
     
     private static function LoadCharacters() {
         self::$characters_loaded = false;
-
         self::$myGamesList = DB::WoW()->select("SELECT `account_id` FROM `DBPREFIX_users_accounts` WHERE `id` = %d", self::GetUserID());
         $account_ids = array();
-        for($i=0;$i<count(self::$myGamesList);$i++) { 
-          $account_ids[] = self::$myGamesList[$i]['account_id'];
+        $accounts_count = count(self::$myGamesList);
+        for($i = 0; $i < $accounts_count; ++$i) {
+            $account_ids[] = self::$myGamesList[$i]['account_id'];
         }
-        
-        if(!empty($account_ids)) {
-          $total_chars_count = DB::Realm()->selectCell("SELECT SUM(`numchars`) FROM `realmcharacters` WHERE `acctid` IN (%s)", implode(', ', $account_ids) );
-          self::$characters_data = DB::WoW()->select("SELECT * FROM `DBPREFIX_user_characters` WHERE `account` IN (%s) ORDER BY `index`", implode(', ', $account_ids));
+        if(is_array($account_ids) && $accounts_count > 0) {
+            $total_chars_count = DB::Realm()->selectCell("SELECT SUM(`numchars`) FROM `realmcharacters` WHERE `acctid` IN (%s)", $account_ids);
+            self::$characters_data = DB::WoW()->select("SELECT * FROM `DBPREFIX_user_characters` WHERE `account` IN (%s) ORDER BY `index`", $account_ids);
         }
         else {
-          $total_chars_count = 0;
+            $total_chars_count = 0;
         }
-        
-        if(!self::$characters_data || count(self::$characters_data) < $total_chars_count) {
+        if(!self::$characters_data || count(self::$characters_data) != $total_chars_count) {
             self::LoadCharactersFromWorld();
         }
         else {
@@ -839,10 +837,10 @@ Class WoW_Account {
         }
         $active_set = false;
         $index = 0;
-        DB::WoW()->query("DELETE FROM `DBPREFIX_user_characters` WHERE `account` = %d", self::GetUserID());
+        DB::WoW()->query("DELETE FROM `DBPREFIX_user_characters` WHERE `account` IN (%s)", $account_ids);
         foreach(self::$characters_data as $char) {
             DB::WoW()->query("INSERT INTO `DBPREFIX_user_characters` VALUES (%d, %d, %d, '%s', %d, '%s', '%s', %d, '%s', '%s', %d, %d, %d, '%s', %d, %d, '%s', %d, '%s', '%s', '%s')",
-                self::GetUserID(),
+                $char['account'],
                 $index,
                 $char['guid'],
                 $char['name'],
@@ -893,6 +891,7 @@ Class WoW_Account {
             $chars_data = DB::Characters()->select("
                 SELECT
                 `characters`.`guid`,
+                `characters`.`account`,
                 `characters`.`name`,
                 `characters`.`class`,
                 `characters`.`race`,
