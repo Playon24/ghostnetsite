@@ -39,7 +39,6 @@ if(isset($_POST['accountName'])) {
     }
     if(WoW_Account::PerformLogin($username, $password)) {
         if(isset($_POST['ref'])) {
-            die($_POST['ref']);
             header('Location: ' . $_POST['ref']);
             exit;
         }

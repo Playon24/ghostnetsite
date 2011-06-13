@@ -28,6 +28,7 @@ WoW_Template::SetTemplateTheme('account');
 if($url_data['action2'] == 'wow' && $url_data['action3'] == 'signup') {
     if(!WoW_Account::IsLoggedIn()) {
         header('Location: ' . WoW::GetWoWPath() . '/login/?ref=' . urlencode('http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI']));
+        exit;
     }
     if(isset($_POST['emailAddress'])) {
         $account_data = array(
@@ -89,9 +90,6 @@ if(preg_match('/tos.html/i', $url_data['action2'])) {
             if(WoW_Account::RegisterUser($user_data, true)) {
                 header('Location: ' . WoW::GetWoWPath() . '/account/management/');
                 exit;
-                //WoW_Template::SetPageIndex('creation_success');
-                //WoW_Template::SetPageData('page', 'creation_success');
-                //WoW_Template::SetPageData('email', $_POST['emailAddress']);
             }
             else {
                 WoW_Template::SetPageIndex('creation_tos');

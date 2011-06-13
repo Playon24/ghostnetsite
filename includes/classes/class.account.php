@@ -677,7 +677,7 @@ Class WoW_Account {
             $account_ids[] = self::$myGamesList[$i]['account_id'];
         }
         if(!empty($account_ids)) {
-            self::$userGames = DB::Realm()->select("SELECT * FROM `account` WHERE `id` IN (%s)", implode(', ', $account_ids));        
+            self::$userGames = DB::Realm()->select("SELECT * FROM `account` WHERE `id` IN (%s)", $account_ids);        
         }
         return true;
     }
@@ -903,7 +903,7 @@ Class WoW_Account {
                 FROM `characters` AS `characters`
                 LEFT JOIN `guild_member` AS `guild_member` ON `guild_member`.`guid`=`characters`.`guid`
                 LEFT JOIN `guild` AS `guild` ON `guild`.`guildid`=`guild_member`.`guildid`
-                WHERE `account` IN (%s)",  implode(', ', $account_ids));
+                WHERE `account` IN (%s)",  $account_ids);
             if(!$chars_data) {
                 continue;
             }
