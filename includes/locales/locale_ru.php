@@ -91,10 +91,11 @@ $WoW_Locale = array(
     'template_locale_ru' => 'Русский',
     
     'template_country_usa' => 'США',
-    'template_country_fr' => 'Франция',
-    'template_country_de' => 'Германия',
-    'template_country_es' => 'Испания',
-    'template_country_ru' => 'Российская Федерация',
+    'template_country_fra' => 'Франция',
+    'template_country_deu' => 'Германия',
+    'template_country_esp' => 'Испания',
+    'template_country_rus' => 'Российская Федерация',
+    'template_country_gbr' => 'Великобритания',
     
     'template_month_1' => 'январь',
     'template_month_2' => 'февраль',
@@ -794,6 +795,7 @@ $WoW_Locale = array(
     'template_management_main_title' => 'Учетная запись Battle.Net',
     
     'template_management_account_management' => 'Управление записью',
+    'template_management_account_creation' => 'Создание записи',
     'template_management_menu_information' => 'Информация',
     'template_management_menu_parameters' => 'Параметры',
     'template_management_menu_games' => 'Игры',
@@ -980,6 +982,9 @@ $WoW_Locale = array(
     'template_account_creation_js_passwordStrength1' => 'низкий',
     'template_account_creation_js_passwordStrength2' => 'приемлемый',
     'template_account_creation_js_passwordStrength3' => 'высокий',
+    'template_account_creation_error_email_used' => 'Этот E-mail уже использован.',
+    'template_account_creation_error_fields' => 'Заполните, пожалуйста, все обязательные поля.',
+    'template_account_creation_error_exception' => 'Не удалось создать учетную запись. Пожалуйста, повторите попытку.',
     
     'template_account_not_verified_email' => 'Электронный адрес (<em>%s</em>) еще не прошел проверку.',
     'template_account_not_verified_resend_email' => 'Пока вы не подтвердите действительность этого адреса, вы не сможете управлять параметрами игр и пользоваться рядом функций. Проверьте, пожалуйста, почту: вам было выслано контрольное сообщение.',

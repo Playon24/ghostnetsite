@@ -1,6 +1,11 @@
 <div id="layout-middle">
 <div class="wrapper">
 <div id="content">
+<?php
+if(WoW_Template::GetPageData('creation_error')) {
+    WoW_Template::LoadTemplate('block_account_creation_error');
+}
+?>
 <div id="page-header">
 <p class="privacy-message"><?php echo WoW_Locale::GetString('template_account_creation_privacy_notify'); ?></p>
 </div>
@@ -17,24 +22,46 @@
 <span class="input-right">
 <span class="input-select input-select-small">
 <select name="country" id="country" class="small border-5 glow-shadow-2" tabindex="1">
-<optgroup>
-<option value="GBR"<?php echo WoWConfig::$DefaultLocaleID == LOCALE_EN ? ' selected="selected"' : null; ?>><?php echo WoW_Locale::GetString('template_country_usa'); ?></option>
-<option value="FRA"<?php echo WoWConfig::$DefaultLocaleID == LOCALE_FR ? ' selected="selected"' : null; ?>><?php echo WoW_Locale::GetString('template_country_fr'); ?></option>
-<option value="DEU"<?php echo WoWConfig::$DefaultLocaleID == LOCALE_DE ? ' selected="selected"' : null; ?>><?php echo WoW_Locale::GetString('template_country_de'); ?></option>
-<option value="ESP"<?php echo WoWConfig::$DefaultLocaleID == LOCALE_ES ? ' selected="selected"' : null; ?>><?php echo WoW_Locale::GetString('template_country_es'); ?></option>
-<option value="RUS"<?php echo WoWConfig::$DefaultLocaleID == LOCALE_RU ? ' selected="selected"' : null; ?>><?php echo WoW_Locale::GetString('template_country_ru'); ?></option>
-</optgroup>
+<?php
+if(isset($_GET['country']) && in_array(strtoupper($_GET['country']), array('GBR', 'USA', 'FRA', 'DEU', 'ESP', 'RUS'))) {
+    $selected_country = $_GET['country'];
+}
+else {
+    switch(WoW_Locale::GetLocaleID()) {
+        case LOCALE_DE:
+            $selected_country = 'DEU';
+            break;
+        case LOCALE_EN:
+            $selected_country = 'GBR';
+            break;
+        case LOCALE_ES:
+            $selected_country = 'ESP';
+            break;
+        case LOCALE_FR:
+            $selected_country = 'FRA';
+            break;
+        case LOCALE_RU:
+            $selected_country = 'RUS';
+            break;
+        default:
+            $selected_country = null;
+            break;
+    }
+}
+?>
+<option value="GBR"<?php echo $selected_country == 'GBR' ? ' selected="selected"' : null; ?>><?php echo WoW_Locale::GetString('template_country_gbr'); ?></option>
+<option value="USA"<?php echo $selected_country == 'USA' ? ' selected="selected"' : null; ?>><?php echo WoW_Locale::GetString('template_country_usa'); ?></option>
+<option value="FRA"<?php echo $selected_country == 'FRA' ? ' selected="selected"' : null; ?>><?php echo WoW_Locale::GetString('template_country_fra'); ?></option>
+<option value="DEU"<?php echo $selected_country == 'DEU' ? ' selected="selected"' : null; ?>><?php echo WoW_Locale::GetString('template_country_deu'); ?></option>
+<option value="ESP"<?php echo $selected_country == 'ESP' ? ' selected="selected"' : null; ?>><?php echo WoW_Locale::GetString('template_country_esp'); ?></option>
+<option value="RUS"<?php echo $selected_country == 'RUS' ? ' selected="selected"' : null; ?>><?php echo WoW_Locale::GetString('template_country_rus'); ?></option>
 </select>
 <span class="inline-message" id="country-message"> </span>
 </span>
-<button
-class="ui-button button1 "
-type="submit"
-id="country-submit"
-tabindex="1">
-<span>
-<span><?php echo WoW_Locale::GetString('template_account_creation_change_country'); ?></span>
-</span>
+<button class="ui-button button1 " type="submit" id="country-submit" tabindex="1">
+    <span>
+        <span><?php echo WoW_Locale::GetString('template_account_creation_change_country'); ?></span>
+    </span>
 </button>
 </span>
 </div>
@@ -43,17 +70,12 @@ tabindex="1">
 <div class="input-note-content">
 <p class="caption"><?php echo WoW_Locale::GetString('template_account_creation_change_country_confirm'); ?></p>
 <p>
-<a
-class="ui-button button1 "
-href="<?php echo WoW::GetWoWPath(); ?>/account/creation/tos.html"
-tabindex="1">
+<a class="ui-button button1" href="<?php echo WoW::GetWoWPath(); ?>/account/creation/tos.html" tabindex="1">
 <span>
-<span><?php echo WoW_Locale::GetString('template_account_creation_change_country_confirm_yes'); ?></span>
+    <span><?php echo WoW_Locale::GetString('template_account_creation_change_country_confirm_yes'); ?></span>
 </span>
 </a>
-<a class="ui-cancel "
-href="<?php echo WoW::GetWoWPath(); ?>/account/creation/tos.html"
-tabindex="1">
+<a class="ui-cancel" href="<?php echo WoW::GetWoWPath(); ?>/account/creation/tos.html" tabindex="1">
 <span>
 <?php echo WoW_Locale::GetString('template_wow_dashboard_upgrade_account_cancel'); ?> </span>
 </a>
@@ -75,27 +97,7 @@ countrySubmit.style.display = 'none';
 <form action="<?php echo WoW::GetWoWPath(); ?>/account/creation/tos.html" method="post" id="creation">
 <div class="input-hidden">
 <input type="hidden" name="csrftoken" value="e6612910-483b-48e5-8f12-c8b370277606" />
-<input name="country" value="
-<?php
-switch(WoWConfig::$DefaultLocaleID) {
-    default:
-    case LOCALE_EN:
-        echo 'GBR'; // Great Britain, but I'm using this as USA
-        break;
-    case LOCALE_DE:
-        echo 'DEU';
-        break;
-    case LOCALE_FR:
-        echo 'FRA';
-        break;
-    case LOCALE_ES:
-        echo 'ESP';
-        break;
-    case LOCALE_RU:
-        echo 'RUS';
-        break;
-}
- ?>" />
+<input name="country" value="<?php echo $selected_country; ?>" />
 </div>
 <script type="text/javascript">
 //<![CDATA[
@@ -128,7 +130,7 @@ passwordStrength3: '<?php echo WoW_Locale::GetString('template_account_creation_
 <option value="" selected="selected"><?php echo WoW_Locale::GetString('template_account_creation_birthday_day'); ?></option>
 <?php
 for($i = 1; $i < 32; ++$i) {
-    echo sprintf("<option value=\"%d\">%d</option>\n", $i, $i);
+    echo sprintf('<option value="%d"%s>%d</option>', $i, (isset($_POST['dobDay']) && $_POST['dobDay'] == $i) ? ' selected="selected"' : null, $i);
 }
 ?>
 </select>
@@ -139,7 +141,7 @@ for($i = 1; $i < 32; ++$i) {
 <option value="" selected="selected"><?php echo WoW_Locale::GetString('template_account_creation_birthday_month'); ?></option>
 <?php
 for($i = 1; $i < 13; $i++) {
-    echo sprintf('<option value="%d">%s</option>', $i, WoW_Locale::GetString('template_month_' . $i));
+    echo sprintf('<option value="%d"%s>%s</option>', $i, (isset($_POST['dobMonth']) && $_POST['dobMonth'] == $i) ? ' selected="selected"' : null, mb_convert_case(WoW_Locale::GetString('template_month_' . $i), MB_CASE_TITLE));
 }
 ?>
 </select>
@@ -150,14 +152,11 @@ for($i = 1; $i < 13; $i++) {
 <option value="" selected="selected"><?php echo WoW_Locale::GetString('template_account_creation_birthday_year'); ?></option>
 <?php
 for($i = date('Y'); $i >= 1900; --$i) {
-    echo sprintf("<option value=\"%d\">%d</option>\n", $i, $i);
+    echo sprintf('<option value="%d"%s>%d</option>', $i, (isset($_POST['dobYear']) && $_POST['dobYear'] == $i) ? ' selected="selected"' : null, $i);
 }
 ?>
 </select>
 <span class="inline-message" id="dobYear-message"> </span>
-</span>
-<span class="inline-note">
-<span class="caption"><?php echo WoW_Locale::GetString('template_account_creation_child_notify'); ?></span>
 </span>
 </span>
 </div>
@@ -173,10 +172,13 @@ for($i = date('Y'); $i >= 1900; --$i) {
 <span class="input-right">
 <span class="input-select input-select-small">
 <select name="gender" id="gender" class="small border-5 glow-shadow-2" tabindex="1" required="required">
-<option value="1" selected="selected"><?php echo WoW_Locale::GetString('template_account_creation_treatment_1'); ?></option>
-<option value="2"><?php echo WoW_Locale::GetString('template_account_creation_treatment_2'); ?></option>
-<option value="3"><?php echo WoW_Locale::GetString('template_account_creation_treatment_3'); ?></option>
-<option value="4"><?php echo WoW_Locale::GetString('template_account_creation_treatment_4'); ?></option>
+<?php
+for($i = 1; $i < 5; ++$i) {
+    if(WoW_Locale::GetString('template_account_creation_treatment_' . $i) != 'template_account_creation_treatment_' . $i) {
+        echo sprintf('<option value="%s"%s>%s</option>', $i, (isset($_POST['gender']) && $_POST['gender'] == $i) ? ' selected="selected"' : null, WoW_Locale::GetString('template_account_creation_treatment_' . $i));
+    }
+}
+?>
 </select>
 <span class="inline-message" id="gender-message"> </span>
 </span>
@@ -193,11 +195,11 @@ for($i = date('Y'); $i >= 1900; --$i) {
 </span>
 <span class="input-right">
 <span class="input-text input-text-small">
-<input type="text" name="firstname" value="" id="firstname" class="small border-5 glow-shadow-2" autocomplete="off" maxlength="32" tabindex="1" required="required" placeholder="<?php echo WoW_Locale::GetString('template_account_creation_first_name'); ?>" />
+<input type="text" name="firstname" value="<?php echo isset($_POST['firstname']) ? $_POST['firstname'] : null; ?>" id="firstname" class="small border-5 glow-shadow-2" autocomplete="off" maxlength="32" tabindex="1" required="required" placeholder="<?php echo WoW_Locale::GetString('template_account_creation_first_name'); ?>" />
 <span class="inline-message" id="firstname-message"> </span>
 </span>
 <span class="input-text input-text-small">
-<input type="text" name="lastname" value="" id="lastname" class="small border-5 glow-shadow-2" autocomplete="off" maxlength="32" tabindex="1" required="required" placeholder="<?php echo WoW_Locale::GetString('template_account_creation_last_name'); ?>" />
+<input type="text" name="lastname" value="<?php echo isset($_POST['lastname']) ? $_POST['lastname'] : null; ?>" id="lastname" class="small border-5 glow-shadow-2" autocomplete="off" maxlength="32" tabindex="1" required="required" placeholder="<?php echo WoW_Locale::GetString('template_account_creation_last_name'); ?>" />
 <span class="inline-message" id="lastname-message"> </span>
 </span>
 </span>
@@ -213,11 +215,11 @@ for($i = date('Y'); $i >= 1900; --$i) {
 </span>
 <span class="input-right">
 <span class="input-text input-text-small">
-<input type="email" name="emailAddress" value="" id="emailAddress" class="small border-5 glow-shadow-2" autocomplete="off" onpaste="return false;" maxlength="320" tabindex="1" required="required" placeholder="<?php echo WoW_Locale::GetString('template_account_creation_set_email'); ?>" />
+<input type="email" name="emailAddress" value="<?php echo isset($_POST['emailAddress']) ? $_POST['emailAddress'] : null; ?>" id="emailAddress" class="small border-5 glow-shadow-2" autocomplete="off" onpaste="return false;" maxlength="320" tabindex="1" required="required" placeholder="<?php echo WoW_Locale::GetString('template_account_creation_set_email'); ?>" />
 <span class="inline-message" id="emailAddress-message"> </span>
 </span>
 <span class="input-text input-text-small">
-<input type="email" name="emailAddressConfirmation" value="" id="emailAddressConfirmation" class="small border-5 glow-shadow-2" autocomplete="off" onpaste="return false;" maxlength="320" tabindex="1" required="required" placeholder="<?php echo WoW_Locale::GetString('template_account_creation_confirm_email'); ?>" />
+<input type="email" name="emailAddressConfirmation" value="<?php echo isset($_POST['emailAddressConfirmation']) ? $_POST['emailAddressConfirmation'] : null; ?>" id="emailAddressConfirmation" class="small border-5 glow-shadow-2" autocomplete="off" onpaste="return false;" maxlength="320" tabindex="1" required="required" placeholder="<?php echo WoW_Locale::GetString('template_account_creation_confirm_email'); ?>" />
 <span class="inline-message" id="emailAddressConfirmation-message"> </span>
 </span>
 </span>
@@ -259,9 +261,9 @@ for($i = date('Y'); $i >= 1900; --$i) {
 <?php
 for($i = 0; $i < 5; ++$i) {
     echo sprintf('<li id="password-level-%d">
-<span class="icon-16"></span>
-<span class="icon-16-label">%s</span>
-</li>', $i, WoW_Locale::GetString('template_account_creation_security_' . $i));
+    <span class="icon-16"></span>
+    <span class="icon-16-label">%s</span>
+    </li>', $i, WoW_Locale::GetString('template_account_creation_security_' . $i));
 }
 ?>
 </ul>
@@ -282,17 +284,17 @@ for($i = 0; $i < 5; ++$i) {
 <span class="input-right">
 <span class="input-select input-select-small">
 <select name="question1" id="question1" class="small border-5 glow-shadow-2" tabindex="1" required="required">
-<option value="" selected="selected"><?php echo WoW_Locale::GetString('template_account_creation_secret_question_chose'); ?></option>
+<option value=""<?php echo !isset($_POST['question1']) ? ' selected="selected"' : null; ?>><?php echo WoW_Locale::GetString('template_account_creation_secret_question_chose'); ?></option>
 <?php
 for($i = 1; $i < 11; $i++) {
-    echo sprintf('<option value="%d">%s</option>', $i, WoW_Locale::GetString('template_account_creation_secret_question_' . $i));
+    echo sprintf('<option value="%d"%s>%s</option>', $i, (isset($_POST['question1']) && $_POST['question1'] == $i) ? ' selected="selected"' : null, WoW_Locale::GetString('template_account_creation_secret_question_' . $i));
 }
 ?>
 </select>
 <span class="inline-message" id="question1-message"> </span>
 </span>
 <span class="input-text input-text-small">
-<input type="text" name="answer1" value="" id="answer1" class="small border-5 glow-shadow-2" autocomplete="off" maxlength="100" tabindex="1" required="required" placeholder="<?php echo WoW_Locale::GetString('template_account_creation_secret_answer'); ?>" />
+<input type="text" name="answer1" value="<?php echo isset($_POST['answer1']) ? $_POST['answer1'] : null; ?>" id="answer1" class="small border-5 glow-shadow-2" autocomplete="off" maxlength="100" tabindex="1" required="required" placeholder="<?php echo WoW_Locale::GetString('template_account_creation_secret_answer'); ?>" />
 <span class="inline-message" id="answer1-message"> </span>
 </span>
 </span>
@@ -350,7 +352,7 @@ tabindex="1">
 </span>
 </button>
 <a class="ui-cancel "
-href="http://eu.battle.net/"
+href="<?php echo WoW::GetWoWPath(); ?>/"
 tabindex="1">
 <span>
 <?php echo WoW_Locale::GetString('template_wow_dashboard_upgrade_account_cancel'); ?> </span>

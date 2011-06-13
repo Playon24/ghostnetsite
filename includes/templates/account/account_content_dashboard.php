@@ -5,7 +5,7 @@
 <div class="primary">
 <div class="header">
 <h2 class="subcategory"><?php echo WoW_Locale::GetString('template_wow_dashboard_management'); ?></h2>
-<h3 class="headline">World of Warcraft®: Cataclysm</h3>
+<h3 class="headline"><?php echo WoW_Locale::GetString('expansion_' . WoW_Account::GetExpansion()); ?></h3>
 <a href="<?php echo WoW::GetWoWPath(); ?>/account/management/wow/dashboard.html?region=EU&amp;accountName=<?php echo WoW_Account::GetUserName(); ?>"><img src="/account/local-common/images/game-icons/wow<?php echo WoW_Account::GetExpansion() > 0 ? 'x' . WoW_Account::GetExpansion() : 'c'; ?>.png?v17" alt="World of Warcraft®" title="" width="48" height="48" /></a>
 </div>
 <div class="account-summary">
@@ -16,7 +16,7 @@
 <div class="section account-details">
 <dl>
 <dt class="subcategory"><?php echo WoW_Locale::GetString('template_management_account_name'); ?></dt>
-<dd class="account-name"><?php echo WoW_Account::GetUserName(); ?></dd>
+<dd class="account-name"><?php echo WoW_Account::GetAccountName(); ?></dd>
 <dt class="subcategory"><?php echo WoW_Locale::GetString('template_wow_dashboard_account_status'); ?></dt>
 <dd class="account-status"> <span><strong class="<?php echo WoW_Account::IsBanned() ? 'frozen' : 'active'; ?>"><?php echo WoW_Locale::GetString(sprintf('template_wow_dashboard_account_%s', WoW_Account::IsBanned() ? 'banned' : 'active')); ?></strong></span>
 </dd>
@@ -39,13 +39,13 @@ for($i = WoW_Account::GetExpansion()-1; $i > -1; --$i) {
 <div class="section available-actions">
 <ul class="game-time">
 <li class="change-payment-method">
-<a href="<?php echo WoW::GetWoWPath(); ?>/account/payment-method.html?accountName=<?php echo WoW_Account::GetUserName(); ?>"><?php echo WoW_Locale::GetString('template_wow_dashboard_buy_game_time'); ?></a>
+<a href="<?php echo WoW::GetWoWPath(); ?>/account/payment-method.html?accountName=<?php echo WoW_Account::GetAccountName(); ?>"><?php echo WoW_Locale::GetString('template_wow_dashboard_buy_game_time'); ?></a>
 </li>
 <li class="add-game-card">
-<a href="<?php echo WoW::GetWoWPath(); ?>/account/gamecard.html?accountName=<?php echo WoW_Account::GetUserName(); ?>"><?php echo WoW_Locale::GetString('template_wow_dashboard_active_timecard'); ?></a>
+<a href="<?php echo WoW::GetWoWPath(); ?>/account/gamecard.html?accountName=<?php echo WoW_Account::GetAccountName(); ?>"><?php echo WoW_Locale::GetString('template_wow_dashboard_active_timecard'); ?></a>
 </li>
 <li class="payment-history">
-<a href="<?php echo WoW::GetWoWPath(); ?>/account/payment-history.html?accountName=<?php echo WoW_Account::GetUserName(); ?>"><?php echo WoW_Locale::GetString('template_wow_dashboard_view_account_history'); ?></a>
+<a href="<?php echo WoW::GetWoWPath(); ?>/account/payment-history.html?accountName=<?php echo WoW_Account::GetAccountName(); ?>"><?php echo WoW_Locale::GetString('template_wow_dashboard_view_account_history'); ?></a>
 </li>
 <li class="download-client">
 <a href="<?php echo WoW::GetWoWPath(); ?>/account/management/download/#wow-downloads"><?php echo WoW_Locale::GetString('template_wow_dashboard_download_game_client'); ?></a>
@@ -58,7 +58,7 @@ for($i = WoW_Account::GetExpansion()-1; $i > -1; --$i) {
 <div class="hiddenInputWrapper">
 <input type="hidden" name="confirmed" value="true" />
 <input type="hidden" name="codeType" value="WOW" />
-<input type="hidden" name="wowAccountLabel" value="<?php echo WoW_Account::GetUserName(); ?>" />
+<input type="hidden" name="wowAccountLabel" value="<?php echo WoW_Account::GetAccountName(); ?>" />
 <input type="hidden" name="legalAgreementAccepted" value="false" />
 <input type="hidden" name="product" value="" />
 <input type="hidden" name="region" value="EU" />
@@ -151,7 +151,7 @@ echo sprintf('<strong>%s</strong>%s', WoW_Locale::GetString('template_wow_dashbo
 <div class="content additional-services" id="additional-services">
 <ul>
 <li class="wow-service ptr-copy">
-<a href="https://www.wow-europe.com/ptr/?accountName=<?php echo WoW_Account::GetUserName(); ?>&amp;locale=ru_RU">
+<a href="https://www.wow-europe.com/ptr/?accountName=<?php echo WoW_Account::GetAccountName(); ?>&amp;locale=ru_RU">
 <span class="icon glow-shadow-3"></span>
 <?php
 echo sprintf('<strong>%s</strong>%s', WoW_Locale::GetString('template_wow_dashboard_service_ptr_title'), WoW_Locale::GetString('template_wow_dashboard_service_ptr_title'));
@@ -179,7 +179,7 @@ echo sprintf('<strong>%s</strong>%s', WoW_Locale::GetString('template_wow_dashbo
 <div class="content referrals-rewards" id="referrals-rewards">
 <ul>
 <li class="wow-service raf">
-<a href="<?php echo WoW::GetWoWPath(); ?>/account/management/wow/services/raf-invite.html?l=<?php echo WoW_Account::GetUserName(); ?>&amp;r=EU">
+<a href="<?php echo WoW::GetWoWPath(); ?>/account/management/wow/services/raf-invite.html?l=<?php echo WoW_Account::GetAccountName(); ?>&amp;r=EU">
 <span class="icon glow-shadow-3"></span>
 <?php
 echo sprintf('<strong>%s</strong>%s', WoW_Locale::GetString('template_wow_dashboard_service_recruit_title'), WoW_Locale::GetString('template_wow_dashboard_service_recruit_title'));
@@ -187,7 +187,7 @@ echo sprintf('<strong>%s</strong>%s', WoW_Locale::GetString('template_wow_dashbo
 </a>
 </li>
 <li class="wow-service resurrection-scroll">
-<a href="<?php echo WoW::GetWoWPath(); ?>/account/management/wow/services/sor-invite.html?l=<?php echo WoW_Account::GetUserName(); ?>&amp;r=EU">
+<a href="<?php echo WoW::GetWoWPath(); ?>/account/management/wow/services/sor-invite.html?l=<?php echo WoW_Account::GetAccountName(); ?>&amp;r=EU">
 <span class="icon glow-shadow-3"></span>
 <?php
 echo sprintf('<strong>%s</strong>%s', WoW_Locale::GetString('template_wow_dashboard_service_scroll_title'), WoW_Locale::GetString('template_wow_dashboard_service_scroll_title'));
@@ -199,7 +199,7 @@ echo sprintf('<strong>%s</strong>%s', WoW_Locale::GetString('template_wow_dashbo
 <div class="content game-time-subscriptions" id="game-time-subscriptions">
 <ul>
 <li class="wow-service add-game-card">
-<a href="https://www.wow-europe.com/account/gamecard.html?accountName=<?php echo WoW_Account::GetUserName(); ?>">
+<a href="https://www.wow-europe.com/account/gamecard.html?accountName=<?php echo WoW_Account::GetAccountName(); ?>">
 <span class="icon glow-shadow-3"></span>
 <?php
 echo sprintf('<strong>%s</strong>%s', WoW_Locale::GetString('template_wow_dashboard_service_gamecard_title'), WoW_Locale::GetString('template_wow_dashboard_service_gamecard_title'));
@@ -207,7 +207,7 @@ echo sprintf('<strong>%s</strong>%s', WoW_Locale::GetString('template_wow_dashbo
 </a>
 </li>
 <li class="wow-service wow-anywhere">
-<a href="https://www.wow-europe.com/account/wow-remote-payment-method.html?accountName=<?php echo WoW_Account::GetUserName(); ?>">
+<a href="https://www.wow-europe.com/account/wow-remote-payment-method.html?accountName=<?php echo WoW_Account::GetAccountName(); ?>">
 <span class="icon glow-shadow-3"></span>
 <?php
 echo sprintf('<strong>%s</strong>%s', WoW_Locale::GetString('template_wow_dashboard_service_wowremote_title'), WoW_Locale::GetString('template_wow_dashboard_service_wowremote_title'));

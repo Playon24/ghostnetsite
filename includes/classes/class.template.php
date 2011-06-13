@@ -1069,8 +1069,6 @@ Class WoW_Template {
                 return sprintf('%s - ', WoW_Template::GetPageData('blog_title'));
             case 'game':
                 return sprintf('%s - ', WoW_Locale::GetString('template_menu_game'));
-            case 'management':
-                return WoW_Locale::GetString('template_management_main_title');
             case 'dashboard':
                 return sprintf('%s - Battle.Net', WoW_Locale::GetString('expansion_' . WoW_Account::GetExpansion()));
             case 'landing':
@@ -1081,7 +1079,8 @@ Class WoW_Template {
                 break;
             case 'creation_tos':
             case 'creation_success':
-                return 'Battle.Net'; //[PH]
+            case 'management':
+                return WoW_Locale::GetString('template_management_main_title'); //[PH]
             case 'auction_lots':
                 return sprintf('%s - %s - ', WoW_Locale::GetString('template_auction_menu_lots'), WoW_Locale::GetString('template_menu_game'));
             case 'forum_index':

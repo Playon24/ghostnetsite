@@ -91,10 +91,11 @@ $WoW_Locale = array(
     'template_locale_ru' => 'Russian',
     
     'template_country_usa' => 'USA',
-    'template_country_fr' => 'French',
-    'template_country_de' => 'Germany',
-    'template_country_es' => 'Spain',
-    'template_country_ru' => 'Russian Federation',
+    'template_country_fra' => 'French',
+    'template_country_deu' => 'Germany',
+    'template_country_esp' => 'Spain',
+    'template_country_rus' => 'Russian Federation',
+    'template_country_gbr' => 'Great Britain',
     
     'template_month_1' => 'jauary',
     'template_month_2' => 'february',
@@ -974,6 +975,9 @@ $WoW_Locale = array(
     'template_account_creation_js_passwordStrength1' => 'Weak',
     'template_account_creation_js_passwordStrength2' => 'Fair',
     'template_account_creation_js_passwordStrength3' => 'Strong',
+    'template_account_creation_error_email_used' => 'This e-mail address is already in use.',
+    'template_account_creation_error_fields' => 'Please fill in all required fields.',
+    'template_account_creation_error_exception' => 'Account creation failed. Please, try again.',
     
     'template_account_not_verified_email' => 'The e-mail address (<em>%s</em>) is currently unverified.',
     'template_account_not_verified_resend_email' => 'You will be unable to access game management or perform certain account functions until this address has been verified. Please check your inbox for a verification e-mail.',

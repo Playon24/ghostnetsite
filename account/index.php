@@ -31,6 +31,7 @@ if(!WoW_Account::IsLoggedIn()) {
 WoW_Template::SetTemplateTheme('account');
 WoW_Account::UserGames();
 if($url_data['action2'] == 'wow' && preg_match('/dashboard.html/i', $url_data['action3'])) {
+    WoW_Account::InitializeAccount($_GET['accountName']);
     WoW_Template::SetPageIndex('dashboard');
     WoW_Template::SetMenuIndex('games');
     WoW_Template::SetPageData('page', 'dashboard');
@@ -41,7 +42,6 @@ elseif($url_data['action2'] == 'add-game.html'){
           'username' => $_POST['gameAcountName'],
           'sha' => sha1(strtoupper($_POST['gameAcountName']) . ':' . strtoupper($_POST['gameAcountPass']))
         );
-      
         if(WoW_Account::RegisterGameAccount($account_data)) {
           header('Location: ' . WoW::GetWoWPath() . '/account/management/');
           exit;

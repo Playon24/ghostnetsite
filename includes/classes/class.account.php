@@ -241,6 +241,8 @@ Class WoW_Account {
      **/
     private static $password_recovery_data = array();
     
+    private static $dashboard_account = array();
+    
     /**
      * Class constructor.
      * 
@@ -278,7 +280,7 @@ Class WoW_Account {
      * @return   bool
      **/
     public static function IsBanned() {
-        return self::$is_banned;
+        return isset(self::$dashboard_account['banned']) ? self::$dashboard_account['banned'] : false;
     }
     
     /**
@@ -327,11 +329,11 @@ Class WoW_Account {
      * @return   bool
      **/
     private static function CreateShaPassHash() {
-        if(!self::$username || !self::$password) {
+        if(!self::$email || !self::$password) {
             WoW_Log::WriteError('%s : username/password was not defined!', __METHOD__);
             return false;
         }
-        self::$sha_pass_hash = sha1(strtoupper(self::$username) . ':' . strtoupper(self::$password));
+        self::$sha_pass_hash = sha1(strtoupper(self::$email) . ':' . strtoupper(self::$password));
         return true;
     }
     
@@ -360,6 +362,10 @@ Class WoW_Account {
      **/
     public static function SetPassword($password) {
         self::$password = $password;
+    }
+    
+    public static function SetEmail($email) {
+        self::$email = $email;
     }
     
     /**
@@ -450,7 +456,7 @@ Class WoW_Account {
      * @return   int
      **/
     public static function GetExpansion() {
-        return self::$expansion;
+        return isset(self::$dashboard_account['expansion']) ? self::$dashboard_account['expansion'] : 0;
     }
     
     public static function GetCharactersData() {
@@ -517,7 +523,7 @@ Class WoW_Account {
     private static function CreateSession() {
         self::$session_string = sprintf('%d:%s:%s:%s:%s:%d:%s:%s:%d:%d:%d',
             self::GetUserID(), // [0]
-            self::NormalizeStringForSessionString(self::GetUserName(), NORMALIZE_TO), // [1]
+            self::NormalizeStringForSessionString(self::GetEmail(), NORMALIZE_TO), // [1]
             self::NormalizeStringForSessionString(self::GetPassword(), NORMALIZE_TO), // [2]
             self::GetShaPassHash(),    // [3]
             $_SERVER['REMOTE_ADDR'],    // [4]
@@ -620,32 +626,31 @@ Class WoW_Account {
      * Login handler
      * @category Account Manager Class
      * @access   public
-     * @param    string $username
+     * @param    string $email
      * @param    string $password
      * @return   bool
      **/
     public static function PerformLogin($username, $password) {
-        self::SetUserName($username);
+//        self::SetEmail($email);
+        self::SetEmail($username);
         self::SetPassword($password);
         self::CreateShaPassHash();
         // No SQL injection
-        //$user_data = DB::Realm()->selectRow("SELECT `id`, `username`, `sha_pass_hash`, `email`, `expansion` FROM `account` WHERE `username` = '%s' LIMIT 1", self::GetUserName());
-        $user_data = DB::WoW()->selectRow("SELECT `id`, `first_name`, `last_name`, `password`, `email` FROM `DBPREFIX_users` WHERE `first_name` = '%s' LIMIT 1", self::GetUserName());
+        $user_data = DB::WoW()->selectRow("SELECT `id`, `first_name`, `last_name`, `email`, `sha_pass_hash` FROM `DBPREFIX_users` WHERE `email` = '%s' LIMIT 1", self::GetEmail());
         if(!$user_data) {
-            WoW_Log::WriteError('%s : user account %s was not found in `DBPREFIX_users` table!', __METHOD__, self::GetUserName());
+            WoW_Log::WriteLog('%s : user %s was not found in `DBPREFIX_users` table!', __METHOD__, self::GetEmail());
             self::SetLastErrorCode(ERROR_WRONG_USERNAME_OR_PASSWORD);
             return false;
         }
-        if($user_data['password'] != self::GetShaPassHash()) {
-            WoW_Log::WriteError('%s : username %s tried to perform login with wrong password!', __METHOD__, self::GetUserName());
+        if($user_data['sha_pass_hash'] != self::GetShaPassHash()) {
+            WoW_Log::WriteLog('%s : user %s tried to perform login with wrong password!', __METHOD__, self::GetEmail());
             self::SetLastErrorCode(ERROR_WRONG_USERNAME_OR_PASSWORD);
             return false;
         }
         self::$userid = $user_data['id'];
-        self::$email = $user_data['email'];
         self::$first_name = $user_data['first_name'];
         self::$last_name = $user_data['last_name'];
-        self::SetUserName(self::$first_name);
+        //self::SetUserName(self::$first_name);
         //self::$is_banned = DB::Realm()->selectCell("SELECT 1 FROM `account_banned` WHERE `id` = %d AND `active` = 1", self::GetUserID());
         //self::$expansion = 1;
         self::UserGames();
@@ -667,11 +672,12 @@ Class WoW_Account {
         self::$myGames = DB::WoW()->selectCell("SELECT COUNT(*) FROM `DBPREFIX_users_accounts` WHERE `id` = %d", self::GetUserID());
         self::$myGamesList = DB::WoW()->select("SELECT `account_id` FROM `DBPREFIX_users_accounts` WHERE `id` = %d", self::GetUserID());
         $account_ids = array();
-        for($i=0;$i<count(self::$myGamesList);$i++) { 
-          $account_ids[] = self::$myGamesList[$i]['account_id'];
+        $count = count(self::$myGamesList);
+        for($i = 0; $i < $count; ++$i) {
+            $account_ids[] = self::$myGamesList[$i]['account_id'];
         }
         if(!empty($account_ids)) {
-          self::$userGames = DB::Realm()->select("SELECT * FROM `account` WHERE `id` IN (%s)", implode(', ', $account_ids) );        
+            self::$userGames = DB::Realm()->select("SELECT * FROM `account` WHERE `id` IN (%s)", implode(', ', $account_ids) );        
         }
         return true;
     }
@@ -690,13 +696,11 @@ Class WoW_Account {
         if(DB::Realm()->selectCell("SELECT 1 FROM `account` WHERE `username` = '%s' LIMIT 1", $account_data['username'])) {
             return false;
         }
-        if(DB::Realm()->query("INSERT INTO `account` (`username`, `sha_pass_hash`, `gmlevel`, `email`, `expansion`) VALUES ('%s', '%s', 0, '', %d)", $account_data['username'], $account_data['sha'], (MAX_EXPANSION_LEVEL - 1))) {
+        if(DB::Realm()->query("INSERT INTO `account` (`username`, `sha_pass_hash`, `email`, `expansion`) VALUES ('%s', '%s', 0, '', %d)", $account_data['username'], $account_data['sha'], (MAX_EXPANSION_LEVEL - 1))) {
             $account_data['id'] = DB::Realm()->selectCell("SELECT `id` FROM `account` WHERE `username` = '%s' LIMIT 1", $account_data['username']);
             DB::WoW()->query("INSERT INTO `DBPREFIX_users_accounts` (`id`, `account_id`) VALUES ('%s', '%s')", self::GetUserID(), $account_data['id']);
         }
-        
         self::UserGames();
-
         return true;
     }
     
@@ -877,10 +881,13 @@ Class WoW_Account {
         $index = 0;
         
         $account_ids = array();
-        for($i=0;$i<count(self::$myGamesList);$i++) { 
+        $count = count(self::$myGamesList);
+        if($count == 0) {
+            return false;
+        }
+        for($i = 0; $i < $count; ++$i) { 
           $account_ids[] = self::$myGamesList[$i]['account_id'];
         }
-        
         foreach(WoWConfig::$Realms as $realm_info) {
             $db = DB::ConnectToDB(DB_CHARACTERS, $realm_info['id']);
             $chars_data = DB::Characters()->select("
@@ -1103,21 +1110,36 @@ Class WoW_Account {
         if(!is_array($user_data)) {
             return false;
         }
-        if(!isset($user_data['username'])) {
+        if(DB::WoW()->selectCell("SELECT 1 FROM `DBPREFIX_users` WHERE `email` = '%s' LIMIT 1", $user_data['email'])) {
+            WoW_Template::SetPageData('creation_error', true);
+            WoW_Template::SetPageData('account_creation_error_msg', WoW_Locale::GetString('template_account_creation_error_email_used'));
             return false;
         }
-        
-        if(DB::WoW()->selectCell("SELECT 1 FROM `DBPREFIX_users` WHERE `username` = '%s' LIMIT 1", $user_data['username'])) {
-            return false;
+        $reg_result = DB::WoW()->query("
+        INSERT INTO `DBPREFIX_users`
+        (
+            `first_name`, `last_name`, `treatment`, `email`,
+            `sha_pass_hash`, `question_id`, `question_answer`, `birthdate`, `country_code`
+        )
+        VALUES
+        (
+            '%s', '%s', %d, '%s', '%s', %d, '%s', %d, '%s'
+        )
+        ",
+            $user_data['first_name'], $user_data['last_name'], $user_data['treatment'], $user_data['email'],
+            $user_data['sha'], $user_data['question_id'], $user_data['question_answer'],
+            $user_data['birthdate'], $user_data['country_code']
+        );
+        if($reg_result) {
+            if($auto_session) {
+                self::PerformLogin($user_data['email'], $user_data['password']);
+            }
+            return true;
         }
-        if(DB::WoW()->query("INSERT INTO `DBPREFIX_users` (`first_name`, `last_name`, `gender`, `email`, `password`, `secredQ`, `secredA`, `dob`, `country`) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')", $user_data['username'], $user_data['lastname'], $user_data['gender'], $user_data['email'], $user_data['sha'], $user_data['question1'], $user_data['answer1'], $user_data['dob'], $user_data['country'])) {
-           
-        }
-        
-        if($auto_session) {
-            self::PerformLogin($user_data['username'], $user_data['password']);
-        }
-        return true;
+        // Unknown exception
+        WoW_Template::SetPageData('creation_error', true);
+        WoW_Template::SetPageData('account_creation_error_msg', WoW_Locale::GetString('template_account_creation_error_exception'));
+        return false;
     }
     
     public static function RecoverPasswordSelect($user_data) {
@@ -1127,18 +1149,15 @@ Class WoW_Account {
         else {
             return false;
         }
-        
     }
     
-    public static function GetRecoverPasswordData()
-    {
-      return self::$password_recovery_data;
+    public static function GetRecoverPasswordData() {
+        return self::$password_recovery_data;
     }
     
-    public static function SetRecoverPasswordData($data_from_session)
-    {
-      self::$password_recovery_data = $data_from_session;
-      return true;
+    public static function SetRecoverPasswordData($data_from_session) {
+        self::$password_recovery_data = $data_from_session;
+        return true;
     }
     
     /**
@@ -1148,21 +1167,37 @@ Class WoW_Account {
      * 
      * UNCOMMENT THIS ONLY WHEN EMAIL SENDER OBJECT AND RANDOM PASSWORD GENERATOR WILL BE SCRIPTED               
      **/
-    public static function RecoverPasswordSuccess($secretAnswer)
-    {
-      if(strtolower(self::$password_recovery_data['secredA']) == strtolower($secretAnswer)) {
-          
-          //$new_password = set here random password generator function
-          //if(DB::WoW()->query("UPDATE `DBPREFIX_users` SET `password` = '%s' WHERE `first_name` = '%s' AND `email` = '%s' LIMIT 1", sha1(strtoupper(self::$password_recovery_data['username']) . ':' . strtoupper($new_password), $password_recovery_data['username'], $password_recovery_data['email'])) {
-          //}
-          
-          //make here email sender with new password generator
-          return true;
-      }
-      else {
-          return false;
-      }
+    public static function RecoverPasswordSuccess($secretAnswer) {
+        if(strtolower(self::$password_recovery_data['secredA']) == strtolower($secretAnswer)) {
+            //$new_password = set here random password generator function
+            //if(DB::WoW()->query("UPDATE `DBPREFIX_users` SET `password` = '%s' WHERE `first_name` = '%s' AND `email` = '%s' LIMIT 1", sha1(strtoupper(self::$password_recovery_data['username']) . ':' . strtoupper($new_password), $password_recovery_data['username'], $password_recovery_data['email'])) {
+            //}
+            
+            //make here email sender with new password generator
+            return true;
+        }
+        else {
+            return false;
+        }
     }
     
+    public static function InitializeAccount($accountName) {
+        $accountData = DB::Realm()->selectRow("SELECT * FROM `account` WHERE `username` = '%s'", $accountName);
+        if(!$accountData) {
+            header('Location: ' . WoW::GetWoWPath() . '/account/management/');
+            exit;
+        }
+        self::$dashboard_account = $accountData;
+        if(DB::Realm()->selectCell("SELECT 1 FROM `account_banned` WHERE `id` = %d AND `active` = 1", self::$dashboard_account['id'])) {
+            self::$dashboard_account['banned'] = true;
+        }
+        else {
+            self::$dashboard_account['banned'] = false;
+        }
+    }
+    
+    public static function GetAccountName() {
+        return isset(self::$dashboard_account['username']) ? self::$dashboard_account['username'] : null;
+    }
 }
 ?>

@@ -27,36 +27,59 @@ if(!is_array($url_data) || !isset($url_data['action1']) || $url_data['action1'] 
 WoW_Template::SetTemplateTheme('account');
 if(preg_match('/tos.html/i', $url_data['action2'])) {
     if(isset($_POST['csrftoken'])) {
-        $user_gender = array(
-            1 => 'Mr',
-            2 => 'Ms',
-            3 => 'Mrs',
-            4 => 'Miss');
-        $user_data = array(
-            'username' => $_POST['firstname'],
-            'password' => $_POST['password'],
-            'sha' => sha1(strtoupper($_POST['firstname']) . ':' . strtoupper($_POST['password'])),
-            
-            'lastname' => $_POST['lastname'],
-            'gender' => $user_gender[$_POST['gender']],
-            'email' => $_POST['emailAddress'],
-            'question1' => $_POST['question1'],
-            'answer1' => $_POST['answer1'],
-            'dob' => $_POST['dobYear'].'-'.$_POST['dobDay'].'-'.$_POST['dobMonth'],
-            'country' => $_POST['country']
-            
-            
+        $registration_allowed = true;
+        $required_post_fields = array(
+            'firstname', 'lastname', array('emailAddress', 'emailAddressConfirmation'), array('password', 'rePassword'),
+            'gender', 'question1', 'answer1', 'dobDay', 'dobMonth', 'dobYear', 'country'
         );
-        if(WoW_Account::RegisterUser($user_data, true)) {
-            header('Location: ' . WoW::GetWoWPath() . '/account/management/');
-            exit;
-            //WoW_Template::SetPageIndex('creation_success');
-            //WoW_Template::SetPageData('page', 'creation_success');
-            //WoW_Template::SetPageData('email', $_POST['emailAddress']);
+        // Check POST fields
+        foreach($required_post_fields as $field) {
+            if(is_array($field)) {
+                if(!isset($_POST[$field[0]], $_POST[$field[1]])) {
+                    $registration_allowed = false;
+                    WoW_Template::SetPageData('account_creation_error_msg', WoW_Locale::GetString('template_account_creation_error_fields'));
+                }
+                if(($_POST[$field[0]] != $_POST[$field[1]]) || empty($_POST[$field[0]]) || empty($_POST[$field[1]])) {
+                    $registration_allowed = false;
+                    WoW_Template::SetPageData('account_creation_error_msg', WoW_Locale::GetString('template_account_creation_error_fields'));
+                }
+            }
+            else {
+                if(!isset($_POST[$field]) || $_POST[$field] == null) {
+                    $registration_allowed = false;
+                    WoW_Template::SetPageData('account_creation_error_msg', WoW_Locale::GetString('template_account_creation_error_fields'));
+                }
+            }
         }
-        else {
+        if(!$registration_allowed) {
+            WoW_Template::SetPageData('creation_error', true);
             WoW_Template::SetPageIndex('creation_tos');
             WoW_Template::SetPageData('page', 'creation_tos');
+        }
+        else {
+            $user_data = array(
+                'first_name' => $_POST['firstname'],
+                'last_name' => $_POST['lastname'],
+                'password' => $_POST['password'],
+                'sha' => sha1(strtoupper($_POST['emailAddress']) . ':' . strtoupper($_POST['password'])),
+                'treatment' => $_POST['gender'],
+                'email' => $_POST['emailAddress'],
+                'question_id' => $_POST['question1'],
+                'question_answer' => $_POST['answer1'],
+                'birthdate' => strtotime(sprintf('%d.%d.%d', $_POST['dobDay'], $_POST['dobMonth'], $_POST['dobYear'])),
+                'country_code' => $_POST['country']
+            );
+            if(WoW_Account::RegisterUser($user_data, true)) {
+                header('Location: ' . WoW::GetWoWPath() . '/account/management/');
+                exit;
+                //WoW_Template::SetPageIndex('creation_success');
+                //WoW_Template::SetPageData('page', 'creation_success');
+                //WoW_Template::SetPageData('email', $_POST['emailAddress']);
+            }
+            else {
+                WoW_Template::SetPageIndex('creation_tos');
+                WoW_Template::SetPageData('page', 'creation_tos');
+            }
         }
     }
     else {
