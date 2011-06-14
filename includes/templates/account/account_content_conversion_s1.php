@@ -2,27 +2,22 @@
 <div class="wrapper">
 <div id="content">
 <div id="account-progress">
-<span>Состояние 33%</span> [Шаг 1 из 3]
+<?php echo sprintf(WoW_Locale::GetString('template_account_conversion_progress'), 33, 1, 3); ?>
 <div id="progress-bar" class="border-3">
 <div id="current-progress" class="border-3" style="width: 33%"></div>
 </div>
 </div>
-<div class="alert error closeable border-4 glow-shadow">
-<div class="alert-inner">
-<div class="alert-message">
-<p class="title"><strong>An error has occurred.</strong></p>
-<p class="wowMerge.error.invalidLogin">Your login was invalid. Please try again.</p>
-</div>
-</div>
-<a class="alert-close" href="#" onclick="$(this).parent().fadeOut(250, function() { $(this).css({opacity:0}).animate({height: 0}, 100, function() { $(this).remove(); }); }); return false;">Close</a>
-<span class="clear"><!-- --></span>
-</div>
+<?php
+if(WoW_Template::GetPageData('conversion_error') == true) {
+    WoW_Template::LoadTemplate('block_account_creation_error');
+}
+?>
 <div id="notKRAccount" class="noregion-merge" style="display: none;">
 <div class="alert caution border-4 glow-shadow">
 <div class="alert-inner">
 <div class="alert-message">
-<p class="title"><strong>Ограничения по региону</strong></p>
-<p>Для использования игр на корейском языке вам необходимо изменить страну своего проживания на Корею и указать для проверки свой личный номер резидента.</p>
+<p class="title"><strong><?php echo WoW_Locale::GetString('template_account_conversion_no_region_merge'); ?></strong></p>
+<p><?php echo WoW_Locale::GetString('template_account_conversion_no_region_merge_text_kr'); ?></p>
 </div>
 </div>
 <span class="clear"><!-- --></span>
@@ -32,8 +27,8 @@
 <div class="alert caution border-4 glow-shadow">
 <div class="alert-inner">
 <div class="alert-message">
-<p class="title"><strong>Ограничения по региону</strong></p>
-<p>Объединение учетной записи Battle.net с записью World of Warcraft в вашем регионе пока не осуществляется.</p>
+<p class="title"><strong><?php echo WoW_Locale::GetString('template_account_conversion_no_region_merge'); ?></strong></p>
+<p><?php echo WoW_Locale::GetString('template_account_conversion_no_region_merge_text'); ?></p>
 </div>
 </div>
 <span class="clear"><!-- --></span>
@@ -61,21 +56,22 @@
 </div>
 </div>
 <div id="page-header">
-<span class="float-right"><span class="form-req">*</span> Необходимо указать</span>
-<h2 class="subcategory">Управление игрой</h2>
-<h3 class="headline">Объединение с учетной записью World of Warcraft®</h3>
+<span class="float-right"><span class="form-req">*</span> <?php echo WoW_Locale::GetString('template_account_conversion_required_fields'); ?></span>
+<h2 class="subcategory"><?php echo WoW_Locale::GetString('template_wow_dashboard_management'); ?></h2>
+<h3 class="headline"><?php echo WoW_Locale::GetString('template_account_conversion_header'); ?></h3>
 </div>
-<p>Введите название и пароль учетной записи World of Warcraft®, которую вы хотите объединить с этой записью Battle.net. По завершении объединения вы сможете присоединить к ней и другие свои записи World of Warcraft®. После объединения для авторизации с записи World of Warcraft нужно будет использовать название и пароль записи Battle.net.</p>
+<p><?php echo WoW_Locale::GetString('template_account_conversion_info'); ?></p>
 <div id="page-content">
 <form method="post" action="<?php echo WoW::GetWoWPath(); ?>/account/management/wow-account-conversion.html" class="account-merge" id="account-merge">
 <div class="input-hidden">
+<input type="hidden" id="convert-target-page" name="targetpage" value="2" />
 <input type="hidden" name="csrftoken" value="e6612910-483b-48e5-8f12-c8b370277606" />
 </div>
 <div class="input-row input-row-select">
 <span class="input-left">
 <label for="wowRegion">
 <span class="label-text">
-К какому региону относится ваша запись World of Warcraft Account?
+<?php echo WoW_Locale::GetString('template_account_conversion_region_prompt'); ?>
 </span>
 <span class="input-required">*</span>
 </label>
@@ -83,9 +79,9 @@
 <span class="input-right">
 <span class="input-select input-select-small">
 <select name="wowRegion" id="wowRegion" class="small border-5 glow-shadow-2" tabindex="1" required="required">
-<option value="US">C. и Ю. Америка</option>
-<option value="EU" selected="selected">Европа</option>
-<option value="KR">Корея</option>
+<option value="US"><?php echo WoW_Locale::GetString('template_account_conversion_region_us'); ?></option>
+<option value="EU" selected="selected"><?php echo WoW_Locale::GetString('template_account_conversion_region_eu'); ?></option>
+<option value="KR"><?php echo WoW_Locale::GetString('template_account_conversion_region_kr'); ?></option>
 </select>
 <span class="inline-message" id="wowRegion-message"> </span>
 </span>
@@ -96,14 +92,14 @@
 <span class="input-left">
 <label for="username">
 <span class="label-text">
-Название записи World of Warcraft:
+<?php echo WoW_Locale::GetString('template_account_conversion_account_name'); ?>
 </span>
 <span class="input-required">*</span>
 </label>
 </span>
 <span class="input-right">
 <span class="input-text input-text-small">
-<input type="text" name="username" value="" id="username" class="small border-5 glow-shadow-2" autocomplete="off" tabindex="1" required="required" />
+<input type="text" name="username" value="<?php echo isset($_POST['username']) ? $_POST['username'] : null; ?>" id="username" class="small border-5 glow-shadow-2" autocomplete="off" tabindex="1" required="required" />
 <span class="inline-message" id="username-message"> </span>
 </span>
 </span>
@@ -112,7 +108,7 @@
 <span class="input-left">
 <label for="password">
 <span class="label-text">
-Пароль записи World of Warcraft:
+<?php echo WoW_Locale::GetString('template_account_conversion_account_password'); ?>
 </span>
 <span class="input-required">*</span>
 </label>
@@ -120,10 +116,12 @@
 <span class="input-right">
 <span class="input-text input-text-small">
 <input type="password" id="password" name="password" value="" class="small border-5 glow-shadow-2" autocomplete="off" onpaste="return false;" maxlength="16" tabindex="1" required="required" />
+<!--
 <span class="inline-message" id="password-message"> <a class="icon-external" href="https://www.wow-europe.com/login-support/password.html" onclick="window.open(this.href);return false" tabindex="1">
-Вы забыли пароль?
+<?php echo WoW_Locale::GetString('template_account_conversion_lost_password'); ?>
 </a>
 </span>
+-->
 </span>
 </span>
 </div>
@@ -131,21 +129,12 @@
 <div class="submit-row">
 <div class="input-left"></div>
 <div class="input-right">
-<button
-class="ui-button button1 "
-type="submit"
-id="merge-submit"
-tabindex="1">
+<button class="ui-button button1" type="submit" id="merge-submit" tabindex="1">
 <span>
-<span>Далее</span>
+<span><?php echo WoW_Locale::GetString('template_account_conversion_next'); ?></span>
 </span>
 </button>
-<a class="ui-cancel "
-href="<?php echo WoW::GetWoWPath(); ?>/account/"
-tabindex="1">
-<span>
-Отмена </span>
-</a>
+<a class="ui-cancel " href="<?php echo WoW::GetWoWPath(); ?>/account/" tabindex="1"><span><?php echo WoW_Locale::GetString('template_wow_dashboard_upgrade_account_cancel'); ?></span></a>
 </div>
 </div>
 <script type="text/javascript">
@@ -165,7 +154,7 @@ $(function() {
 var inputs = new Inputs('#account-merge');
 var mergeForm = new AccountMerge('#account-merge', {
 captchaRegions: [ 'US', 'EU', 'KR' ],
-accountCountry: 'RUS'
+accountCountry: '<?php echo WoW_Account::GetCountryCode(); ?>'
 });
 });
 //]]>

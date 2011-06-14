@@ -145,6 +145,8 @@ Class WoW_Account {
      **/
     private static $login_time = null;
     
+    private static $country_code = '';
+    
     /**
      * User (pseudo-) Battle.Net ID. Used as user's real name index.
      * @access    private
@@ -313,9 +315,7 @@ Class WoW_Account {
         self::$login_time = $sess_data[5];
         self::$first_name = self::NormalizeStringForSessionString($sess_data[6], NORMALIZE_FROM);
         self::$last_name = self::NormalizeStringForSessionString($sess_data[7], NORMALIZE_FROM);
-        self::$bnet_id = $sess_data[8];
-        self::$is_banned = $sess_data[9];
-        self::$expansion = $sess_data[10];
+        self::$country_code = $sess_data[8];
         self::SetLoginState(ACCMGR_LOGGED_IN);
         return true;
     }
@@ -459,6 +459,10 @@ Class WoW_Account {
         return isset(self::$dashboard_account['expansion']) ? self::$dashboard_account['expansion'] : 0;
     }
     
+    public static function GetCountryCode() {
+        return self::$country_code;
+    }
+    
     public static function GetCharactersData() {
         if(!self::IsCharactersLoaded()) {
             self::LoadCharacters();
@@ -521,7 +525,7 @@ Class WoW_Account {
      * @return   bool
      **/
     private static function CreateSession() {
-        self::$session_string = sprintf('%d:%s:%s:%s:%s:%d:%s:%s:%d:%d:%d',
+        self::$session_string = sprintf('%d:%s:%s:%s:%s:%d:%s:%s:%s',
             self::GetUserID(), // [0]
             self::NormalizeStringForSessionString(self::GetEmail(), NORMALIZE_TO), // [1]
             self::NormalizeStringForSessionString(self::GetPassword(), NORMALIZE_TO), // [2]
@@ -530,9 +534,7 @@ Class WoW_Account {
             self::GetLoginTimeStamp(), // [5]
             self::NormalizeStringForSessionString(self::$first_name, NORMALIZE_TO), // [6]
             self::NormalizeStringForSessionString(self::$last_name, NORMALIZE_TO),  // [7]
-            self::$bnet_id, // [8]
-            self::$is_banned, // [9]
-            self::$expansion // [10]
+            self::$country_code // [8]
         );
         self::$session_hash = md5(self::$session_string);
         self::$sid = md5(self::$session_hash);
@@ -636,7 +638,7 @@ Class WoW_Account {
         self::SetPassword($password);
         self::CreateShaPassHash();
         // No SQL injection
-        $user_data = DB::WoW()->selectRow("SELECT `id`, `first_name`, `last_name`, `email`, `sha_pass_hash` FROM `DBPREFIX_users` WHERE `email` = '%s' LIMIT 1", self::GetEmail());
+        $user_data = DB::WoW()->selectRow("SELECT `id`, `first_name`, `last_name`, `email`, `sha_pass_hash`, `country_code` FROM `DBPREFIX_users` WHERE `email` = '%s' LIMIT 1", self::GetEmail());
         if(!$user_data) {
             WoW_Log::WriteLog('%s : user %s was not found in `DBPREFIX_users` table!', __METHOD__, self::GetEmail());
             self::SetLastErrorCode(ERROR_WRONG_USERNAME_OR_PASSWORD);
@@ -650,9 +652,7 @@ Class WoW_Account {
         self::$userid = $user_data['id'];
         self::$first_name = $user_data['first_name'];
         self::$last_name = $user_data['last_name'];
-        //self::SetUserName(self::$first_name);
-        //self::$is_banned = DB::Realm()->selectCell("SELECT 1 FROM `account_banned` WHERE `id` = %d AND `active` = 1", self::GetUserID());
-        //self::$expansion = 1;
+        self::$country_code = $user_data['country_code'];
         self::UserGames();
         
         self::CreateSession();
@@ -1202,6 +1202,65 @@ Class WoW_Account {
     
     public static function GetGameAccountsCount() {
         return self::$myGames;
+    }
+    
+    public static function PerformConversionStep($step, $post_data = false) {
+        switch($step) {
+            case 1:
+                // Find account in realm DB and check passwords matching
+                if(!is_array($post_data)) {
+                    // Wrong post data
+                    WoW_Template::SetPageData('conversion_error', true);
+                    WoW_Template::SetPageData('account_creation_error_msg', WoW_Locale::GetString('template_account_conversion_error1'));
+                    return false;
+                }
+                $info = DB::Realm()->selectRow("SELECT `id`, `sha_pass_hash` FROM `account` WHERE `username` = '%s' LIMIT 1", $post_data['username']);
+                $sha = sha1(strtoupper($post_data['username']) . ':' . strtoupper($post_data['password']));
+                if(!$info || $info['sha_pass_hash'] != $sha) {
+                    // Wrong post data
+                    WoW_Template::SetPageData('conversion_error', true);
+                    WoW_Template::SetPageData('account_creation_error_msg', WoW_Locale::GetString('template_account_conversion_error1'));
+                    return false;
+                }
+                // Check account link
+                if(DB::WoW()->selectCell("SELECT 1 FROM `DBPREFIX_users_accounts` WHERE `account_id` = %d", $info['id'])) {
+                    // Already linked
+                    WoW_Template::SetPageData('conversion_error', true);
+                    WoW_Template::SetPageData('account_creation_error_msg', WoW_Locale::GetString('template_account_conversion_error2'));
+                    return false;
+                }
+                // All fine
+                $_SESSION['conversion_userName'] = $post_data['username'];
+                $_SESSION['conversion_userID'] = $info['id'];
+                break;
+            case 3:
+                // Check session
+                $conversion_allowed = true;
+                if(!isset($_SESSION['conversion_userName']) || !isset($_SESSION['conversion_userID'])) {
+                    $conversion_allowed = false;
+                }
+                else {
+                    if($_SESSION['conversion_userName'] == null) {
+                        $conversion_allowed = false;
+                    }
+                    if($_SESSION['conversion_userID'] == 0) {
+                        $conversion_allowed = false;
+                    }
+                }
+                if(!$conversion_allowed) {
+                    header('Location: ' . WoW::GetWoWPath() . '/account/management/wow-account-conversion.html');
+                    exit;
+                }
+                // Link account
+                if(DB::WoW()->query("INSERT INTO `DBPREFIX_users_accounts` VALUES (%d, %d)", self::GetUserID(), ((int) $_SESSION['conversion_userID']))) {
+                    header('Location: ' . WoW::GetWoWPath() . '/account/management/wow/dashboard.html?accountName=' . $_SESSION['conversion_userName'] . '&region=EU');
+                    exit;
+                }
+                break;
+            default:
+                return false;
+        }
+        return true;
     }
 }
 ?>

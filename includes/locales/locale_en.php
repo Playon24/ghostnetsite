@@ -1024,10 +1024,13 @@ $WoW_Locale = array(
     'template_account_conversion_confirm_sole_user_no' => 'No – Cancel account merge',
     'template_account_conversion_confirmation' => 'Confirm Merge',
     'template_account_conversion_warning_account_name' => 'After clicking the finalize button below, you will no longer use the account name:',
-    'template_account_conversion_new_account_name' => 'Your new World of Warcraft login will be:',
+    'template_account_conversion_new_account_name' => 'Your new World of Warcraft Community Site login will be:',
     'template_account_conversion_details_header' => 'Please read and consider the following before you finalize this merge:',
-    'template_account_conversion_details_list' => '<li><span>Once finalized, you will need to use the Battle.net account name <strong>%s</strong> and its associated password to log in to World of Warcraft®.</span></li><li><span><strong>This merge is final.</strong> You will not be able to undo this merge once you complete this step.</span></li><li><span>For security reasons, you will not be able to transfer characters outside this Battle.net account for <strong>30 days</strong>. Click <a href="http://us.blizzard.com/support/article.xml?articleId=26163" onclick="window.open(this.href);return false;">here</a> for complete details.</span></li>',
+    'template_account_conversion_details_list' => '<li><span>Once finalized, you will need to use the Battle.net account name <strong>%s</strong> and its associated password to log in to World of Warcraft® Community Site.</span></li><li><span><strong>This merge is final.</strong> You will not be able to undo this merge once you complete this step.</span></li><li><span>For security reasons, you will not be able to transfer characters outside this Battle.net account for <strong>30 days</strong>. Click <a href="http://us.blizzard.com/support/article.xml?articleId=26163" onclick="window.open(this.href);return false;">here</a> for complete details.</span></li>',
     'template_account_conversion_complete' => 'Finalize Account Merge',
+    'template_account_conversion_error1' => 'Your login was invalid. Please try again.',
+    'template_account_conversion_error2' => 'This World of Warcraft account has already been merged into a different Battle.net account',
+    
     
     'template_account_wow_title' => 'Sign up for a free World of Warcraft Trial',
     'template_account_wow_meta' => 'Sign up for a free World of Warcraft Trial',

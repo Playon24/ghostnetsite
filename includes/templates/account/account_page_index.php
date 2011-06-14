@@ -83,6 +83,9 @@ switch(WoW_Template::GetPageIndex()) {
     case 'add_game':
         WoW_Template::LoadTemplate('content_add_game');
         break;
+    case 'account_conversion':
+        WoW_Template::LoadTemplate('content_conversion_s' . WoW_Template::GetPageData('conversion_page'));
+        break;
 }
 ?>
 <div id="layout-bottom">
@@ -122,6 +125,10 @@ switch(WoW_Template::GetPageIndex()) {
         break;
     case 'add_game':
         echo '<script type="text/javascript" src="' . WoW::GetWoWPath() . '/account/js/management/add-game.js?v19"></script>';
+        break;
+    case 'account_conversion':
+        echo '<script type="text/javascript" src="' . WoW::GetWoWPath() . '/account/js/inputs.js?v19"></script>
+<script type="text/javascript" src="' . WoW::GetWoWPath() . '/account/js/management/wow/merge/account-merge.js?v19"></script>';
         break;
 }
 ?>

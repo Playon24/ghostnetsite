@@ -141,7 +141,7 @@ for($i = 1; $i < 32; ++$i) {
 <option value="" selected="selected"><?php echo WoW_Locale::GetString('template_account_creation_birthday_month'); ?></option>
 <?php
 for($i = 1; $i < 13; $i++) {
-    echo sprintf('<option value="%d"%s>%s</option>', $i, (isset($_POST['dobMonth']) && $_POST['dobMonth'] == $i) ? ' selected="selected"' : null, mb_convert_case(WoW_Locale::GetString('template_month_' . $i), MB_CASE_TITLE));
+    echo sprintf('<option value="%d"%s>%s</option>', $i, (isset($_POST['dobMonth']) && $_POST['dobMonth'] == $i) ? ' selected="selected"' : null, WoW_Locale::GetString('template_month_' . $i));
 }
 ?>
 </select>

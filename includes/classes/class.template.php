@@ -348,7 +348,42 @@ Class WoW_Template {
                         'skip_path' => false
                     ),
                 );
-                    
+                break;
+            case 'account_conversion':
+                $css_data_page = array(
+                    array(
+                        'path' => '/css/bnet-print.css',
+                        'version' => 19,
+                        'media' => 'print',
+                        'browser' => false,
+                        'skip_path' => false
+                    ),
+                    array(
+                        'path' => '/css/inputs.css',
+                        'version' => 19,
+                        'browser' => false,
+                        'skip_path' => false
+                    ),
+                    array(
+                        'path' => '/css/inputs-ie6.css',
+                        'version' => 19,
+                        'browser' => 'IE 6',
+                        'skip_path' => false
+                    ),
+                    array(
+                        'path' => '/css/inputs-ie7.css',
+                        'version' => 19,
+                        'browser' => 'IE 7',
+                        'skip_path' => false
+                    ),
+                    array(
+                        'path' => '/css/management/wow/merge/wow-merge.css',
+                        'version' => 19,
+                        'media' => 'all',
+                        'browser' => false,
+                        'skip_path' => false
+                    )
+                );
                 break;
         }
         $cssList = array_merge($css_data, $css_data_page);
@@ -1079,6 +1114,7 @@ Class WoW_Template {
                 break;
             case 'creation_tos':
             case 'creation_success':
+            case 'account_conversion':
             case 'management':
                 return WoW_Locale::GetString('template_management_main_title'); //[PH]
             case 'auction_lots':

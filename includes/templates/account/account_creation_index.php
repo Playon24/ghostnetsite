@@ -11,7 +11,7 @@
 </div>
 </form>
 </div>
-<h1 id="logo"><a href="<?php echo WoW::GetWoWPath(); ?>" tabindex="50" accesskey="h">Battle.net</a></h1>
+<h1 id="logo"><a href="<?php echo WoW::GetWoWPath(); ?>/account/management/" tabindex="50" accesskey="h">Battle.net</a></h1>
 <div id="navigation">
 <div id="page-menu" class="large">
 <h2 class="isolated"><?php echo WoW_Locale::GetString('template_management_account_creation'); ?></h2>
