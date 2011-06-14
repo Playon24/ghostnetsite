@@ -5,8 +5,8 @@
 							<h3 class="selection-title"><?php echo WoW_Locale::GetString('template_bn_my_games'); ?> <span>(<?php echo WoW_Account::GetMyGames(); ?>)</span></h3>
 <?php
 $UserGames = WoW_Account::GetUserGames();
-for($i=0;$i<count($UserGames);$i++)
-{
+$count = count($UserGames);
+for($i = 0; $i < $count; ++$i) {
 ?>
 		<div class="game-selection " id="game-WOW<?php echo $UserGames[$i]['expansion'] > 0 ? 'X' . $UserGames[$i]['expansion'] : 'C'; ?>" onclick="openGameDialog(this, '#dialog-WOW<?php echo $UserGames[$i]['expansion'] > 0 ? 'X' . $UserGames[$i]['expansion'] : 'C'; ?>');" title="<?php echo WoW_Locale::GetString('expansion_' . $UserGames[$i]['expansion']); ?>">
 			<img class="box" src="<?php echo WoW::GetWoWPath(); ?>/static/local-common/images/game-boxes/<?php echo WoW_Locale::GetLocale(LOCALE_DOUBLE); ?>/wow<?php echo $UserGames[$i]['expansion'] > 0 ? 'x' . $UserGames[$i]['expansion'] : 'C'; ?>.png" alt="" />
@@ -24,8 +24,7 @@ for($i=0;$i<count($UserGames);$i++)
 				</div>
 				<div id="game-dialogs">
 <?php
-for($i=0;$i<count($UserGames);$i++)
-{
+for($i = 0; $i < $count; ++$i) {
 ?>		
     <div class="game-selection-dialog" id="dialog-WOW<?php echo $UserGames[$i]['expansion'] > 0 ? 'X' . $UserGames[$i]['expansion'] : 'C'; ?>" style="display: none">
 			<div class="game-label">

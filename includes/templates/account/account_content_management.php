@@ -63,7 +63,7 @@ for($i=0;$i<count($UserGames);$i++)
 </a>
 </p>
 <p>
-<a href="<?php echo WoW::GetWoWPath(); ?>/account/wow-account-conversion.html" class="" onclick="">
+<a href="<?php echo WoW::GetWoWPath(); ?>/account/management/wow-account-conversion.html" class="" onclick="">
 <span class="icon-16 icon-account-merge"></span>
 <span class="icon-16-label"><?php echo WoW_Locale::GetString('template_management_menu_games_wow_conversion'); ?></span>
 </a>
