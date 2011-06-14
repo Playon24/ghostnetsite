@@ -50,19 +50,14 @@ Class WoWConfig {
     public static $WoW_Path          = ''; // Without slash at the end of path. If your site is in root directory, leave this empty.
                                            // For example: site is available at http://example.org/wowcs/
                                            // That means that you should set this variable as '/wowcs'.
-    
+    public static $DefaultExpansion  = 2; // 0 - Classic, 1 - Burning Crusade, 2 - Wrath, 3 - Cataclysm
+
     public static $Realms            = array(
         1 => array(
             'id'   => 1,
             'name' => 'Armory Realm',
             'type' => SERVER_MANGOS
-        ),
-        2 => array(
-            'id'   => 2,
-            'name' => 'Armory Realm 2',
-            'type' => SERVER_TRINITY
         )
     );
 }
-
 ?>

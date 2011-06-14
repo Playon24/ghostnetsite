@@ -697,7 +697,7 @@ Class WoW_Account {
             WoW_Template::SetPageData('creation_error', true);
             return false;
         }
-        if(DB::Realm()->query("INSERT INTO `account` (`username`, `sha_pass_hash`, `email`, `expansion`) VALUES ('%s', '%s', '%s', %d)", $account_data['username'], $account_data['sha'], self::GetUserName(), (MAX_EXPANSION_LEVEL - 1))) {
+        if(DB::Realm()->query("INSERT INTO `account` (`username`, `sha_pass_hash`, `email`, `expansion`) VALUES ('%s', '%s', '%s', %d)", $account_data['username'], $account_data['sha'], self::GetUserName(), WoWConfig::$DefaultExpansion)) {
             $account_data['id'] = DB::Realm()->selectCell("SELECT `id` FROM `account` WHERE `username` = '%s' LIMIT 1", $account_data['username']);
             DB::WoW()->query("INSERT INTO `DBPREFIX_users_accounts` (`id`, `account_id`) VALUES ('%s', '%s')", self::GetUserID(), $account_data['id']);
         }
