@@ -840,7 +840,8 @@ Class WoW_Account {
         $index = 0;
         DB::WoW()->query("DELETE FROM `DBPREFIX_user_characters` WHERE `account` IN (%s)", $account_ids);
         foreach(self::$characters_data as $char) {
-            DB::WoW()->query("INSERT INTO `DBPREFIX_user_characters` VALUES (%d, %d, %d, '%s', %d, '%s', '%s', %d, '%s', '%s', %d, %d, %d, '%s', %d, %d, '%s', %d, '%s', '%s', '%s')",
+            DB::WoW()->query("INSERT INTO `DBPREFIX_user_characters` VALUES (%d, %d, %d, %d, '%s', %d, '%s', '%s', %d, '%s', '%s', %d, %d, %d, '%s', %d, %d, '%s', %d, '%s', '%s', '%s')",
+                self::GetUserID(),
                 $char['account'],
                 $index,
                 $char['guid'],
