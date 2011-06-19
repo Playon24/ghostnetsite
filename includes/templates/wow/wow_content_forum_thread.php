@@ -12,6 +12,10 @@ World of Warcraft
 <?php echo WoW_Locale::GetString('template_menu_forums'); ?>
 </a>
 </li>
+<li>
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/forum/#forum<?php echo WoW_Forums::GetGlobalCategoryId(); ?>/" rel="np">
+<?php echo WoW_Forums::GetGlobalCategoryTitle(); ?>
+</a>
 </li>
 <li>
 <a href="<?php echo WoW::GetWoWPath(); ?>/wow/forum/<?php echo WoW_Forums::GetCategoryId(); ?>/" rel="np">
@@ -48,7 +52,7 @@ World of Warcraft
 	    
 		<div class="section-header">
                 <span class="blizzard_icon">
-                    <a class="nextBlizz" href="../topic/900640295#1" data-tooltip="Первое сообщение Blizzard">
+                    <a class="nextBlizz" href="../topic/<?php echo WoW_Forums::GetThreadId(); ?>#1" data-tooltip="Первое сообщение Blizzard">
                     </a>
                 </span>
             <span class="topic">Тема</span><span class="sub-title"><?php echo WoW_Forums::GetThreadTitle(); ?></span>
@@ -69,16 +73,7 @@ World of Warcraft
 
 
 
-	<a
-		class="ui-button button1 disabled "
-			href="javascript:;"
-		
-		
-		
-		
-		
-		
-		>
+	<a class="ui-button button1<?php echo WoW_Forums::IsClosedThread() ? ' disabled' : null; ?>" href="<?php echo WoW_Forums::IsClosedThread() ? ' javascript:;' : '#new-post'; ?>">
 		<span>
 			<span>
                 	Разместить ответ
@@ -104,18 +99,11 @@ World of Warcraft
                 	<div class="post-interior">
                             <table><tr><td class="post-character">
 	<div class="post-user">
-
-
         <div class="character-info">
-
-
     <div class="user-name">
 		<span class="char-name-code" style="display: none">
 			%s 
 		</span>
-
-
-
 	<div id="context-2" class="ui-context">
 		<div class="context">
 			<a href="javascript:;" class="close" onclick="return CharSelect.close(this);"></a>
@@ -193,12 +181,6 @@ World of Warcraft
     <div class="forum-actions bottom">
 		<div class="actions-panel">
 
-
-
-
-
-
-
 <ol class="ui-breadcrumb">
 <li>
 <a href="<?php echo WoW::GetWoWPath(); ?>/wow/" rel="np">
@@ -210,6 +192,10 @@ World of Warcraft
 <?php echo WoW_Locale::GetString('template_menu_forums'); ?>
 </a>
 </li>
+<li>
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/forum/#forum<?php echo WoW_Forums::GetGlobalCategoryId(); ?>/" rel="np">
+<?php echo WoW_Forums::GetGlobalCategoryTitle(); ?>
+</a>
 </li>
 <li>
 <a href="<?php echo WoW::GetWoWPath(); ?>/wow/forum/<?php echo WoW_Forums::GetCategoryId(); ?>/" rel="np">
@@ -233,8 +219,7 @@ World of Warcraft
             <div class="post general">
 	<table class="dynamic-center ">
 		<tr>
-			<td>                            Тема закрыта.
-</td>
+			<td>Тема закрыта.</td>
 		</tr>
 	</table>
             </div>

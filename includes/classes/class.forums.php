@@ -18,6 +18,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  **/
 
+/**
+ * @todo TOTALLY REWRITE THIS CLASS
+ **/
 Class WoW_Forums {
     private static $forum_categories = array();
     private static $category_threads = array();
@@ -25,6 +28,8 @@ Class WoW_Forums {
     private static $blizz_tracker = array();
     private static $latest_blizz_posts = array();
     private static $blizz_tracker_active = false;
+    
+    private static $thread_data = array();
     
     private static $active_global_category_id = 0;
     private static $active_global_category_title = '';
@@ -41,13 +46,6 @@ Class WoW_Forums {
             self::LoadForumCategories();
         }
         elseif(self::GetCategoryId() > 0 && self::GetThreadId() == 0) {
-            $category = DB::WoW()->selectRow("SELECT `title_%s` AS `title`, `parent_cat` FROM `DBPREFIX_forum_category` WHERE `cat_id` = %d AND `header` = 0", WoW_Locale::GetLocale(), self::GetCategoryId());
-            if(!$category) {
-                return false;
-            }
-            self::$active_category_title = $category['title'];
-            self::$active_global_category_id = $category['parent_cat'];
-            self::$active_global_category_title = DB::WoW()->selectCell("SELECT `title_%s` FROM `DBPREFIX_forum_category` WHERE `cat_id` = %d", WoW_Locale::GetLocale(), self::$active_global_category_id);
             self::LoadCategoryThreads();
         }
         elseif(self::GetCategoryId() == 0 && self::GetThreadId() > 0) {
@@ -57,6 +55,25 @@ Class WoW_Forums {
             WoW_Log::WriteError('%s : unhandled exception (category ID: %d, thread ID: %d)!', __METHOD__, self::GetCategoryId(), self::GetThreadId());
             return false;
         }
+        return true;
+    }
+    
+    private static function LoadCategoryInfo() {
+        if(self::GetCategoryId() > 0) {
+            $category = DB::WoW()->selectRow("SELECT `title_%s` AS `title`, `parent_cat` FROM `DBPREFIX_forum_category` WHERE `cat_id` = %d AND `header` = 0", WoW_Locale::GetLocale(), self::GetCategoryId());
+        }
+        elseif(self::GetThreadId() > 0) {
+            $category = DB::WoW()->selectRow("SELECT `title_%s` AS `title`, `parent_cat` FROM `DBPREFIX_forum_category` WHERE `cat_id` = %d AND `header` = 0", WoW_Locale::GetLocale(), DB::WoW()->selectCell("SELECT `cat_id` FROM `DBPREFIX_forum_threads` WHERE `thread_id` = %d", self::GetThreadId()));
+        }
+        else {
+            $category = false;
+        }
+        if(!$category) {
+            return false;
+        }
+        self::$active_category_title = $category['title'];
+        self::$active_global_category_id = $category['parent_cat'];
+        self::$active_global_category_title = DB::WoW()->selectCell("SELECT `title_%s` FROM `DBPREFIX_forum_category` WHERE `cat_id` = %d", WoW_Locale::GetLocale(), self::$active_global_category_id);
         return true;
     }
     
@@ -76,19 +93,22 @@ Class WoW_Forums {
     }
     
     private static function LoadCategoryThreads() {
+        self::LoadCategoryInfo();
         self::$category_threads = DB::WoW()->select("
-        SELECT
+        SELECT DISTINCT
         `a`.*,
         `b`.`name` AS `author`
         FROM `DBPREFIX_forum_threads` AS `a`
-        JOIN `DBPREFIX_user_characters` AS `b` ON `b`.`account` = `a`.`author_id` AND `b`.`guid` = `a`.`author_guid`
+        JOIN `DBPREFIX_user_characters` AS `b` ON `b`.`bn_id` = `a`.`author_id` AND `b`.`account` = `a`.`author_account` AND `b`.`guid` = `a`.`author_guid`
         WHERE `a`.`cat_id` = %d", self::GetCategoryId());
         self::HandleCategoryThreads();
     }
     
     private static function LoadThreadPosts() {
+        self::LoadCategoryInfo();
+        self::$thread_data = DB::WoW()->selectRow("SELECT * FROM `DBPREFIX_forum_threads` WHERE `thread_id` = %d", self::GetThreadId());
         self::$thread_posts = DB::WoW()->select("
-        SELECT
+        SELECT DISTINCT
         `a`.*,
         `b`.`title` AS `threadTitle`,
         `c`.`title_%s` AS `categoryTitle`,
@@ -96,19 +116,21 @@ Class WoW_Forums {
         FROM `DBPREFIX_forum_posts` AS `a`
         JOIN `DBPREFIX_forum_threads` AS `b` ON `b`.`thread_id` = `a`.`thread_id`
         JOIN `DBPREFIX_forum_category` AS `c` ON `c`.`cat_id` = `a`.`cat_id`
-        JOIN `DBPREFIX_user_characters` AS `d` ON `d`.`account` = `a`.`author_id` AND `d`.`guid` = `a`.`author_guid`
+        JOIN `DBPREFIX_user_characters` AS `d` ON `d`.`bn_id` = `a`.`author_id` AND `d`.`account` = `a`.`author_account` AND `d`.`guid` = `a`.`author_guid`
         WHERE `a`.`thread_id` = %d
         ORDER BY `a`.`post_date` DESC
         ", WoW_Locale::GetLocale(), self::GetThreadId());
         self::HandleThreadPosts();
+        self::UpdateThreadViews();
     }
     
     private static function LoadBlizzPosts($latest = false) {
         self::$latest_blizz_posts = DB::WoW()->select("
-        SELECT
+        SELECT DISTINCT
         `a`.`thread_id`,
         `a`.`cat_id`,
         `a`.`author_id`,
+        `a`.`author_account`,
         `a`.`author_guid`,
         `a`.`message`,
         `a`.`post_count`,
@@ -119,7 +141,7 @@ Class WoW_Forums {
         FROM `DBPREFIX_forum_posts` AS `a`
         JOIN `DBPREFIX_forum_threads` AS `b` ON `b`.`thread_id` = `a`.`thread_id`
         JOIN `DBPREFIX_forum_category` AS `c` ON `c`.`cat_id` = `a`.`cat_id`
-        JOIN `DBPREFIX_user_characters` AS `d` ON `d`.`account` = `a`.`author_id` AND `d`.`guid` = `a`.`author_guid`
+        JOIN `DBPREFIX_user_characters` AS `d` ON `d`.`bn_id` = `a`.`author_id` AND `d`.`account` = `a`.`author_account` AND `d`.`guid` = `a`.`author_guid`
         WHERE `a`.`blizzpost` = 1
         ORDER BY `a`.`post_date` DESC
         %s", WoW_Locale::GetLocale(), $latest ? 'LIMIT 15' : null);
@@ -408,9 +430,12 @@ Class WoW_Forums {
         return array('cat_id' => $category_id, 'thread_id' => $thread_id, 'post_id' => DB::WoW()->GetInsertID());
     }
     
-    public static function GetBreadcrumb() {
-        $html = '';
-        
+    public static function UpdateThreadViews() {
+        DB::WoW()->query("UPDATE `DBPREFIX_forum_threads` SET `views` = `views` + 1 WHERE `thread_id` = %d", self::GetThreadId());
+    }
+    
+    public static function IsClosedThread() {
+        return self::$thread_data['flags'] & THREAD_FLAG_CLOSED;
     }
 }
 ?>
