@@ -343,6 +343,53 @@ Class WoW_Forums {
         ++self::$active_thread_blizzard_posts_current;
         return self::$active_thread_blizzard_posts[self::$active_thread_blizzard_posts_current - 1];
     }
+    
+    public static function BBCodesToHTML(&$post_text) {
+        $matches = array();
+        if(preg_match_all('/\[item\=(.+?)\/]/x', $post_text, $matches)) {
+            $count = count($matches[0]);
+            // Replace [item] tag
+            for($i = 0; $i < $count; ++$i) {
+                $info = WoW_Items::GetItemInfo(isset($matches[1][$i]) ? str_replace('"', '', $matches[1][$i]) : 0);
+                if(!$info) {
+                    continue;
+                }
+                $post_text = str_replace($matches[0][$i], sprintf('<a href="%s/wow/item/%d" class="bml-link-item color-q%d"><span class="icon-frame frame-10"><img src="http://battle.net/wow-assets/static/images/icons/18/%s.jpg"> </span>%s</a>', WoW::GetWoWPath(), $info['entry'], $info['Quality'], WoW_Items::GetItemIcon(0, $info['displayid']), WoW_Items::GetItemName($info['entry'])), $post_text);
+            }
+        }
+        // Replace [quote] tag
+        $post_text = str_replace('[quote', '<blockquote', $post_text);
+        // Replace other tags
+        $post_text = str_replace(array('[', ']', "\n"), array('<', '>', '<br/>'), $post_text);
+        $post_text = str_replace('"', '\"', $post_text);
+    }
+    
+    public static function AddNewThread($category_id, &$post_data, $return_id = false) {
+        DB::WoW()->query("INSERT INTO `DBPREFIX_forum_threads` (`cat_id`, `author_id`, `author_account`, `author_guid`, `title`, `views`, `flags`) VALUES (%d, %d, %d, %d, '%s', 0, %d)",
+            $category_id, WoW_Account::GetUserID(), WoW_Account::GetActiveCharacterInfo('account'), WoW_Account::GetActiveCharacterInfo('guid'), $post_data['subject'], (WoW_Account::GetGMLevel() >= 3 ? (THREAD_FLAG_BLIZZARD) : 0));
+        if(!$return_id) {
+            return self::AddNewPost($category_id, DB::WoW()->GetInsertID(), $post_data);
+        }
+        return DB::WoW()->GetInsertID();
+    }
+    
+    public static function AddNewPost($category_id, $thread_id, &$post_data) {
+        self::BBCodesToHTML($post_data['postCommand_detail']);
+        DB::WoW()->query("
+        INSERT INTO `DBPREFIX_forum_posts`
+        (
+            `thread_id`, `cat_id`, `author_id`, `author_account`, `author_guid`, `blizzpost`,
+            `blizz_name`, `message`, `post_count`, `post_date`, `author_ip` 
+        )
+        VALUES
+        (
+            %d, %d, %d, %d, %d, %d, '%s', '%s', 1, %d, '%s'
+        )
+        ",
+            $thread_id, $category_id, WoW_Account::GetUserID(), WoW_Account::GetActiveCharacterInfo('account'), WoW_Account::GetActiveCharacterInfo('guid'), isset($post_data['blizz']) ? 1 : 0,
+            (isset($post_data['blizzName'])) ? $post_data['blizzName'] : null, $post_data['postCommand_detail'], time(), $_SERVER['REMOTE_ADDR']
+        );
+        return array('cat_id' => $category_id, 'thread_id' => $thread_id, 'post_id' => DB::WoW()->GetInsertID());
+    }
 }
-
 ?>

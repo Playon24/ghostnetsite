@@ -27,6 +27,19 @@ Class WoW_Template {
     private static $menu_index = null;
     private static $template_theme = null;
     
+    public static function ErrorPage($code) {
+        switch($code) {
+            case 403:
+            case 404:
+            case 500:
+                die('ERROR ' . $code);
+                break;
+            default:
+                return false;
+                break;
+        }
+    }
+    
     public static function InitializeTemplate() {
         
     }

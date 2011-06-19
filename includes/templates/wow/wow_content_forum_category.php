@@ -43,7 +43,7 @@ World of Warcraft
 	</script>
 
 
-	<a class="ui-button button1 " href="topic">
+	<a class="ui-button button1 " href="topic"<?php echo !WoW_Account::IsLoggedIn() ? ' onclick="return Login.open(\'' . WoW::GetWoWPath() . '/login/login.frag\');"' : null; ?>>
 		<span>
 			<span><?php echo WoW_Locale::GetString('template_forums_create_thread'); ?></span>
 		</span>
@@ -149,7 +149,7 @@ World of Warcraft
 
         </div>
 
-	<a class="ui-button button1 " href="topic" >
+	<a class="ui-button button1 " href="topic"<?php echo !WoW_Account::IsLoggedIn() ? ' onclick="return Login.open(\'' . WoW::GetWoWPath() . '/login/login.frag\');"' : null; ?>>
 		<span>
 			<span><?php echo WoW_Locale::GetString('template_forums_create_thread'); ?></span>
 		</span>

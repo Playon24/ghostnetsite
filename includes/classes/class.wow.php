@@ -96,6 +96,7 @@ Class WoW {
                 $urldata['category_id'] = 0;
                 $urldata['thread_id'] = 0;
                 for($i = 0; $i < $count; $i++) {
+                    $urldata['action' . $i] = $url_array[$i];
                     switch($url_array[$i]) {
                         case 'forum':
                             $urldata['category_id'] = (isset($url_array[$i + 1])) ? (int) $url_array[$i + 1] : 0;

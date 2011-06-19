@@ -195,13 +195,13 @@ tr:hover .fansite-link,
 
 /* menu */
 .flyout-menu { background: #161413; opacity: .99; border: 1px solid #353837; padding: 1px; -moz-border-radius: 5px; -moz-box-shadow: 0 0 10px #000; -webkit-border-radius: 5px; -webkit-box-shadow: 0 0 10px #000; border-radius: 5px; box-shadow: 0 0 10px #000 }
-.flyout-menu ul { width: 199px; border-right: 1px solid #2A292B; }
+.flyout-menu ul { width: 199px; }
 .flyout-menu ul:last-child { width: 200px; border-right: 0; }
 .flyout-menu ul li { margin: 0; border-bottom: 1px solid #2A292B; }
 .flyout-menu ul li:last-child { border-bottom: 0; }
 .flyout-menu ul:last-child > li:last-child { border-bottom: 1px solid #2A292B !important; }
 .flyout-menu ul:first-child > li:last-child { border-bottom: 0 !important; }
-.flyout-menu ul li span { color: #EFE3D2; font-weight: bold; display: block; padding: 4px 8px; background-color: #060606; } /* separator */
+.flyout-menu ul li span { color: #EFE3D2; font-weight: bold; display: block; padding: 4px 8px; } /* separator */
 .flyout-menu ul li a { color: #ffae00; padding: 4px 8px; }
 .flyout-menu ul li a .desc { display: block; color: #7b7b7b; font-size: 11px; }
 .flyout-menu ul li .opened { color: #d5d5d5; }
@@ -277,8 +277,8 @@ tr:hover .fansite-link,
 .section-title .view-all {letter-spacing: normal;}
 
 /* page sub nav */
-#sub-nav { width:942px; height:36px; border:1px solid #732c0c; margin:0 auto; background: url(../images/layout/sub-navigation.gif) 0 0 repeat-x; -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius:5px; }
-#sub-nav ul a { font:normal 13px/36px Arial, Sans-serif; display:block; height:36px; float:left; padding:0 18px 0 15px; background: url(../images/layout/sub-navigation.gif) 100% -45px no-repeat; border-right:1px solid #732c0c }
+#sub-nav { width:942px; height:36px; border:1px solid #732c0c; margin:0 auto; background: url(/wow/static/images/layout/sub-navigation.gif) 0 0 repeat-x; -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius:5px; }
+#sub-nav ul a { font:normal 13px/36px Arial, Sans-serif; display:block; height:36px; float:left; padding:0 18px 0 15px; background: url(/wow/static/images/layout/sub-navigation.gif) 100% -45px no-repeat; border-right:1px solid #732c0c }
 #sub-nav ul a.first-col { -moz-border-radius: 5px 0 0 5px; -webkit-border-radius: 5px 0 0 5px; border-radius: 5px 0 0 5px;}
 #sub-nav ul a:hover { background-color:#340c02; -moz-box-shadow: inset 5px 5px 5px #200601; -webkit-box-shadow:inset 5px 5px 5px #200601; box-shadow:inset 5px 5px 5px #200601; }
 #sub-nav ul a.active { background-color:#340c02; -moz-box-shadow: inset 5px 5px 5px #200601; -webkit-box-shadow:inset 5px 5px 5px #200601; box-shadow:inset 5px 5px 5px #200601; cursor:default }
@@ -286,16 +286,10 @@ tr:hover .fansite-link,
 
 /* search bar */
 #search-bar { position: absolute; right: 5px; top: 75px; z-index: 5; }
-#search-form { float: right; width: 336px; background: #fff; padding: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px; -moz-box-shadow: 0 0 10px #361005; -webkit-box-shadow: 0 0 10px #361005; box-shadow: 0 0 10px #361005; }
+#search-form { float: right; width: 335px; background: #fff; padding: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px; -moz-box-shadow: 0 0 10px #361005; -webkit-box-shadow: 0 0 10px #361005; box-shadow: 0 0 10px #361005; margin-right: 3px; }
 #search-field { color: #707070; }
 #search-field.active, #search-field:focus { color: #000; }
 #search-button { border:none; outline: none; position: absolute; top: -6px; right: -6px; cursor: pointer; background: url("../images/icons/mag-glass.png") center center no-repeat; width: 44px; height: 46px; z-index: 7; }
-/*
-#browse-armory { float: right; margin-right: 15px; height: 33px; line-height: 32px; width: 131px; background: url("../images/layout/search/button-armory.png") 0 0 repeat; color: #eea200; cursor: pointer; -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px; -moz-box-shadow: 0 0 5px #361005; -webkit-box-shadow: 0 0 5px #361005; box-shadow: 0 0 5px #361005;}
-#browse-armory:hover,
-#browse-armory.opened { color: #fff; background-position: 0 -33px; }
-#browse-armory span { display: block; text-indent: 36px; font-size: 14px; vertical-align: middle; }
-*/
 
 /* menu */
 #menu { width: 623px; height: 65px; position: absolute; left: 19px; top: 19px; -moz-user-select: none; -webkit-user-select: none; user-select: none }

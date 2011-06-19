@@ -27,11 +27,48 @@ $url_data = WoW::GetUrlData('forum');
 // Clear category/thread values
 WoW_Forums::SetCategoryId(0);
 WoW_Forums::SetThreadId(0);
+// Check preview
+if(isset($url_data['action3'], $url_data['action4'], $url_data['action5']) && (($url_data['action3'].$url_data['action4'].$url_data['action5']) == 'topicpostpreview')) {
+    $post_text = isset($_POST['post']) ? $_POST['post'] : null;
+    if($post_text == null) {
+        WoW_Template::ErrorPage(500);
+    }
+    // Convert BB codes to HTML
+    WoW_Forums::BBCodesToHTML($post_text);
+    // Output json
+    header('Content-type: text/json');
+    echo '{"detail":"' . $post_text . '"}';
+    exit;
+}
 // Set values (if any)
 if($url_data['category_id'] > 0) {
-    WoW_Forums::SetCategoryId($url_data['category_id']);
-    WoW_Template::SetPageIndex('forum_category');
-    WoW_Template::SetPageData('page', 'forum_category');
+    if(isset($url_data['action4']) && $url_data['action4'] == 'topic') {
+        // Check $_POST query
+        if(isset($_POST['xstoken'])) {
+            $post_allowed = true;
+            $required_post_fields = array('xstoken', 'sessionPersist', 'subject', 'postCommand_detail');
+            foreach($required_post_fields as $field) {
+                if(!isset($_POST[$field])) {
+                    $post_allowed = false;
+                }
+            }
+            if($post_allowed) {
+                $post_info = WoW_Forums::AddNewThread($url_data['category_id'], $_POST, false);
+                if(is_array($post_info)) {
+                    header('Location: ' . WoW::GetWoWPath() . '/wow/forum/topic/' . $post_info['thread_id']);
+                    exit;
+                }
+            }
+        }
+        // Topic create
+        WoW_Template::SetPageIndex('forum_new_topic');
+        WoW_Template::SetPageData('page', 'forum_new_topic');
+    }
+    else {
+        WoW_Forums::SetCategoryId($url_data['category_id']);
+        WoW_Template::SetPageIndex('forum_category');
+        WoW_Template::SetPageData('page', 'forum_category');
+    }
 }
 elseif($url_data['thread_id'] > 0) {
     WoW_Forums::SetThreadId($url_data['thread_id']);

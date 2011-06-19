@@ -27,7 +27,7 @@
 #forum-content .section-header .sticky-request { font-size:11px; padding:5px 10px; border:1px solid transparent; -moz-border-radius:5px; border-radius:5px; float:right; width:80px; text-align:center; }
 
 
-.forum-actions { padding:12px 18px 20px; position:relative; clear:both; }
+.forum-actions { padding: 20px; position:relative; clear:both; }
 .forum-actions.bottom .actions-panel { height:40px; }
 .forum-actions.bottom .pageNav { bottom:12px; }
 .forum-actions.bottom .ui-breadcrumb { left:auto; }
@@ -97,13 +97,14 @@
 #cm-moveTarget option { padding-left:10px; }
 #cm-moveTarget option[disabled] { padding:0; color:black; font-weight:bold;}
 
-.forum-options { position:absolute; right:50px; z-index:1; }
+.forum-options { position:absolute; right:15px; z-index:1; margin-top: -5px; }
 .forum-options a { background:url(../../images/layout/cms/forum-options.gif) 0 5px no-repeat; display:block; float:right; margin-left:5px; padding:2px 10px 2px 20px; font-size:11px; }
 .forum-options a:first-child { background-position:0 -95px; }
 
 #posts-container { padding:0 20px; }
-#posts { width:100%; border-spacing:0; border-collapse:collapse;   }
+#posts { width:100%; border-spacing:0; border-collapse:separate;   }
 #posts td {  margin:0; border:none;  }
+#posts thead td { padding-bottom: 5px; }
 #posts .post-th { text-align:left; font-size:10px; text-transform:uppercase; font-family:"Lucida Sans Unicode", "Lucida Grande", Verdana; }
 #posts tr:hover { }
 #posts tr:first-child:hover { background:none; }
@@ -254,6 +255,7 @@ div.blizzard .post-user { background-position:0 -272px;  }
 
 .forum-mod-tools { padding:0 0 10px 19px; }
 .mod_panel { background:url("../../images/layout/cms/cm_panel.jpg") 50% 100% no-repeat #040404; padding:10px 25px; overflow:hidden; border-top:1px solid #333; }
+#posts.mass-mode .forum-post-icon { padding-left:5px; }
 #posts td.forum-mod { width:20px; padding:0 5px; border-right:1px solid #261913; }
 .edit-mode .drag-handle, .mass-mode .mass-action, .sticky-add .sticky-added, .sticky-remove .sticky-removed { display:inline; }
 .forum-mod, .drag-handle, .sticky-added, .sticky-removed, .sticky-remove .drag-handle, .mass-action, .mass-mode .sticky-added, .mass-mode .sticky-removed { display:none; }
@@ -454,3 +456,13 @@ div.blizzard .post-user { background-position:0 -272px;  }
 .post-detail ul { margin: 0 0 0 25px; list-style: square; }
 
 
+/* April Fools RP Filter Styles */
+
+.rplol p { padding-bottom:15px; text-indent:20px; }
+p.dropcappe { font-size:110%; color:#ccc; font-family:Georgia, "Times New Roman", Times, serif;}
+p.dropcappe:first-letter { text-transform:uppercase; font:normal 72px/.75 'Times', Arial, Helvetica, sans-serif; float:left; margin:1px 5px 10px 0; }
+
+
+#forum-content .forum-search { position: absolute; right: 0; top: 7px; }
+#forum-content .forum-search input { width: 200px; padding: 5px; color: #707070; }
+#forum-content .forum-search input.active { color: #000; }

@@ -306,6 +306,9 @@ Class WoW_DatabaseHandler {
     public function GetStatistics() {
         return array('queryCount' => $this->queryCount, 'queryTimeGeneration' => $this->queryTimeGeneration);
     }
+    
+    public function GetInsertID() {
+        return mysql_insert_id($this->connectionLink);
+    }
 }
-
 ?>

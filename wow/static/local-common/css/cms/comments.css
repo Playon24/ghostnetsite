@@ -44,9 +44,7 @@
 #page-comments .hidden { padding-bottom:19px; }
 #page-comments .hidden .status-text { display:block; }
 #page-comments .hidden .avatar, #page-comments .hidden .content, #page-comments .hidden .rate-btn-holder, #page-comments .hidden .comment-actions  { display:none; }
-.comment-actions .reply-link { 	border: 1px solid transparent; padding: 3px 20px 3px 7px; text-transform:uppercase; 
-								background:no-repeat 100% 3px;
-								-moz-border-radius: 3px; border-radius: 3px; }
+.comment-actions .reply-link { margin-right: 5px; text-transform:uppercase; }
 #page-comments .hidden .user a.context-link { }
 #page-comments .hidden .user .character, #page-comments .hidden .user .character a { }
 

@@ -114,6 +114,8 @@ switch(WoW_Template::GetPageIndex()) {
     case 'forum_thread':
         WoW_Template::LoadTemplate('content_forum_thread');
         break;
+    case 'forum_new_topic':
+        WoW_Template::LoadTemplate('content_forum_new_topic');
     case 'zones':
         WoW_Template::LoadTemplate('content_zones');
         break;
