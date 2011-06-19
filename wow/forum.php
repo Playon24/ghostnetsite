@@ -42,6 +42,7 @@ if(isset($url_data['action3'], $url_data['action4'], $url_data['action5']) && ((
 }
 // Set values (if any)
 if($url_data['category_id'] > 0) {
+    WoW_Forums::SetCategoryId($url_data['category_id']);
     if(isset($url_data['action4']) && $url_data['action4'] == 'topic') {
         // Check $_POST query
         if(isset($_POST['xstoken'])) {
@@ -65,7 +66,6 @@ if($url_data['category_id'] > 0) {
         WoW_Template::SetPageData('page', 'forum_new_topic');
     }
     else {
-        WoW_Forums::SetCategoryId($url_data['category_id']);
         WoW_Template::SetPageIndex('forum_category');
         WoW_Template::SetPageData('page', 'forum_category');
     }

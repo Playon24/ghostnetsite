@@ -7,9 +7,19 @@
 World of Warcraft
 </a>
 </li>
-<li class="last">
+<li>
 <a href="<?php echo WoW::GetWoWPath(); ?>/wow/forum/" rel="np">
 <?php echo WoW_Locale::GetString('template_menu_forums'); ?>
+</a>
+</li>
+<li>
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/forum/#forum<?php echo WoW_Forums::GetGlobalCategoryId(); ?>" rel="np">
+<?php echo WoW_Forums::GetGlobalCategoryTitle(); ?>
+</a>
+</li>
+<li class="last">
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/forum/<?php echo WoW_Forums::GetCategoryId(); ?>/" rel="np">
+<?php echo WoW_Forums::GetCategoryTitle(); ?>
 </a>
 </li>
 </ol>

@@ -9,28 +9,27 @@ World of Warcraft
 </li>
 <li>
 <a href="<?php echo WoW::GetWoWPath(); ?>/wow/forum/" rel="np">
-Forums
+<?php echo WoW_Locale::GetString('template_menu_forums'); ?>
 </a>
 </li>
 <li>
-<a href="<?php echo WoW::GetWoWPath(); ?>/wow/forum/#forum874788" rel="np">
-Classes
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/forum/#forum<?php echo WoW_Forums::GetGlobalCategoryId(); ?>" rel="np">
+<?php echo WoW_Forums::GetGlobalCategoryTitle(); ?>
 </a>
 </li>
 <li>
-<a href="<?php echo WoW::GetWoWPath(); ?>/wow/forum/874793/" rel="np">
-Paladin
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/forum/<?php echo WoW_Forums::GetCategoryId(); ?>/" rel="np">
+<?php echo WoW_Forums::GetCategoryTitle(); ?>
 </a>
 </li>
 <li class="last">
-<a href="<?php echo WoW::GetWoWPath(); ?>/wow/forum/874793/topic" rel="np">
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/forum/<?php echo WoW_Forums::GetCategoryId(); ?>/topic" rel="np">
 New Topic
 </a>
 </li>
 </ol>
 </div>
 <div class="content-bot">    
-	
 	<script type="text/javascript">
 	//<![CDATA[
 		$(function() {
@@ -55,8 +54,8 @@ New Topic
 
             <div class="avatar">
                 <div class="avatar-interior">
-                        <a href="<?php echo WoW::GetWoWPath(); ?>/wow/character/sylvanas/Fandorka/">
-                        	<img height="84" src="http://eu.battle.net/static-render/eu/sylvanas/147/68448915-avatar.jpg?alt=/wow/static/images/2d/avatar/10-1.jpg" alt="" />
+                        <a href="<?php echo WoW_Account::GetActiveCharacterInfo('url'); ?>">
+                        	<img height="84" src="<?php echo WoW::GetWoWPath(); ?>/wow/static/images/2d/avatar/<?php echo WoW_Account::GetActiveCharacterInfo('race'); ?>-<?php echo WoW_Account::GetActiveCharacterInfo('gender'); ?>.jpg" alt="" />
                         </a>
                 </div>
             </div>
@@ -67,7 +66,7 @@ New Topic
 
     <div class="user-name">
 		<span class="char-name-code" style="display: none">
-			Fandorka 
+			<?php echo WoW_Account::GetActiveCharacterInfo('name'); ?> 
 		</span>
 
 
@@ -77,9 +76,9 @@ New Topic
 			<a href="javascript:;" class="close" onclick="return CharSelect.close(this);"></a>
 
 			<div class="context-user">
-				<strong>Fandorka</strong>
+				<strong><?php echo WoW_Account::GetActiveCharacterInfo('name'); ?></strong>
 						<br />
-						<span class="realm up">Sylvanas</span>
+						<span class="realm up"><?php echo WoW_Account::GetActiveCharacterInfo('realmName'); ?></span>
 			</div>
 
 
@@ -91,17 +90,17 @@ New Topic
 					
 
 			<div class="context-links">
-					<a href="<?php echo WoW::GetWoWPath(); ?>/wow/character/sylvanas/Fandorka/" title="Profile" rel="np"
+					<a href="<?php echo WoW_Account::GetActiveCharacterInfo('url'); ?>" title="Profile" rel="np"
 					   class="icon-profile link-first"
 					   >
 						Profile
 					</a>
-					<a href="<?php echo WoW::GetWoWPath(); ?>/wow/search?f=post&amp;a=Fandorka%40Sylvanas&amp;sort=time" title="View my posts" rel="np"
+					<a href="<?php echo WoW::GetWoWPath(); ?>/wow/search?f=post&amp;a=<?php echo urlencode(WoW_Account::GetActiveCharacterInfo('name') . ' @ ' . WoW_Account::GetActiveCharacterInfo('realmName')); ?>&amp;sort=time" title="View my posts" rel="np"
 					   class="icon-posts"
 					   >
 						
 					</a>
-					<a href="<?php echo WoW::GetWoWPath(); ?>/wow/vault/character/auction/horde/" title="View auctions" rel="np"
+					<a href="<?php echo WoW::GetWoWPath(); ?>/wow/vault/character/auction/<?php echo WoW_Account::GetActiveCharacterInfo('faction') == FACTION_HORDE ? 'horde' : 'alliance'; ?>/" title="View auctions" rel="np"
 					   class="icon-auctions"
 					   >
 						
@@ -116,8 +115,8 @@ New Topic
 
 	</div>
 
-        <a href="<?php echo WoW::GetWoWPath(); ?>/wow/character/sylvanas/Fandorka/" class="context-link color-c8" rel="np">
-        	Fandorka
+        <a href="<?php echo WoW_Account::GetActiveCharacterInfo('url'); ?>" class="context-link color-c<?php echo WoW_Account::GetActiveCharacterInfo('class'); ?>" rel="np">
+        	<?php echo WoW_Account::GetActiveCharacterInfo('name'); ?>
         </a>
     </div>
 
@@ -130,16 +129,21 @@ New Topic
 
 						<div class="character-desc">
 
-							<span class="color-c8">
-								39 Blood Elf Mage
+							<span class="color-c<?php echo WoW_Account::GetActiveCharacterInfo('class'); ?>">
+								<?php echo WoW_Account::GetActiveCharacterInfo('level'); ?> <?php echo WoW_Account::GetActiveCharacterInfo('race_text'); ?> <?php echo WoW_Account::GetActiveCharacterInfo('class_text'); ?>
 							</span>
 						</div>
 
-							<div class="guild">
-								<a href="<?php echo WoW::GetWoWPath(); ?>/wow/guild/sylvanas/Blacktooth%20Cartel/">Blacktooth Cartel</a>
-							</div>
+							<?php
+                            if(WoW_Account::GetActiveCharacterInfo('guildId') > 0) {
+                                echo sprintf('<div class="guild">
+								<a href="%s">%s</a>
+							</div>', WoW_Account::GetActiveCharacterInfo('guildUrl'), WoW_Account::GetActiveCharacterInfo('guildName'));
+                            }
+                            ?>
+                            
 
-								<div class="achievements">80</div>
+								<div class="achievements">0</div>
 
                 </div>
 
@@ -170,7 +174,7 @@ New Topic
 
     <textarea id="postCommand.detail" name="postCommand.detail" class="post-editor" cols="78" rows="13"></textarea>
 
-							<script type="text/javascript" src="/wow/static/local-common/js/bml.js"></script>
+							<script type="text/javascript" src="<?php echo WoW::GetWoWPath(); ?>/wow/static/local-common/js/bml.js"></script>
 	<script type="text/javascript">
 	//<![CDATA[
 								$(function() {

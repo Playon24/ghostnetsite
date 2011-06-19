@@ -26,6 +26,8 @@ Class WoW_Forums {
     private static $latest_blizz_posts = array();
     private static $blizz_tracker_active = false;
     
+    private static $active_global_category_id = 0;
+    private static $active_global_category_title = '';
     private static $active_category_id = 0;
     private static $active_category_title = '';
     private static $active_thread_id = 0;
@@ -39,7 +41,13 @@ Class WoW_Forums {
             self::LoadForumCategories();
         }
         elseif(self::GetCategoryId() > 0 && self::GetThreadId() == 0) {
-            self::$active_category_title = DB::WoW()->selectCell("SELECT `title_%s` FROM `DBPREFIX_forum_category` WHERE `cat_id` = %d AND `header` = 0", WoW_Locale::GetLocale(), self::GetCategoryId());
+            $category = DB::WoW()->selectRow("SELECT `title_%s` AS `title`, `parent_cat` FROM `DBPREFIX_forum_category` WHERE `cat_id` = %d AND `header` = 0", WoW_Locale::GetLocale(), self::GetCategoryId());
+            if(!$category) {
+                return false;
+            }
+            self::$active_category_title = $category['title'];
+            self::$active_global_category_id = $category['parent_cat'];
+            self::$active_global_category_title = DB::WoW()->selectCell("SELECT `title_%s` FROM `DBPREFIX_forum_category` WHERE `cat_id` = %d", WoW_Locale::GetLocale(), self::$active_global_category_id);
             self::LoadCategoryThreads();
         }
         elseif(self::GetCategoryId() == 0 && self::GetThreadId() > 0) {
@@ -317,6 +325,14 @@ Class WoW_Forums {
         return self::$latest_blizz_posts;
     }
     
+    public static function GetGlobalCategoryTitle() {
+        return self::$active_global_category_title;
+    }
+    
+    public static function GetGlobalCategoryId() {
+        return self::$active_global_category_id;
+    }
+    
     public static function GetCategoryTitle() {
         return self::$active_category_title;
     }
@@ -390,6 +406,11 @@ Class WoW_Forums {
             (isset($post_data['blizzName'])) ? $post_data['blizzName'] : null, $post_data['postCommand_detail'], time(), $_SERVER['REMOTE_ADDR']
         );
         return array('cat_id' => $category_id, 'thread_id' => $thread_id, 'post_id' => DB::WoW()->GetInsertID());
+    }
+    
+    public static function GetBreadcrumb() {
+        $html = '';
+        
     }
 }
 ?>
