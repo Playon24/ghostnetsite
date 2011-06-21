@@ -43,19 +43,33 @@ Class WoW_Forums {
     
     public static function InitForums() {
         if(self::GetCategoryId() == 0 && self::GetThreadId() == 0) {
-            self::LoadForumCategories();
+            self::LoadCategories();
         }
         elseif(self::GetCategoryId() > 0 && self::GetThreadId() == 0) {
-            self::LoadCategoryThreads();
+            self::LoadThreads();
         }
         elseif(self::GetCategoryId() == 0 && self::GetThreadId() > 0) {
-            self::LoadThreadPosts();
+            self::LoadThread();
         }
         else {
             WoW_Log::WriteError('%s : unhandled exception (category ID: %d, thread ID: %d)!', __METHOD__, self::GetCategoryId(), self::GetThreadId());
             return false;
         }
         return true;
+    }
+    
+    private static function LoadCategories() {
+        self::LoadForumCategories();
+    }
+    
+    private static function LoadThreads() {
+        self::LoadCategoryInfo();
+        self::LoadCategoryThreads();
+    }
+    
+    private static function LoadThread() {
+        self::LoadCategoryInfo();
+        self::LoadThreadPosts();
     }
     
     private static function LoadCategoryInfo() {
@@ -93,7 +107,6 @@ Class WoW_Forums {
     }
     
     private static function LoadCategoryThreads() {
-        self::LoadCategoryInfo();
         self::$category_threads = DB::WoW()->select("
         SELECT DISTINCT
         `a`.*,
@@ -105,7 +118,6 @@ Class WoW_Forums {
     }
     
     private static function LoadThreadPosts() {
-        self::LoadCategoryInfo();
         self::$thread_data = DB::WoW()->selectRow("SELECT * FROM `DBPREFIX_forum_threads` WHERE `thread_id` = %d", self::GetThreadId());
         self::$thread_posts = DB::WoW()->select("
         SELECT DISTINCT

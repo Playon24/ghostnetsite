@@ -2861,6 +2861,7 @@ Class WoW_Characters /*implements Interface_Characters*/ {
     private static function PerformAudit($rebuild = false) {
         // Empty glyphs
         $empty_glyphs = 6;
+        //TODO: check player level
         switch(self::$m_server) {
             default:
             case SERVER_MANGOS:
@@ -2940,7 +2941,6 @@ Class WoW_Characters /*implements Interface_Characters*/ {
                     }
                     else {
                         self::UpdateAudit(AUDIT_TYPE_USED_GEMS, $item->GetSocketInfo($i));
-                        //self::UpdateAudit(AUDIT_TYPE_STAT_BONUS, $item->GetSocketInfo($i));
                     }
                 }
             }
@@ -3025,11 +3025,7 @@ Class WoW_Characters /*implements Interface_Characters*/ {
                 }
                 ++self::$audit[$type][$value[0]]['count'];
                 break;
-            case AUDIT_TYPE_STAT_BONUS:/*
-                if(!isset(self::$audit[$type][$value[0]])) {
-                    self::$audit[$type][$value[0]] = 0;
-                }
-                self::$audit[$type][$value[0]] += $value[1];*/
+            case AUDIT_TYPE_STAT_BONUS:
                 if(!$value || !is_array($value)) {
                     return;
                 }
@@ -3067,7 +3063,7 @@ Class WoW_Characters /*implements Interface_Characters*/ {
         return self::$audit;
     }
     
-    private static function GetAuditInfo($type) {
+    public static function GetAuditInfo($type) {
         return isset(self::$audit[$type]) ? self::$audit[$type] : false;
     }
 }

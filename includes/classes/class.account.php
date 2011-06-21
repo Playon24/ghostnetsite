@@ -145,13 +145,20 @@ Class WoW_Account {
      **/
     private static $login_time = null;
     
+    /**
+     * User's country code
+     * @access    private
+     * @staticvar string $country_code
+     * @return    string
+     **/
     private static $country_code = '';
     
     /**
      * User (pseudo-) Battle.Net ID. Used as user's real name index.
-     * @access    private
-     * @staticvar int $bnet_id
-     * @return    int
+     * @access     private
+     * @staticvar  int $bnet_id
+     * @deprecated
+     * @return     int
      **/
     private static $bnet_id = 0;
     
@@ -207,6 +214,7 @@ Class WoW_Account {
      * Ban checker
      * @access    private
      * @staticvar bool $is_banned;
+     * @deprecated
      * @return    bool
      **/
     private static $is_banned = false;
@@ -243,6 +251,12 @@ Class WoW_Account {
      **/
     private static $password_recovery_data = array();
     
+    /**
+     * Selected account data for WoW dashboard page
+     * @access    private
+     * @staticvar array $dashboard_account
+     * @return    array
+     **/
     private static $dashboard_account = array();
     
     /**
@@ -321,7 +335,7 @@ Class WoW_Account {
     }
     
     /**
-     * Creates SHA1 hash for LOGIN:PASSWORD combination.
+     * Creates SHA1 hash for EMAIL:PASSWORD combination.
      * 
      * @access   public
      * @static   WoW_Account::CreateShaPassHash()
@@ -364,14 +378,25 @@ Class WoW_Account {
         self::$password = $password;
     }
     
+    /**
+     * Sets email
+     * 
+     * @access   public
+     * @static   WoW_Account::SetEmail(string $email)
+     * @param    string $email
+     * @category Account Manager Class
+     * @return   bool
+     **/
     public static function SetEmail($email) {
         self::$email = $email;
     }
     
     /**
-     * Returns user ID
-     * @category Account Manager Class
+     * Returns user BNID
+     * 
      * @access   public
+     * @static   WoW_Account::GetUserID()
+     * @category Account Manager Class
      * @return   int
      **/
     public static function GetUserID() {
@@ -380,8 +405,10 @@ Class WoW_Account {
     
     /**
      * Returns user name
-     * @category Account Manager Class
+     * 
      * @access   public
+     * @static   WoW_Account::GetUserName()
+     * @category Account Manager Class
      * @return   string
      **/
     public static function GetUserName() {
@@ -389,17 +416,68 @@ Class WoW_Account {
     }
     /**
      * Returns user password
-     * @category Account Manager Class
+     * 
      * @access   public
+     * @static   WoW_Account::GetPassword()
+     * @category Account Manager Class
      * @return   string
      **/
     public static function GetPassword() {
         return self::$password;
     }
+    
+    /**
+     * Returns first name
+     * 
+     * @access   public
+     * @static   WoW_Account::GetFirstName()
+     * @category Account Manager Class
+     * @return   string
+     **/
+    public static function GetFirstName() {
+        if(self::$first_name) {
+            return self::$first_name;
+        }
+        return self::$username;
+    }
+    
+    /**
+     * Returns last name
+     * 
+     * @access   public
+     * @static   WoW_Account::GetLastName()
+     * @category Account Manager Class
+     * @return   string
+     **/
+    public static function GetLastName() {
+        if(self::$last_name) {
+            return self::$last_name;
+        }
+        return self::$username;
+    }
+    
+    
+    /**
+     * Returns full name
+     * 
+     * @access   public
+     * @static   WoW_Account::GetFullName()
+     * @category Account Manager Class
+     * @return   string
+     **/
+    public static function GetFullName() {
+        if(self::GetFirstName() == self::GetLastName()) {
+            return self::GetFirstName(); // Account name
+        }
+        return self::GetFirstName() . ' ' . self::GetLastName();
+    }
+    
     /**
      * Returns user SHA1 hash for LOGIN:PASSWORD combination.
-     * @category Account Manager Class
+     * 
      * @access   public
+     * @static   WoW_Account::GetShaPassHash()
+     * @category Account Manager Class
      * @return   string
      **/
     public static function GetShaPassHash() {
@@ -411,8 +489,10 @@ Class WoW_Account {
     
     /**
      * Returns all realm game accounts
-     * @category Account Manager Class
+     * 
      * @access   public
+     * @static   WoW_Account::GetUserGames()
+     * @category Account Manager Class
      * @return   array
      **/
     public static function GetUserGames() {
@@ -421,8 +501,10 @@ Class WoW_Account {
     
     /**
      * Returns GM Level
-     * @category Account Manager Class
+     * 
      * @access   public
+     * @static   WoW_Account::GetGMLevel()
+     * @category Account Manager Class
      * @return   int
      **/
     public static function GetGMLevel() {
@@ -431,8 +513,10 @@ Class WoW_Account {
     
     /**
      * Returns E-mail address
-     * @category Account Manager Class
+     * 
      * @access   public
+     * @static   WoW_Account::GetEmail()
+     * @category Account Manager Class
      * @return   string
      **/
     public static function GetEmail() {
@@ -441,8 +525,10 @@ Class WoW_Account {
     
     /**
      * Returns login timestamp
-     * @category Account Manager Class
+     * 
      * @access   public
+     * @static   WoW_Account::GetLoginTimeStamp()
+     * @category Account Manager Class
      * @return   int
      **/
     public static function GetLoginTimeStamp() {
@@ -451,18 +537,36 @@ Class WoW_Account {
     
     /**
      * Returns account expansion
-     * @category Account Manager Class
+     * 
      * @access   public
+     * @static   WoW_Account::GetExpansion()
+     * @category Account Manager Class
      * @return   int
      **/
     public static function GetExpansion() {
         return isset(self::$dashboard_account['expansion']) ? self::$dashboard_account['expansion'] : 0;
     }
     
+    /**
+     * Returns country code
+     * 
+     * @access   public
+     * @static   WoW_Account::GetCountryCode()
+     * @category Account Manager Class
+     * @return   string
+     **/
     public static function GetCountryCode() {
         return self::$country_code;
     }
     
+    /**
+     * Returns account characters
+     * 
+     * @access   public
+     * @static   WoW_Account::GetCharactersData()
+     * @category Account Manager Class
+     * @return   array
+     **/
     public static function GetCharactersData() {
         if(!self::IsCharactersLoaded()) {
             self::LoadCharacters();
@@ -471,9 +575,12 @@ Class WoW_Account {
     }
     
     /**
-     * Returns last error code
-     * @category Account Manager Class
+     * Adds new error code to the last error code mask
+     * 
      * @access   public
+     * @static   WoW_Account::SetLastErrorCode($code)
+     * @param    int $code
+     * @category Account Manager Class
      * @return   bool
      **/
     public static function SetLastErrorCode($code) {
@@ -481,14 +588,24 @@ Class WoW_Account {
         return true;
     }
     
+    /**
+     * Returns account characters
+     * 
+     * @access   public
+     * @static   WoW_Account::GetLastErrorCode()
+     * @category Account Manager Class
+     * @return   array
+     **/
     public static function GetLastErrorCode() {
         return self::$last_error_code;
     }
     
     /**
-     * Clears last error code
-     * @category Account Manager Class
+     * Drops last error code
+     * 
      * @access   public
+     * @static   WoW_Account::DropLastErrorCode()
+     * @category Account Manager Class
      * @return   bool
      **/
     public static function DropLastErrorCode() {
@@ -498,9 +615,11 @@ Class WoW_Account {
     
     /**
      * Changes login state
-     * @category Account Manager Class
-     * @param    int $state
+     * 
      * @access   public
+     * @static   WoW_Account::SetLoginState($state)
+     * @param    int $state
+     * @category Account Manager Class
      * @return   bool
      **/
     public static function SetLoginState($state) {
@@ -509,9 +628,11 @@ Class WoW_Account {
     }
     
     /**
-     * Return number of created game accounts on realm
-     * @category Account Manager Class
+     * Returns number of created game accounts on realm
+     * 
      * @access   public
+     * @static   WoW_Account::GetMyGames()
+     * @category Account Manager Class
      * @return   int
      **/
     public static function GetMyGames() {
@@ -520,8 +641,10 @@ Class WoW_Account {
     
     /**
      * Creates new session
-     * @category Account Manager Class
+     * 
      * @access   private
+     * @category Account Manager Class
+     * @static   WoW_Account::CreateSession()
      * @return   bool
      **/
     private static function CreateSession() {
@@ -549,8 +672,10 @@ Class WoW_Account {
     
     /**
      * Destroys active session
-     * @category Account Manager Class
+     * 
      * @access   private
+     * @static   WoW_Account::DestroySession()
+     * @category Account Manager Class
      * @return   bool
      **/
     private static function DestroySession() {
@@ -566,8 +691,10 @@ Class WoW_Account {
     
     /**
      * Destroys user data
-     * @category Account Manager Class
+     * 
      * @access   private
+     * @static   WoW_Account::DestroyUserData()
+     * @category Account Manager Class
      * @return   bool
      **/
     private static function DestroyUserData() {
@@ -591,8 +718,10 @@ Class WoW_Account {
     
     /**
      * Returns some session info
-     * @category Account Manager Class
+     * 
      * @access   private
+     * @static   WoW_Account::GetSessionInfo()
+     * @category Account Manager Class
      * @param    string $info
      * @return   string
      **/
@@ -605,10 +734,12 @@ Class WoW_Account {
     
     /**
      * Replace ":" (colon) to special string and vice-versa
-     * @category Account Manager Class
+     * 
      * @access   private
+     * @static   WoW_Account::NormalizeStringForSessionString($string, $action = NORMALIZE_TO)
      * @param    string $string
      * @param    int $action = NORMALIZE_TO
+     * @category Account Manager Class
      * @return   string
      **/
     private static function NormalizeStringForSessionString($string, $action = NORMALIZE_TO) {
@@ -626,10 +757,12 @@ Class WoW_Account {
     
     /**
      * Login handler
-     * @category Account Manager Class
+     * 
      * @access   public
+     * @static   WoW_Account::PerformLogin($username, $password)
      * @param    string $email
      * @param    string $password
+     * @category Account Manager Class
      * @return   bool
      **/
     public static function PerformLogin($username, $password) {
@@ -664,8 +797,10 @@ Class WoW_Account {
     
     /**
      * Game accounts handler
-     * @category Account Manager Class
+     * 
      * @access   public
+     * @static   WoW_Account::UserGames()
+     * @category Account Manager Class
      * @return   bool
      **/
     public static function UserGames() {
@@ -684,9 +819,11 @@ Class WoW_Account {
     
     /**
      * Game accounts registration
-     * @category Account Manager Class
-     * @param    string $account_data
+     * 
      * @access   public
+     * @static   WoW_Account::RegisterGameAccount($account_data)
+     * @param    array $account_data
+     * @category Account Manager Class
      * @return   bool
      **/
     public static function RegisterGameAccount($account_data) {
@@ -707,8 +844,10 @@ Class WoW_Account {
     
     /**
      * Logoff user. Destroy session/user data from here.
-     * @category Account Manager Class
+     * 
      * @access   public
+     * @static   WoW_Account::PerformLogout()
+     * @category Account Manager Class
      * @return   bool
      **/
     public static function PerformLogout() {
@@ -717,27 +856,14 @@ Class WoW_Account {
         return true;
     }
     
-    public static function GetFirstName() {
-        if(self::$first_name) {
-            return self::$first_name;
-        }
-        return self::$username;
-    }
-    
-    public static function GetLastName() {
-        if(self::$last_name) {
-            return self::$last_name;
-        }
-        return self::$username;
-    }
-    
-    public static function GetFullName() {
-        if(self::GetFirstName() == self::GetLastName()) {
-            return self::GetFirstName(); // Account name
-        }
-        return self::GetFirstName() . ' ' . self::GetLastName();
-    }
-    
+    /**
+     * Checks if user has active (primary) character
+     * 
+     * @access   public
+     * @static   WoW_Account::IsHaveActiveCharacter()
+     * @category Account Manager Class
+     * @return   bool
+     **/
     public static function IsHaveActiveCharacter() {
         if(!self::$characters_data && self::IsCharactersLoaded()) {
             return false;
@@ -752,6 +878,15 @@ Class WoW_Account {
         return true;
     }
     
+    /**
+     * Checks if user has any character on selected realm
+     * 
+     * @access   public
+     * @static   WoW_Account::IsHaveActiveCharacter($realmName)
+     * @param    string $realmName
+     * @category Account Manager Class
+     * @return   bool
+     **/
     public static function IsHaveCharacterOnRealm($realmName) {
         if(!self::$characters_data && self::IsCharactersLoaded()) {
             return false;
@@ -771,6 +906,15 @@ Class WoW_Account {
         return false;
     }
     
+    /**
+     * Returns active (primary) character info
+     * 
+     * @access   public
+     * @static   WoW_Account::GetActiveCharacterInfo($info)
+     * @param    string $info
+     * @category Account Manager Class
+     * @return   mixed
+     **/
     public static function GetActiveCharacterInfo($info) {
         if(!self::IsCharactersLoaded()) {
             self::LoadCharacters();
@@ -778,6 +922,15 @@ Class WoW_Account {
         return (isset(self::$active_character[$info])) ? self::$active_character[$info] : false;
     }
     
+    /**
+     * Returns active (primary) character
+     * 
+     * @access   public
+     * @static   WoW_Account::GetActiveCharacter()
+     * @param    string $info
+     * @category Account Manager Class
+     * @return   array
+     **/
     public static function GetActiveCharacter() {
         if(!self::IsCharactersLoaded()) {
             self::LoadCharacters();
@@ -785,6 +938,16 @@ Class WoW_Account {
         return self::$active_character;
     }
     
+    /**
+     * Returns character by GUID and RealmID
+     * 
+     * @access   public
+     * @static   WoW_Account::GetCharacter($guid, $realm_id)
+     * @param    int $guid
+     * @param    int $realm_id
+     * @category Account Manager Class
+     * @return   array
+     **/
     public static function GetCharacter($guid, $realm_id) {
         $db = DB::ConnectToDB(DB_CHARACTERS, $realm_id);
         if(!$db) {
@@ -799,6 +962,14 @@ Class WoW_Account {
         return $char_data;
     }
     
+    /**
+     * Loads all characters from DB
+     * 
+     * @access   public
+     * @static   WoW_Account::LoadCharacters()
+     * @category Account Manager Class
+     * @return   bool
+     **/
     private static function LoadCharacters() {
         self::$characters_loaded = false;
         self::$myGamesList = DB::WoW()->select("SELECT `account_id` FROM `DBPREFIX_users_accounts` WHERE `id` = %d", self::GetUserID());
@@ -874,6 +1045,14 @@ Class WoW_Account {
         return true;
     }
     
+    /**
+     * Loads all characters from world DBs
+     * 
+     * @access   public
+     * @static   WoW_Account::LoadCharactersFromWorld()
+     * @category Account Manager Class
+     * @return   void
+     **/
     private static function LoadCharactersFromWorld() {
         $db = null;
         $chars_data = array();
@@ -938,10 +1117,28 @@ Class WoW_Account {
         }
     }
     
+    /**
+     * Checks if characters loaded
+     * 
+     * @access   public
+     * @static   WoW_Account::IsCharactersLoaded()
+     * @category Account Manager Class
+     * @return   bool
+     **/
     public static function IsCharactersLoaded() {
         return self::$characters_loaded;
     }
     
+    /**
+     * Generates and returns some characters-related strings
+     * 
+     * @access   public
+     * @static   WoW_Account::PrintAccountCharacters($type, $only_primary = false)
+     * @param    string $type
+     * @param    bool $only_primary = false
+     * @category Account Manager Class
+     * @return   bool
+     **/
     public static function PrintAccountCharacters($type, $only_primary = false) {
         if(!self::IsCharactersLoaded()) {
             if(!self::LoadCharacters()) {
@@ -1024,6 +1221,16 @@ Class WoW_Account {
         return $characters_string;
     }
     
+    /**
+     * Returns characters count
+     * 
+     * @access   public
+     * @static   WoW_Account::GetCharactersCount($without_primary = false, $start = 0)
+     * @param    bool $without_primary = false
+     * @param    int $start = 0
+     * @category Account Manager Class
+     * @return   bool
+     **/
     public static function GetCharactersCount($without_primary = false, $start = 0) {
         if(!$without_primary && $start == 0) {
             return count(self::$characters_data);
@@ -1039,6 +1246,14 @@ Class WoW_Account {
         }
     }
     
+    /**
+     * Loads friends list for active (primary) character
+     * 
+     * @access   public
+     * @static   WoW_Account::LoadFriendsListForPrimaryCharacter()
+     * @category Account Manager Class
+     * @return   bool
+     **/
     private static function LoadFriendsListForPrimaryCharacter() {
         if(!self::GetSessionInfo('wow_sid')) {
             return false;
@@ -1070,6 +1285,14 @@ Class WoW_Account {
         return true;
     }
     
+    /**
+     * Returns friends list for active (primary) character
+     * 
+     * @access   public
+     * @static   WoW_Account::GetFriendsListForPrimaryCharacter()
+     * @category Account Manager Class
+     * @return   array
+     **/
     public static function GetFriendsListForPrimaryCharacter() {
         if(!self::$friends_data) {
             self::LoadFriendsListForPrimaryCharacter();
@@ -1083,10 +1306,27 @@ Class WoW_Account {
         return self::$friends_data;
     }
     
+    /**
+     * Returns friends list count
+     * 
+     * @access   public
+     * @static   WoW_Account::GetFriendsListCount()
+     * @category Account Manager Class
+     * @return   int
+     **/
     public static function GetFriendsListCount() {
         return count(self::$friends_data);
     }
     
+    /**
+     * Checks if active character (WoW_Characters class) is on current account
+     * 
+     * @access   public
+     * @static   WoW_Account::IsAccountCharacter()
+     * @category Account Manager Class
+     * @uses     WoW_Characters
+     * @return   bool
+     **/
     public static function IsAccountCharacter() {
         if(!self::IsLoggedIn()) {
             return false;
@@ -1105,6 +1345,7 @@ Class WoW_Account {
     }
     
     /**
+     * @deprecated
      * @todo Rewrite this method with responses and other tasty things. Write it only when you don't want to go sleep...
      **/
     public static function RegisterUser($user_data, $auto_session = false) {
@@ -1143,6 +1384,9 @@ Class WoW_Account {
         return false;
     }
     
+    /**
+     * @deprecated
+     **/
     public static function RecoverPasswordSelect($user_data) {
         if(self::$password_recovery_data = DB::WoW()->selectRow("SELECT `secredQ`, `secredA`, `first_name` AS `username`, `email` FROM `DBPREFIX_users` WHERE `first_name` = '%s' AND `email` = '%s' LIMIT 1", $user_data['username'], $user_data['email']) ) {
             return true;
@@ -1152,10 +1396,16 @@ Class WoW_Account {
         }
     }
     
+    /**
+     * @deprecated
+     **/
     public static function GetRecoverPasswordData() {
         return self::$password_recovery_data;
     }
     
+    /**
+     * @deprecated
+     **/
     public static function SetRecoverPasswordData($data_from_session) {
         self::$password_recovery_data = $data_from_session;
         return true;
@@ -1163,6 +1413,7 @@ Class WoW_Account {
     
     /**
      * @todo RecoveryPasswordSuccess have fully functional password change script, but there is no mail sender object.
+     * @deprecated
      * Also there is no random password generator.     
      * Because of this, script to change password is commented.
      * 
@@ -1182,6 +1433,15 @@ Class WoW_Account {
         }
     }
     
+    /**
+     * Initializes account for dashboard page
+     * 
+     * @access   public
+     * @static   WoW_Account::InitializeAccount($accountName)
+     * @param    string $accountName
+     * @category Account Manager Class
+     * @return   void
+     **/
     public static function InitializeAccount($accountName) {
         $accountData = DB::Realm()->selectRow("SELECT * FROM `account` WHERE `username` = '%s'", $accountName);
         if(!$accountData) {
@@ -1197,14 +1457,40 @@ Class WoW_Account {
         }
     }
     
+    /**
+     * Returns dashboard account name
+     * 
+     * @access   public
+     * @static   WoW_Account::GetAccountName()
+     * @category Account Manager Class
+     * @return   string
+     **/
     public static function GetAccountName() {
         return isset(self::$dashboard_account['username']) ? self::$dashboard_account['username'] : null;
     }
     
+    /**
+     * Returns game accounts count
+     * 
+     * @access   public
+     * @static   WoW_Account::GetGameAccountsCount()
+     * @category Account Manager Class
+     * @return   array
+     **/
     public static function GetGameAccountsCount() {
         return self::$myGames;
     }
     
+    /**
+     * Performs account conversion (merging) step
+     * 
+     * @access   public
+     * @static   WoW_Account::PerformConversionStep($step, $post_data = false)
+     * @param    int $step
+     * @param    array $post_data = false
+     * @category Account Manager Class
+     * @return   bool
+     **/
     public static function PerformConversionStep($step, $post_data = false) {
         switch($step) {
             case 1:
