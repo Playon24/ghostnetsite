@@ -44,6 +44,8 @@ if($url_data['action2'] == 'wow' && $url_data['action3'] == 'signup') {
     exit;
 }
 if(preg_match('/tos.html/i', $url_data['action2'])) {
+    WoW_Template::SetPageIndex('creation_tos');
+    WoW_Template::SetPageData('page', 'creation_tos');
     if(isset($_POST['csrftoken'])) {
         $registration_allowed = true;
         $required_post_fields = array(
@@ -69,12 +71,8 @@ if(preg_match('/tos.html/i', $url_data['action2'])) {
                 }
             }
         }
-        if(!$registration_allowed) {
-            WoW_Template::SetPageData('creation_error', true);
-            WoW_Template::SetPageIndex('creation_tos');
-            WoW_Template::SetPageData('page', 'creation_tos');
-        }
-        else {
+        if($registration_allowed) {
+            // Generate user data
             $user_data = array(
                 'first_name' => $_POST['firstname'],
                 'last_name' => $_POST['lastname'],
@@ -87,22 +85,17 @@ if(preg_match('/tos.html/i', $url_data['action2'])) {
                 'birthdate' => strtotime(sprintf('%d.%d.%d', $_POST['dobDay'], $_POST['dobMonth'], $_POST['dobYear'])),
                 'country_code' => $_POST['country']
             );
+            // And try to register new account
             if(WoW_Account::RegisterUser($user_data, true)) {
+                // Account created, redirect user to manager index
                 header('Location: ' . WoW::GetWoWPath() . '/account/management/');
                 exit;
             }
-            else {
-                WoW_Template::SetPageIndex('creation_tos');
-                WoW_Template::SetPageData('page', 'creation_tos');
-            }
+        }
+        else {
+            WoW_Template::SetPageData('creation_error', true);
         }
     }
-    else {
-        WoW_Template::SetPageIndex('creation_tos');
-        WoW_Template::SetPageData('page', 'creation_tos');
-    }
-}
-else {
 }
 WoW_Template::LoadTemplate('creation_index');
 ?>

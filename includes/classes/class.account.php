@@ -1345,8 +1345,15 @@ Class WoW_Account {
     }
     
     /**
-     * @deprecated
-     * @todo Rewrite this method with responses and other tasty things. Write it only when you don't want to go sleep...
+     * Registers user (BNACCOUNT)
+     * 
+     * @access   public
+     * @static   WoW_Account::RegisterUser($user_data, $auto_session = false)
+     * @param    array $user_data
+     * @param    bool $auto_session = false
+     * @category Account Manager Class
+     * @uses     WoW_Characters
+     * @return   bool
      **/
     public static function RegisterUser($user_data, $auto_session = false) {
         if(!is_array($user_data)) {
