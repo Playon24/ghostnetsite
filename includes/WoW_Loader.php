@@ -20,21 +20,29 @@
 
 // Start sessions
 session_start();
+
 // Display all errors
 error_reporting(E_ALL);
+
 // Detect main directory
 define('WOW_DIRECTORY', dirname(dirname(__FILE__)));
+
 // And check it
 if(!defined('WOW_DIRECTORY') || !WOW_DIRECTORY) {
     die('<strong>Fatal Error</strong>: unable to detect directory for system files!');
 }
+
+define('DS', DIRECTORY_SEPARATOR);
+
 // Load defines
 include(WOW_DIRECTORY . '/includes/revision_nr.php');
 include(WOW_DIRECTORY . '/includes/UpdateFields.php');
 include(WOW_DIRECTORY . '/includes/SharedDefines.php');
+
 // Load Interfaces
 include(WOW_DIRECTORY . '/includes/interfaces/interface.db.php');
 include(WOW_DIRECTORY . '/includes/interfaces/interface.log.php');
+
 /**
  * Temporary disabled // Shadez
  * Load configs
@@ -57,6 +65,7 @@ else{
   include(WOW_DIRECTORY . '/includes/configs/DatabaseConfig.local.php');
   include(WOW_DIRECTORY . '/includes/configs/WoWConfig.local.php');
 }*/
+
 // Load libraries
 include(WOW_DIRECTORY . '/includes/classes/libs/mysqldatabase.php');
 include(WOW_DIRECTORY . '/includes/classes/libs/log.php');
@@ -65,54 +74,38 @@ include(WOW_DIRECTORY . '/includes/classes/class.db.php');
 include(WOW_DIRECTORY . '/includes/classes/class.wow.php');
 include(WOW_DIRECTORY . '/includes/classes/class.locale.php');
 include(WOW_DIRECTORY . '/includes/classes/class.template.php');
+
 // Custom classes
-// TODO: Load only necessary classes for opened page
-include(WOW_DIRECTORY . '/includes/classes/class.account.php');
-include(WOW_DIRECTORY . '/includes/classes/class.utils.php');
-include(WOW_DIRECTORY . '/includes/classes/class.characters.php');
-include(WOW_DIRECTORY . '/includes/classes/class.achievements.php');
-include(WOW_DIRECTORY . '/includes/classes/class.item.php');
-include(WOW_DIRECTORY . '/includes/classes/class.items.php');
-include(WOW_DIRECTORY . '/includes/classes/class.itemprototype.php');
-include(WOW_DIRECTORY . '/includes/classes/class.guild.php');
-include(WOW_DIRECTORY . '/includes/classes/class.search.php');
-include(WOW_DIRECTORY . '/includes/classes/class.reputation.php');
-include(WOW_DIRECTORY . '/includes/classes/class.auction.php');
-include(WOW_DIRECTORY . '/includes/classes/class.forums.php');
-include(WOW_DIRECTORY . '/includes/classes/class.game.php');
+// Register autoload method
+spl_autoload_register('WoW_Autoload');
+
+/**
+ * Autoload classes. Do not call this function manually, it will be called automatically.
+ * 
+ * @category WoW Loader
+ * @access   global / public
+ * @param    string $className
+ * @return   void
+ **/
+function WoW_Autoload($className)
+{
+    $className = strtolower(str_replace('WoW_', null, $className));
+    if(!file_exists(WOW_DIRECTORY . DS . 'includes' . DS . 'classes' . DS . 'class.' . $className . '.php')) {
+        die('<strong>Fatal Error:</strong> unable to autoload class ' . $className . '!');
+    }
+    include(WOW_DIRECTORY . DS . 'includes' . DS . 'classes' . DS . 'class.' . $className . '.php');
+}
+
 // Load data
 include(WOW_DIRECTORY . '/includes/data/data.classes.php');
 include(WOW_DIRECTORY . '/includes/data/data.races.php');
-// Perform log in (if required)
-if(isset($_GET['login']) || preg_match('/\?login/', $_SERVER['REQUEST_URI'])) {
-    header('Location: ' . WoW::GetWoWPath() . '/login/');
-    exit;
-}
-// Perform logout (if required)
-if(isset($_GET['logout']) || preg_match('/\?logout/', $_SERVER['REQUEST_URI'])) {
-    // $_SERVER['REQUEST_URI'] check is required for mod_rewrited URL cases.
-    WoW_Account::PerformLogout();
-    header('Location: ' . WoW::GetWoWPath() . '/');
-    exit;
-}
-// Locale
-if(isset($_GET['locale']) && !preg_match('/lookup/', $_SERVER['REQUEST_URI'])) {
-    $_SESSION['wow_locale'] = $_GET['locale'];
-    $_SESSION['wow_locale_id'] = WoW_Locale::GetLocaleIDForLocale($_SESSION['wow_locale']);
-    if(WoW_Locale::IsLocale($_SESSION['wow_locale'], $_SESSION['wow_locale_id'])) {
-        WoW_Locale::SetLocale($_SESSION['wow_locale'], $_SESSION['wow_locale_id']);
-        if(isset($_SERVER['HTTP_REFERER'])) {
-            header('Location: ' . $_SERVER['HTTP_REFERER']);
-            exit;
-        }
-        else {
-            header('Location: ' . WoW::GetWoWPath() . '/');
-            exit; 
-        }
-    }
-}
+
+// Try to catch some operations (login, logout, etc.)
+WoW::CatchOperations();
+
 // Initialize account (if user already logged in we need to re-build his info from session data)
 WoW_Account::Initialize();
+
 // Load locale
 if(isset($_SESSION['wow_locale']) && WoW_Locale::IsLocale($_SESSION['wow_locale'], $_SESSION['wow_locale_id'])) {
     WoW_Locale::SetLocale($_SESSION['wow_locale'], $_SESSION['wow_locale_id']);
@@ -120,19 +113,23 @@ if(isset($_SESSION['wow_locale']) && WoW_Locale::IsLocale($_SESSION['wow_locale'
 else {
     WoW_Locale::SetLocale(WoWConfig::$DefaultLocale, WoWConfig::$DefaultLocaleID);
 }
+
 // Initialize debug log
 WoW_Log::Initialize(WoWConfig::$UseLog, WoWConfig::$LogLevel);
+
 // Load databases configs
-DB::LoadConfigs();
 // Do not create DB connections here - it will be created automatically at first query request!
+DB::LoadConfigs();
 
 // Initialize auction handler
 WoW_Auction::InitAuction(); // TODO: this initialization should be moved in some other place.
+
+// Display wow revision (if required; do not remove).
 if(isset($_GET['_DISPLAYVERSION_'])) {
     die('WOW_REVISION: ' . WOW_REVISION);
 }
-// RunOnce.
+
+// RunOnce
 define('__RUNONCE__', true);
 include(WOW_DIRECTORY . '/includes/RunOnce.php');
-WoW::AddInWoW();
 ?>
