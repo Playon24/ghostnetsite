@@ -2,15 +2,8 @@
 <div class="content-top">
 <div class="content-trail">
 <ol class="ui-breadcrumb">
-<li>
-<a href="<?php echo WoW::GetWoWPath(); ?>/wow/" rel="np">
-World of Warcraft
-</a>
-</li>
-<li class="last">
-<a href="<?php echo WoW::GetWoWPath(); ?>/wow/game/" rel="np">
-<?php echo WoW_Locale::GetString('template_menu_game'); ?>
-</a>
+<li><a href="<?php echo WoW::GetWoWPath(); ?>/wow/" rel="np">World of Warcraft</a></li>
+<li class="last"><a href="<?php echo WoW::GetWoWPath(); ?>/wow/game/" rel="np"><?php echo WoW_Locale::GetString('template_menu_game'); ?></a>
 </li>
 </ol>
 </div>
@@ -19,7 +12,7 @@ World of Warcraft
 		<div class="title">
 			<h2><?php echo WoW_Locale::GetString('template_game_guide_title'); ?></h2>
 			<p class="desc"><?php echo WoW_Locale::GetString('template_game_subwelcome'); ?></p>
-			<a href="<?php echo WoW::GetWoWPath(); ?>/wow/guide/" class="beginners-guide">
+			<a href="<?php echo WoW::GetWoWPath(); ?>/wow/game/guide/" class="beginners-guide">
 				<strong><?php echo WoW_Locale::GetString('template_game_beginners_guide_title'); ?></strong>
 				<span><?php echo WoW_Locale::GetString('template_game_guide_desc'); ?></span>
 			</a>

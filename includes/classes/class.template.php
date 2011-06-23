@@ -927,6 +927,139 @@ Class WoW_Template {
                     )
                 );
                 break;
+            case 'game_guide_what_is_wow':
+            case 'game_guide_getting_started':
+            case 'game_guide_how_to_play':
+            case 'game_guide_playing_together':
+            case 'game_guide_late_game':
+                $css_data_page = array(
+                    array(
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/game/game-common.css',
+                        'version' => 10,
+                        'browser' => false
+                    ),
+                    array(
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/game/game-guide-common.css',
+                        'version' => 10,
+                        'browser' => false
+                    ),
+                    array(),
+                    array(
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/game/game-guide-ie6.css.css',
+                        'version' => 10,
+                        'browser' => 'IE'
+                    ),
+                    array(
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/game/game-guide-common-ie6.css',
+                        'version' => 10,
+                        'browser' => 'IE'
+                    ),
+                    array(
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/lightbox.css',
+                        'version' => 10,
+                        'browser' => false
+                    )
+                );
+                if(self::GetPageIndex() == 'game_guide_what_is_wow') {
+                    $css_data_page[2] = array(
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/game/game-guide-what-is-wow.css',
+                        'version' => 10,
+                        'browser' => false
+                    );
+                }
+                elseif(self::GetPageIndex() == 'game_guide_getting_started') {
+                    $css_data_page[2] = array(
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/game/game-guide-getting-started.css',
+                        'version' => 10,
+                        'browser' => false
+                    );
+                }
+                elseif(self::GetPageIndex() == 'game_guide_how_to_play') {
+                    $css_data_page[2] = array(
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/game/game-guide-how-to-play.css',
+                        'version' => 10,
+                        'browser' => false
+                    );
+                }
+                elseif(self::GetPageIndex() == 'game_guide_playing_together') {
+                    $css_data_page[2] = array(
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/game/game-guide-playing-together.css',
+                        'version' => 10,
+                        'browser' => false
+                    );
+                }
+                elseif(self::GetPageIndex() == 'game_guide_late_game') {
+                    $css_data_page[2] = array(
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/game/game-guide-late-game.css',
+                        'version' => 10,
+                        'browser' => false
+                    );
+                }
+                break;
+            case 'game_race_index':
+            case 'game_race':
+                $css_data_page = array(
+                    array(
+                        'path' => WoW::GetWoWPath() . '/wow/static/local-common/css/cms/cms-common.css',
+                        'version' => 15,
+                        'browser' => false,
+                    ),
+                    array(
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/cms.css',
+                        'version' => 15,
+                        'browser' => false,
+                    ),
+                    array(
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/game/game-race.css',
+                        'version' => 10,
+                        'browser' => false
+                    )
+                );
+                if(self::GetPageIndex() == 'game_race') {
+                    $css_data_page[3] = array(
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/game/game-common.css',
+                        'version' => 10,
+                        'browser' => false
+                    );
+                }
+                break;
+            case 'game_class_index':
+                $css_data_page = array(
+                    array(
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/game/game-class.css',
+                        'version' => 10,
+                        'browser' => false
+                    )
+                );
+                break;
+            case 'game_class':
+                $css_data_page = array(
+                    array(
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/game/game-common.css',
+                        'version' => 10,
+                        'browser' => false
+                    ),
+                    array(
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/game/game-class.css',
+                        'version' => 10,
+                        'browser' => false
+                    )
+                );
+                break;
+            case 'faction':
+                $css_data_page = array(
+                    array(
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/wiki/wiki.css',
+                        'version' => 10,
+                        'browser' => false
+                    ),
+                    array(
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/wiki/faction.css',
+                        'version' => 10,
+                        'browser' => false
+                    )
+                );
+                break;
             case 'account_status':
                 $css_data_page = array(
                     array(
@@ -1117,6 +1250,26 @@ Class WoW_Template {
                 return sprintf('%s - ', WoW_Template::GetPageData('blog_title'));
             case 'game':
                 return sprintf('%s - ', WoW_Locale::GetString('template_menu_game'));
+            case 'game_guide_what_is_wow':
+                return sprintf('%s - %s - ', WoW_Locale::GetString('template_menu_game_guide_what_is_wow'), WoW_Locale::GetString('template_menu_game'));
+            case 'game_guide_getting_started':
+                return sprintf('%s - %s - ', WoW_Locale::GetString('template_menu_game_guide_getting_started'), WoW_Locale::GetString('template_menu_game'));
+            case 'game_guide_how_to_play':
+                return sprintf('%s - %s - ', WoW_Locale::GetString('template_menu_game_guide_how_to_play'), WoW_Locale::GetString('template_menu_game'));
+            case 'game_guide_playing_together':
+                return sprintf('%s - %s - ', WoW_Locale::GetString('template_menu_game_guide_playing_together'), WoW_Locale::GetString('template_menu_game'));
+            case 'game_guide_late_game':
+                return sprintf('%s - %s - ', WoW_Locale::GetString('template_menu_game_guide_late_game'), WoW_Locale::GetString('template_menu_game'));
+            case 'game_race_index':
+                return sprintf('%s - %s - ', WoW_Locale::GetString('template_game_race_index'), WoW_Locale::GetString('template_menu_game'));
+            case 'game_race':
+                return sprintf('%s - %s - ', WoW_Locale::GetString('template_game_race_'.WoW_Template::GetPageData('race')), WoW_Locale::GetString('template_menu_game'));
+            case 'game_class_index':
+                return sprintf('%s - %s - ', WoW_Locale::GetString('template_game_class_index'), WoW_Locale::GetString('template_menu_game'));
+            case 'game_class':
+                return sprintf('%s - %s - ', WoW_Locale::GetString('template_game_classes_'.WoW_Template::GetPageData('class')), WoW_Locale::GetString('template_menu_game'));
+            
+            
             case 'dashboard':
                 return sprintf('%s - Battle.Net', WoW_Locale::GetString('expansion_' . WoW_Account::GetExpansion()));
             case 'landing':

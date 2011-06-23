@@ -99,6 +99,37 @@ switch(WoW_Template::GetPageIndex()) {
     case 'game':
         WoW_Template::LoadTemplate('static_game_index');
         break;
+    case 'game_guide_what_is_wow':
+        WoW_Template::LoadTemplate('static_game_guide_what_is_wow');
+        break;
+    case 'game_guide_getting_started':
+        WoW_Template::LoadTemplate('static_game_guide_getting_started');
+        break;
+    case 'game_guide_how_to_play':
+        WoW_Template::LoadTemplate('static_game_guide_how_to_play');
+        break;
+    case 'game_guide_playing_together':
+        WoW_Template::LoadTemplate('static_game_guide_playing_together');
+        break;
+    case 'game_guide_late_game':
+        WoW_Template::LoadTemplate('static_game_guide_late_game');
+        break;
+    case 'game_race_index':
+        WoW_Template::LoadTemplate('static_game_race_index');
+        break;
+    case 'game_race':
+        WoW_Template::LoadTemplate('content_game_race');
+        break;
+    case 'game_class_index':
+        WoW_Template::LoadTemplate('static_game_class_index');
+        break;
+    case 'game_class':
+        WoW_Template::LoadTemplate('content_game_class');
+        break;
+    case 'faction':
+        WoW_Template::LoadTemplate('content_faction');
+        break;
+        
     case 'account_status':
         WoW_Template::LoadTemplate('content_account_status');
         break;
@@ -236,6 +267,17 @@ switch(WoW_Template::GetPageData('page')) {
 <script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/local-common/js/cms.js?v20"></script>
 <script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/local-common/js/filter.js?v20"></script>
 <script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/local-common/js/lightbox.js?v20"></script>';
+        break;
+    case 'game_guide_what_is_wow':
+    case 'game_guide_getting_started':
+    case 'game_guide_how_to_play':
+    case 'game_guide_playing_together':
+    case 'game_guide_late_game':
+        echo '<script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/local-common/js/lightbox.js?v20"></script>';
+        break;
+    case 'faction':
+        echo '<script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/js/wiki/wiki.js?v10"></script>
+<script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/local-common/js/filter.js?v20"></script>';
         break;
 }
 ?>

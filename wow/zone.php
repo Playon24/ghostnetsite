@@ -19,6 +19,7 @@
  **/
 
 include('../includes/WoW_Loader.php');
+WoW_Template::SetPageData('body_class', sprintf('%s  zone-index expansion-3', WoW_Locale::GetLocale(LOCALE_DOUBLE)));
 WoW_Template::SetTemplateTheme('wow');
 WoW_Template::SetPageIndex('zones');
 WoW_Template::SetPageData('page', 'zones');
