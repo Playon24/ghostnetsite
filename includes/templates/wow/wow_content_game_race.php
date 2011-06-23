@@ -10,7 +10,7 @@
 </div>
 <div class="content-bot">
 			<div id="content-subheader">
-				<a class="race-parent" href="./"><?php echo WoW_Locale::GetString('template_game_race_title'); ?></a>
+				<a class="race-parent" href="./"><?php echo WoW_Locale::GetString('template_game_races_title'); ?></a>
 	      <span class="clear"><!-- --></span>
 				<h4><?php echo WoW_Locale::GetString('template_game_race_'.WoW_Template::GetPageData('race')); ?></h4>
 			</div>	<span class="clear"><!-- --></span>

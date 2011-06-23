@@ -1497,7 +1497,7 @@ $WoW_Locale = array(
     'template_game_race_forsaken' => 'Forsaken',
     'template_game_race_forsaken_info' => 'When the Lich King’s grasp on his vast armies faltered after the Third War, a contingent of undead broke free of their master’s iron will.',
 
-    'template_game_race_title' => 'Races of World of Warcraft',
+    'template_game_races_title' => 'Races of World of Warcraft',
     'template_game_race_racial_traits' => '%s Racial Traits',
     'template_game_race_classes' => 'Available Classes',
     'template_game_race_classes_desc' => 'These are the classes available to %s player characters:',
@@ -1771,7 +1771,7 @@ $WoW_Locale = array(
     'template_game_class_warlock_info' => 'In the face of demonic power, most heroes see death. Warlocks see only opportunity. Dominance is their aim, and they have found a path to it in the dark arts. These voracious spellcasters summon demonic minions to fight beside them.',
     'template_game_class_druid_info' => 'Druids harness the vast powers of nature to preserve balance and protect life. As master shapeshifters, druids can take on the forms of a variety of beasts, morphing into a bear, cat, storm crow, or sea lion with ease.',
     
-    'template_game_class_title' => 'Classes of World of Warcraft',
+    'template_game_classes_title' => 'Classes of World of Warcraft',
     'template_game_class_inforamtion' => '%s Information',
     'template_game_class_talents' => '%s Tallents',
     'template_game_class_talent_trees' => '%s Tallent Trees',

@@ -10,7 +10,7 @@
 </div>
     <div class="content-bot">
       <div id="content-subheader">
-        <a class="class-parent" href="./"><?php echo WoW_Locale::GetString('template_game_class_title'); ?></a>
+        <a class="class-parent" href="./"><?php echo WoW_Locale::GetString('template_game_classes_title'); ?></a>
         <span class="clear"><!-- --></span>
         <h4><?php echo WoW_Locale::GetString('template_game_classes_'.WoW_Template::GetPageData('class')); ?></h4>
       </div>
