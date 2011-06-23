@@ -27,7 +27,7 @@
         </div>
         <div class="basic-info-box-list basic-info">
           <div class="basic-info-box-list-title">
-            <span><?php echo sprintf(WoW_Locale::GetString('template_game_class_inforamtion'), WoW_Locale::GetString('template_game_classes_'.WoW_Template::GetPageData('class'))); ?></span>
+            <span><?php echo sprintf(WoW_Locale::GetString('template_game_class_information'), WoW_Locale::GetString('template_game_classes_'.WoW_Template::GetPageData('class'))); ?></span>
           </div>
           <div class="list-box">
             <div class="wrapper">

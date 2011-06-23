@@ -1772,9 +1772,9 @@ $WoW_Locale = array(
     'template_game_class_druid_info' => 'Druids harness the vast powers of nature to preserve balance and protect life. As master shapeshifters, druids can take on the forms of a variety of beasts, morphing into a bear, cat, storm crow, or sea lion with ease.',
     
     'template_game_classes_title' => 'Classes of World of Warcraft',
-    'template_game_class_inforamtion' => '%s Information',
-    'template_game_class_talents' => '%s Tallents',
-    'template_game_class_talent_trees' => '%s Tallent Trees',
+    'template_game_class_information' => '%s Information',
+    'template_game_class_talents' => '%s Talents',
+    'template_game_class_talent_trees' => '%s Talent Trees',
     'template_game_class_races' => '%s Available Races',
     'template_game_class_alliance' => 'Alliance',
     'template_game_class_horde' => 'Horde',
