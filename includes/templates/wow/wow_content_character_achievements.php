@@ -179,7 +179,25 @@ WoW_Template::LoadTemplate('block_profile_crest');
 	<span class="clear"><!-- --></span>
 	</div>
 
-	<script type="text/javascript" src="<?php echo WoW::GetWoWPath(); ?>/wow/static/js/locales/summary_<?php echo WoW_Locale::GetLocale(); ?>.js"></script>
+	<script type="text/javascript">
+	//<![CDATA[
+		$(function() {
+			Profile.url = '<?php echo WoW_Characters::GetURL(); ?>achievement';
+		});
+
+		var MsgProfile = {
+			tooltip: {
+				feature: {
+					notYetAvailable: "<?php echo WoW_Locale::GetString('template_feature_not_available'); ?>"
+				},
+				vault: {
+					character: "<?php echo WoW_Locale::GetString('template_vault_auth_required'); ?>",
+					guild: "<?php echo WoW_Locale::GetString('template_vault_guild'); ?>"
+				}
+			}
+		};
+	//]]>
+	</script>
 	
 	<script type="text/javascript">
 		$(document).ready(function () {

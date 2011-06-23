@@ -326,22 +326,6 @@ Class WoW {
         return $realmList;
     }
     
-    public static function AddInWoW() {
-        if(self::IsInWoW()) {
-            return true;
-        }
-        if(!isset($_SESSION['in_wow'])) {
-            $_SESSION['in_wow'] = true;
-        }
-        else {
-            $_SESSION['in_wow2'] = true;
-        }
-    }
-    
-    public static function IsInWoW() {
-        return isset($_SESSION['in_wow']) && isset($_SESSION['in_wow2']);
-    }
-    
     public static function RedirectToCorrectProfilePage($current_type = '') {
         if($current_type == 'simple' && !preg_match('/simple/i', $_SERVER['REQUEST_URI'])) {
             if(isset($_COOKIE['wow_character_summary_view']) && in_array($_COOKIE['wow_character_summary_view'], array('simple', 'advanced'))) {
@@ -389,6 +373,38 @@ Class WoW {
             }
         }
         return false;
+    }
+    
+    public static function CatchOperations() {
+        // Perform log in (if required)
+        if(isset($_GET['login']) || preg_match('/\?login/', $_SERVER['REQUEST_URI'])) {
+            // $_SERVER['REQUEST_URI'] check is required for mod_rewrited URL cases.
+            header('Location: ' . WoW::GetWoWPath() . '/login/');
+            exit;
+        }
+        // Perform logout (if required)
+        if(isset($_GET['logout']) || preg_match('/\?logout/', $_SERVER['REQUEST_URI'])) {
+            // $_SERVER['REQUEST_URI'] check is required for mod_rewrited URL cases.
+            WoW_Account::PerformLogout();
+            header('Location: ' . WoW::GetWoWPath() . '/');
+            exit;
+        }
+        // Locale
+        if(isset($_GET['locale']) && !preg_match('/lookup/', $_SERVER['REQUEST_URI'])) {
+            $_SESSION['wow_locale'] = $_GET['locale'];
+            $_SESSION['wow_locale_id'] = WoW_Locale::GetLocaleIDForLocale($_SESSION['wow_locale']);
+            if(WoW_Locale::IsLocale($_SESSION['wow_locale'], $_SESSION['wow_locale_id'])) {
+                WoW_Locale::SetLocale($_SESSION['wow_locale'], $_SESSION['wow_locale_id']);
+                if(isset($_SERVER['HTTP_REFERER'])) {
+                    header('Location: ' . $_SERVER['HTTP_REFERER']);
+                    exit;
+                }
+                else {
+                    header('Location: ' . WoW::GetWoWPath() . '/');
+                    exit; 
+                }
+            }
+        }
     }
 }
 ?>

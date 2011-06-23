@@ -113,6 +113,10 @@ if(is_array($categories)) {
 	</div>
 	<script type="text/javascript">
 	//<![CDATA[
+		$(function() {
+			Profile.url = '<?php echo WoW_Characters::GetURL(); ?>statistic';
+		});
+
 		var MsgProfile = {
 			tooltip: {
 				feature: {
