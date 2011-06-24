@@ -23,6 +23,9 @@ Class WoW_Game {
     private static $m_zone = array();
     private static $m_zone_key = array();
     
+    private static $m_class = array();
+    private static $m_class_abilities = array();
+    
     public static function LoadZones() {
         self::$m_zones = DB::WoW()->select("SELECT
         `a`.`zone_id`, 
@@ -254,6 +257,27 @@ Class WoW_Game {
             self::LoadZone();
         }
         return self::$m_zone;
+    }
+    
+    public static function LoadClass($class_id) {
+        if($class_id <= 0 || $class_id >= MAX_CLASSES) {
+            WoW_Log::WriteError('%s : classID %d was not found!', __METHOD__, $class_id);
+            return false;
+        }
+        self::$m_class = DB::WoW()->selectRow("
+        SELECT `id`, `story_%s` AS `story`, `info_%s` AS `info`, `desc_%s` AS `desc`, `talents_%s` AS `talentsInfo`, `races_flag`, `roles_flag`, `powers_flag`, `armors_flag`, `weapons_flag`, `expansion`
+        FROM `DBPREFIX_classes`
+        WHERE `id` = %d", WoW_Locale::GetLocale(), WoW_Locale::GetLocale(), WoW_Locale::GetLocale(), WoW_Locale::GetLocale(), $class_id);
+        if(!self::$m_class) {
+            WoW_Log::WriteError('%s : class %d was not found in DB!', __METHOD__, $class_id);
+            return false;
+        }
+        self::$m_class['talents'] = DB::WoW()->select("SELECT `spec`, `icon`, `name_%s` AS `name`, `dps`, `tank`, `healer` FROM `DBPREFIX_talent_icons` WHERE `class` = %d ORDER BY `spec`", WoW_Locale::GetLocale(), self::$m_class['id']);
+        return true;
+    }
+    
+    public function GetClass() {
+        return self::$m_class;
     }
 }
 ?>

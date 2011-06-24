@@ -22,73 +22,56 @@ include('../includes/WoW_Loader.php');
 WoW_Template::SetPageData('body_class', sprintf('%s  game-index', WoW_Locale::GetLocale(LOCALE_DOUBLE)));
 WoW_Template::SetTemplateTheme('wow');
 $url_data = WoW::GetUrlData('game');
-if($url_data['action0'] == 'game') {
-    if(empty($url_data['action1'])) {
-        WoW_Template::SetPageIndex('game');
-        WoW_Template::SetPageData('page', 'game');
-    }
-    elseif($url_data['action1'] == 'guide') {
-        if(empty($url_data['action2'])) {
+if(empty($url_data['action1'])) {
+    WoW_Template::SetPageIndex('game');
+    WoW_Template::SetPageData('page', 'game');
+}
+elseif($url_data['action1'] == 'guide') {
+    switch($url_data['action2']) {
+        case 'getting-started':
+        case 'how-to-play':
+        case 'playing-together':
+        case 'late-game':
+            WoW_Template::SetPageIndex('game_guide_' . str_replace('-', '_', $url_data['action2']));
+            WoW_Template::SetPageData('body_class', 'game-guide-' . $url_data['action2']);
+            WoW_Template::SetPageData('page', 'game_guide_' . str_replace('-', '_', $url_data['action2']));
+            break;
+        default:
             WoW_Template::SetPageIndex('game_guide_what_is_wow');
             WoW_Template::SetPageData('body_class', 'game-guide-what-is-wow');
             WoW_Template::SetPageData('page', 'game_guide_what_is_wow');
-        }
-        elseif($url_data['action2'] == 'getting-started') {
-            WoW_Template::SetPageIndex('game_guide_getting_started');
-            WoW_Template::SetPageData('body_class', 'game-guide-getting-started');
-            WoW_Template::SetPageData('page', 'game_guide_getting_started');
-        }
-        elseif($url_data['action2'] == 'how-to-play') {
-            WoW_Template::SetPageIndex('game_guide_how_to_play');
-            WoW_Template::SetPageData('body_class', 'game-guide-how-to-play');
-            WoW_Template::SetPageData('page', 'game_guide_how_to_play');
-        }
-        elseif($url_data['action2'] == 'playing-together') {
-            WoW_Template::SetPageIndex('game_guide_playing_together');
-            WoW_Template::SetPageData('body_class', 'game-guide-playing-together');
-            WoW_Template::SetPageData('page', 'game_guide_playing_together');
-        }
-        
-        elseif($url_data['action2'] == 'late-game') {
-            WoW_Template::SetPageIndex('game_guide_late_game');
-            WoW_Template::SetPageData('body_class', 'game-guide-late-game');
-            WoW_Template::SetPageData('page', 'game_guide_late_game');
-        }
-        else {
-            WoW_Template::SetPageIndex('game');
-            WoW_Template::SetPageData('page', 'game');
-        }
+            break;                
     }
-    elseif($url_data['action1'] == 'race') {
-        if(in_array($url_data['action2'], array('worgen','draenei','dwarf','gnome','human','night-elf','goblin','blood-elf','orc','tauren','troll','forsaken') )) {
-            WoW_Template::SetPageIndex('game_race');
-            WoW_Template::SetPageData('body_class', 'race-'.$url_data['action2']);
-            WoW_Template::SetPageData('race', $url_data['action2']);
-            WoW_Template::SetPageData('page', 'game_race');
-        }
-        else {
-            WoW_Template::SetPageIndex('game_race_index');
-            WoW_Template::SetPageData('body_class', 'game-race-index');
-            WoW_Template::SetPageData('page', 'game_race_index');
-        }
-    }
-    elseif($url_data['action1'] == 'class') {
-        if(in_array($url_data['action2'], array('warrior','paladin','hunter','rogue','priest','death-knight','shaman','mage','warlock','druid') )) {
-            WoW_Template::SetPageIndex('game_class');
-            WoW_Template::SetPageData('body_class', 'class-'.$url_data['action2']);
-            WoW_Template::SetPageData('class', $url_data['action2']);
-            WoW_Template::SetPageData('page', 'game_class');
-        }
-        else {
-            WoW_Template::SetPageIndex('game_class_index');
-            WoW_Template::SetPageData('body_class', 'game-classes-index');
-            WoW_Template::SetPageData('page', 'game_class_index');
-        }
-    }
-    
 }
-else {
-    
+elseif($url_data['action1'] == 'race') {
+    $race_id = WoW_Utils::GetRaceIDByKey($url_data['action2']);
+    if($race_id > 0) {
+        WoW_Template::SetPageIndex('game_race');
+        WoW_Template::SetPageData('body_class', 'race-' . $url_data['action2']);
+        WoW_Template::SetPageData('race', $url_data['action2']);
+        WoW_Template::SetPageData('page', 'game_race');
+    }
+    else {
+        WoW_Template::SetPageIndex('game_race_index');
+        WoW_Template::SetPageData('body_class', 'game-race-index');
+        WoW_Template::SetPageData('page', 'game_race_index');
+    }
+}
+elseif($url_data['action1'] == 'class') {
+    $class_id = WoW_Utils::GetClassIDByKey($url_data['action2']);
+    if($class_id > 0) {
+        WoW_Game::LoadClass($class_id);
+        WoW_Template::SetPageIndex('game_class');
+        WoW_Template::SetPageData('body_class', 'class-' . $url_data['action2']);
+        WoW_Template::SetPageData('class', $url_data['action2']);
+        WoW_Template::SetPageData('classId', $class_id);
+        WoW_Template::SetPageData('page', 'game_class');
+    }
+    else {
+        WoW_Template::SetPageIndex('game_class_index');
+        WoW_Template::SetPageData('body_class', 'game-classes-index');
+        WoW_Template::SetPageData('page', 'game_class_index');
+    }
 }
 WoW_Template::SetMenuIndex('menu-game');
 WoW_Template::LoadTemplate('page_index');

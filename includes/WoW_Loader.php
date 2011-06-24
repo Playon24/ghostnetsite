@@ -75,6 +75,10 @@ include(WOW_DIRECTORY . '/includes/classes/class.wow.php');
 include(WOW_DIRECTORY . '/includes/classes/class.locale.php');
 include(WOW_DIRECTORY . '/includes/classes/class.template.php');
 
+// Load data
+include(WOW_DIRECTORY . '/includes/data/data.classes.php');
+include(WOW_DIRECTORY . '/includes/data/data.races.php');
+
 // Custom classes
 // Register autoload method
 spl_autoload_register('WoW_Autoload');
@@ -95,10 +99,6 @@ function WoW_Autoload($className)
     }
     include(WOW_DIRECTORY . DS . 'includes' . DS . 'classes' . DS . 'class.' . $className . '.php');
 }
-
-// Load data
-include(WOW_DIRECTORY . '/includes/data/data.classes.php');
-include(WOW_DIRECTORY . '/includes/data/data.races.php');
 
 // Try to catch some operations (login, logout, etc.)
 WoW::CatchOperations();

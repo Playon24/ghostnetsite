@@ -2914,6 +2914,7 @@ Class WoW_Characters /*implements Interface_Characters*/ {
                     self::UpdateAudit(AUDIT_TYPE_MISSING_BELT_BUCKLE, true);
                 }
                 // Unused profession perks
+                // TODO: add more profession perks (currently only enchanting and blacksmithing are available)
                 switch($item->GetSlot()) {
                     case INV_RING_1:
                     case INV_RING_2:

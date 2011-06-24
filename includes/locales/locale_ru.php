@@ -114,6 +114,7 @@ $WoW_Locale = array(
     'armor_leather' => 'Кожа',
     'armor_mail' => 'Кольчуга',
     'armor_plate' => 'Латы',
+    'armor_shield' => 'Щиты',
     
     'template_buy_now' => 'или <a href="'. WoW::GetWoWPath() .'/account/management/digital-purchase.html?product=WOWC&amp;gameRegion=ru">купите</a> игру!',
 	'template_search' => 'Поиск',
@@ -1166,5 +1167,26 @@ $WoW_Locale = array(
     'template_zone_bosses' => 'Боссы',
     'template_zone_expansion_required' => 'Требуется',
     'template_zone_introduced_in_patch' => 'Появилось в обновлении:',
+    
+    'template_class_role_melee' => 'Боец (физический урон в ближнем бою)',
+    'template_class_role_ranged' => 'Боец (физический урон в дальнем бою)',
+    'template_class_role_caster' => 'Боец (магический урон в дальнем бою)',
+    'template_class_role_heaker' => 'Лекарь',
+    'template_class_role_tank' => '«Танк»',
+    
+    'template_game_class_index' => 'Классы',
+    'template_game_class_intro' => 'В этом обновленном руководстве по классам World of Warcraft содержится описание всех способностей игровых классов и рассказы об их месте в Азероте.',
+    
+    'template_game_classes_title' => 'Классы World of Warcraft',
+    'template_game_class_information' => 'Описание',
+    'template_game_class_talents' => 'Таланты',
+    'template_game_class_talent_trees' => 'Дерево талантов',
+    'template_game_class_races' => 'Расы',
+    'template_game_class_next' => 'След. класс: %s',
+    'template_game_class_prev' => 'Пред. класс: %s',
+    'template_game_class_type' => 'Тип',
+    'template_game_class_bars' => 'Стандартные панели',
+    'template_game_class_armor' => 'Доступная броня',
+    'template_game_class_weapons' => 'Доступное оружие',
 );
 ?>

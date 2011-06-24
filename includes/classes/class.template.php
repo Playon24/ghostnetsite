@@ -1267,7 +1267,7 @@ Class WoW_Template {
             case 'game_class_index':
                 return sprintf('%s - %s - ', WoW_Locale::GetString('template_game_class_index'), WoW_Locale::GetString('template_menu_game'));
             case 'game_class':
-                return sprintf('%s - %s - ', WoW_Locale::GetString('template_game_classes_'.WoW_Template::GetPageData('class')), WoW_Locale::GetString('template_menu_game'));
+                return sprintf('%s - %s - ', WoW_Locale::GetString('character_class_' . self::GetPageData('classId')), WoW_Locale::GetString('template_menu_game'));
             
             
             case 'dashboard':

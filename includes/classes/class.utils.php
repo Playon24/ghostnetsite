@@ -29,8 +29,8 @@ Class WoW_Utils {
      **/
     public function GetFactionId($raceID) {
         // Get player factionID
-        $horde_races    = array(RACE_ORC,     RACE_TROLL, RACE_TAUREN, RACE_UNDEAD, RACE_BLOODELF);
-        $alliance_races = array(RACE_DRAENEI, RACE_DWARF, RACE_GNOME,  RACE_HUMAN,  RACE_NIGHTELF);
+        $horde_races    = array(RACE_ORC,     RACE_TROLL, RACE_TAUREN, RACE_UNDEAD, RACE_BLOODELF, RACE_GOBLIN);
+        $alliance_races = array(RACE_DRAENEI, RACE_DWARF, RACE_GNOME,  RACE_HUMAN,  RACE_NIGHTELF, RACE_WORGEN);
         if(in_array($raceID, $horde_races)) {
             return FACTION_HORDE;
         }
@@ -39,7 +39,7 @@ Class WoW_Utils {
         }
         else {
             // Unknown race
-            $this->armory->Log()->writeError('%s : unknown race: %d', __METHOD__, $raceID);
+            WoW_Log::WriteError('%s : unknown race: %d', __METHOD__, $raceID);
             return false;
         }
     }
@@ -696,6 +696,32 @@ Class WoW_Utils {
             'pos_x' => $npc_coordinates['position_x'],
             'pos_y' => $npc_coordinates['position_y']
         );
+    }
+    
+    public function GetClassIDByKey($key) {
+        foreach(Data_Classes::$classes as $classId => $classInfo) {
+            if($classInfo['key'] == $key) {
+                return $classId;
+            }
+        }
+        return 0;
+    }
+    
+    public function GetClassKeyById($id) {
+        return isset(Data_Classes::$classes[$id]['key']) ? Data_Classes::$classes[$id]['key'] : null;
+    }
+    
+    public function GetRaceIDByKey($key) {
+        foreach(Data_Races::$races as $raceId => $raceInfo) {
+            if($raceInfo['key'] == $key) {
+                return $raceId;
+            }
+        }
+        return 0;
+    }
+    
+    public function GetRaceKeyById($id) {
+        return isset(Data_Races::$races[$id]['key']) ? Data_Races::$races[$id]['key'] : null;
     }
 }
 ?>
