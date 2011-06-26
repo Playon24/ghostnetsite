@@ -26,17 +26,32 @@ Class WoW_Template {
     private static $carousel_data = array();
     private static $menu_index = null;
     private static $template_theme = null;
+    private static $is_redirect = false;
+    private static $is_error_page = false;
     
-    public static function ErrorPage($code) {
+    public static function ErrorPage($code, $error_profile = null, $bn_error = false) {
         switch($code) {
             case 403:
             case 404:
             case 500:
-                die('ERROR ' . $code);
+                self::SetTemplateTheme(($bn_error ? 'bn' : 'wow'));
+                self::SetPageData('body_class', WoW_Locale::GetLocale(LOCALE_DOUBLE));
+                if(!$bn_error) {
+                    self::SetPageIndex('404');
+                }
+                self::SetPageData(($bn_error ? 'landing' : 'page'), '404');
+                if(!$error_profile) {
+                    self::SetPageData('errorProfile', 'template_404');
+                }
+                else {
+                    self::SetPageData('errorProfile', $error_profile);
+                }
+                self::SetPageData('errorCode', $code);
+                self::LoadTemplate(($bn_error ? 'page_landing' : 'page_index'));
+                self::$is_error_page = true; // Set this variable as "true" only after WoW_Template::LoadTemplate call!
                 break;
             default:
                 return false;
-                break;
         }
     }
     
@@ -53,6 +68,9 @@ Class WoW_Template {
     }
     
     public static function LoadTemplate($template_name, $overall = false) {
+        if(self::$is_error_page) {
+            return false; // Do not load any templates if error page triggered.
+        }
         if($overall) {
             $template = WOW_DIRECTORY . '/includes/templates/overall/overall_' . $template_name . '.php';
         }
@@ -261,6 +279,16 @@ Class WoW_Template {
                                 'path' => '/css/landing/info-ie6.css',
                                 'version' => 5,
                                 'browser' => 'IE 6',
+                                'skip_path' => false
+                            )
+                        );
+                        break;
+                    case '404':
+                        $css_data_page = array(
+                            array(
+                                'path' => '/css/error.css',
+                                'version' => 6,
+                                'browser' => false,
                                 'skip_path' => false
                             )
                         );

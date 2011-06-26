@@ -77,7 +77,7 @@ Class WoW_Guild {
             `info` AS `guild_info`,
             `motd` AS `guild_motd`,
             `createdate` AS `guild_create_date`
-            FROM `guild` WHERE `name` = '%s' LIMIT 1", $guild_name);
+            FROM `guild` WHERE `name` = '%s' LIMIT 1", urldecode($guild_name));
         if(!$guild_data) {
             WoW_Log::WriteError('%s : guild %s was not found in DB!', __METHOD__, $guild_name);
             return false;

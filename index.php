@@ -27,6 +27,11 @@ if(isset($_GET['what-is'])) {
     WoW_Template::LoadTemplate('page_landing');
     exit;
 }
+elseif(isset($_GET['errorCode'])) {
+    WoW_Template::SetPageIndex('landing');
+    WoW_Template::SetPageData('landing', '404');
+    WoW_Template::ErrorPage(404, null, true);
+}
 else {
     WoW_Account::UserGames();
     WoW_Template::SetPageIndex('index');

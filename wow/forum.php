@@ -42,7 +42,10 @@ if(isset($url_data['action3'], $url_data['action4'], $url_data['action5']) && ((
 }
 // Set values (if any)
 if($url_data['category_id'] > 0) {
-    WoW_Forums::SetCategoryId($url_data['category_id']);
+    if(!WoW_Forums::SetCategoryId($url_data['category_id'])) {
+        WoW_Template::ErrorPage(404);
+        exit;
+    }
     if(isset($url_data['action4']) && $url_data['action4'] == 'topic') {
         // Check $_POST query
         if(isset($_POST['xstoken'])) {
@@ -71,7 +74,10 @@ if($url_data['category_id'] > 0) {
     }
 }
 elseif($url_data['thread_id'] > 0) {
-    WoW_Forums::SetThreadId($url_data['thread_id']);
+    if(!WoW_Forums::SetThreadId($url_data['thread_id'])) {
+        WoW_Template::ErrorPage(404);
+        exit;
+    }
     WoW_Template::SetPageIndex('forum_thread');
     WoW_Template::SetPageData('page', 'forum_thread');
 }

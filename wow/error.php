@@ -19,12 +19,5 @@
  **/
 
 include('../includes/WoW_Loader.php');
-WoW_Template::SetTemplateTheme('wow');
-WoW_Template::SetPageData('body_class', WoW_Locale::GetLocale(LOCALE_DOUBLE));
-WoW_Template::SetPageIndex('404');
-WoW_Template::SetPageData('page', '404');
-WoW_Template::SetPageData('errorProfile', 'template_404');
-WoW_Template::SetMenuIndex('menu-game');
-WoW_Template::LoadTemplate('page_index');
-exit;
+WoW_Template::ErrorPage((isset($_GET['code']) && in_array($_GET['code'], array(403, 404, 500)) ? $_GET['code'] : 404));
 ?>

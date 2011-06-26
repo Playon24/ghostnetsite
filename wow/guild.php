@@ -24,15 +24,10 @@ WoW_Template::SetTemplateTheme('wow');
 $url_data = WoW::GetUrlData('guild');
 $guild_error = false;
 if(!$url_data) {
-    $guild_error = true;
+    WoW_Template::ErrorPage(404);
 }
-if(!WoW_Guild::LoadGuild($url_data['name'], WoW_Utils::GetRealmIDByName($url_data['realmName']))) {
-    $guild_error = true;
-}
-if($guild_error) {
-    WoW_Template::SetPageIndex('404');
-    WoW_Template::SetPageData('page', '404');
-    WoW_Template::SetPageData('errorProfile', 'template_404');
+elseif(!WoW_Guild::LoadGuild($url_data['name'], WoW_Utils::GetRealmIDByName($url_data['realmName']))) {
+    WoW_Template::ErrorPage(404);
 }
 else {
     $primary = WoW_Account::GetActiveCharacter();

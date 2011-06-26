@@ -312,7 +312,11 @@ Class WoW_Forums {
             WoW_Log::WriteError('%s : wrong category ID (%d), unable to handle.', __METHOD__, $cat_id);
             return false;
         }
+        if(!DB::WoW()->selectCell("SELECT 1 FROM `DBPREFIX_forum_category` WHERE `cat_id` = %d", $cat_id)) {
+            return false;
+        }
         self::$active_category_id = $cat_id;
+        return true;
     }
     
     public static function SetThreadId($thread_id) {
@@ -320,7 +324,11 @@ Class WoW_Forums {
             WoW_Log::WriteError('%s : wrong thread ID (%d), unable to handle.', __METHOD__, $thread_id);
             return false;
         }
+        if(!DB::WoW()->selectCell("SELECT 1 FROM `DBPREFIX_forum_threads` WHERE `thread_id` = %d", $thread_id)) {
+            return false;
+        }
         self::$active_thread_id = $thread_id;
+        return true;
     }
     
     public static function GetCategoryId() {

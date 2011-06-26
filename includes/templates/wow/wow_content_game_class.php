@@ -7,7 +7,7 @@ $class = WoW_Game::GetClass();
 <ol class="ui-breadcrumb">
 <li><a href="<?php echo WoW::GetWoWPath(); ?>/wow/" rel="np">World of Warcraft</a></li>
 <li><a href="<?php echo WoW::GetWoWPath(); ?>/wow/game/" rel="np"><?php echo WoW_Locale::GetString('template_menu_game'); ?></a></li>
-<li><a href="<?php echo WoW::GetWoWPath(); ?>/wow/game/race/" rel="np"><?php echo WoW_Locale::GetString('template_game_class_index'); ?></a></li>
+<li><a href="<?php echo WoW::GetWoWPath(); ?>/wow/game/class/" rel="np"><?php echo WoW_Locale::GetString('template_game_class_index'); ?></a></li>
 <li class="last"><a href="<?php echo WoW::GetWoWPath(); ?>/wow/game/class/<?php echo WoW_Template::GetPageData('class'); ?>" rel="np"><?php echo WoW_Locale::GetString('character_class_' . $class['id']); ?></a></li>
 </ol>
 </div>

@@ -21,13 +21,13 @@
 include('../includes/WoW_Loader.php');
 $url_data = WoW::GetUrlData('vault');
 // Check session
-if(!WoW_Account::IsLoggedIn()) {
-    header('Location: ' . WoW::GetWoWPath() . '/login/');
-    exit;
-}
 if($url_data['action0'] != 'vault') {
     // Wrong URL parsing
     header('Location: ' . WoW::GetWoWPath() . '/wow/');
+    exit;
+}
+if(!WoW_Account::IsLoggedIn()) {
+    header('Location: ' . WoW::GetWoWPath() . '/login/?ref=' . urlencode($_SERVER['REQUEST_URI']));
     exit;
 }
 WoW_Template::SetTemplateTheme('wow');

@@ -27,7 +27,7 @@ $url_data = WoW::GetUrlData('zone');
 if(isset($url_data['action2']) && $url_data['action2'] != null) {
     exit; // [PH]
 }
-if(isset($url_data['action1']) && $url_data['action1'] != null) {
+elseif(isset($url_data['action1']) && $url_data['action1'] != null) {
     // Try to find zone
     if(WoW_Game::IsZone($url_data['action1'])) {
         WoW_Template::SetPageIndex('zone');

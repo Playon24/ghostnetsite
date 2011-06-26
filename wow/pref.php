@@ -20,6 +20,7 @@
 
 include('../includes/WoW_Loader.php');
 if(!isset($_POST['index']) || !WoW_Account::IsLoggedIn()) {
+    WoW_Template::ErrorPage(404);
     exit;
 }
 $character_index = $_POST['index'];

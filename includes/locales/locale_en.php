@@ -237,6 +237,7 @@ $WoW_Locale = array(
     
     'template_404' => '<h2 class="http">Four,<br /> oh: four.</h2><h3>Page Not Found</h3><p>There was<br /> a <strong>PAGE</strong><br /> here.<br />It’s gone now.<br /><br /><em>(Is this what happens to pages that wander into the forest?)</em></p>',
     'template_lowlevel' => '<h2>Oops</h2><h3>Only characters level 10 or higher can be viewed.</h3>',
+    'template_unavailable' => '<h2>Oops</h2><h3>Character Not Available</h3><p>This character profile could not be displayed, possibly for one of the following reasons:</p><ul><li>The character has been inactive for an extended period of time.</li><li>The character name or realm was spelled incorrectly.</li><li>The profile is temporarily unavailable while the character is in the midst of a process such as a realm transfer or faction change.</li><li>Characters that have been deleted are no longer available.</li></ul>',
     
     'email_title' => 'E-mail Address',
     'login_title' => 'Username',

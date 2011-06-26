@@ -120,29 +120,29 @@ Class WoW_Characters /*implements Interface_Characters*/ {
         // Data checks
         if(!is_string($name) || $name == null) {
             WoW_Log::WriteError('%s : name must be a string (%s given.)!', __METHOD__, gettype($name));
-            return false;
+            return 1;
         }
         if(!$realm_id || $realm_id == 0) {
             WoW_Log::WriteError('%s : realm ID must be > 0!', __METHOD__);
-            return false;
+            return 1;
         }
         if(!isset(WoWConfig::$Realms[$realm_id])) {
             WoW_Log::WriteError('%s : unable to find realm with ID #%d. Check your configs.', __METHOD__, $realm_id);
-            return false;
+            return 1;
         }
         // Connect to characters DB
         DB::ConnectToDB(DB_CHARACTERS, $realm_id, true, false);
         // Check connection
         if(!DB::Characters()->TestLink()) {
             // Message about failed connection will appear from database handler class.
-            return false;
+            return 1;
         }
         // BINARY.
         self::$name = mb_convert_case($name, MB_CASE_TITLE, "UTF-8");
         // If $full == true, we need to check `armory_character_stats` table.
         // Load character fields.
         if(!self::LoadCharacterFieldsFromDB()) {
-            return false;
+            return 1;
         }
         // Some checks before script will load `data` field.
         if(!self::IsCharacterFitsRequirements()) {

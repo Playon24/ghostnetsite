@@ -73,6 +73,9 @@ elseif($url_data['action1'] == 'class') {
         WoW_Template::SetPageData('page', 'game_class_index');
     }
 }
+else {
+    WoW_Template::ErrorPage(404);
+}
 WoW_Template::SetMenuIndex('menu-game');
 WoW_Template::LoadTemplate('page_index');
 ?>

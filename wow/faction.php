@@ -33,9 +33,6 @@ if(isset($url_data['action1']) && $url_data['action1'] != null) {
         WoW_Template::SetPageIndex('zone');
         WoW_Template::SetPageData('page', 'zone');
         WoW_Game::LoadZone($url_data['action1']); // save in memory
-        //echo '<pre>';
-        //print_r(WoW_Game::GetZone());
-        //die;
     }
 }
 WoW_Template::SetMenuIndex('menu-game');

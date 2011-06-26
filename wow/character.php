@@ -23,9 +23,7 @@ WoW_Template::SetPageData('body_class', WoW_Locale::GetLocale(LOCALE_DOUBLE));
 WoW_Template::SetTemplateTheme('wow');
 $url_data = WoW::GetUrlData('character');
 if(!$url_data) {
-    WoW_Template::SetPageIndex('404');
-    WoW_Template::SetPageData('page', '404');
-    WoW_Template::SetPageData('errorProfile', 'template_404');
+    WoW_Template::ErrorPage(404);
 }
 else {
     if($url_data['action0'] == 'advanced') {
@@ -44,14 +42,7 @@ else {
         if($url_data['action0'] == 'tooltip') {
             exit;
         }
-        if($load_result == 2) {
-            WoW_Template::SetPageData('errorProfile', 'template_lowlevel');
-        }
-        else {
-            WoW_Template::SetPageData('errorProfile', 'template_404');
-        }
-        WoW_Template::SetPageIndex('404');
-        WoW_Template::SetPageData('page', '404');
+        WoW_Template::ErrorPage(404, ($load_result == 2 ? 'template_lowlevel' : $load_result == 1 ? 'template_unavailable' : null));
     }
     else {
         WoW_Achievements::Initialize();

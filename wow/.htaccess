@@ -14,3 +14,8 @@ RewriteRule ^faction/(.*) /wow/faction.php?%{QUERY_STRING}
 RewriteRule ^search search.php?%{QUERY_STRING}
 RewriteRule ^status status.php
 RewriteRule ^account-status account-status.php
+
+# Change "/wow/" to your correct path.
+ErrorDocument 404 /wow/error.php?code=404
+ErrorDocument 403 /wow/error.php?code=403
+ErrorDocument 500 /wow/error.php?code=500

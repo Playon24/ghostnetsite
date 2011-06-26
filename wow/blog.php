@@ -24,9 +24,7 @@ WoW_Template::SetPageData('body_class', WoW_Locale::GetLocale(LOCALE_DOUBLE));
 $url_data = WoW::GetUrlData('blog');
 $blog_id = $url_data['blog_id'];
 if(!$blog_id || !WoW::LoadBlog($blog_id)) {
-    WoW_Template::SetPageIndex('404');
-    WoW_Template::SetPageData('page', '404');
-    WoW_Template::SetPageData('errorProfile', 'template_404');
+    WoW_Template::ErrorPage(404);
 }
 else {
     WoW_Template::SetPageData('wow_news', WoW::GetLastNews());

@@ -25,7 +25,9 @@ WoW_Template::SetPageData('page', 'item_info');
 WoW_Template::SetMenuIndex('menu-game');
 $url_data = WoW::GetUrlData('item');
 if(!$url_data) {
-    // Exit;
+    if(!isset($_GET['t'])) {
+        WoW_Template::ErrorPage(404);
+    }
     exit;
 }
 $item_entry = $url_data['item_entry'];
@@ -42,7 +44,10 @@ if($item_entry == 0) {
 $proto = new WoW_ItemPrototype();
 $proto->LoadItem($item_entry);
 if(!$proto->IsCorrect()) {
-    exit; // [PH]
+    if(!isset($_GET['t'])) {
+        WoW_Template::ErrorPage(404);
+    }
+    exit;
 }
 WoW_Template::SetPageData('item_entry', $item_entry);
 // SSD and SSV data
@@ -70,7 +75,6 @@ if($url_data['tooltip'] == true) {
 }
 else {
     if(isset($url_data['action0']) && $url_data['action0'] != null) {
-        //header('Content-type: text/xml');
         WoW_Template::SetPageData('tab_type', $url_data['action0']);
         WoW_Template::LoadTemplate('page_item_tab');
         exit;
