@@ -289,7 +289,7 @@ if(!isset($prevClassId)) {
 }
 ?>
 <a class="ui-button next-class button1-next" href="<?php echo WoW_Utils::GetClassKeyById($nextClassId); ?>"><span><span><?php echo sprintf(WoW_Locale::GetString('template_game_class_next'), WoW_Locale::GetString('character_class_' . $nextClassId)); ?></span></span></a>
-<a class="ui-button previous-class button1-previous" href="<?php echo WoW_Utils::GetClassKeyById($prevClassId); ?>"><span><span><?php echo sprintf(WoW_Locale::GetString('template_game_class_prev'), WoW_Locale::GetString('character_class_' . $nextClassId)); ?></span></span></a>
+<a class="ui-button previous-class button1-previous" href="<?php echo WoW_Utils::GetClassKeyById($prevClassId); ?>"><span><span><?php echo sprintf(WoW_Locale::GetString('template_game_class_prev'), WoW_Locale::GetString('character_class_' . $prevClassId)); ?></span></span></a>
 			</div>
 	</div>
 </div>
