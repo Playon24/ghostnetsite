@@ -69,11 +69,11 @@
         <div class="multi-type">
         <div class="result-title">
         <div class="type-icon type-wowitem border-q%d" style="background-image:url(http://eu.battle.net/wow-assets/static/images/icons/36/%s.jpg)">
-        <a href="%s/wow/item/%d" rel="item:%d">
+        <a href="%s/wow/' . WoW_Locale::GetLocale() . '/item/%d" rel="item:%d">
             <img width="32" height="32" src="http://eu.battle.net/wow-assets/static/images/icons/36/%s.jpg" alt=""/>
         </a>
         </div>
-        <a href="%s/wow/item/%d" class="search-title color-q%d">%s</a>
+        <a href="%s/wow/' . WoW_Locale::GetLocale() . '/item/%d" class="search-title color-q%d">%s</a>
         </div>
         <div>%s</div>
         %s / %s / %s<br />

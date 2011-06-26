@@ -121,7 +121,7 @@ World of Warcraft
         else {
             echo sprintf('<div data-id="%d" data-type="%d" class="slot slot-%d %s item-quality-%d" style="%s">
             <div class="slot-inner">
-            <div class="slot-contents"><a href="%s/wow/item/%d" class="item" data-item="%s"><img src="http://eu.battle.net/wow-assets/static/images/icons/56/%s.jpg" alt="" /><span class="frame"></span></a>
+            <div class="slot-contents"><a href="%s/wow/' . WoW_Locale::GetLocale() . '/item/%d" class="item" data-item="%s"><img src="http://eu.battle.net/wow-assets/static/images/icons/56/%s.jpg" alt="" /><span class="frame"></span></a>
             </div>
             </div>
             </div>', ($data['slot']-1), $data['slot'], $data['slot'], ($slot >= 9 && $slot <= 15) ? 'slot-align-right' : null, $item_info['quality'], $data['style'], WoW::GetWoWPath(), $item_info['item_id'], $item_info['data-item'], $item_info['icon']);

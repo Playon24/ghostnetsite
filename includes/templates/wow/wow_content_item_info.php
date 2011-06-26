@@ -16,27 +16,27 @@ World of Warcraft
 </a>
 </li>
 <li>
-<a href="/wow/item/" rel="np">
+<a href="/wow/<?php echo WoW_Locale::GetLocale(); ?>/item/" rel="np">
 <?php echo WoW_Locale::GetString('template_menu_items'); ?>
 </a>
 </li>
 <li>
-<a href="/wow/item/?classId=<?php echo $proto->class; ?>" rel="np">
+<a href="/wow/<?php echo WoW_Locale::GetLocale(); ?>/item/?classId=<?php echo $proto->class; ?>" rel="np">
 <?php echo $proto->class_name; ?>
 </a>
 </li>
 <li>
-<a href="/wow/item/?classId=<?php echo sprintf('%d&amp;subClassId=%d', $proto->class, $proto->subclass); ?>" rel="np">
+<a href="/wow/<?php echo WoW_Locale::GetLocale(); ?>/item/?classId=<?php echo sprintf('%d&amp;subClassId=%d', $proto->class, $proto->subclass); ?>" rel="np">
 <?php echo $proto->subclass_name; ?>
 </a>
 </li>
 <li>
-<a href="/wow/item/?classId=<?php echo sprintf('%d&amp;subClassId=%d&InventoryType=%d', $proto->class, $proto->subclass, $proto->InventoryType); ?>" rel="np">
+<a href="/wow/<?php echo WoW_Locale::GetLocale(); ?>/item/?classId=<?php echo sprintf('%d&amp;subClassId=%d&InventoryType=%d', $proto->class, $proto->subclass, $proto->InventoryType); ?>" rel="np">
 <?php echo WoW_Locale::GetString('template_item_invtype_' . $proto->InventoryType); ?>
 </a>
 </li>
 <li class="last">
-<a href="/wow/item/<?php echo $proto->entry; ?>" rel="np">
+<a href="/wow/<?php echo WoW_Locale::GetLocale(); ?>/item/<?php echo $proto->entry; ?>" rel="np">
 <?php echo $proto->name; ?>
 </a>
 </li>
@@ -212,7 +212,7 @@ WoW_Template::LoadTemplate('page_item_tooltip');
 				<tr class="row1">
 					<td data-raw="-4 Небесный осколок">
 						<strong>
-							<a href="/wow/item/52721" class="item-link color-q3">
+							<a href="/wow/<?php echo WoW_Locale::GetLocale(); ?>/item/52721" class="item-link color-q3">
  
 
 

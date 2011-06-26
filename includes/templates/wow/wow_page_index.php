@@ -290,7 +290,7 @@ switch(WoW_Template::GetPageData('page')) {
     Core.load("<?php echo WoW::GetWoWPath(); ?>/wow/static/local-common/js/third-party/jquery.mousewheel.min.js?v15");
     Core.load("<?php echo WoW::GetWoWPath(); ?>/wow/static/local-common/js/third-party/jquery.tinyscrollbar.min.js?v15");
     Core.load("<?php echo WoW::GetWoWPath(); ?>/wow/static/local-common/js/login.js?v15", false, function() {
-        Login.embeddedUrl = '<?php echo WoW::GetWoWPath(); ?>/login/login.frag';
+        Login.embeddedUrl = '<?php echo WoW::GetWoWPath(); ?>/login/<?php echo WoW_Locale::GetLocale() ?>/login.frag';
     });
 //]]>
 </script>

@@ -33,15 +33,23 @@ if(!defined('WOW_DIRECTORY') || !WOW_DIRECTORY) {
 }
 
 define('DS', DIRECTORY_SEPARATOR);
+define('INCLUDES_DIR',    WOW_DIRECTORY . DS . 'includes' . DS);
+define('CLASSES_DIR',     INCLUDES_DIR . 'classes' . DS);
+define('CONFIGS_DIR',     INCLUDES_DIR . 'configs' . DS);
+define('INTERFACES_DIR',  INCLUDES_DIR . 'interfaces' . DS);
+define('LOCALES_DIR',     INCLUDES_DIR . 'locales' . DS);
+define('TEMPLATES_DIR',   INCLUDES_DIR . 'templates' . DS);
+define('CONTROLLERS_DIR', INCLUDES_DIR . 'controllers' . DS);
+define('WEBROOT_DIR',     WOW_DIRECTORY . DS . 'webroot' . DS);
 
 // Load defines
-include(WOW_DIRECTORY . '/includes/revision_nr.php');
-include(WOW_DIRECTORY . '/includes/UpdateFields.php');
-include(WOW_DIRECTORY . '/includes/SharedDefines.php');
+include(INCLUDES_DIR . 'revision_nr.php');
+include(INCLUDES_DIR . 'UpdateFields.php');
+include(INCLUDES_DIR . 'SharedDefines.php');
 
 // Load Interfaces
-include(WOW_DIRECTORY . '/includes/interfaces/interface.db.php');
-include(WOW_DIRECTORY . '/includes/interfaces/interface.log.php');
+include(INTERFACES_DIR . 'interface.db.php');
+include(INTERFACES_DIR . 'interface.log.php');
 
 /**
  * Temporary disabled // Shadez
@@ -58,8 +66,8 @@ include(WOW_DIRECTORY . '/includes/interfaces/interface.log.php');
  * 1) create file named ".public" in "WOW_DIRECTORY./includes/configs/" ONLY in your public server, NOT in localhost
  **/
 //if(file_exists(WOW_DIRECTORY . '/includes/configs/.public') ) {
-include(WOW_DIRECTORY . '/includes/configs/DatabaseConfig.php');
-include(WOW_DIRECTORY . '/includes/configs/WoWConfig.php');
+include(CONFIGS_DIR . 'DatabaseConfig.php');
+include(CONFIGS_DIR . 'WoWConfig.php');
 /*}
 else{
   include(WOW_DIRECTORY . '/includes/configs/DatabaseConfig.local.php');
@@ -67,17 +75,20 @@ else{
 }*/
 
 // Load libraries
-include(WOW_DIRECTORY . '/includes/classes/libs/mysqldatabase.php');
-include(WOW_DIRECTORY . '/includes/classes/libs/log.php');
+include(CLASSES_DIR . 'libs' . DS . 'mysqldatabase.php');
+include(CLASSES_DIR . 'libs' . DS . 'log.php');
 // Load classes
-include(WOW_DIRECTORY . '/includes/classes/class.db.php');
-include(WOW_DIRECTORY . '/includes/classes/class.wow.php');
-include(WOW_DIRECTORY . '/includes/classes/class.locale.php');
-include(WOW_DIRECTORY . '/includes/classes/class.template.php');
+include(CLASSES_DIR . 'class.db.php');
+include(CLASSES_DIR . 'class.wow.php');
+include(CLASSES_DIR . 'class.locale.php');
+include(CLASSES_DIR . 'class.template.php');
+
+include(CLASSES_DIR . 'class.pagecontroller.php');
+include(CONTROLLERS_DIR . 'controller.php');
 
 // Load data
-include(WOW_DIRECTORY . '/includes/data/data.classes.php');
-include(WOW_DIRECTORY . '/includes/data/data.races.php');
+include(INCLUDES_DIR . 'data' . DS . 'data.classes.php');
+include(INCLUDES_DIR . 'data' . DS . 'data.races.php');
 
 // Custom classes
 // Register autoload method
@@ -94,25 +105,33 @@ spl_autoload_register('WoW_Autoload');
 function WoW_Autoload($className)
 {
     $className = strtolower(str_replace('WoW_', null, $className));
-    if(!file_exists(WOW_DIRECTORY . DS . 'includes' . DS . 'classes' . DS . 'class.' . $className . '.php')) {
-        die('<strong>Fatal Error:</strong> unable to autoload class ' . $className . '!');
+    if(!file_exists(CLASSES_DIR . 'class.' . $className . '.php')) {
+        die('<strong>Autoload Fatal Error:</strong> unable to autoload class ' . $className . '!');
     }
-    include(WOW_DIRECTORY . DS . 'includes' . DS . 'classes' . DS . 'class.' . $className . '.php');
+    include(CLASSES_DIR . 'class.' . $className . '.php');
 }
 
 // Try to catch some operations (login, logout, etc.)
-WoW::CatchOperations();
+$locale_loaded = false;
+WoW::CatchOperations($locale_loaded);
+
+// locale from page controller
+$wow_locale_cms = (isset($_COOKIE['wow_locale']) ? $_COOKIE['wow_locale'] : WoWConfig::$DefaultLocale);
+if(!isset($_COOKIE['wow_locale'])) {
+    setcookie('wow_locale', $wow_locale_cms, strtotime('NEXT YEAR'), '/');
+    $_COOKIE['wow_locale'] = $wow_locale_cms;
+}
+$pController = new PageController();
+if($pController->GetLocale() != null && $pController->GetLocale() != $_COOKIE['wow_locale']) {
+    //$_SESSION['wow_locale'] = $pController->GetLocale();
+    WoW_Locale::SetLocale($pController->GetLocale(), WoW_Locale::GetLocaleIDForLocale($pController->GetLocale()), true);
+}
+else {
+    WoW_Locale::SetLocale($_COOKIE['wow_locale'], WoW_Locale::GetLocaleIDForLocale($_COOKIE['wow_locale']));
+}
 
 // Initialize account (if user already logged in we need to re-build his info from session data)
 WoW_Account::Initialize();
-
-// Load locale
-if(isset($_SESSION['wow_locale']) && WoW_Locale::IsLocale($_SESSION['wow_locale'], $_SESSION['wow_locale_id'])) {
-    WoW_Locale::SetLocale($_SESSION['wow_locale'], $_SESSION['wow_locale_id']);
-}
-else {
-    WoW_Locale::SetLocale(WoWConfig::$DefaultLocale, WoWConfig::$DefaultLocaleID);
-}
 
 // Initialize debug log
 WoW_Log::Initialize(WoWConfig::$UseLog, WoWConfig::$LogLevel);
@@ -131,5 +150,5 @@ if(isset($_GET['_DISPLAYVERSION_'])) {
 
 // RunOnce
 define('__RUNONCE__', true);
-include(WOW_DIRECTORY . '/includes/RunOnce.php');
+include(INCLUDES_DIR . 'RunOnce.php');
 ?>

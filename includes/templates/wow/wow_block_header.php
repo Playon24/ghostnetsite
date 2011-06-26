@@ -17,7 +17,7 @@ try { document.execCommand('BackgroundImageCache', false, true) } catch(e) {}
 <script type="text/javascript">
 //<![CDATA[
 Core.staticUrl = '<?php echo WoW::GetWoWPath(); ?>/wow/static';
-Core.baseUrl = '<?php echo WoW::GetWoWPath(); ?>/wow';
+Core.baseUrl = '<?php echo WoW::GetWoWPath(); ?>/wow/<?php echo WoW_Locale::GetLocale(); ?>';
 Core.project = 'wow';
 Core.locale = '<?php echo WoW_Locale::GetLocale(LOCALE_DOUBLE); ?>';
 Core.buildRegion = 'eu';

@@ -375,7 +375,7 @@ Class WoW {
         return false;
     }
     
-    public static function CatchOperations() {
+    public static function CatchOperations(&$loaded) {
         // Perform log in (if required)
         if(isset($_GET['login']) || preg_match('/\?login/', $_SERVER['REQUEST_URI'])) {
             // $_SERVER['REQUEST_URI'] check is required for mod_rewrited URL cases.
@@ -391,10 +391,10 @@ Class WoW {
         }
         // Locale
         if(isset($_GET['locale']) && !preg_match('/lookup/', $_SERVER['REQUEST_URI'])) {
-            $_SESSION['wow_locale'] = $_GET['locale'];
-            $_SESSION['wow_locale_id'] = WoW_Locale::GetLocaleIDForLocale($_SESSION['wow_locale']);
-            if(WoW_Locale::IsLocale($_SESSION['wow_locale'], $_SESSION['wow_locale_id'])) {
-                WoW_Locale::SetLocale($_SESSION['wow_locale'], $_SESSION['wow_locale_id']);
+            if(WoW_Locale::IsLocale($_GET['locale'], WoW_Locale::GetLocaleIDForLocale($_GET['locale']))) {
+                WoW_Locale::SetLocale($_GET['locale'], WoW_Locale::GetLocaleIDForLocale($_GET['locale']));
+                $loaded = true;
+                setcookie('wow_locale', WoW_Locale::GetLocale(), strtotime('NEXT YEAR'), '/');
                 if(isset($_SERVER['HTTP_REFERER'])) {
                     header('Location: ' . $_SERVER['HTTP_REFERER']);
                     exit;
@@ -405,6 +405,11 @@ Class WoW {
                 }
             }
         }
+    }
+    
+    public static function RedirectTo($url = '') {
+        header('Location: /' . $url);
+        exit; // Terminate script
     }
 }
 ?>

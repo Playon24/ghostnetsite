@@ -1342,7 +1342,7 @@ World of Warcraft
 
 		<ul>
 	<li class="filled">
-			<a href="/wow/item/42414" class="color-q1">
+			<a href="/wow/' . WoW_Locale::GetLocale() . '/item/42414" class="color-q1">
 		<span class="icon"> 
 
 
@@ -1357,7 +1357,7 @@ World of Warcraft
 	<span class="clear"><!-- --></span>
 	</li>
 	<li class="filled">
-			<a href="/wow/item/42406" class="color-q1">
+			<a href="/wow/' . WoW_Locale::GetLocale() . '/item/42406" class="color-q1">
 		<span class="icon"> 
 
 
@@ -1372,7 +1372,7 @@ World of Warcraft
 	<span class="clear"><!-- --></span>
 	</li>
 	<li class="filled">
-			<a href="/wow/item/42415" class="color-q1">
+			<a href="/wow/' . WoW_Locale::GetLocale() . '/item/42415" class="color-q1">
 		<span class="icon"> 
 
 
@@ -1393,7 +1393,7 @@ World of Warcraft
 
 		<ul>
 	<li class="filled">
-			<a href="/wow/item/42398" class="color-q1">
+			<a href="/wow/' . WoW_Locale::GetLocale() . '/item/42398" class="color-q1">
 		<span class="icon"> 
 
 
@@ -1408,7 +1408,7 @@ World of Warcraft
 	<span class="clear"><!-- --></span>
 	</li>
 	<li class="filled">
-			<a href="/wow/item/42404" class="color-q1">
+			<a href="/wow/' . WoW_Locale::GetLocale() . '/item/42404" class="color-q1">
 		<span class="icon"> 
 
 
@@ -1423,7 +1423,7 @@ World of Warcraft
 	<span class="clear"><!-- --></span>
 	</li>
 	<li class="filled">
-			<a href="/wow/item/45757" class="color-q1">
+			<a href="/wow/' . WoW_Locale::GetLocale() . '/item/45757" class="color-q1">
 		<span class="icon"> 
 
 
@@ -1444,7 +1444,7 @@ World of Warcraft
 
 		<ul>
 	<li class="filled">
-			<a href="/wow/item/43370" class="color-q1">
+			<a href="/wow/' . WoW_Locale::GetLocale() . '/item/43370" class="color-q1">
 		<span class="icon"> 
 
 
@@ -1459,7 +1459,7 @@ World of Warcraft
 	<span class="clear"><!-- --></span>
 	</li>
 	<li class="filled">
-			<a href="/wow/item/43374" class="color-q1">
+			<a href="/wow/' . WoW_Locale::GetLocale() . '/item/43374" class="color-q1">
 		<span class="icon"> 
 
 
@@ -1474,7 +1474,7 @@ World of Warcraft
 	<span class="clear"><!-- --></span>
 	</li>
 	<li class="filled">
-			<a href="/wow/item/43371" class="color-q1">
+			<a href="/wow/' . WoW_Locale::GetLocale() . '/item/43371" class="color-q1">
 		<span class="icon"> 
 
 

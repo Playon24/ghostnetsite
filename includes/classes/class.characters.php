@@ -877,7 +877,7 @@ Class WoW_Characters /*implements Interface_Characters*/ {
     }
     
     public static function GetURL() {
-        return sprintf('%s/wow/character/%s/%s/', WoW::GetWoWPath(), urlencode(self::GetRealmName()), urlencode(self::GetName()));
+        return sprintf('%s/wow/%s/character/%s/%s/', WoW::GetWoWPath(), WoW_Locale::GetLocale(), urlencode(self::GetRealmName()), urlencode(self::GetName()));
     }
     
     public static function GetAverageItemLevel() {

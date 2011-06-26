@@ -21,9 +21,6 @@ switch(WoW_Template::GetPageData('landing')) {
     case 'what_is':
         WoW_Template::LoadTemplate('content_what_is');
         break;
-    case '404':
-        WoW_Template::LoadTemplate('content_404');
-        break;
 }
 WoW_Template::LoadTemplate('block_footer', true);
 WoW_Template::LoadTemplate('block_service', true);

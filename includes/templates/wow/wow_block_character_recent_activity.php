@@ -31,9 +31,9 @@
                     $i, $event['icon'], $event['name'], $event['desc'], $event['date']);
                     break;
                 case TYPE_ITEM_FEED:
-                    $item_link = sprintf('<a href="%s/wow/item/%d" class="color-q%d" data-item="%s">%s</a>', WoW::GetWoWPath(), $event['id'], $event['quality'], $event['data-item'], $event['name']);
+                    $item_link = sprintf('<a href="%s/wow/' . WoW_Locale::GetLocale() . '/item/%d" class="color-q%d" data-item="%s">%s</a>', WoW::GetWoWPath(), $event['id'], $event['quality'], $event['data-item'], $event['name']);
                     echo sprintf('<li>
-                    <dl><dd><a href="%s/wow/item/%d" class="color-q%d" data-item="%s"> 
+                    <dl><dd><a href="%s/wow/' . WoW_Locale::GetLocale() . '/item/%d" class="color-q%d" data-item="%s"> 
                     <span  class="icon-frame frame-18" style=\'background-image: url("http://eu.battle.net/wow-assets/static/images/icons/18/%s.jpg");\'></span></a>
                     %s
                     </dd><dt>%s</dt></dl>

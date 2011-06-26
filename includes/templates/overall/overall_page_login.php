@@ -15,10 +15,10 @@
 
 <script type="text/javascript" src="<?php echo WoW::GetWoWPath(); ?>/login/static/local-common/js/core.js?"></script>
 <script type="text/javascript">
-Core.baseUrl = '<?php echo WoW::GetWoWPath(); ?>/login/';
+Core.baseUrl = '<?php echo WoW::GetWoWPath(); ?>/login/<?php echo WoW_Locale::GetLocale(); ?>/';
 </script>
 </head>
-<body class="ru-ru">
+<body class="<?php echo WoW_Locale::GetLocale(LOCALE_DOUBLE); ?>">
 <div id="wrapper">
 <h1 id="logo"><a href="<?php echo WoW::GetWoWPath(); ?>/">Battle.net</a></h1>
 <div id="content" class="login">

@@ -122,10 +122,10 @@ Class WoW_Template {
     public static function PrintCSSForBNPage() {
         switch(self::GetTemplateTheme()) {
             case 'account':
-                $root_path = WoW::GetWoWPath() . '/account';
+                $root_path = WoWConfig::$WoW_Path . '/account';
                 break;
             default:
-                $root_path = WoW::GetWoWPath() . '/static';
+                $root_path = WoWConfig::$WoW_Path . '/static';
                 break;
         }
         $css_data = array(

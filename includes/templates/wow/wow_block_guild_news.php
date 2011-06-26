@@ -37,11 +37,11 @@
                                 $i++;
                                 break;
                             case TYPE_ITEM_FEED:
-                                $feed_link = sprintf('<a href="%s/wow/item/%d" class="color-q%d">
+                                $feed_link = sprintf('<a href="%s/wow/' . WoW_Locale::GetLocale() . '/item/%d" class="color-q%d">
                                 <span  class="icon-frame frame-18" style=\'background-image: url("http://eu.battle.net/wow-assets/static/images/icons/18/%s.jpg");\'></span>
                             </a>', WoW::GetWoWPath(), $feed['id'], $feed['quality'], $feed['icon']);
                                 $char_link = sprintf('<a href="%s/wow/character/%s/%s/">%s</a>', WoW::GetWoWPath(), WoW_Guild::GetGuildRealmName(), $feed['charName'], $feed['charName']);
-                                $item_link = sprintf('<a href="%s/wow/item/%d" class="color-q%d">%s</a>', WoW::GetWoWPath(), $feed['id'], $feed['quality'], $feed['name']);
+                                $item_link = sprintf('<a href="%s/wow/' . WoW_Locale::GetLocale() . '/item/%d" class="color-q%d">%s</a>', WoW::GetWoWPath(), $feed['id'], $feed['quality'], $feed['name']);
                                 echo sprintf('<li class="item-purchased first">
                     <dl>
                         <dd>

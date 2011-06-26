@@ -113,7 +113,7 @@ Core.load("<?php echo WoW::GetWoWPath(); ?>/static/local-common/js/third-party/j
 Core.load("<?php echo WoW::GetWoWPath(); ?>/static/local-common/js/overlay.js?v15");
 Core.load("<?php echo WoW::GetWoWPath(); ?>/static/local-common/js/search.js?v15");
 Core.load("<?php echo WoW::GetWoWPath(); ?>/static/local-common/js/login.js?v15", false, function() {
-Login.embeddedUrl = '<?php echo WoW::GetWoWPath(); ?>/login/login.frag';
+Login.embeddedUrl = '<?php echo WoW::GetWoWPath(); ?>/login/<?php echo WoW_Locale::GetLocale(); ?>/login.frag';
 });
 //]]>
 </script>

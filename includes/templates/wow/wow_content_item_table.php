@@ -1,6 +1,6 @@
 <?php
 $breadcrumbs = WoW_Items::GetBreadCrumbsForItem($_GET);
-$global_url = '/wow/item/';
+$global_url = '/wow/' . WoW_Locale::GetLocale() . '/item/';
 $breadcrumb_nav = '';
 if(is_array($breadcrumbs)) {
     foreach($breadcrumbs as $crumb) {
@@ -38,7 +38,7 @@ World of Warcraft
 </a>
 </li>
 <li<?php echo $breadcrumb_nav == '' ? ' class="last"' : null; ?>>
-<a href="<?php echo WoW::GetWoWPath(); ?>/wow/item/" rel="np">
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/' . WoW_Locale::GetLocale() . '/item/" rel="np">
 <?php echo WoW_Locale::GetString('template_menu_items'); ?>
 </a>
 </li>
@@ -186,7 +186,7 @@ World of Warcraft
                         echo sprintf('
                             <tr class="row%d">
                                 <td data-raw="0 %s">
-                                    <a href="%s/wow/item/%d" class="item-link color-q%d">
+                                    <a href="%s/wow/' . WoW_Locale::GetLocale() . '/item/%d" class="item-link color-q%d">
                                         <span  class="icon-frame frame-18 " style=\'background-image: url("http://eu.media.blizzard.com/wow/icons/18/%s.jpg");\'> </span>
                                         <strong>%s</strong>
                                         %s
