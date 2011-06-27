@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright (C) 2010-2011 Shadez <https://github.com/Shadez>
+ * Copyright (C) 2011 Shadez <https://github.com/Shadez>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  **/
 
-include('../../../includes/WoW_Loader.php');
-header('Content-type: text/plain');
-echo WoW_Locale::GetMenuString();
+class Marketing extends Controller {
+    public function main() { }
+}
+
 ?>

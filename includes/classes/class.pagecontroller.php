@@ -26,6 +26,7 @@ Class PageController {
     protected $m_errorCode = 0;     // 403, 404, 500 and others HTTP error statuses.
     protected $m_locale = 'en';     // locale name from URL
     protected $m_locale_index = 0;  // locale index in URL
+    protected $m_skip_redirect = false;
     
     public function __construct() {
         $this->FindActions();
@@ -47,22 +48,24 @@ Class PageController {
         if(!$url_size) {
             return false;
         }
-        if(strtolower($url_data[1]) == 'wow') {
-            $this->m_type = 'wow';
-            $this->m_locale_index = 2;
+        switch(strtolower($url_data[1])) {
+            case 'wow':
+            case 'login':
+                $this->m_type = strtolower($url_data[1]);
+                $this->m_locale_index = 2;
+                break;
+            case 'account':
+            case 'marketing':
+            case 'ta':
+                $this->m_type = strtolower($url_data[1]);
+                $this->m_locale_index = 0;
+                $this->m_skip_redirect = true;
+                break;
+            default:
+                $this->m_type = 'bn';
+                $this->m_locale_index = 1;
+                break;
         }
-        elseif(strtolower($url_data[1]) == 'account') {
-            $this->m_type = 'account';
-            $this->m_locale_index = 0;
-        }
-        elseif(strtolower($url_data[1] == 'login')) {
-            $this->m_type = 'login';
-            $this->m_locale_index = 2;
-        }
-        else {
-            $this->m_type = 'bn';
-            $this->m_locale_index = 1;
-        }        
         $allowed_locales = array('de', 'en', 'es', 'fr', 'ru');
         for($i = 1; $i < $url_size; ++$i) {
             $this->m_actions['action' . ($i - 1)] = $url_data[$i];
@@ -76,10 +79,9 @@ Class PageController {
     }
     
     private function ParseURL() {
-        //echo $_SESSION['wow_locale'];
         $url_data = explode('/', $this->m_url);
         $allowed_locales = array('de', 'en', 'es', 'fr', 'ru');
-        if((!isset($url_data[$this->m_locale_index]) || $url_data[$this->m_locale_index] === null || !in_array($url_data[$this->m_locale_index], $allowed_locales)) && $this->m_type != 'account') {
+        if((!isset($url_data[$this->m_locale_index]) || $url_data[$this->m_locale_index] === null || !in_array($url_data[$this->m_locale_index], $allowed_locales)) && !$this->m_skip_redirect) {
             $sTmp = substr($this->m_url, 1, strlen($url_data[1]));
             unset($url_data[0]);
             if($this->m_type == 'wow') {
@@ -99,7 +101,7 @@ Class PageController {
         else {
             $this->m_locale = $_COOKIE['wow_locale'];
         }
-        $this->m_controller = $this->m_type != 'bn' ? ((isset($url_data[$this->m_locale_index + 1]) && $url_data[$this->m_locale_index + 1] != null) ? $url_data[$this->m_locale_index + 1] : 'home') : 'home';
+        $this->m_controller = ((isset($url_data[$this->m_locale_index + 1]) && $url_data[$this->m_locale_index + 1] != null) ? $url_data[$this->m_locale_index + 1] : 'home') ;
         if(preg_match('/\?/', $this->m_controller)) {
             $tmp = explode('?', $this->m_controller);
             $this->m_controller = $tmp[0];
@@ -117,8 +119,6 @@ Class PageController {
         $controller_file = CONTROLLERS_DIR . $this->m_type . DS . $this->m_controller . '.php';
         if(!file_exists($controller_file)) {
             exit;
-            $this->m_controller = 'error';
-            $controller_file = CONTROLLERS_DIR . $this->m_type . DS . $this->m_controller . '.php';
         }
         include($controller_file);
         $this->m_controller = new $this->m_controller($this->m_actions);

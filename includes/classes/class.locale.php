@@ -25,7 +25,6 @@ Class WoW_Locale {
     private static $menu_holder = null;
     
     public static function SetLocale($locale_name, $locale_id, $load_locale = true) {
-        WoW_Log::WriteError('%s : new locale: %s', __METHOD__, $locale_name);
         self::$locale_name = self::GetAppropriateLocaleNameForLocale($locale_name);
         self::$locale_id = $locale_id;
         if($load_locale) {
