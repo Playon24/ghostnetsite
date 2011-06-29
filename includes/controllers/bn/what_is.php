@@ -19,7 +19,7 @@
  **/
 
 Class What_is extends Controller {
-    public function masin() {
+    public function main() {
         WoW_Template::SetTemplateTheme('bn');
         WoW_Template::SetMenuIndex('index');
         WoW_Template::SetPageIndex('landing');
