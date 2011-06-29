@@ -36,9 +36,7 @@ Class WoW_Template {
             case 500:
                 self::SetTemplateTheme(($bn_error ? 'bn' : 'wow'));
                 self::SetPageData('body_class', WoW_Locale::GetLocale(LOCALE_DOUBLE));
-                if(!$bn_error) {
-                    self::SetPageIndex('404');
-                }
+                self::SetPageIndex(($bn_error ? 'landing' : '404'));
                 self::SetPageData(($bn_error ? 'landing' : 'page'), '404');
                 if(!$error_profile) {
                     self::SetPageData('errorProfile', 'template_404');
@@ -68,14 +66,14 @@ Class WoW_Template {
     }
     
     public static function LoadTemplate($template_name, $overall = false) {
-        if(self::$is_error_page) {
-            return false; // Do not load any templates if error page triggered.
+        if(self::$is_error_page || self::$is_redirect) {
+            return false; // Do not load any templates if error page triggered or page is redirecting.
         }
         if($overall) {
-            $template = WOW_DIRECTORY . '/includes/templates/overall/overall_' . $template_name . '.php';
+            $template = TEMPLATES_DIR . 'overall' . DS . 'overall_' . $template_name . '.php';
         }
         else {
-            $template = WOW_DIRECTORY . '/includes/templates/' . self::GetTemplateTheme() . '/' . self::GetTemplateTheme() . '_' . $template_name . '.php';
+            $template = TEMPLATES_DIR . self::GetTemplateTheme() . DS . self::GetTemplateTheme() . '_' . $template_name . '.php';
         }
         if(file_exists($template)) {
             include($template);

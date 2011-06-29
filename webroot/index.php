@@ -19,5 +19,5 @@
  **/
 
 include('../includes/WoW_Loader.php');
-$pController->Init();
+$pController->Init(); // create page
 ?>

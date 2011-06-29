@@ -51,6 +51,8 @@ Class WoWConfig {
                                            // For example: site is available at http://example.org/wowcs/
                                            // That means that you should set this variable as '/wowcs'.
     public static $DefaultExpansion  = 2; // 0 - Classic, 1 - Burning Crusade, 2 - Wrath, 3 - Cataclysm
+    public static $Maintenance       = false; // Disable site? true/false
+    public static $TwitterAccount    = 'WowarmoryM'; // Twitter account name (displayed on maintenance page). Leave it blank if you don't use any.
 
     public static $Realms            = array(
         1 => array(

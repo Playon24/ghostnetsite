@@ -34,5 +34,4 @@ Class Ta extends Controller {
         WoW_Template::LoadTemplate('page_ta_lookup');
     }
 }
-
 ?>

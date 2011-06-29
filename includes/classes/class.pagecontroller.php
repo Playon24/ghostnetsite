@@ -27,12 +27,23 @@ Class PageController {
     protected $m_locale = 'en';     // locale name from URL
     protected $m_locale_index = 0;  // locale index in URL
     protected $m_skip_redirect = false;
+    protected $m_allowErrorPage = true;
     
     public function __construct() {
+        // Check maintenance
+        if(WoWConfig::$Maintenance) {
+            $this->m_controller = 'Maintenance';
+            $this->m_type = 'bn';
+            $this->LoadController();
+            exit;
+        }
         $this->FindActions();
     }
     
     public function Init() {
+        if(preg_match('/\/static\//', $this->m_url)) {
+            return;
+        }
         $this->ParseURL();
         $this->LoadController();
     }
@@ -116,12 +127,46 @@ Class PageController {
             WoW_Template::ErrorPage(404);
             return false;
         }
+        $this->m_allowErrorPage = true;
+        switch(strtolower($this->m_controller)) {
+            case 'marketing':
+            case 'ta':
+            case 'login_frag':
+            case 'data':
+            case 'discussion':
+            case 'pref':
+                $this->m_allowErrorPage = false;
+                break;
+            case 'item':
+                if(isset($this->m_actions['action4']) && strtolower($this->m_actions['action4']) == 'tooltip') {
+                    $this->m_allowErrorPage = false;
+                }
+                break;
+        }
         $controller_file = CONTROLLERS_DIR . $this->m_type . DS . $this->m_controller . '.php';
         if(!file_exists($controller_file)) {
+            //WoW_Log::WriteError('%s : unable to load controller <strong>"%s"</strong>: file <strong>"%s"</strong> was not found! (m_actions: %s)', __METHOD__, ucfirst($this->m_controller), $controller_file, print_r($this->m_actions, true));
+            if($this->m_allowErrorPage) {
+                WoW_Template::ErrorPage(404, null, ($this->m_type == 'wow' ? false : true));
+            }
             exit;
         }
         include($controller_file);
+        if(!class_exists($this->m_controller, false)) {
+            //WoW_Log::WriteError('%s : controller file was loaded but class <strong>"%s"</strong> was not found!', __METHOD__, ucfirst($this->m_controller));
+            if($this->m_allowErrorPage) {
+                WoW_Template::ErrorPage(404);
+            }
+            exit;
+        }
         $this->m_controller = new $this->m_controller($this->m_actions);
+        if(!method_exists($this->m_controller, 'main')) {
+            //WoW_Log::WriteError('%s : class <strong>"%s"</strong> was loaded but method %s::main() was not found!', __METHOD__, ucfirst(get_class($this->m_controller)), ucfirst(get_class($this->m_controller)));
+            if($this->m_allowErrorPage) {
+                WoW_Template::ErrorPage(404, null, ($this->m_type == 'wow' ? false : true));
+            }
+            exit;
+        }
         $this->m_controller->main();
     }
     
@@ -134,7 +179,7 @@ Class PageController {
     }
     
     public function GetControllerName() {
-        return $this->m_controller;
+        return is_object($this->m_controller) ? get_class($this->m_controller) : $this->m_controller;
     }
 }
 ?>
