@@ -243,6 +243,8 @@ Class WoW_Account {
      **/
     private static $userGames = array();
     
+    private static $gameAccountData = array();
+    
     /**
      * Return Q&A, userdatas for recovery password
      * @access    private
@@ -812,7 +814,11 @@ Class WoW_Account {
             $account_ids[] = self::$myGamesList[$i]['account_id'];
         }
         if(!empty($account_ids)) {
-            self::$userGames = DB::Realm()->select("SELECT * FROM `account` WHERE `id` IN (%s)", $account_ids);        
+            self::$userGames = DB::Realm()->select("SELECT a.*, b.`bandate`, b.`unbandate`, b.`banreason`, b.`bannedby`, b.`active` AS `active_ban` FROM `account` a LEFT JOIN `account_banned` b ON b.`id` IN (%s) WHERE a.`id` IN (%s)", $account_ids, $account_ids);     
+        }
+        
+        for($i=0;$i<count(self::$userGames);$i++) {
+            self::$gameAccountData[strtolower(self::$userGames[$i]['username'])] = self::$userGames[$i];
         }
         return true;
     }
