@@ -7,7 +7,9 @@
                   <script type="text/javascript" src="<?php echo WoW::GetWoWPath(); ?>/wow/static/local-common/js/slideshow.js"></script>
                   <script type="text/javascript" src="<?php echo WoW::GetWoWPath(); ?>/wow/static/local-common/js/third-party/swfobject.js"></script>
 <?php
-WoW_Template::LoadTemplate('block_slideshow');
+if(!isset($_GET['page'])) {
+    WoW_Template::LoadTemplate('block_slideshow');
+}
 WoW_Template::LoadTemplate('block_featured_news');
 WoW_Template::LoadTemplate('block_news_updates');
 ?>

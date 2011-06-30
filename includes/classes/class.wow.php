@@ -19,6 +19,9 @@
  **/
 
 Class WoW {
+    private static $total_news_count = 0;
+    private static $current_news_page = 0;
+    private static $pager_data = array('prev' => false, 'next' => false);
     private static $last_news = array();
     private static $blog_contents = array();
     private static $carousel_data = array();
@@ -41,24 +44,49 @@ Class WoW {
     
     public static function GetLastNews($limit = 20, $start = 0) {
         if(!self::$last_news) {
-            self::LoadLastNews();
+            self::LoadLastNews($limit, $start);
         }
-        $news_to_return = array();
-        for($i = 0; $i < $limit; $i++) {
-            if(!isset(self::$last_news[ $i + $start ])) {
-                continue;
-            }
-            $news_to_return[] = (object) self::$last_news[ $i + $start ];
-        }
-        return $news_to_return;
+        return self::$last_news;
     }
     
-    private static function LoadLastNews() {
-        self::$last_news = DB::WoW()->select("SELECT `id`, `image`, `header_image`, `title_%s` AS `title`, `desc_%s` AS `desc`, `author`, `postdate` FROM `DBPREFIX_news` ORDER BY `postdate` DESC", WoW_Locale::GetLocale(), WoW_Locale::GetLocale());
+    public static function GetFeaturedNews() {
+        return DB::WoW()->select("SELECT `id`, `image`, `title_%s` AS `title` FROM `DBPREFIX_news` LIMIT 5", WoW_Locale::GetLocale());
+    }
+    
+    private static function LoadLastNews($limit, $start) {
+        if($start > 0) {
+            self::$current_news_page = $start;
+            $offset = ($start * $limit);
+        }
+        else {
+            $offset = 0;
+        }
+        self::$last_news = DB::WoW()->select("SELECT `id`, `image`, `header_image`, `title_%s` AS `title`, `desc_%s` AS `desc`, `author`, `postdate` FROM `DBPREFIX_news` ORDER BY `postdate` DESC LIMIT %d, %d", WoW_Locale::GetLocale(), WoW_Locale::GetLocale(), $offset, $limit);
         $count = count(self::$last_news);
         for($i = 0; $i < $count; $i++) {
             self::$last_news[$i]['comments_count'] = DB::WoW()->selectCell("SELECT COUNT(*) FROM `DBPREFIX_blog_comments` WHERE `blog_id` = %d", self::$last_news[$i]['id']);
         }
+        self::$total_news_count = DB::WoW()->selectCell("SELECT COUNT(*) FROM `DBPREFIX_news`");
+        if(self::$current_news_page > 0) {
+            self::$pager_data['prev'] = true;
+            if(($limit * ($start + 1)) < self::$total_news_count) {
+                self::$pager_data['next'] = true;
+            }
+        }
+        else {
+            self::$pager_data['prev'] = false;
+            if(self::$total_news_count > $limit) {
+                self::$pager_data['next'] = true;
+            }
+        }
+    }
+    
+    public static function GetPrevPage() {
+        return self::$pager_data['prev'] ? self::$current_news_page - 1 : -1;
+    }
+    
+    public static function GetNextPage() {
+        return self::$pager_data['next'] ? self::$current_news_page + 1 : -1;
     }
     
     public static function GetUrlData($type) {

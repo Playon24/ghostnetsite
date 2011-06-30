@@ -112,10 +112,15 @@ Class PageController {
         else {
             $this->m_locale = $_COOKIE['wow_locale'];
         }
-        $this->m_controller = ((isset($url_data[$this->m_locale_index + 1]) && $url_data[$this->m_locale_index + 1] != null) ? $url_data[$this->m_locale_index + 1] : 'home') ;
-        if(preg_match('/\?/', $this->m_controller)) {
-            $tmp = explode('?', $this->m_controller);
-            $this->m_controller = $tmp[0];
+        $this->m_controller = 'home';
+        if(isset($url_data[$this->m_locale_index + 1])) {
+            $exploded = explode('?', $url_data[$this->m_locale_index + 1]);
+            if($exploded) {
+                $this->m_controller = $exploded[0] != null ? $exploded[0] : 'home';
+            }
+            else {
+                $this->m_controller = $url_data[$this->m_locale_index + 1];
+            }
         }
         $this->m_controller = str_replace(array('-', '.'), '_', $this->m_controller);
         return true;

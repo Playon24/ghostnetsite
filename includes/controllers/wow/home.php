@@ -21,7 +21,7 @@
 class Home extends Controller {
     public function main() {
         WoW_Template::SetPageData('carousel', WoW::GetCarouselData());
-        WoW_Template::SetPageData('wow_news', WoW::GetLastNews());
+        WoW_Template::SetPageData('wow_news', WoW::GetLastNews(20, (isset($_GET['page']) ? (int) ($_GET['page'] - 1) : 0)));
         WoW_Template::SetPageData('body_class', sprintf('%s homepage', WoW_Locale::GetLocale(LOCALE_DOUBLE)));
         WoW_Template::SetTemplateTheme('wow');
         WoW_Template::SetPageIndex('index');
@@ -29,5 +29,4 @@ class Home extends Controller {
         WoW_Template::LoadTemplate('page_index');
     }
 }
-
 ?>
