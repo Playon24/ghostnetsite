@@ -14,11 +14,11 @@
         <div class="multi-type">
         <div class="result-title">
         <div class="type-icon type-wowcharacter border-c%d" style="background-image:url(%s/wow/static/images/2d/avatar/%d-%d.jpg)">
-        <a href="%s/wow/character/%s/%s/">
+        <a href="%s/wow/%s/character/%s/%s/">
             <img width="32" height="32" src="%s/wow/static/images/2d/avatar/%d-%d.jpg" alt=""/>
         </a>
         </div>
-        <a href="%s/wow/character/%s/%s/" class="search-title color-c%d">
+        <a href="%s/wow/%s/character/%s/%s/" class="search-title color-c%d">
             %s @ %s
         </a>
         </div>
@@ -31,9 +31,9 @@
         </div>',
                 $char['classId'],
                 WoW::GetWoWPath(), $char['raceId'], $char['gender'],
-                WoW::GetWoWPath(), $char['realmName'], $char['name'],
+                WoW::GetWoWPath(), WoW_Locale::GetLocale(), $char['realmName'], $char['name'],
                 WoW::GetWoWPath(), $char['raceId'], $char['gender'],
-                WoW::GetWoWPath(), $char['realmName'], $char['name'], $char['classId'],
+                WoW::GetWoWPath(), WoW_Locale::GetLocale(), $char['realmName'], $char['name'], $char['classId'],
                 $char['name'], $char['realmName'],
                 $guild_text,
                 WoW_Locale::GetString('character_race_' . $char['raceId'], $char['gender']), WoW_Locale::GetString('character_class_' . $char['classId'], $char['gender']), sprintf(WoW_Locale::GetString('tempalte_lvl_fmt'), $char['level']),

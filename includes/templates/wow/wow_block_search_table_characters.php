@@ -19,7 +19,7 @@
                                     foreach($searchResults as $char) {
                                         echo sprintf('<tr class="row%d">
 									<td class="table-link">
-										<a 	href="%s/wow/character/%s/%s/"
+										<a 	href="%s/wow/%s/character/%s/%s/"
 											class="color-c%d">
 											<span class="list-icon border-c%d">
 												<img src="%s/wow/static/images/2d/avatar/%d-%d.jpg" alt="" />
@@ -51,7 +51,7 @@
 								</tr>
                                 ',
                                     $toggleStyle % 2 ? 1 : 2,
-                                    WoW::GetWoWPath(), $char['realmName'], $char['name'],
+                                    WoW::GetWoWPath(), WoW_Locale::GetLocale(), $char['realmName'], $char['name'],
                                     $char['classId'],
                                     $char['classId'],
                                     WoW::GetWoWPath(), $char['raceId'], $char['gender'],
