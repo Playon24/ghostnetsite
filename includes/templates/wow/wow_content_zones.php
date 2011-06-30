@@ -143,7 +143,7 @@ World of Warcraft
 						<a href="javascript:;"
 						   id="nav-%d"
 						   onclick="WikiDirectory.view(this, %d);"
-						   class="expansion-%d nav-active">
+						   class="expansion-%d'.(($i == 3) ? ' nav-active' : '').'">
 							%s
 						</a>
 					</li>

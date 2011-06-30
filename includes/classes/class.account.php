@@ -1450,17 +1450,24 @@ Class WoW_Account {
      * @return   void
      **/
     public static function InitializeAccount($accountName) {
-        $accountData = DB::Realm()->selectRow("SELECT * FROM `account` WHERE `username` = '%s'", $accountName);
-        if(!$accountData) {
-            header('Location: ' . WoW::GetWoWPath() . '/account/management/');
-            exit;
-        }
-        self::$dashboard_account = $accountData;
-        if(DB::Realm()->selectCell("SELECT 1 FROM `account_banned` WHERE `id` = %d AND `active` = 1", self::$dashboard_account['id'])) {
-            self::$dashboard_account['banned'] = true;
+        if(array_key_exists(strtolower($accountName), self::$gameAccountData) ) {
+            $accountData = DB::Realm()->selectRow("SELECT * FROM `account` WHERE `username` = '%s'", $accountName);
+            if(!$accountData) {
+                header('Location: ' . WoW::GetWoWPath() . '/account/management/');
+                exit;
+            }
+            self::$dashboard_account = $accountData;
+    
+            if(DB::Realm()->selectCell("SELECT 1 FROM `account_banned` WHERE `id` = %d AND `active` = 1", self::$dashboard_account['id'])) {
+                self::$dashboard_account['banned'] = true;
+            }
+            else {
+                self::$dashboard_account['banned'] = false;
+            }
         }
         else {
-            self::$dashboard_account['banned'] = false;
+            header('Location: ' . WoW::GetWoWPath() . '/account/management/');
+            exit;
         }
     }
     
