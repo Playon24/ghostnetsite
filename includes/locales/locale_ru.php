@@ -509,6 +509,7 @@ $WoW_Locale = array(
     'template_profile_spell_stats' => 'Заклинания',
     'template_profile_defense_stats' => 'Защита',
     'template_profile_resistances_stats' => 'Сопротивление',
+    'template_profile_lastupdate' => 'Последнее обновление:',
     
     'stat_health' => 'Здоровье',
     'stat_power0' => 'Мана',
@@ -693,6 +694,8 @@ $WoW_Locale = array(
     'template_character_pvp_rating_roster' => 'Рейтинг',
     'template_character_pvp_season' => 'Сезон',
     'template_character_pvp_week' => 'На этой неделе',
+    'template_character_pvp_personal_rating' => 'Личный рейтинг',
+    'template_character_pvp_unranked' => 'Без рейтинга',
     
     'template_character_audit' => 'Осмотр персонажа',
     'template_character_audit_help' => 'Что это?',

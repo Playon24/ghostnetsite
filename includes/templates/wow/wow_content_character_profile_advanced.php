@@ -428,6 +428,14 @@ World of Warcraft
 					</div>
 				</div>
 	<span class="clear"><!-- --></span>
+    <?php
+    if(WoW_Characters::IsHaveArenaTeam()) {
+        WoW_Template::LoadTemplate('block_character_arena_info');
+    }
+    ?>
+    <div class="summary-lastupdate">
+        <?php echo WoW_Locale::GetString('template_profile_lastupdate') . ' ' . WoW_Characters::GetLastUpdateTimeStamp('d/m/Y'); ?>
+	</div>
 	<span class="clear"><!-- --></span>
 			</div>
 		</div>

@@ -500,6 +500,7 @@ $WoW_Locale = array(
     'template_profile_spell_stats' => 'Spell',
     'template_profile_defense_stats' => 'Defense',
     'template_profile_resistances_stats' => 'Resistance',
+    'template_profile_lastupdate' => 'Last updated on',
     
     'stat_health' => 'Health',
     'stat_power0' => 'Mana',
@@ -684,6 +685,8 @@ $WoW_Locale = array(
     'template_character_pvp_rating_roster' => 'Rating',
     'template_character_pvp_season' => 'Season',
     'template_character_pvp_week' => 'This week',
+    'template_character_pvp_personal_rating' => 'Personal rating',
+    'template_character_pvp_unranked' => 'Unranked',
     
     'template_character_audit' => 'Character Audit',
     'template_character_audit_help' => 'What is this?',

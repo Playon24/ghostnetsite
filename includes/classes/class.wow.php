@@ -439,5 +439,36 @@ Class WoW {
         header('Location: /' . $url);
         exit; // Terminate script
     }
+    
+    public static function GetBattleGroup($id = 1, $name = '') {
+        $activeBG = false;
+        if($name != null) {
+            // Find BG with provided name
+            foreach(WoWConfig::$BattleGroups as &$bg) {
+                if($bg['name'] == $name) {
+                    $activeBG = $bg;
+                }
+            }
+        }
+        else {
+            if(isset(WoWConfig::$BattleGroups[$id])) {
+                $activeBG = WoWConfig::$BattleGroups[$i];
+            }
+        }
+        if($activeBG && isset($activeBG['realms'])) {
+            foreach($activeBG['realms'] as &$realm) {
+                $realm = isset(WoWConfig::$Realms[$realm]) ? WoWConfig::$Realms[$realm] : null;
+                if(!$realm) {
+                    unset($realm);
+                }
+            }
+            return $activeBG;
+        }
+        return false;
+    }
+    
+    public static function GetServerType($realmID) {
+        return isset(WoWConfig::$Realms[$realmID]['type']) ? WoWConfig::$Realms[$realmID]['type'] : UNK_SERVER;
+    }
 }
 ?>

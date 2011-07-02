@@ -62,6 +62,7 @@ Class WoW_Characters /*implements Interface_Characters*/ {
     private static $item_level     = array();
     private static $role           = 0;
     private static $next_pvp       = 2;
+    private static $last_update    = 0;
     
     // Storages
     private static $professions    = array();
@@ -163,6 +164,8 @@ Class WoW_Characters /*implements Interface_Characters*/ {
             self::$data = DB::Characters()->selectCell("SELECT `data` FROM `armory_character_stats` WHERE `guid`=%d LIMIT 1", self::$guid);
             // Convert string to array
             self::HandleDataField();
+            // Last update date
+            self::$last_update = DB::Characters()->selectCell("SELECT `save_date` FROM `armory_character_stats` WHERE `guid` = %d LIMIT 1", self::$guid);
             // Class/race names/keys
             self::$class_name = WoW_Locale::GetString('character_class_' . self::$class, self::$gender);            
             self::$race_name = WoW_Locale::GetString('character_race_' . self::$race, self::$gender);
@@ -896,6 +899,25 @@ Class WoW_Characters /*implements Interface_Characters*/ {
         return self::$feeds;
     }
     
+    public static function GetLastUpdateTimeStamp($date_format = '') {
+        if($date_format != null) {
+            return date($date_format, self::$last_update);
+        }
+        return self::$last_update;
+    }
+    
+    public static function GetArenaTeams() {
+        $team_ids = DB::Characters()->selectRow("SELECT `%s` AS `id` FROM `arena_team_member` WHERE `guid` = %d", self::GetServerType() == SERVER_MANGOS ? 'arenateamid' : 'arenaTeamId', self::GetGUID());
+        if(!$team_ids) {
+            return false;
+        }
+        $teams = array();
+        foreach($team_ids as $id) {
+            $teams[] = new WoW_ArenaTeam(self::GetRealmID(), '', $id['id']);
+        }
+        return $teams;
+    }
+    
     /**
      * @param bool $current = true
      * @param bool $update = false
@@ -1340,6 +1362,10 @@ Class WoW_Characters /*implements Interface_Characters*/ {
                 WoW_Log::WriteError('%s : wrong team type: %d', __METHOD__, $team_type);
                 return false;
         }
+    }
+    
+    public static function IsHaveArenaTeam() {
+        return DB::Characters()->selectCell("SELECT 1 FROM `arena_team_member` WHERE guid = %d", self::GetGUID());
     }
     
     /**

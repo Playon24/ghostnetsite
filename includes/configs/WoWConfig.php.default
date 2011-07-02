@@ -53,8 +53,16 @@ Class WoWConfig {
     public static $DefaultExpansion  = 2; // 0 - Classic, 1 - Burning Crusade, 2 - Wrath, 3 - Cataclysm
     public static $Maintenance       = false; // Disable site? true/false
     public static $TwitterAccount    = 'WowarmoryM'; // Twitter account name (displayed on maintenance page). Leave it blank if you don't use any.
-
-    public static $Realms            = array(
+    
+    /**
+     * All available realms
+     * Structure:
+     *      id - realm ID (should be the same as array index)
+     *      name - Realm Name
+     *      type - Realm type (can be SERVER_MANGOS or SERVER_TRINITY, depends on your server core. Note that this is a constant!)
+     * You can create unlimited realms
+     **/
+    public static $Realms = array(
         1 => array(
             'id'   => 1,
             'name' => 'Armory Realm',
@@ -65,6 +73,31 @@ Class WoWConfig {
             'name' => 'Armory Realm 2',
             'type' => SERVER_TRINITY
         )
+    );
+    
+    /**
+     * Server battlegroups
+     * Structure:
+     *      id - BattleGroup ID
+     *      name - BG name
+     *      realms - array of realm IDs that includes into this BG
+     * You can create unlimited battlegroups, but realms lists must be unique!
+     **/
+    public static $BattleGroups = array(
+        1 => array(
+            'id' => 1,
+            'name' => 'Massive Network',
+            'realms' => array(1, 2)
+        )
+    );
+
+    public static $MailSender        = array(
+        'smtp' => '', //smtp server url - for gmail use 'smtp.gmail.com'
+        'name' => '', //smtp auth username - for gmail use your gmail login
+        'pass' => '', //smtp auth password - for gmail use your gmail password
+        'port' => '', //smtp port - for gmail use '465'
+        'security' => '', //security (ssl, tls or blank) - for gmail use 'ssl'
+        'from' => 'wowcs@yourserver.com' //email adress
     );
 }
 ?>

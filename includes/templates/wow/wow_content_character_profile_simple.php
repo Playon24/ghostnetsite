@@ -172,6 +172,15 @@ World of Warcraft
 				</div>
 	<span class="clear"><!-- --></span>
 	<span class="clear"><!-- --></span>
+    <?php
+    if(WoW_Characters::IsHaveArenaTeam()) {
+        WoW_Template::LoadTemplate('block_character_arena_info');
+    }
+    ?>
+    	<span class="clear"><!-- --></span>
+				<div class="summary-lastupdate">
+                    <?php echo WoW_Locale::GetString('template_profile_lastupdate') . ' ' . WoW_Characters::GetLastUpdateTimeStamp('d/m/Y'); ?>
+				</div>
 			</div>
 		</div>
 	<span class="clear"><!-- --></span>

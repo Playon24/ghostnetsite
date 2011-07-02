@@ -389,6 +389,14 @@ a.summary-stats-toggler:hover .inner { background-position: right bottom; /*back
 .summary-arena .cell-mid { padding: 15px 20px 0 20px; }
 .summary-arena .cell-mid .rating { font-size: 14px; margin-top: 2px; margin-bottom: 8px; line-height: 21px; }
 .summary-arena .cell-mid .icon { margin: 3px 3px 0 0; }
+.summary-arena a.profile-linktomore { margin-top: 10px; }
+.summary-arena .rating { font-size: 20px; color: #953203; font-family: 'Arial Black', Verdana, Arial, sans-serif; font-weight: bold; line-height:29px; }
+.summary-arena .rank { color: #FEF092; font-size: 14px; font-weight: bold; }
+.summary-arena .rank .unranked { color: #71401F; font-size: 12px; font-style: italic; font-weight: normal; }
+.summary-arena .gameswon { color: #0F0; }
+.summary-arena .gameslost { color: red; }
+.summary-arena .percentwon { padding-left: 6px; }
+.summary-arena .tip { border-color: #54361f; }
 
 .summary-arena .gameswon { color: #0F0; }
 .summary-arena .gameslost { color: red; }
