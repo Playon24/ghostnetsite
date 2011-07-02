@@ -1397,11 +1397,15 @@ Class WoW_Account {
         return false;
     }
     
-    /**
-     * @deprecated
+    /** 
+     * @access   public
+     * @static   WoW_Account::RecoverPasswordSelect($user_data)
+     * @param    array $user_data
+     * @category Account Manager Class
+     * @return   bool
      **/
     public static function RecoverPasswordSelect($user_data) {
-        if(self::$password_recovery_data = DB::WoW()->selectRow("SELECT `secredQ`, `secredA`, `first_name` AS `username`, `email` FROM `DBPREFIX_users` WHERE `first_name` = '%s' AND `email` = '%s' LIMIT 1", $user_data['username'], $user_data['email']) ) {
+        if(self::$password_recovery_data = DB::WoW()->selectRow("SELECT `question_id`,`question_answer`, `first_name` AS `username`, `email` FROM `DBPREFIX_users` WHERE `first_name` = '%s' AND `email` = '%s' LIMIT 1", $user_data['username'], $user_data['email']) ) {
             return true;
         }
         else {
@@ -1409,40 +1413,152 @@ Class WoW_Account {
         }
     }
     
-    /**
-     * @deprecated
+    /** 
+     * @access   public
+     * @static   WoW_Account::GetRecoverPasswordData()
+     * @category Account Manager Class
+     * @return   array
      **/
     public static function GetRecoverPasswordData() {
         return self::$password_recovery_data;
     }
     
-    /**
-     * @deprecated
+    /** 
+     * @access   public
+     * @static   WoW_Account::SetRecoverPasswordData($data_from_session)
+     * @param    array $data_from_session
+     * @category Account Manager Class
+     * @return   bool
      **/
     public static function SetRecoverPasswordData($data_from_session) {
         self::$password_recovery_data = $data_from_session;
         return true;
     }
     
-    /**
-     * @todo RecoveryPasswordSuccess have fully functional password change script, but there is no mail sender object.
-     * @deprecated
-     * Also there is no random password generator.     
-     * Because of this, script to change password is commented.
-     * 
-     * UNCOMMENT THIS ONLY WHEN EMAIL SENDER OBJECT AND RANDOM PASSWORD GENERATOR WILL BE SCRIPTED               
+    /** 
+     * Sets password recovery ticket and sends email with ticket link for type new password
+     *         
+     * @access   public
+     * @static   WoW_Account::RecoverPasswordSuccess($secretAnswer)
+     * @param    array $secretAnswer
+     * @category Account Manager Class
+     * @return   bool
      **/
     public static function RecoverPasswordSuccess($secretAnswer) {
-        if(strtolower(self::$password_recovery_data['secredA']) == strtolower($secretAnswer)) {
-            //$new_password = set here random password generator function
-            //if(DB::WoW()->query("UPDATE `DBPREFIX_users` SET `password` = '%s' WHERE `first_name` = '%s' AND `email` = '%s' LIMIT 1", sha1(strtoupper(self::$password_recovery_data['username']) . ':' . strtoupper($new_password), $password_recovery_data['username'], $password_recovery_data['email'])) {
-            //}
+        if(strtolower(self::$password_recovery_data['question_answer']) == strtolower($secretAnswer)) {
+            $ticket = self::GenerateTicket();
             
-            //make here email sender with new password generator
-            return true;
+            if(DB::WoW()->query("UPDATE `DBPREFIX_users` SET `pass_reset_ticket` = '%s' WHERE `first_name` = '%s' AND `email` = '%s' LIMIT 1", $ticket, self::$password_recovery_data['username'], self::$password_recovery_data['email'])) {
+                //make here email sender with new password generator
+                //because swiftmail is huge use it only if it is needed
+                require_once(INCLUDES_DIR . 'swiftmailer' . DS . 'swift_required.php');
+                //Create the Transport the call setUsername() and setPassword()
+                $transport = Swift_SmtpTransport::newInstance(WoWConfig::$MailSender['smtp'], WoWConfig::$MailSender['port'], WoWConfig::$MailSender['security'])
+                  ->setUsername(WoWConfig::$MailSender['name'])
+                  ->setPassword(WoWConfig::$MailSender['pass'])
+                  ;
+                
+                //Create the Mailer using your created Transport
+                $mailer = Swift_Mailer::newInstance($transport);
+                
+                //Create a message
+                $message = Swift_Message::newInstance(WoW_Locale::GetString('mailer_password_ticked_subject'))
+                  ->setFrom(array(WoWConfig::$MailSender['from']))
+                  ->setTo(array(self::$password_recovery_data['email']))
+                  ->setBody(sprintf(WoW_Locale::GetString('mailer_password_ticked_body'), 'http://'.$_SERVER['SERVER_NAME'].'/account/support/password-reset-confirm.xml?ticket='.$ticket, 'http://'.$_SERVER['SERVER_NAME'].'/account/support/password-reset-confirm.xml?ticket='.$ticket, 'http://'.$_SERVER['SERVER_NAME'].'/account/support/'), 'text/html')
+                  ;
+                //Send the message
+                if($mailer->send($message))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
         else {
             return false;
+        }
+    }
+    
+    /**
+     * Generate unique ticket for password recovery
+     * 
+     * @access   private
+     * @static   WoW_Account::GenerateTicket()
+     * @category Account Manager Class
+     * @return   string
+     **/
+    private static function GenerateTicket() {
+        $ticket = md5(uniqid());
+        if(DB::WoW()->selectCell("SELECT 1 FROM `DBPREFIX_users` WHERE `pass_reset_ticket` = '%s' LIMIT 1", $ticket)) {
+          self::GenerateTicket();
+        }
+        else {
+          return $ticket;
+        }
+    }
+    
+    /**
+     * Check if ticket exists
+     * 
+     * @access   public
+     * @static   WoW_Account::validTicket()
+     * @category Account Manager Class
+     * @return   bool
+     **/
+    public static function validTicket($ticket) {
+        if($recovery = DB::WoW()->selectRow("SELECT `email`, `first_name` FROM `DBPREFIX_users` WHERE `pass_reset_ticket` = '%s' LIMIT 1", $ticket)) {
+          $_SESSION['password_recovery_email'] = $recovery['email'];
+          $_SESSION['password_recovery_first_name'] = $recovery['first_name'];
+          $_SESSION['password_recovery_ticket'] = $ticket;
+          return true;
+        }
+        else {
+          return false;
+        }
+    }
+    
+    /**
+     * Change password in DB
+     * 
+     * @access   public
+     * @static   WoW_Account::RecoverPasswordChange()
+     * @param    string $password     
+     * @category Account Manager Class
+     * @return   bool
+     **/
+    public static function RecoverPasswordChange($password) {
+        $sha_pass_hash = sha1(strtoupper($_SESSION['password_recovery_email']) . ':' . strtoupper($password));
+        $ticket = $_SESSION['password_recovery_ticket'];
+        if(DB::WoW()->query("UPDATE `DBPREFIX_users` SET `sha_pass_hash` = '%s', `pass_reset_ticket` = NULL WHERE `pass_reset_ticket` = '%s' LIMIT 1", $sha_pass_hash, $ticket)) {
+            //make here email sender
+            //because swiftmail is huge use it only if it is needed
+            require_once(INCLUDES_DIR . 'swiftmailer' . DS . 'swift_required.php');
+            //Create the Transport the call setUsername() and setPassword()
+            $transport = Swift_SmtpTransport::newInstance(WoWConfig::$MailSender['smtp'], WoWConfig::$MailSender['port'], WoWConfig::$MailSender['security'])
+              ->setUsername(WoWConfig::$MailSender['name'])
+              ->setPassword(WoWConfig::$MailSender['pass'])
+              ;
+            
+            //Create the Mailer using your created Transport
+            $mailer = Swift_Mailer::newInstance($transport);
+            
+            //Create a message
+            $message = Swift_Message::newInstance(WoW_Locale::GetString('mailer_password_changed_subject'))
+              ->setFrom(array(WoWConfig::$MailSender['from']))
+              ->setTo(array($_SESSION['password_recovery_email']))
+              ->setBody(sprintf(WoW_Locale::GetString('mailer_password_changed_body'), $_SESSION['password_recovery_first_name'], $_SESSION['password_recovery_email'], 'http://'.$_SERVER['SERVER_NAME'].'/account/support/'), 'text/html')
+              ;
+            //Send the message
+            $mailer->send($message);
+            
+            unset($_SESSION['password_recovery_email']);
+            unset($_SESSION['password_recovery_first_name']);
+            unset($_SESSION['password_recovery_ticket']);
+            return true;
+        }
+        else {
+          return false;
         }
     }
     

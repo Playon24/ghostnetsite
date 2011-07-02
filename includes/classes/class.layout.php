@@ -274,6 +274,8 @@ class WoW_Layout {
             case 'password_reset_select':
             case 'password_reset_secred_answer':
             case 'password_reset_success':
+            case 'password_reset_confirm':
+            case 'password_reset_changed':
                 $css_data_page = array(
                     array(
                         'path' => '/css/bnet-print.css',
@@ -1174,6 +1176,13 @@ class WoW_Layout {
                 return sprintf('%s - %s - ', WoW_Locale::GetString('template_game_class_index'), WoW_Locale::GetString('template_menu_game'));
             case 'game_class':
                 return sprintf('%s - %s - ', WoW_Locale::GetString('character_class_' . self::GetPageData('classId')), WoW_Locale::GetString('template_menu_game'));
+            case 'password_reset':
+                return sprintf('%s - Battle.Net', WoW_Locale::GetString('login_help_title'));
+            case 'password_reset_select':
+            case 'password_reset_secred_answer':
+            case 'password_reset_success':
+            case 'password_reset_confirm':
+                return sprintf('%s - Battle.Net', WoW_Locale::GetString('template_account_password_reset_title'));
             case 'dashboard':
                 return sprintf('%s - Battle.Net', WoW_Locale::GetString('expansion_' . WoW_Account::GetExpansion()));
             case 'landing':

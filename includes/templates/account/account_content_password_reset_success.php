@@ -2,13 +2,13 @@
   <div class="wrapper">
     <div id="content"> 
       <div id="page-header">
-        <h2 class="subcategory">Password Retrieval</h2>
-        <h3 class="headline">Action Required: Confirmation E-mail Sent</h3>
+        <h2 class="subcategory"><?php echo WoW_Locale::GetString('template_account_password_reset_retrieval'); ?></h2>
+        <h3 class="headline"><?php echo WoW_Locale::GetString('template_account_password_reset_confirmation_title'); ?></h3>
       </div>
       <div id="page-content" class="page-content">
-        <p>A confirmation e-mail has been sent to your registered e-mail address. Click the link in this e-mail to complete the password retrieval process. You will be prompted to create a new password during this final step.</p>
+        <p><?php echo WoW_Locale::GetString('template_account_password_reset_confirmation_intro'); ?></p>
         <div class="section-buttons"> 
-          <a class="ui-button button1 " href="/account/"><span><span>Go Back</span></span></a>
+          <a class="ui-button button1 " href="<?php echo WoW::GetWoWPath(); ?>/account/"><span><span><?php echo WoW_Locale::GetString('template_account_password_reset_confirmation_back'); ?></span></span></a>
         </div>
       </div> 
     </div>
