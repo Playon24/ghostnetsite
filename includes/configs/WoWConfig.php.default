@@ -90,5 +90,14 @@ Class WoWConfig {
             'realms' => array(1, 2)
         )
     );
+
+    public static $MailSender        = array(
+        'smtp' => '', //smtp server url - for gmail use 'smtp.gmail.com'
+        'name' => '', //smtp auth username - for gmail use your gmail login
+        'pass' => '', //smtp auth password - for gmail use your gmail password
+        'port' => '', //smtp port - for gmail use '465'
+        'security' => '', //security (ssl, tls or blank) - for gmail use 'ssl'
+        'from' => 'wowcs@yourserver.com' //email adress
+    );
 }
 ?>
