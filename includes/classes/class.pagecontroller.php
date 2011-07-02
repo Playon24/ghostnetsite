@@ -150,7 +150,6 @@ Class PageController {
         }
         $controller_file = CONTROLLERS_DIR . $this->m_type . DS . $this->m_controller . '.php';
         if(!file_exists($controller_file)) {
-            //WoW_Log::WriteError('%s : unable to load controller <strong>"%s"</strong>: file <strong>"%s"</strong> was not found! (m_actions: %s)', __METHOD__, ucfirst($this->m_controller), $controller_file, print_r($this->m_actions, true));
             if($this->m_allowErrorPage) {
                 WoW_Template::ErrorPage(404, null, ($this->m_type == 'wow' ? false : true));
             }
@@ -158,20 +157,19 @@ Class PageController {
         }
         include($controller_file);
         if(!class_exists($this->m_controller, false)) {
-            //WoW_Log::WriteError('%s : controller file was loaded but class <strong>"%s"</strong> was not found!', __METHOD__, ucfirst($this->m_controller));
             if($this->m_allowErrorPage) {
                 WoW_Template::ErrorPage(404);
             }
             exit;
         }
-        $this->m_controller = new $this->m_controller($this->m_actions);
-        if(!method_exists($this->m_controller, 'main')) {
-            //WoW_Log::WriteError('%s : class <strong>"%s"</strong> was loaded but method %s::main() was not found!', __METHOD__, ucfirst(get_class($this->m_controller)), ucfirst(get_class($this->m_controller)));
+        $this->m_controller = new $this->m_controller($this->m_actions, $this->m_type);
+        if(!is_object($this->m_controller) || !method_exists($this->m_controller, 'main')) {
             if($this->m_allowErrorPage) {
                 WoW_Template::ErrorPage(404, null, ($this->m_type == 'wow' ? false : true));
             }
             exit;
         }
+        // Run page        
         $this->m_controller->main();
     }
     

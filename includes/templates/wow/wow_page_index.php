@@ -15,7 +15,7 @@ WoW_Template::LoadTemplate('block_header');
             <h1 id="logo"><a href="<?php echo WoW::GetWoWPath(); ?>/wow/">World of Warcraft</a></h1>
             <div class="header-plate-wrapper header-plate">
 <?php
-WoW_Template::PrintMainMenu();
+echo WoW_Layout::PrintMainMenu();
 if(WoW_Account::IsLoggedIn()) {
     if(WoW_Account::IsHaveActiveCharacter()) {
         WoW_Template::LoadTemplate('block_user_meta_auth');

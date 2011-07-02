@@ -19,10 +19,12 @@
  **/
 
 class Controller {
-    protected $m_actions = array();
+    protected $m_actions   = array();
+    protected $m_type      = '';
     
-    public function __construct($actions) {
+    public function __construct($actions, $type) {
         $this->m_actions = $actions;
+        $this->m_type = $type;
     }
 }
 ?>

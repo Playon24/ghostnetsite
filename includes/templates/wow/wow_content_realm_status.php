@@ -3,28 +3,25 @@
 <div class="content-trail">
 <ol class="ui-breadcrumb">
 <li>
-<a href="<?php echo WoW::GetWoWPath(); ?>/wow/" rel="np">
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/<?php echo WoW_Locale::GetLocale(); ?>/" rel="np">
 World of Warcraft
 </a>
 </li>
 <li>
-<a href="<?php echo WoW::GetWoWPath(); ?>/wow/game/" rel="np">
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/<?php echo WoW_Locale::GetLocale(); ?>/game/" rel="np">
 <?php echo WoW_Locale::GetString('template_menu_game'); ?>
 </a>
 </li>
 <li class="last">
-<a href="<?php echo WoW::GetWoWPath(); ?>/wow/status" rel="np">
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/<?php echo WoW_Locale::GetLocale(); ?>/status" rel="np">
 <?php echo WoW_Locale::GetString('template_realm_status'); ?>
 </a>
 </li>
 </ol>
 </div>
-
 <div class="content-bot">
 	<div class="content-header">
 				<h2 class="header "><?php echo WoW_Locale::GetString('template_realm_status'); ?></h2>
-
-
 		<div class="desc"><?php echo WoW_Locale::GetString('template_realm_status_desc'); ?></div>
 	<span class="clear"><!-- --></span>
 	</div>
@@ -32,9 +29,7 @@ World of Warcraft
 	<div id="realm-status">
 	<ul class="tab-menu ">
 				<li>
-					<a href="javascript:;"
-					   
-					    class="tab-active">
+					<a href="javascript:;" class="tab-active">
 					   <?php echo WoW_Locale::GetString('template_realm_status_all_realms'); ?>
 					</a>
 				</li>
@@ -52,7 +47,7 @@ World of Warcraft
 		<div id="realm-filters" class="table-filters">
 			<form action="">
 				<div class="filter">
-					<label for="filter-status">Статус</label>
+					<label for="filter-status"><?php echo WoW_Locale::GetString('template_realm_status_status'); ?></label>
 					
 					<select id="filter-status" class="input select" data-filter="column" data-column="0">
 						<option value=""><?php echo WoW_Locale::GetString('template_realm_status_all'); ?></option>
@@ -125,17 +120,7 @@ World of Warcraft
 				<div class="filter" style="margin: 5px 0 5px 15px">
 					
 
-	<button
-		class="ui-button button1 "
-			type="button"
-			
-		
-		id="filter-button"
-		
-		onclick="RealmStatus.reset();"
-		
-		
-		>
+	<button class="ui-button button1 " type="button" id="filter-button" onclick="RealmStatus.reset();">
 		<span>
 			<span><?php echo WoW_Locale::GetString('template_realm_status_reset_filters'); ?></span>
 		</span>
