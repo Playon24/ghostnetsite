@@ -1971,6 +1971,11 @@ The Battle.net Account Team<br />
 
 
 <a href="http://eu.blizzard.com/en/privacy.html">Online Privacy Policy</a>',
+    
+    'template_pvp_arena_top_teams' => 'Top Arena Teams',
+    'template_pvp_arena_summary' => 'Summary',
+    'template_pvp_arena_pass' => 'Arena Pass',
+    'template_pvp_browse_rating_caption' => 'View %dv%d ladder',
 
     
 );

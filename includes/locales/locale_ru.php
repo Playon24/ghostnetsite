@@ -1194,5 +1194,10 @@ $WoW_Locale = array(
     'template_game_class_bars' => 'Стандартные панели',
     'template_game_class_armor' => 'Доступная броня',
     'template_game_class_weapons' => 'Доступное оружие',
+    
+    'template_pvp_arena_top_teams' => 'Лучшие команды Арены',
+    'template_pvp_arena_summary' => 'Оглавление',
+    'template_pvp_arena_pass' => 'Пропуск на Арену',
+    'template_pvp_browse_rating_caption' => 'Просмотр рейтинга %d на %d',
 );
 ?>

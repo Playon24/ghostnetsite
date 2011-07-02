@@ -48,6 +48,10 @@ class WoW_ArenaTeam {
             WoW_Log::WriteError('%s : team #%d was not found in DB!', __METHOD__, $teamID);
             return false;
         }
+        DB::ConnectToDB(DB_CHARACTERS, $realmID);
+        if(!DB::Characters()->TestLink()) {
+            return false;
+        }
         $this->m_teamId = $teamID;
         $this->m_teamName = $teamName;
         $this->m_realmId = $realmID;
@@ -315,6 +319,14 @@ class WoW_ArenaTeam {
     
     public function GetTeamType() {
         return $this->m_teamType;
+    }
+    
+    public function GetTeamRank() {
+        return $this->m_teamStats['rank'];
+    }
+    
+    public function GetTeamRating() {
+        return $this->m_teamStats['rating'];
     }
 }
 ?>

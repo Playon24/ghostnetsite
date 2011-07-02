@@ -1094,6 +1094,20 @@ class WoW_Layout {
                     )
                 );
                 break;
+            case 'pvp_arena':
+                $css_data_page = array(
+                    array(
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/pvp/pvp.css',
+                        'version' => 11,
+                        'browser' => false
+                    ),
+                    array(
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/pvp/pvp-ie6.css',
+                        'version' => 11,
+                        'browser' => 'IE 6'
+                    )
+                );
+                break;
         }
         $cssList = array_merge($css_data, $css_data_page);
         $cssList[] = array(
@@ -1208,6 +1222,8 @@ class WoW_Layout {
                 return sprintf('%s - %s - ', WoW_Locale::GetString('template_game_dungeons_and_raids'), WoW_Locale::GetString('template_menu_game'));
             case 'zone':
                 return sprintf('%s - %s - ' , WoW_Template::GetPageData('zone_name'), WoW_Locale::GetString('template_menu_game'));
+            case 'pvp_arena':
+                return sprintf('PvP - %s - ', WoW_Locale::GetString('template_menu_game'));
             default:
                 return '';
         }

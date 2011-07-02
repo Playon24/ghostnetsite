@@ -33,68 +33,11 @@ else {
 <?php
 // <div id="content"> starts here!
 switch(WoW_Template::GetPageIndex()) {
-    default:
-    case 'index':
-        WoW_Template::LoadTemplate('content_index');
-        break;
     case 'item':
         WoW_Template::LoadTemplate('content_item_page');
         break;
     case 'item_list':
         WoW_Template::LoadTemplate('content_item_table');
-        break;
-    case 'character_profile_simple':
-        WoW_Template::LoadTemplate('content_character_profile_simple');
-        break;
-    case 'character_profile_advanced':
-        WoW_Template::LoadTemplate('content_character_profile_advanced');
-        break;
-    /*
-    case 'character_talents':
-        WoW_Template::LoadTemplate('content_character_talents');
-        break;
-    */
-    case '404':
-        WoW_Template::LoadTemplate('content_404');
-        break;
-    case 'guild_page':
-        WoW_Template::LoadTemplate('content_guild_page');
-        break;
-    case 'guild_perks':
-        WoW_Template::LoadTemplate('content_guild_perks');
-        break;
-    case 'guild_roster':
-        WoW_Template::LoadTemplate('content_guild_roster');
-        break;
-    case 'guild_professions':
-        WoW_Template::LoadTemplate('content_guild_professions');
-        break;
-    case 'character_achievements':
-        WoW_Template::LoadTemplate('content_character_achievements');
-        break;
-    case 'character_reputation':
-        WoW_Template::LoadTemplate('content_character_reputation');
-        break;
-    case 'character_reputation_tabular':
-        WoW_Template::LoadTemplate('content_character_reputation_tabular');
-        break;
-    case 'character_pvp':
-        WoW_Template::LoadTemplate('content_character_pvp');
-        break;
-    case 'character_statistics':
-        WoW_Template::LoadTemplate('content_character_statistics');
-        break;
-    case 'character_feed':
-        WoW_Template::LoadTemplate('content_character_feed');
-        break;
-    case 'search':
-        WoW_Template::LoadTemplate('content_search');
-        break;
-    case 'realm_status':
-        WoW_Template::LoadTemplate('content_realm_status');
-        break;
-    case 'blog':
-        WoW_Template::LoadTemplate('content_blog');
         break;
     case 'game':
         WoW_Template::LoadTemplate('static_game_index');
@@ -117,41 +60,8 @@ switch(WoW_Template::GetPageIndex()) {
     case 'game_race_index':
         WoW_Template::LoadTemplate('static_game_race_index');
         break;
-    case 'game_race':
-        WoW_Template::LoadTemplate('content_game_race');
-        break;
-    case 'game_class_index':
-        WoW_Template::LoadTemplate('static_game_class_index');
-        break;
-    case 'game_class':
-        WoW_Template::LoadTemplate('content_game_class');
-        break;
-    case 'faction':
-        WoW_Template::LoadTemplate('content_faction');
-        break;
-        
-    case 'account_status':
-        WoW_Template::LoadTemplate('content_account_status');
-        break;
-    case 'auction_lots':
-        WoW_Template::LoadTemplate('content_auction_lots');
-        break;
-    case 'forum_index':
-        WoW_Template::LoadTemplate('content_forum_index');
-        break;
-    case 'forum_category':
-        WoW_Template::LoadTemplate('content_forum_category');
-        break;
-    case 'forum_thread':
-        WoW_Template::LoadTemplate('content_forum_thread');
-        break;
-    case 'forum_new_topic':
-        WoW_Template::LoadTemplate('content_forum_new_topic');
-    case 'zones':
-        WoW_Template::LoadTemplate('content_zones');
-        break;
-    case 'zone':
-        WoW_Template::LoadTemplate('content_zone');
+    default:
+        WoW_Template::LoadTemplate('content_' . WoW_Template::GetPageIndex());
         break;
 }
 WoW_Template::LoadTemplate('block_footer', true);
@@ -278,6 +188,10 @@ switch(WoW_Template::GetPageData('page')) {
     case 'faction':
         echo '<script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/js/wiki/wiki.js?v10"></script>
 <script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/local-common/js/filter.js?v20"></script>';
+        break;
+    case 'pvp_arena':
+        echo '<script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/local-common/js/utility/dynamic-menu.js?v21"></script>
+<script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/js/pvp/pvp.js?v11"></script>';
         break;
 }
 ?>
