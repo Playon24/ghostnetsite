@@ -1871,8 +1871,104 @@ $WoW_Locale = array(
     'template_menu_game_factions' => 'Factions',
     'template_menu_game_factions_intro' => 'Azeroth is a fractious and war-stricken world, and standing alone can be deadly. To survive and prosper, members of all races gather together along cultural and ideological lines. Each of these factions holds to a unique philosophy, and they often disagree with one another – violently. Yet, despite the danger, allegiance to a faction never goes unnoticed; those heroes who are willing to risk taking sides can expect handsome rewards.',
     'template_menu_game_factions_' => '',
-    'template_menu_game_factions_' => '',
-    'template_menu_game_factions_' => '',
+    
+    'template_account_password_reset_title' => 'Reset Your Password',
+    'template_account_password_reset_required_fields' => 'Required',
+    'template_account_password_reset_intro' => 'There are several reasons you might not be able to log in. Check below for more information and possible solutions.',
+    'template_account_password_reset_forgot_title' => 'I forgot my Battle.net account password, or am currently locked out of my account.',
+    'template_account_password_reset_hacked_title' => 'I think my account may have been hacked.',
+    'template_account_password_reset_next' => 'Continue',
+    'template_account_password_reset_back' => 'Back',
+    'template_account_password_reset_email' => 'E-mail Address:',
+    'template_account_password_reset_account' => 'Account Name:',
+    'template_account_password_reset_hacked_subtitle' => 'Here are some common signs:',
+    'template_account_password_reset_hacked_signs' => '<li class="signs">My password has been working fine until now</li>
+<li class="signs">There is an authenticator attached to the account, but I didn’t attach&#160;one</li>
+<li class="signs">My account got banned and I don’t know why</li>
+<li class="signs">I’ve reset my password recently but it’s not working</li>',
+    'template_account_password_reset_recovery_title' => 'Do these signs apply to you? We can help.',
+    'template_account_password_reset_recovery_subtitle' => 'Click the button below to start the Account Recovery process. We will help get these issues resolved as soon as we can.',
+    'template_account_password_reset_recovery' => 'BEGIN ACCOUNT RECOVERY',
+    'template_account_password_reset_error' => 'An error has occurred.',
+    'template_account_password_reset_error_invalid_combination' => 'Invalid email/account name combination',
+    'template_account_password_reset_error_close' => 'Close',
+    
+    'template_account_password_reset_retrieval' => 'Password Retrieval',
+    'template_account_password_reset_retrieval_intro' => 'To verify that you are the registered user of the account %s^%s , please provide one of the following:',
+    'template_account_password_reset_retrieval_method' => 'Choose Verification Method:',
+    'template_account_password_reset_retrieval_method_Q' => 'Answer my Battle.net security question',
+    'template_account_password_reset_retrieval_where' => '&#160;&#160;Where can I find this?',
+    'template_account_password_reset_retrieval_note' => 'Can’t provide either?  Please <a href="index.html">contact Customer Support</a>.',
+    
+    'template_account_password_reset_error_answer' => 'Security answer not match!',
+    'template_account_password_reset_question' => 'Battle.net Security Question:',
+    'template_account_password_reset_answer' => 'Answer:',
+    'template_account_password_reset_confirmation_title' => 'Action Required: Confirmation E-mail Sent',
+    'template_account_password_reset_confirmation_intro' => 'A confirmation e-mail has been sent to your registered e-mail address. Click the link in this e-mail to complete the password retrieval process. You will be prompted to create a new password during this final step.',
+    'template_account_password_reset_confirmation_back' => 'Go Back',
+    
+    'template_account_password_reset_change_title' => 'Change Your Password',
+    'template_account_password_reset_change_intro' => 'Enter your new password.',
+    'template_account_password_reset_change_newpass' => 'New Password:',
+    'template_account_password_reset_change_confirm' => 'Confirm New Password:',
+    'template_account_password_reset_rules_title' => 'Password Rules',
+    'template_account_password_reset_rules' => '<li>Your password may only contain 
+                      <strong>alphabetic characters (A–Z), numeric characters (0–9), and punctuation.</strong></li>
+                      <li>Your password 
+                      <strong>must</strong>
+                      contain at least one alphabetic character 
+                      <strong>and</strong>
+                      one numeric character.</li>
+                      <li>You cannot enter your account name as your password.</li>
+                      <li>Your password must be between 
+                      <strong>eight and sixteen characters</strong>
+                      in length.</li>
+                      <li>For your security, we highly recommend you choose a unique password that you don’t use for any other online account.</li>',
+    'template_account_password_error_pass_not_match' => 'Passwords not match!',
+    'template_account_password_reset_change_success' => 'Success!',
+    'template_account_password_reset_change_success_title' => 'Your Password has been changed.',
+    'template_account_password_reset_change_success_info' => 'Changing your password at regular intervals can help increase account security.',
+    'template_account_password_reset_change_success_home' => 'Home',
+    
+    'mailer_password_ticked_subject' => 'Battle.net Account - Password Recovery',
+    'mailer_password_ticked_body' => 'We\'ve received a request to reset the password for this Battle.net account. Please click this link to reset your password: 
+<br />
+<a href="%s" target="_blank">%s</a>
+<br /><br />
+
+If you no longer wish to make the above change, or if you did not initiate this request, please disregard and/or delete this e-mail.
+<br /><br />
+
+If you have any questions regarding your Battle.net account, <a href="%s">click here</a> for answers to frequently asked questions and contact information for the Blizzard Billing & Account Services team.
+<br /><br />
+
+Sincerely,<br />
+The Battle.net Account Team<br />
+
+
+<a href="http://eu.blizzard.com/en-gb/company/about/privacy.html">Online Privacy Policy</a>',
+    'mailer_password_changed_subject' => 'Battle.net Account – Password Change Notice',
+    'mailer_password_changed_body' => 'Hello %s,<br /><br />
+
+This is an automated notification regarding the recent change(s) made to your Battle.net account: %s.<br /><br />
+
+Your password has recently been modified through the Account Management website.<br /><br />
+
+*** If you made this password change, please disregard this notification.<br /><br />
+
+However, if you did NOT make any changes to your password, we recommend you contact Blizzard Billing & Account Services for assistance keeping your account as secure as possible.<br /><br />
+
+For more information, <a href="%s">  click here</a> for answers to Frequently Asked Questions or to contact the Blizzard Billing & Account Services team.
+<br /><br />
+
+Account security is solely the responsibility of the accountholder.  Please be advised that in the event of a compromised account, Blizzard representatives typically must lock the account.  In these cases the Account Administration team will require faxed receipt of ID materials before releasing the account for play.  <br /><br />
+
+Sincerely,<br />
+The Battle.net Account Team<br />
+
+
+<a href="http://eu.blizzard.com/en/privacy.html">Online Privacy Policy</a>',
+
     
 );
 ?>

@@ -104,11 +104,14 @@ spl_autoload_register('WoW_Autoload');
  **/
 function WoW_Autoload($className)
 {
-    $className = strtolower(str_replace('WoW_', null, $className));
-    if(!file_exists(CLASSES_DIR . 'class.' . $className . '.php')) {
-        die('<strong>Autoload Fatal Error:</strong> unable to autoload class ' . $className . '!');
+    //prevent error when mailer classes are loaded
+    if(!preg_match('/swift_(.*)/i', $className)) {
+        $className = strtolower(str_replace('WoW_', null, $className));
+        if(!file_exists(CLASSES_DIR . 'class.' . $className . '.php')) {
+            die('<strong>Autoload Fatal Error:</strong> unable to autoload class ' . $className . '!');
+        }
+        include(CLASSES_DIR . 'class.' . $className . '.php');
     }
-    include(CLASSES_DIR . 'class.' . $className . '.php');
 }
 
 // Try to catch some operations (login, logout, etc.)
