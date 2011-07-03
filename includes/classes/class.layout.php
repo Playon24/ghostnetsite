@@ -1197,6 +1197,7 @@ class WoW_Layout {
             case 'password_reset_secred_answer':
             case 'password_reset_success':
             case 'password_reset_confirm':
+            case 'password_reset_changed':
                 return sprintf('%s - Battle.Net', WoW_Locale::GetString('template_account_password_reset_title'));
             case 'dashboard':
                 return sprintf('%s - Battle.Net', WoW_Locale::GetString('expansion_' . WoW_Account::GetExpansion()));
