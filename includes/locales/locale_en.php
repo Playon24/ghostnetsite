@@ -1976,7 +1976,18 @@ The Battle.net Account Team<br />
     'template_pvp_arena_summary' => 'Summary',
     'template_pvp_arena_pass' => 'Arena Pass',
     'template_pvp_browse_rating_caption' => 'View %dv%d ladder',
-
-    
+    'template_pvp_ladder_format' => '%dv%d Arena Ladder',
+    'template_pvp_ladder_header' => 'Top 2000 Arena %dv%d',
+    'template_pvp_ladder_filter_realm' => 'Realm',
+    'template_pvp_ladder_tooltip_ph' => 'Recently placed in ladder',
+    'template_pvp_ladder_wins' => 'Wins',
+    'template_pvp_ladder_loses' => 'Losses',
+    'template_pvp_ladder_rating' => 'Rating',
+    'template_pvp_ladder_change_filter' => 'Modify',
+    'template_pvp_ladder_add_class' => 'Add Another Class',
+    'template_pvp_ladder_filter_any_class' => '- Any Class -',
+    'template_pvp_ladder_filter_comp_edit' => 'Filter by team compositions',
+    'template_pvp_ladder_filter_comp_all' => 'Show all team compositions',
+    'template_pvp_ladder_filter_comp_any' => '- Any Spec -',
 );
 ?>

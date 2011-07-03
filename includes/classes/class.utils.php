@@ -723,5 +723,9 @@ Class WoW_Utils {
     public function GetRaceKeyById($id) {
         return isset(Data_Races::$races[$id]['key']) ? Data_Races::$races[$id]['key'] : null;
     }
+    
+    public function GetClassSpecs() {
+        return DB::WoW()->select("SELECT `class`, `spec`, `name_%s` AS `name` FROM `DBPREFIX_talent_icons` ORDER BY `class`, `spec`", WoW_Locale::GetLocale());
+    }
 }
 ?>

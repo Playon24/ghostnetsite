@@ -19,7 +19,7 @@
  **/
 
 class WoW_Arena {
-    public function GetTopTeams($format, $bg_id) {
+    public function GetTopTeams($format, $bg_id, $limit = 3, $offset = 0, $count = false) {
         if(!isset(WoWConfig::$BattleGroups[$bg_id])) {
             WoW_Log::WriteError('%s : battleGroupd #%d was not found!', __METHOD__, $bg_id);
             return false;
@@ -34,12 +34,22 @@ class WoW_Arena {
             }
         }
         $top_teams_data = array();
+        $counter = 0;
         foreach($realms as $realmId) {
             DB::ConnectToDB(DB_CHARACTERS, $realmId);
             if(!DB::Characters()->TestLink()) {
                 continue;
             }
             if(WoW::GetServerType($realmId) == SERVER_MANGOS) {
+                if($count) {
+                    $counter += DB::Characters()->selectCell("
+                    SELECT COUNT(*)
+                    FROM `arena_team` AS `a`
+                    LEFT JOIN `arena_team_stats` AS `b` ON `b`.`arenateamid` = `a`.`arenateamid`
+                    WHERE `a`.`type` = %d
+                    AND `b`.`rank` > 0 AND `b`.`rank` < 4", $format);
+                    continue;
+                }
                 $teams = DB::Characters()->select("SELECT
                 `a`.`arenateamid` AS `id`,
                 `a`.`rank`,
@@ -48,10 +58,10 @@ class WoW_Arena {
                 `b`.`type`
                 FROM `arena_team_stats` AS `a`
                 LEFT JOIN `arena_team` AS `b` ON `b`.`arenateamid` = `a`.`arenateamid`
-                WHERE `a`.`rank` > 0 AND `a`.`rank` < 4 AND `b`.`type` = %d ORDER BY `rank`, `rating` LIMIT 3", $realmId, $format);
+                WHERE `a`.`rank` > 0 AND `a`.`rank` < 4 AND `b`.`type` = %d ORDER BY `rank`, `rating` LIMIT %d, %d", $realmId, $format, $offset, $limit);
             }
             else {
-                $teams = DB::Characters()->select("SELECT `arenaTeamId` AS `id`, `rank`, `rating`, '%d' AS `realmId`, `type` FROM `arena_team` WHERE `rank` > 0 AND `rank` < 4 AND `type` = %d ORDER BY `rank`, `rating` LIMIT 3", $realmId, $format);
+                $teams = DB::Characters()->select("SELECT `arenaTeamId` AS `id`, `rank`, `rating`, '%d' AS `realmId`, `type` FROM `arena_team` WHERE `rank` > 0 AND `rank` < 4 AND `type` = %d ORDER BY `rank`, `rating` LIMIT %d, %d", $realmId, $format, $offset, $limit);
             }
             if(!$teams) {
                 continue;
@@ -60,6 +70,9 @@ class WoW_Arena {
                 'realmId' => $realmId,
                 'teamsId' => $teams
             );
+        }
+        if($count) {
+            return $counter;
         }
         // Find top 3 teams
         $top_teams = array();

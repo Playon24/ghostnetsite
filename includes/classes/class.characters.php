@@ -1600,12 +1600,13 @@ Class WoW_Characters /*implements Interface_Characters*/ {
         self::$talent_points = $talent_points;
     }
     
-    public static function GetTalentSpecNameFromDB($spec) {
-        if(!self::IsCorrect()) {
+    public static function GetTalentSpecNameFromDB($spec, $class = 0) {
+        if(!self::IsCorrect() && $class == 0) {
             WoW_Log::WriteError('%s : character was not found.', __METHOD__);
             return false;
         }
-        return DB::WoW()->selectCell("SELECT `name_%s` FROM `DBPREFIX_talent_icons` WHERE `class` = %d AND `spec` = %d LIMIT 1", WoW_Locale::GetLocale(), self::GetClassID(), $spec);
+        $class = $class == 0 ? self::GetClassID() : $class;
+        return DB::WoW()->selectCell("SELECT `name_%s` FROM `DBPREFIX_talent_icons` WHERE `class` = %d AND `spec` = %d LIMIT 1", WoW_Locale::GetLocale(), $class, $spec);
     }
     
     public static function GetTalentSpecIconFromDB($spec) {

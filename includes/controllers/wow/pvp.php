@@ -27,8 +27,42 @@ class Pvp extends Controller {
         switch($this->m_actions['action3']) {
             default:
             case 'arena':
-                WoW_Template::SetPageIndex('pvp_arena');
-                WoW_Template::SetPageData('page', 'pvp_arena');
+                if(isset($this->m_actions['action4']) && $this->m_actions['action4'] != null) {
+                    // Try to find BG with provided name
+                    $bg_found = false;
+                    foreach(WoWConfig::$BattleGroups as &$bg) {
+                        if(mb_strtolower($bg['name']) == mb_strtolower(urldecode($this->m_actions['action4']))) {
+                            // BG was found
+                            $bg_found = true;
+                            WoW_Template::SetPageData('activeBG', mb_strtolower($bg['name']));
+                            WoW_Template::SetPageData('bg', $bg);
+                        }
+                    }
+                    if(!$bg_found) {
+                        WoW_Template::ErrorPage(404);
+                        return false;
+                    }
+                    WoW_Template::SetPageIndex('pvp_arena_ladder');
+                    WoW_Template::SetPageData('page', 'pvp_arena_ladder');
+                    // Set team format
+                    if(!isset($this->m_actions['action4']) || $this->m_actions['action4'] == null) {
+                        $this->m_actions['action4'] = '2v2';
+                        WoW_Template::SetPageData('teamFormat', 2);
+                        WoW_Template::SetPageData('teamFormatS', '2v2');
+                    }
+                    else {
+                        $format = substr($this->m_actions['action5'], 0, 1);
+                        if(!in_array($format, array('2', '3', '5'))) {
+                            $format = 2;
+                        }
+                        WoW_Template::SetPageData('teamFormat', $format);
+                        WoW_Template::SetPageData('teamFormatS', $format . 'v' . $format);
+                    }
+                }
+                else {
+                    WoW_Template::SetPageIndex('pvp_arena');
+                    WoW_Template::SetPageData('page', 'pvp_arena');
+                }
                 WoW_Template::LoadTemplate('page_index');
                 break;
             case 'trending':

@@ -1095,6 +1095,7 @@ class WoW_Layout {
                 );
                 break;
             case 'pvp_arena':
+            case 'pvp_arena_ladder':
                 $css_data_page = array(
                     array(
                         'path' => WoW::GetWoWPath() . '/wow/static/css/pvp/pvp.css',

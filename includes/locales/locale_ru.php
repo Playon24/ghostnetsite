@@ -1199,5 +1199,18 @@ $WoW_Locale = array(
     'template_pvp_arena_summary' => 'Оглавление',
     'template_pvp_arena_pass' => 'Пропуск на Арену',
     'template_pvp_browse_rating_caption' => 'Просмотр рейтинга %d на %d',
+    'template_pvp_ladder_format' => 'Рейтинг %dx%d',
+    'template_pvp_ladder_header' => '2000 лучших команд Арены %d на %d',
+    'template_pvp_ladder_filter_realm' => 'Мир',
+    'template_pvp_ladder_tooltip_ph' => 'Пред. место в таблице',
+    'template_pvp_ladder_wins' => 'Победы',
+    'template_pvp_ladder_loses' => 'Поражения',
+    'template_pvp_ladder_rating' => 'Рейтинг',
+    'template_pvp_ladder_change_filter' => 'Изменить',
+    'template_pvp_ladder_add_class' => 'Добавить класс',
+    'template_pvp_ladder_filter_any_class' => '- Любой класс -',
+    'template_pvp_ladder_filter_comp_edit' => 'Искать по составу',
+    'template_pvp_ladder_filter_comp_all' => 'Показать все составы',
+    'template_pvp_ladder_filter_comp_any' => '- Любая специализация -',
 );
 ?>

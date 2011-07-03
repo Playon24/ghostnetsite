@@ -98,38 +98,7 @@ PvP
 		</div>
 	
 		<div class="pvp-left">
-	<ul class="dynamic-menu" id="menu-pvp">
-				<li class="root-item item-active">
-					<a href="<?php WoW::GetWoWPath(); ?>/wow/<?php echo WoW_Locale::GetLocale(); ?>/pvp/">
-						<span class="arrow"><?php echo WoW_Locale::GetString('template_pvp_arena_summary'); ?></span>
-					</a>
-				</li>
-                <?php
-                for($i = 0; $i < 3; ++$i) {
-                    echo '<li class="has-submenu">
-                        <a href="' . WoW::GetWoWPath() . '/wow/' . WoW_Locale::GetLocale() . '/pvp/arena/' . $formats[$i] . 'v' . $formats[$i] . '">
-                            <span class="arrow">' . sprintf(WoW_Locale::GetString('template_team_type_format'), $formats[$i], $formats[$i]) . '</span>
-                        </a>
-                    <ul class="dynamic-menu" id="menu-pvp-' . $formats[$i] . 'v' . $formats[$i] . '">';
-                    foreach(WoWConfig::$BattleGroups as &$bg) {
-                        echo '
-                        <li>
-                            <a href="' . WoW::GetWoWPath() . '/wow/' . WoW_Locale::GetLocale() . '/pvp/arena/' . mb_strtolower($bg['name']) . '/' . $formats[$i] . 'v' . $formats[$i] . '">
-                                <span class="arrow">' . $bg['name'] . '</span>
-                            </li>';
-                    }
-                    echo '
-                    </ul>
-                    </li>
-                    ';
-                }
-                ?>
-				<li>
-					<a href="<?php echo WoW::GetWoWPath(); ?>/wow/<?php echo WoW_Locale::GetLocale(); ?>/game/arena/">
-						<span class="arrow"><?php echo WoW_Locale::GetString('template_pvp_arena_pass'); ?></span>
-					</a>
-				</li>
-	</ul>
+        <?php WoW_Template::LoadTemplate('block_arena_ladder_menu'); ?>
 		</div>
 
 	<span class="clear"><!-- --></span>

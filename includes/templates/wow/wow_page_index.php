@@ -193,6 +193,10 @@ switch(WoW_Template::GetPageData('page')) {
         echo '<script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/local-common/js/utility/dynamic-menu.js?v21"></script>
 <script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/js/pvp/pvp.js?v11"></script>';
         break;
+    case 'pvp_arena_ladder':
+        echo '<script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/local-common/js/utility/dynamic-menu.js?v21"></script>
+<script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/js/pvp/ladder.js?v11"></script>';
+        break;
 }
 ?>
 
