@@ -27,7 +27,7 @@ class Account extends Controller {
         }
         if($url_data['action1'] == 'creation') {
             include(CONTROLLERS_DIR . 'account' . DS . 'creation.php');
-            $controller = new Creation($this->m_actions);
+            $controller = new Creation($this->m_actions, 'account');
             $controller->main();
             exit;
         }
