@@ -750,7 +750,7 @@ class WoW_Layout {
                         'browser' => false
                     );
                 }
-                elseif(in_array(self::GetPageIndex(), array('guild_roster', 'guild_professions'))) {
+                elseif(in_array(WoW_Template::GetPageIndex(), array('guild_roster', 'guild_professions'))) {
                     $css_data_page[] = array(
                         'path' => WoW::GetWoWPath() . '/wow/static/css/guild/roster.css',
                         'version' => 7,
@@ -1190,7 +1190,7 @@ class WoW_Layout {
             case 'game_class_index':
                 return sprintf('%s - %s - ', WoW_Locale::GetString('template_game_class_index'), WoW_Locale::GetString('template_menu_game'));
             case 'game_class':
-                return sprintf('%s - %s - ', WoW_Locale::GetString('character_class_' . self::GetPageData('classId')), WoW_Locale::GetString('template_menu_game'));
+                return sprintf('%s - %s - ', WoW_Locale::GetString('character_class_' . WoW_Template::GetPageData('classId')), WoW_Locale::GetString('template_menu_game'));
             case 'password_reset':
                 return sprintf('%s - Battle.Net', WoW_Locale::GetString('login_help_title'));
             case 'password_reset_select':
@@ -1202,7 +1202,7 @@ class WoW_Layout {
             case 'dashboard':
                 return sprintf('%s - Battle.Net', WoW_Locale::GetString('expansion_' . WoW_Account::GetExpansion()));
             case 'landing':
-                switch(self::GetPageData('landing')) {
+                switch(WoW_Template::GetPageData('landing')) {
                     case 'what_is':
                         return sprintf('%s - Battle.Net', WoW_Locale::GetString('template_bn_what_is_it_title'));
                 }
