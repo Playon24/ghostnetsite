@@ -727,5 +727,24 @@ Class WoW_Utils {
     public function GetClassSpecs() {
         return DB::WoW()->select("SELECT `class`, `spec`, `name_%s` AS `name` FROM `DBPREFIX_talent_icons` ORDER BY `class`, `spec`", WoW_Locale::GetLocale());
     }
+    
+    public function GetClassRolesInfo($roles_flag) {
+        $role_info = '';
+        $roles_masks = array('ROLE_MASK_TANK', 'ROLE_MASK_HEALER', 'ROLE_MASK_MELEE', 'ROLE_MASK_RANGED', 'ROLE_MASK_CASTER');
+        foreach($roles_masks as $mask) {
+            if($roles_flag & constant($mask)) {
+                $role = strtolower(substr($mask, 10));
+                if(!$role) {
+                    continue;
+                }
+                $role_info .= WoW_Locale::GetString('template_class_role_' . $role);
+                $roles_flag -= constant($mask);
+                if($roles_flag > 0) {
+                    $role_info .= ', ';
+                }
+            }
+        }
+        return $role_info;
+    }
 }
 ?>

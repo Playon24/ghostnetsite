@@ -58,7 +58,8 @@ switch(WoW_Template::GetPageIndex()) {
         WoW_Template::LoadTemplate('static_game_guide_late_game');
         break;
     case 'game_race_index':
-        WoW_Template::LoadTemplate('static_game_race_index');
+    case 'game_class_index':
+        WoW_Template::LoadTemplate('static_' . WoW_Template::GetPageIndex());
         break;
     default:
         WoW_Template::LoadTemplate('content_' . WoW_Template::GetPageIndex());

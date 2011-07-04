@@ -5,10 +5,10 @@ $class = WoW_Game::GetClass();
 <div class="content-top">
 <div class="content-trail">
 <ol class="ui-breadcrumb">
-<li><a href="<?php echo WoW::GetWoWPath(); ?>/wow/" rel="np">World of Warcraft</a></li>
-<li><a href="<?php echo WoW::GetWoWPath(); ?>/wow/game/" rel="np"><?php echo WoW_Locale::GetString('template_menu_game'); ?></a></li>
-<li><a href="<?php echo WoW::GetWoWPath(); ?>/wow/game/race/" rel="np"><?php echo WoW_Locale::GetString('template_game_class_index'); ?></a></li>
-<li class="last"><a href="<?php echo WoW::GetWoWPath(); ?>/wow/game/class/<?php echo WoW_Template::GetPageData('class'); ?>" rel="np"><?php echo WoW_Locale::GetString('character_class_' . $class['id']); ?></a></li>
+<li><a href="<?php echo WoW::GetWoWPath(); ?>/wow/<?php echo WoW_Locale::GetLocale(); ?>/" rel="np">World of Warcraft</a></li>
+<li><a href="<?php echo WoW::GetWoWPath(); ?>/wow/<?php echo WoW_Locale::GetLocale(); ?>/game/" rel="np"><?php echo WoW_Locale::GetString('template_menu_game'); ?></a></li>
+<li><a href="<?php echo WoW::GetWoWPath(); ?>/wow/<?php echo WoW_Locale::GetLocale(); ?>/game/class/" rel="np"><?php echo WoW_Locale::GetString('template_game_class_index'); ?></a></li>
+<li class="last"><a href="<?php echo WoW::GetWoWPath(); ?>/wow/<?php echo WoW_Locale::GetLocale(); ?>/game/class/<?php echo WoW_Template::GetPageData('class'); ?>" rel="np"><?php echo WoW_Locale::GetString('character_class_' . $class['id']); ?></a></li>
 </ol>
 </div>
     <div class="content-bot">
@@ -44,22 +44,7 @@ $class = WoW_Game::GetClass();
                 <li>
                     <span class="basic-info-title"><?php echo WoW_Locale::GetString('template_game_class_type'); ?></span>
                     <?php
-                    $roles_masks = array(
-                        'ROLE_MASK_TANK', 'ROLE_MASK_HEALER', 'ROLE_MASK_MELEE', 'ROLE_MASK_RANGED', 'ROLE_MASK_CASTER'
-                    );
-                    foreach($roles_masks as $mask) {
-                        if($class['roles_flag'] & constant($mask)) {
-                            $role = strtolower(substr($mask, 10));
-                            if(!$role) {
-                                continue;
-                            }
-                            echo WoW_Locale::GetString('template_class_role_' . $role);
-                            $class['roles_flag'] -= constant($mask);
-                            if($class['roles_flag'] > 0) {
-                                echo ', ';
-                            }
-                        }
-                    }
+                    echo WoW_Utils::GetClassRolesInfo($class['roles_flag']);
                     ?>
                 </li>
                 <li>
@@ -86,7 +71,6 @@ $class = WoW_Game::GetClass();
                 </li>
                 <li>
                     <span class="basic-info-title"><?php echo WoW_Locale::GetString('template_game_class_weapons'); ?></span>
-                    <?php //echo WoW_Locale::GetString('template_game_class_'.WoW_Template::GetPageData('class').'_weapons'); ?>
                 </li>
               </ul>
               <span class="clear"><!-- --></span>
@@ -95,13 +79,13 @@ $class = WoW_Game::GetClass();
         </div>
         <div class="basic-info-box-list talent-info">
           <div class="basic-info-box-list-title">
-            <span><?php echo sprintf(WoW_Locale::GetString('template_game_class_talents'), WoW_Locale::GetString('template_game_classes_'.WoW_Template::GetPageData('class'))); ?></span>
+            <span><?php echo sprintf(WoW_Locale::GetString('template_game_class_talents'), WoW_Locale::GetString('character_class_' . $class['id'])); ?></span>
           </div>
           <div class="list-box">
             <div class="wrapper">
               <p><?php echo $class['talentsInfo']; ?></p>
               <div class="talent-info-wrapper">
-                <div class="talent-header"><?php echo sprintf(WoW_Locale::GetString('template_game_class_talent_trees'), WoW_Locale::GetString('template_game_classes_'.WoW_Template::GetPageData('class'))); ?></div>
+                <div class="talent-header"><?php echo sprintf(WoW_Locale::GetString('template_game_class_talent_trees'), WoW_Locale::GetString('character_class_' . $class['id'])); ?></div>
                 <a href="javascript:;" data-fansite="talentcalc|<?php echo WoW_Template::GetPageData('class'); ?>|000000000000000" class="fansite-link "></a>
                 <span class="clear"><!-- --></span>
                 <?php
@@ -151,7 +135,7 @@ if(isset($class['abilities']) && is_array($class['abilities'])) {
           </div>
         </div>
         <div class="available-info-box ">
-          <div class="available-info-box-title"><?php echo sprintf(WoW_Locale::GetString('template_game_class_races'), WoW_Locale::GetString('template_game_classes_'.WoW_Template::GetPageData('class'))); ?></div>
+          <div class="available-info-box-title"><?php echo sprintf(WoW_Locale::GetString('template_game_class_races'), WoW_Locale::GetString('character_class_' . $class['id'])); ?></div>
           <span class="available-info-box-desc">
           </span>
           <div class="list-box">
