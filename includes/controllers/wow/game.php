@@ -47,10 +47,12 @@ class Game extends Controller {
         elseif($url_data['action1'] == 'race') {
             $race_id = WoW_Utils::GetRaceIDByKey($url_data['action2']);
             if($race_id > 0) {
+                WoW_Game::LoadRace($race_id);
                 WoW_Template::SetPageIndex('game_race');
                 WoW_Template::SetPageData('body_class', 'race-' . $url_data['action2']);
                 WoW_Template::SetPageData('race', $url_data['action2']);
                 WoW_Template::SetPageData('page', 'game_race');
+                WoW_Template::SetPageData('raceId', $race_id);
             }
             else {
                 WoW_Template::SetPageIndex('game_race_index');

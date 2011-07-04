@@ -14,41 +14,40 @@
       </div> 
       <p class="main-header-desc"><?php echo WoW_Locale::GetString('template_game_class_intro'); ?></p>
 <?php
-      $classes = array(
-          'warrior' => CLASS_WARRIOR,
-          'paladin' => CLASS_PALADIN,
-          'hunter' => CLASS_HUNTER,
-          'rogue' => CLASS_ROGUE,
-          'priest' => CLASS_PRIEST,
-          'death-knight' => CLASS_DK,
-          'shaman' => CLASS_SHAMAN,
-          'mage' => CLASS_MAGE,
-          'warlock' => CLASS_WARLOCK,
-          'druid' => CLASS_DRUID
-      );
-      $exp_classes = array(
-          'wrath' => array('death-knight')
-      );
-      
-      $i = 0;
-      foreach($classes as $class_name => $classes) {
-          if(in_array($class_name, $exp_classes['wrath']) ) {
-              $req = sprintf('<em class="class-req wrath">%s</em>', WoW_Locale::GetString('template_game_class_req_wrath'));
-          }
-          else {
-              $req = '';
-          }
-          echo sprintf('<div class="flag-card %s">
-		<div class="wrapper">
-			<a href="%s">
-				<span class="class-name">%s</span>
-				<span class="class-type">%s</span>%s
-				<span class="class-desc">%s</span>
-			</a>
-		</div>
-	</div>', $class_name, $class_name, WoW_Locale::GetString('template_game_classes_'.$class_name), WoW_Locale::GetString('template_game_classes_type_'.$class_name), $req, WoW_Locale::GetString('template_game_class_'.$class_name.'_info') );
-          ++$i;
-      }
+$classes = array(
+    'warrior' => CLASS_WARRIOR,
+    'paladin' => CLASS_PALADIN,
+    'hunter' => CLASS_HUNTER,
+    'rogue' => CLASS_ROGUE,
+    'priest' => CLASS_PRIEST,
+    'death-knight' => CLASS_DK,
+    'shaman' => CLASS_SHAMAN,
+    'mage' => CLASS_MAGE,
+    'warlock' => CLASS_WARLOCK,
+    'druid' => CLASS_DRUID
+);
+$exp_classes = array(
+    'wrath' => array('death-knight')
+);
+$i = 0;
+foreach($classes as $class_name => $class_id) {
+    if(in_array($class_name, $exp_classes['wrath']) ) {
+        $req = sprintf('<em class="class-req wrath">%s</em>', WoW_Locale::GetString('template_zone_expansion_required') . ' ' . WoW_Locale::GetString('template_expansion_2'));
+    }
+    else {
+        $req = '';
+    }
+    echo sprintf('<div class="flag-card %s">
+        <div class="wrapper">
+        <a href="%s">
+        	<span class="class-name">%s</span>
+        	<span class="class-type">%s</span>%s
+        	<span class="class-desc">%s</span>
+        </a>
+        </div>
+        </div>', $class_name, $class_name, WoW_Locale::GetString('character_class_' . $class_id), WoW_Utils::GetClassRolesInfo(WoW_Game::GetClassRole($class_id)), $req, WoW_Locale::GetString('template_game_class_' . $class_name . '_info') );
+    ++$i;
+}
 ?>
       <span class="clear">
         <!-- -->
