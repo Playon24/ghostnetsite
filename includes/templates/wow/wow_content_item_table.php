@@ -26,7 +26,8 @@ if(is_array($items)) {
 <div id="content">
 <div class="content-top">
 <div class="content-trail">
-<ol class="ui-breadcrumb">
+<?php WoW_Template::NavigationMenu(); ?>
+<!--<ol class="ui-breadcrumb">
 <li>
 <a href="<?php echo WoW::GetWoWPath(); ?>/wow/" rel="np">
 World of Warcraft
@@ -43,7 +44,7 @@ World of Warcraft
 </a>
 </li>
 <?php echo $breadcrumb_nav; ?>
-</ol>
+</ol>-->
 </div>
 <div class="content-bot">
 	<div id="wiki" class="wiki directory wiki-item">

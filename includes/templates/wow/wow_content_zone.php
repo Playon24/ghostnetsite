@@ -4,7 +4,8 @@ $zone_info = WoW_Game::GetZone();
 <div id="content">
 <div class="content-top">
 <div class="content-trail">
-<ol class="ui-breadcrumb">
+<?php WoW_Template::NavigationMenu(); ?>
+<!--<ol class="ui-breadcrumb">
 <li>
 <a href="<?php echo WoW::GetWoWPath(); ?>/wow/" rel="np">
 World of Warcraft
@@ -30,7 +31,7 @@ World of Warcraft
 <?php echo $zone_info['name']; ?>
 </a>
 </li>
-</ol>
+</ol>-->
 </div>
 <div class="content-bot">
 	

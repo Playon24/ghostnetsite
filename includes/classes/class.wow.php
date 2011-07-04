@@ -89,7 +89,7 @@ Class WoW {
         return self::$pager_data['next'] ? self::$current_news_page + 1 : -1;
     }
     
-    public static function GetUrlData($type) {
+    public static function GetUrlData($type = NULL) {
         $url_array = explode('/', $_SERVER['REQUEST_URI']);
         if(!is_array($url_array)) {
             return false;
@@ -298,6 +298,14 @@ Class WoW {
                             }
                             break;
                     }
+                }
+                break;
+            //this is used for auto navigation menu generator
+            default:
+                for($i = 2; $i < ($count); $i++) {
+                      if(isset($url_array[$i]) && $url_array[$i] != null) {
+                          $urldata[($i - 2)] = ($url_array[$i] == WoW_Locale::GetLocale()) ? '/' : '/'.$url_array[$i].'/';
+                      }
                 }
                 break;
         }

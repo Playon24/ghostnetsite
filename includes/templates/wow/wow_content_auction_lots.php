@@ -4,7 +4,8 @@ $char = WoW_Account::GetActiveCharacter();
 <div id="content">
 <div class="content-top">
 <div class="content-trail">
-<ol class="ui-breadcrumb">
+<?php WoW_Template::NavigationMenu(); ?>
+<!--<ol class="ui-breadcrumb">
 <li>
 <a href="<?php echo WoW::GetWoWPath(); ?>/wow/" rel="np">
 World of Warcraft
@@ -30,7 +31,7 @@ World of Warcraft
 <?php echo WoW_Locale::GetString('template_auction_menu_lots'); ?>
 </a>
 </li>
-</ol>
+</ol>-->
 </div>
 <div class="content-bot">
 	<div id="profile-wrapper" class="profile-wrapper profile-wrapper-<?php echo $char['faction_text']; ?> profile-wrapper-<?php echo $char['faction_text']; ?>">

@@ -23,6 +23,7 @@ Class WoW_Locale {
     private static $locale_id = -1;
     private static $locale_holder = null;
     private static $menu_holder = null;
+    public  static $navigation = null;
     
     public static function SetLocale($locale_name, $locale_id, $load_locale = true) {
         self::$locale_name = self::GetAppropriateLocaleNameForLocale($locale_name);
@@ -65,6 +66,7 @@ Class WoW_Locale {
         }
         self::$locale_holder = $WoW_Locale;
         self::$menu_holder = $WoW_Menu;
+        self::$navigation = $Menu;
         return true;
     }
     

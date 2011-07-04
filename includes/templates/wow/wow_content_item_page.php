@@ -4,7 +4,8 @@ $proto = WoW_Template::GetPageData('proto');
 <div id="content">
 <div class="content-top">
 <div class="content-trail">
-<ol class="ui-breadcrumb">
+<?php WoW_Template::NavigationMenu(); ?>
+<!--<ol class="ui-breadcrumb">
 <li>
 <a href="<?php echo WoW::GetWoWPath(); ?>/wow/" rel="np">
 World of Warcraft
@@ -45,7 +46,7 @@ if(in_array($proto->class, array(ITEM_CLASS_WEAPON, ITEM_CLASS_ARMOR))) {
 <?php echo $proto->name; ?>
 </a>
 </li>
-</ol>
+</ol>-->
 </div>
 <div class="content-bot">
 	<div id="wiki" class="wiki wiki-item">

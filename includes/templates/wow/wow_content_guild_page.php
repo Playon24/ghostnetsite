@@ -1,7 +1,8 @@
 <div id="content">
 <div class="content-top">
 <div class="content-trail">
-<ol class="ui-breadcrumb">
+<?php WoW_Template::NavigationMenu(); ?>
+<!--<ol class="ui-breadcrumb">
 <li>
 <a href="<?php echo WoW::GetWoWPath(); ?>/wow/" rel="np">
 World of Warcraft
@@ -17,7 +18,7 @@ World of Warcraft
 <?php echo WoW_Guild::GetGuildName(); ?> @ <?php echo WoW_Guild::GetGuildRealmName(); ?>
 </a>
 </li>
-</ol>
+</ol>-->
 </div>
 <div class="content-bot">
 	<div id="profile-wrapper" class="profile-wrapper profile-wrapper-<?php echo WoW_Guild::GetGuildFactionText(); ?>">

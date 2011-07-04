@@ -60,6 +60,9 @@ switch(WoW_Template::GetPageIndex()) {
     case 'game_race_index':
         WoW_Template::LoadTemplate('static_game_race_index');
         break;
+    case 'game_class_index':
+        WoW_Template::LoadTemplate('static_game_class_index');
+        break;
     default:
         WoW_Template::LoadTemplate('content_' . WoW_Template::GetPageIndex());
         break;

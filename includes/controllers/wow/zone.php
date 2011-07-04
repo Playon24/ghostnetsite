@@ -26,6 +26,7 @@ class Zone extends Controller {
         WoW_Template::SetPageData('page', 'zones');
         $url_data = WoW::GetUrlData('zone');
         if(isset($url_data['action2']) && $url_data['action2'] != null) {
+            echo "need to do zone bosses";
             exit; // [PH]
         }
         elseif(isset($url_data['action1']) && $url_data['action1'] != null) {

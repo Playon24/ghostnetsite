@@ -1,7 +1,8 @@
 <div id="content">
 <div class="content-top">
 <div class="content-trail">
-<ol class="ui-breadcrumb">
+<?php WoW_Template::NavigationMenu(); ?>
+<!--<ol class="ui-breadcrumb">
 <li>
 <a href="<?php echo WoW::GetWoWPath(); ?>/wow/" rel="np">
 World of Warcraft
@@ -12,7 +13,7 @@ World of Warcraft
 <?php echo WoW_Locale::GetString('template_search'); ?>
 </a>
 </li>
-</ol>
+</ol>-->
 </div>
 <?php
 if(WoW_Search::GetSearchQuery() != null && WoW_Search::GetResultsCount() > 0) {

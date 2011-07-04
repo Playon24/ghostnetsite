@@ -130,5 +130,163 @@ Class WoW_Template {
         }
         self::$page_data[$index] .= $data;
     }
+    
+    // used to navigation menu
+    private static function array_searchRecursive( $needle, $haystack, $strict=false, $path=array() )
+    {
+        if( !is_array($haystack) ) {
+            return false;
+        }
+        foreach( $haystack as $key => $val ) {
+            if( is_array($val) && $subPath = self::array_searchRecursive($needle, $val, $strict, $path) ) {
+                $path['label'] = @$val['label'];
+                $path = array_merge($path, array($key), $subPath);
+                return $path;
+            } elseif( (!$strict && $val == $needle) || ($strict && $val === $needle) ) {
+                $path[] = $key;
+                return $path;
+            }
+        }
+        return false;
+    }
+    
+    public static function NavigationMenu() {
+        $navigationMenu[0] = WoW_Locale::$navigation;
+        $url_data = WoW::GetUrlData();
+        $path_data = NULL;
+        $path_search_data = NULL;
+        $last = false;
+        $dinamic_content = false;
+        
+//print_r($url_data);
+
+        switch($url_data[1]) {
+          case '/zone/':
+              $dinamic_content = true;
+              @$zone_info = WoW_Game::GetZone();
+              $_data = array(0 => '/',
+                             1 => '/game/',
+                             2 => '/zone/',
+                             3 => '/zone/#expansion='.@$zone_info['expansion'].'&type='.@$zone_info['type'].'s',
+                             4 => '/zone/'.@$url_data[2],
+                             5 => '/zone/'.@$url_data[2].'/'.@$url_data[3],
+                            );
+              for($a=0;$a<=count($url_data);++$a) {
+                $path_search_data[$a] = $_data[$a];
+              }
+              if(isset($url_data[2])){
+                $path_search_data[4] = $_data[4];
+              }
+            break;
+          case '/faction/':
+              $dinamic_content = true;
+              /**
+               *  WoW_Game::GetFaction() is not defined    
+               *                           
+               *  TODO
+               *  Create function WoW_Game::GetFaction() with same rules as WoW_Game::GetZone()
+               *  and edit wow_content_faction.php template to load datas from DB same as wow_content_zones.php template
+               *  
+               *  Create template and DB data to load and display each faction details.                              
+               */
+              //@$faction_info = WoW_Game::GetFaction();
+              $_data = array(0 => '/',
+                             1 => '/game/',
+                             2 => '/faction/',
+                             3 => '/faction/#expansion='.@$faction_info['expansion'],
+                             4 => '/faction/'.@$url_data[2],
+                            );
+              for($a=0;$a<=count($url_data);++$a) {
+                $path_search_data[$a] = $_data[$a];
+              }
+              if(isset($url_data[2])){
+                $path_search_data[4] = $_data[4];
+              }
+            break;
+          case '/item/':
+              $dinamic_content = true;
+              //WoW_Items::GetBreadCrumbsForItem($_GET) is NOT needed now
+              if(isset($url_data[2])) {
+                $preg = preg_match('/\/\?classId=([0-9]+)(&subClassId=([0-9]+))(&invType=([0-9]+))?/i', $url_data[2], $matches);
+              }
+              $_data = array(0 => '/',
+                             1 => '/game/',
+                             2 => '/item/',
+                             3 => NULL,
+                             4 => NULL,
+                             5 => NULL,
+                            );
+              for($a=0;$a<=count($url_data);++$a) {
+                $path_search_data[$a] = $_data[$a];
+              }
+              if(isset($matches) && array_key_exists(1, $matches)) {
+                $path_search_data[3] = '/item/?classId='.$matches[1];
+              }
+              if(isset($matches) && array_key_exists(3, $matches)) {
+                $path_search_data[4] = '/item/?classId='.$matches[1].'&subClassId='.$matches[3];
+              }
+              if(isset($matches) && array_key_exists(5, $matches)) {
+                $path_search_data[5] = '/item/?classId='.$matches[1].'&subClassId='.$matches[3].'&invType='.$matches[5];
+              }
+            break;
+          case '/profession/':
+              $dinamic_content = true;
+              $_data = array(0 => '/',
+                             1 => '/game/',
+                             2 => '/profession/',
+                             3 => '/profession/'.@$url_data[2],
+                            );
+              for($a=0;$a<=count($url_data);++$a) {
+                $path_search_data[$a] = $_data[$a];
+              }
+            break;
+          case '/pvp/':
+              $dinamic_content = true;
+              $_data = array(0 => '/',
+                             1 => '/game/',
+                             2 => '/pvp/',
+                             3 => '/pvp/'.@$url_data[2],
+                            );
+              for($a=0;$a<=count($url_data);++$a) {
+                $path_search_data[$a] = $_data[$a];
+              }
+            break;
+          case '/status/':
+              $dinamic_content = true;
+              $_data = array(0 => '/',
+                             1 => '/game/',
+                             2 => '/status/',
+                             3 => '/status/'.@$url_data[2],
+                            );
+              for($a=0;$a<=count($url_data);++$a) {
+                $path_search_data[$a] = $_data[$a];
+              }
+            break;
+          default:
+            $path_search_data = $url_data;
+            break;
+        }
+
+        echo '<ol class="ui-breadcrumb">';
+        $path_data = '';
+        for($i = 0;$i < count($path_search_data);++$i) {          
+          if($i == count($path_search_data)-1) {
+            $last = true;
+          }
+          
+          if($dinamic_content == true) {
+            $path_data = $path_search_data[$i];
+          }
+          else {
+            $path_data .= $url_data[$i];
+          }
+          $path_data = str_replace('//', '/', $path_data);
+
+          $menu = self::array_searchRecursive($path_data, $navigationMenu);
+          echo '<li'.(($last == true)?' class="last"':'').'><a href="'.WoW::GetWoWPath().'/wow/'.WoW_Locale::GetLocale().$path_data.'" rel="np">'.$menu['label'].'</a></li>';
+          
+        }
+        echo '</ol>';
+    }
 }
 ?>
