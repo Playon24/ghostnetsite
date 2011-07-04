@@ -273,6 +273,7 @@ Class WoW_Game {
             return false;
         }
         self::$m_class['talents'] = DB::WoW()->select("SELECT `spec`, `icon`, `name_%s` AS `name`, `dps`, `tank`, `healer` FROM `DBPREFIX_talent_icons` WHERE `class` = %d ORDER BY `spec`", WoW_Locale::GetLocale(), self::$m_class['id']);
+        self::$m_class['abilities'] = DB::WoW()->select("SELECT `title_%s` AS `title`, `text_%s` AS `text`, `icon` FROM `DBPREFIX_class_abilities` WHERE `class` = %d", WoW_Locale::GetLocale(), WoW_Locale::GetLocale(), $class_id);
         return true;
     }
     

@@ -124,39 +124,27 @@ $class = WoW_Game::GetClass();
       <div class="right-col">
         <div class="game-scrollbox">
           <div class="scroll-title">
-            <span>Warrior Features</span>
+            <span><?php echo sprintf(WoW_Locale::GetString('template_game_class_features'), WoW_Locale::GetString('character_class_' . $class['id'])); ?></span>
           </div>
           <div class="scroll-content">
             <div class="wrapper">
               <div class="feature-list">
 <?php
-/* This should be moved to `wow_class_abilities` table. Will done this at home. */
-      $features = array(
-          'warrior' => array(1 => 'ability_defend.jpg','ability_meleedamage.jpg','spell_nature_ancestralguardian.jpg','ability_warrior_offensivestance.jpg',),
-          'paladin' => array(1 => 'spell_holy_avengersshield.jpg','spell_holy_crusaderstrike.jpg','spell_holy_devotionaura.jpg','spell_holy_layonhands.jpg',),
-          'hunter' => array(1 => 'ability_hunter_beasttaming.jpg','inv_weapon_bow_02.jpg','spell_frost_chainsofice.jpg','ability_upgrademoonglaive.jpg',),
-          'rogue' => array(1 => 'ability_stealth.jpg','inv_weapon_shortblade_15.jpg','spell_shadow_shadowward.jpg','ability_rogue_eviscerate.jpg',),
-          'priest' => array(1 => 'spell_holy_greaterheal.jpg','spell_shadow_shadowform.jpg','spell_holy_powerwordshield.jpg','spell_shadow_shadowworddominate.jpg',),
-          'death-knight' => array(1 => 'spell_nature_shamanrage.jpg','spell_deathknight_empowerruneblade.jpg','spell_shadow_raisedead.jpg','spell_deathknight_frozenruneweapon.jpg',),
-          'shaman' => array(1 => 'spell_nature_healingwavegreater.jpg','spell_shaman_unleashweapon_wind.jpg','spell_nature_lightning.jpg','spell_shaman_dropall_02.jpg'),
-          'mage' => array(1 => 'spell_fire_flamebolt.jpg','spell_frost_icestorm.jpg','spell_nature_polymorph.jpg','spell_arcane_portaldalaran.jpg',),
-          'warlock' => array(1 => 'spell_shadow_summonfelhunter.jpg','spell_shadow_lifedrain02.jpg','spell_shadow_shadowbolt.jpg','inv_misc_gem_amethyst_02.jpg',),
-          'druid' => array(1 => 'ability_druid_mastershapeshifter.jpg','spell_nature_resistnature.jpg','ability_druid_demoralizingroar.jpg','inv_misc_monsterclaw_03.jpg',)
-      );
-      
-      for($i=1;$i<((WoW_Template::GetPageData('class') == 'blood-elf')?4:5);++$i) {
-              echo '<div class="feature-item clear-after">
-								<span class="icon-frame-gloss float-left" style="background-image: url('.WoW::GetWoWPath().'/wow/icons/56/'.$features[WoW_Template::GetPageData('class')][$i].')">
-									<span class="frame"></span>
-								</span>
-								<div class="feature-wrapper">
-									<span class="feature-item-title">'.WoW_Locale::GetString('template_game_class_'.WoW_Template::GetPageData('class').'_feature_title'.$i).'</span>
-									<p class="feature-item-desc">'.WoW_Locale::GetString('template_game_class_'.WoW_Template::GetPageData('class').'_feature_desc'.$i).'</p>
-								</div>
-	               <span class="clear"><!-- --></span>
-							</div>';
-      }
-
+if(isset($class['abilities']) && is_array($class['abilities'])) {
+    foreach($class['abilities'] as $ability) {
+        echo '
+        <div class="feature-item clear-after">
+            <span class="icon-frame-gloss float-left" style="background-image: url('.WoW::GetWoWPath().'/wow/icons/56/' . $ability['icon'] . ')">
+                <span class="frame"></span>
+            </span>
+            <div class="feature-wrapper">
+                <span class="feature-item-title">' . $ability['title'] . '</span>
+                <p class="feature-item-desc">' . $ability['text'] . '</p>
+            </div>
+            <span class="clear"><!-- --></span>
+        </div>';
+    }
+}
 ?>
               </div>
             </div>

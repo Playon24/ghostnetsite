@@ -1177,7 +1177,7 @@ $WoW_Locale = array(
     'template_class_role_melee' => 'Боец (физический урон в ближнем бою)',
     'template_class_role_ranged' => 'Боец (физический урон в дальнем бою)',
     'template_class_role_caster' => 'Боец (магический урон в дальнем бою)',
-    'template_class_role_heaker' => 'Лекарь',
+    'template_class_role_healer' => 'Лекарь',
     'template_class_role_tank' => '«Танк»',
     
     'template_game_class_index' => 'Классы',
@@ -1187,6 +1187,7 @@ $WoW_Locale = array(
     'template_game_class_information' => 'Описание',
     'template_game_class_talents' => 'Таланты',
     'template_game_class_talent_trees' => 'Дерево талантов',
+	'template_game_class_features' => 'Особенности',
     'template_game_class_races' => 'Расы',
     'template_game_class_next' => 'След. класс: %s',
     'template_game_class_prev' => 'Пред. класс: %s',
@@ -1194,6 +1195,12 @@ $WoW_Locale = array(
     'template_game_class_bars' => 'Стандартные панели',
     'template_game_class_armor' => 'Доступная броня',
     'template_game_class_weapons' => 'Доступное оружие',
+    
+    'template_game_class_artwork' => 'Художественные композиции',
+    'template_game_class_screenshots' => 'Скриншоты',
+    'template_game_class_more' => 'ПОДРОБНЕЕ',
+    'template_game_class_more_desc' => 'Подробнее об этом классе можно прочесть на сайтах поклонников игры.',
+    'template_game_class_viewall' => 'Все',
     
     'template_pvp_arena_top_teams' => 'Лучшие команды Арены',
     'template_pvp_arena_summary' => 'Оглавление',
