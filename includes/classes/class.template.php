@@ -242,6 +242,18 @@ Class WoW_Template {
                     $path_search_data[$a] = $_data[$a];
                 }
                 break;
+			case '/character/':
+				$dynamic_content = true;
+				$_data = array(
+					0 => '/',
+					1 => '/character/',
+					2 => @$url_data[2],
+					3 => @$url_data[3]
+				);
+                for($a = 0; $a < 4; ++$a) {
+                    $path_search_data[$a] = $_data[$a];
+                }
+				break;
             case '/pvp/':
                 $dynamic_content = true;
                 $_data = array(

@@ -1186,7 +1186,7 @@ class WoW_Layout {
             case 'game_race_index':
                 return sprintf('%s - %s - ', WoW_Locale::GetString('template_game_race_index'), WoW_Locale::GetString('template_menu_game'));
             case 'game_race':
-                return sprintf('%s - %s - ', WoW_Locale::GetString('template_game_race_'.WoW_Template::GetPageData('race')), WoW_Locale::GetString('template_menu_game'));
+                return sprintf('%s - %s - ', WoW_Locale::GetString('character_race_' . WoW_Template::GetPageData('raceId')), WoW_Locale::GetString('template_menu_game'));
             case 'game_class_index':
                 return sprintf('%s - %s - ', WoW_Locale::GetString('template_game_class_index'), WoW_Locale::GetString('template_menu_game'));
             case 'game_class':
