@@ -34,13 +34,13 @@ class Character extends Controller {
                 setcookie('wow.character.summary.view', 'advanced', strtotime('NEXT YEAR'), '/' . WoW::GetWoWPath() . '/character/');
             }
             elseif($url_data['action0'] == null && (isset($url_data['name']) && isset($url_data['realmName']))) {
-                WoW::RedirectToCorrectProfilePage('simple');
+                WoW::RedirectToCorrectProfilePage('simple');  //change to WoW::RedirectTo()?
             }
             elseif($url_data['action0'] == 'simple') {
                 // Set "wow.character.summary.view" cookie as "simple"
                 setcookie('wow.character.summary.view', 'simple', strtotime('NEXT YEAR'), '/' . WoW::GetWoWPath() . '/character/');
             }
-            echo $load_result = WoW_Characters::LoadCharacter($url_data['name'], WoW_Utils::GetRealmIDByName($url_data['realmName']), true, true);
+            $load_result = WoW_Characters::LoadCharacter($url_data['name'], WoW_Utils::GetRealmIDByName($url_data['realmName']), true, true);
             if(!WoW_Characters::IsCorrect() || $load_result != 3) {
                 if($url_data['action0'] == 'tooltip') {
                     exit;
@@ -56,6 +56,8 @@ class Character extends Controller {
             }
             else {
                 WoW_Achievements::Initialize();
+                WoW_Template::SetPageData('characterName', WoW_Characters::GetName());
+                WoW_Template::SetPageData('characterRealmName', WoW_Characters::GetRealmName());
                 switch($url_data['action0']) {
                     default:
                         WoW_Template::SetPageIndex('character_profile_simple');

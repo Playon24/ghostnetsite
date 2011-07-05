@@ -1233,11 +1233,11 @@ class WoW_Layout {
     
     public static function PrintMainMenu() {
         $main_menu = "<ul id=\"menu\">\n%s\n</ul>";
-        $menu_item = '<li class="%s"><a href="%s" class="%s"><span>%s</span></a></li>';
+        $menu_item = '<li class="%s"><a href="%s/wow/%s%s" class="%s"><span>%s</span></a></li>';
         $full_menu = null;
         $global_menu = WoW_Template::GetMainMenu();
         foreach($global_menu as &$menu) {
-            $full_menu .= sprintf($menu_item, $menu['key'], WoW::GetWoWPath() . $menu['href'], (WoW_Template::GetMenuIndex() == $menu['key']) ? 'active' : null, $menu['title']);
+            $full_menu .= sprintf($menu_item, $menu['key'], WoW::GetWoWPath(), WoW_Locale::GetLocale(), $menu['href'], (WoW_Template::GetMenuIndex() == $menu['key']) ? 'active' : null, $menu['title']);
             $full_menu .= "\n";
         }
         return sprintf($main_menu, $full_menu);

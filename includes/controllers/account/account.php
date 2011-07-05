@@ -46,7 +46,6 @@ class Account extends Controller {
                                 'email' => $_POST['email'],
                                 'username' => $_POST['firstName']
                             );
-                            
                             WoW_Account::DropLastErrorCode();
                             if(WoW_Account::RecoverPasswordSelect($user_data)) {
                                 $_SESSION['wow_password_recovery'] = WoW_Account::GetRecoverPasswordData();
@@ -117,7 +116,6 @@ class Account extends Controller {
                         WoW_Template::SetPageData('page', 'password_reset_confirm');
                     }
                 }
-                
                 WoW_Template::LoadTemplate('support_index');
             }
             else {
@@ -130,7 +128,7 @@ class Account extends Controller {
         WoW_Template::SetPageIndex('management');
         WoW_Template::SetMenuIndex('management');
         WoW_Template::SetPageData('page', 'management');
-        
+
         if($url_data['action2'] == 'wow' && preg_match('/dashboard.html/i', $url_data['action3'])) {
             WoW_Account::InitializeAccount($_GET['accountName']);
             WoW_Template::SetPageIndex('dashboard');
@@ -172,7 +170,7 @@ class Account extends Controller {
             WoW_Template::SetPageData('page', 'account_conversion');
             WoW_Template::LoadTemplate('page_index');
         }
+		WoW_Template::LoadTemplate('page_index');
     }
 }
-
 ?>

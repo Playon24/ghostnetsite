@@ -38,13 +38,11 @@ class Vault extends Controller {
                     case 'auction':
                         $auction_side = $url_data['action3'];
                         if(!$auction_side || !in_array($auction_side, array('alliance', 'horde', 'neutral'))) {
-                            header('Location: ' . WoW::GetWoWPath() . '/');
-                            exit;
+                            WoW::RedirectTo('wow/' . WoW_Locale::GetLocale() . '/vault/character/auction/' . WoW_Account::GetActiveCharacterInfo('faction_text'));
                         }
                         // Check active character
                         if(WoW_Account::GetActiveCharacterInfo('guid') == 0) {
-                            header('Location: ' . WoW::GetWoWPath() . '/');
-                            exit;
+                            WoW::RedirectTo();
                         }
                         switch($url_data['action4']) {
                             default:
@@ -72,11 +70,16 @@ class Vault extends Controller {
                                 break;
                         }
                         break;
+					default:
+						WoW_Template::ErrorPage(404);
+						break;
                 }
                 break;
+			default:
+				WoW_Template::ErrorPage(404);
+				break;
         }
         WoW_Template::LoadTemplate('page_index');
     }
 }
-
 ?>
