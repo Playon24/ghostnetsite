@@ -143,6 +143,10 @@ WoW_Log::Initialize(WoWConfig::$UseLog, WoWConfig::$LogLevel);
 // Do not create DB connections here - it will be created automatically at first query request!
 DB::LoadConfigs();
 
+if(isset($_COOKIE['wow_session']) && !WoW_Account::IsLoggedIn()) {
+    WoW_Account::loadFromCookieSession();
+}
+
 // Initialize auction handler
 WoW_Auction::InitAuction(); // TODO: this initialization should be moved in some other place.
 

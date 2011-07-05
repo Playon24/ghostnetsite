@@ -28,6 +28,7 @@ class Home extends Controller {
         if(isset($_POST['accountName'])) {
             $username = $_POST['accountName'];
             $password = $_POST['password'];
+            $persistLogin = isset($_POST['persistLogin']) ? true : false;
             WoW_Account::DropLastErrorCode();
             if(mb_strlen($password) <= 7) {
                 WoW_Account::SetLastErrorCode(ERORR_INVALID_PASSWORD_FORMAT);
@@ -38,7 +39,7 @@ class Home extends Controller {
             if($password == null) {
                 WoW_Account::SetLastErrorCode(ERROR_EMPTY_PASSWORD);
             }
-            if(WoW_Account::PerformLogin($username, $password)) {
+            if(WoW_Account::PerformLogin($username, $password, $persistLogin)) {
                 if(isset($_POST['ref'])) {
                     header('Location: ' . $_POST['ref']);
                     exit;

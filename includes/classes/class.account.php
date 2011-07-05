@@ -767,11 +767,11 @@ Class WoW_Account {
      * @category Account Manager Class
      * @return   bool
      **/
-    public static function PerformLogin($username, $password) {
+    public static function PerformLogin($username, $password, $persistLogin = false, $from_cookie_session = false) {
 //        self::SetEmail($email);
         self::SetEmail($username);
         self::SetPassword($password);
-        self::CreateShaPassHash();
+        ($from_cookie_session == true) ? (self::$sha_pass_hash=$password) : self::CreateShaPassHash();
         // No SQL injection
         $user_data = DB::WoW()->selectRow("SELECT `id`, `first_name`, `last_name`, `email`, `sha_pass_hash`, `country_code` FROM `DBPREFIX_users` WHERE `email` = '%s' LIMIT 1", self::GetEmail());
         if(!$user_data) {
@@ -794,7 +794,36 @@ Class WoW_Account {
         self::SetLoginState(ACCMGR_LOGGED_IN);
         self::$login_time = time();
         self::DropLastErrorCode(); // All fine, we can drop it now.
+        if($persistLogin || isset($_COOKIE['wow_session'])) {
+            self::saveToCookieSession();
+        }
+        
         return true;
+    }
+    
+    public static function loadFromCookieSession() {
+        $user_data = DB::WoW()->selectRow("SELECT `email`, `sha_pass_hash` FROM `DBPREFIX_users` WHERE `cookie_session_key` = '%s' LIMIT 1", $_COOKIE['wow_session']);
+        if(!$user_data) {
+            WoW_Log::WriteLog('%s : cookie_session %s was not found in `DBPREFIX_users` table!', __METHOD__, $_COOKIE['wow_session']);
+            unset($_COOKIE['wow_session']); 
+            return false;
+        }
+        else {
+            self::PerformLogin($user_data['email'], $user_data['sha_pass_hash'], true, true);
+            return true;
+        }
+    }
+    
+    public static function saveToCookieSession() {
+        $cookie_session = sha1(self::$email.'='.time().'/'.self::$userid);
+        
+        if(DB::WoW()->query("UPDATE `DBPREFIX_users` SET `cookie_session_key` = '%s' WHERE `first_name` = '%s' AND `email` = '%s' LIMIT 1", $cookie_session, self::$first_name, self::$email)) {
+            setcookie('wow_session', $cookie_session, strtotime('NEXT YEAR'), '/');
+            return true;
+        }
+        else {
+            return false;
+        }
     }
     
     /**
@@ -859,6 +888,8 @@ Class WoW_Account {
     public static function PerformLogout() {
         self::DestroySession();
         self::DestroyUserData();
+        setcookie('wow_session', '', strtotime('LAST YEAR'), '/');
+        unset($_COOKIE['wow_session']);
         return true;
     }
     
