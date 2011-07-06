@@ -110,7 +110,7 @@ $WoW_Locale = array(
     'template_country_rus' => 'Russian Federation',
     'template_country_gbr' => 'Great Britain',
     
-    'template_month_1' => 'jauary',
+    'template_month_1' => 'january',
     'template_month_2' => 'february',
     'template_month_3' => 'march',
     'template_month_4' => 'april',
