@@ -113,6 +113,15 @@ function WoW_Autoload($className)
         include(CLASSES_DIR . 'class.' . $className . '.php');
     }
 }
+// Initialize debug log
+WoW_Log::Initialize(WoWConfig::$UseLog, WoWConfig::$LogLevel);
+
+// Load databases configs
+// Do not create DB connections here - it will be created automatically at first query request!
+DB::LoadConfigs();
+
+// Core self testing
+WoW::SelfTests();
 
 // Try to catch some operations (login, logout, etc.)
 $locale_loaded = false;
@@ -135,13 +144,6 @@ else {
 
 // Initialize account (if user already logged in we need to re-build his info from session data)
 WoW_Account::Initialize();
-
-// Initialize debug log
-WoW_Log::Initialize(WoWConfig::$UseLog, WoWConfig::$LogLevel);
-
-// Load databases configs
-// Do not create DB connections here - it will be created automatically at first query request!
-DB::LoadConfigs();
 
 if(isset($_COOKIE['wow_session']) && !WoW_Account::IsLoggedIn()) {
     WoW_Account::loadFromCookieSession();
