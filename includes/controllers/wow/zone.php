@@ -20,7 +20,7 @@
 
 class Zone extends Controller {
     public function main() {
-        WoW_Template::SetPageData('body_class', sprintf('%s  zone-index expansion-3', WoW_Locale::GetLocale(LOCALE_DOUBLE)));
+        WoW_Template::SetPageData('body_class', sprintf('%s zone-index expansion-3', WoW_Locale::GetLocale(LOCALE_DOUBLE)));
         WoW_Template::SetTemplateTheme('wow');
         WoW_Template::SetPageIndex('zones');
         WoW_Template::SetPageData('page', 'zones');
@@ -35,9 +35,7 @@ class Zone extends Controller {
                 WoW_Template::SetPageIndex('zone');
                 WoW_Template::SetPageData('page', 'zone');
                 WoW_Game::LoadZone($url_data['action1']); // save in memory
-                //echo '<pre>';
-                //print_r(WoW_Game::GetZone());
-                //die;
+                WoW_Template::SetPageData('body_class', sprintf('%s zone-%s', WoW_Locale::GetLocale(LOCALE_DOUBLE), $url_data['action1']));
             }
         }
         WoW_Template::SetMenuIndex('menu-game');

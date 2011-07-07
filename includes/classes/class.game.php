@@ -75,6 +75,8 @@ Class WoW_Game {
         `a`.`itemLevel`,
         `a`.`patch`,
         `a`.`dungeonGroup`,
+        `a`.`floor_levels_count` AS `floorLevelsCount`,
+        `a`.`floor_levels_%s` AS `floorLevels`,
         `b`.`name_%s` AS `dungeonGroupName`,
         `b`.`name_en` AS `dungeonGroupNameOriginal`,
         `c`.`name_%s` AS `locationName`,
@@ -82,7 +84,7 @@ Class WoW_Game {
         FROM `DBPREFIX_instances` AS `a`
         LEFT JOIN `DBPREFIX_instances_groups` AS `b` ON `b`.`group_id` = `a`.`dungeonGroup`
         LEFT JOIN `DBPREFIX_areas` AS `c` ON `c`.`id` = `a`.`location`
-        WHERE `a`.`zone_key` = '%s' LIMIT 1", WoW_Locale::GetLocale(), WoW_Locale::GetLocale(), WoW_Locale::GetLocale(), WoW_Locale::GetLocale(), WoW_Locale::GetLocale(), self::$m_zone_key);
+        WHERE `a`.`zone_key` = '%s' LIMIT 1", WoW_Locale::GetLocale(), WoW_Locale::GetLocale(), WoW_Locale::GetLocale(), WoW_Locale::GetLocale(), WoW_Locale::GetLocale(), WoW_Locale::GetLocale(), self::$m_zone_key);
         if(!self::$m_zone) {
             WoW_Log::WriteError('%s : zone "%s" was not found in %s_instances table!', __METHOD__, self::$m_zone_key, DB::WoW()->GetDatabaseInfo('prefix'));
             return false;
@@ -234,6 +236,15 @@ Class WoW_Game {
             }
             self::$m_zone['bosses'] = $bosses;
             unset($bosses);
+        }
+        if(self::$m_zone['floorLevelsCount'] > 0 && self::$m_zone['floorLevels'] != null) {
+            $zone_floors = explode('|', self::$m_zone['floorLevels']);
+            if($zone_floors) {
+                self::$m_zone['floorLevels'] = $zone_floors;
+            }
+            else {
+                self::$m_zone['floorLevelsCount'] = 0;
+            }
         }
         WoW_Template::SetPageData('zone_name', self::$m_zone['name']);
         WoW_Template::SetPageData('zone_key', self::$m_zone['zone_key']);
