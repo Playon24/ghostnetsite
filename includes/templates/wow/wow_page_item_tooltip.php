@@ -357,7 +357,18 @@ $ssv = WoW_Template::GetPageData('ssv');
             }
             echo '</li>';
         }
-        //TODO: Item source
+        if(WoW_Template::GetPageData('tooltip') == true) {
+            $source = WoW_Items::GetItemSource($proto->entry);
+            if($source) {
+                switch($source['type']) {
+                    case 'sourceType.creatureDrop':
+                        break;
+                    case 'sourceType.questReward':
+                        echo '<ul class="item-specs"><li><span class="color-tooltip-yellow">Quest:</span> <span data-quest="' . $source['questId'] . '">' . $source['Title'] . '</span></li>' . ($source['questZone'] > 0 ? '<li><span class="color-tooltip-yellow">Zone:</span></li>' . WoW_Utils::GetZoneName($source['questZone']) : null) . '</ul>';
+                        break;
+                }
+            }
+        }
         ?>
     </ul>
 <span class="clear"><!-- --></span>

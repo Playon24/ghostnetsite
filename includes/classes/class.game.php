@@ -266,7 +266,7 @@ Class WoW_Game {
     
     public static function GetZone() {
         if(!self::$m_zone) {
-            self::LoadZone();
+            self::LoadZone(WoW_Template::GetPageData('zoneKey'));
         }
         return self::$m_zone;
     }

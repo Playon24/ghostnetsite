@@ -34,6 +34,7 @@ class Zone extends Controller {
             if(WoW_Game::IsZone($url_data['action1'])) {
                 WoW_Template::SetPageIndex('zone');
                 WoW_Template::SetPageData('page', 'zone');
+                WoW_Template::SetPageData('zoneKey', $url_data['action1']);
                 WoW_Game::LoadZone($url_data['action1']); // save in memory
                 WoW_Template::SetPageData('body_class', sprintf('%s zone-%s', WoW_Locale::GetLocale(LOCALE_DOUBLE), $url_data['action1']));
             }

@@ -746,5 +746,9 @@ Class WoW_Utils {
         }
         return $role_info;
     }
+    
+    public function GetZoneName($zoneId) {
+        return DB::WoW()->selectCell("SELECT `name_%s` FROM `DBPREFIX_areas` WHERE `id` = %d", WoW_Locale::GetLocale(), $zoneId);
+    }
 }
 ?>
