@@ -117,6 +117,7 @@ class Account extends Controller {
                     }
                 }
                 WoW_Template::LoadTemplate('support_index');
+                exit;
             }
             else {
                 header('Location: ' . WoW::GetWoWPath() . '/login/');
