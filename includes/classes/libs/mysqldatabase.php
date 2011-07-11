@@ -79,7 +79,8 @@ Class WoW_DatabaseHandler {
             'password' => $password,
             'name'     => $dbName,
             'charset'  => ($charset == null) ? 'UTF8' : $charset,
-            'prefix'   => $prefix
+            'prefix'   => $prefix,
+            'hash'     => sha1(time()),
         );
         $this->db_prefix = $prefix;
         $this->server_version = $this->selectCell("SELECT VERSION()");

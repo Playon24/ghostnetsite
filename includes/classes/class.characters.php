@@ -85,6 +85,7 @@ Class WoW_Characters /*implements Interface_Characters*/ {
     private static $m_mounts       = array(); // Character companions & mounts
     private static $m_mounts_count = array(); // Character companions & mounts counters (collected / not collected)
     private static $m_spells       = array(); // Character spells
+    private static $m_dbHash       = '';      // Database connection hash
     
     private static function IsCharacterFitsRequirements() {
         if(self::$level < WoWConfig::$MinLevelToDisplay) {
@@ -141,6 +142,7 @@ Class WoW_Characters /*implements Interface_Characters*/ {
             // Message about failed connection will appear from database handler class.
             return 1;
         }
+        self::$m_dbHash = DB::Characters()->GetDatabaseInfo('hash');
         // BINARY.
         self::$name = mb_convert_case($name, MB_CASE_TITLE, "UTF-8");
         // If $full == true, we need to check `armory_character_stats` table.
@@ -205,7 +207,10 @@ Class WoW_Characters /*implements Interface_Characters*/ {
     }
     
     public static function IsCorrect() {
-        DB::ConnectToDB(DB_CHARACTERS, self::GetRealmID());
+        if(DB::Characters()->GetDatabaseInfo('hash') != self::$m_dbHash) {
+            // Reconnect
+            DB::ConnectToDB(DB_CHARACTERS, self::GetRealmID());
+        }
         return (self::$name != null && self::$guid > 0);
     }
     
