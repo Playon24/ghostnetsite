@@ -644,7 +644,7 @@ Class WoW_Characters /*implements Interface_Characters*/ {
                 'class' => $team['class'],
                 'gender' => $team['gender'],
                 'level' => $team['level'],
-                'url' => sprintf('%s/character/%s/%s/', WoW::GetWoWPath(), self::GetRealmName(), $team['charName']),
+                'url' => sprintf('%s/wow/%s/character/%s/%s/', WoW::GetWoWPath(), WoW_Locale::GetLocale(), self::GetRealmName(), $team['charName']),
                 'played_week' => $team['played_week'],
                 'wons_week' => $team['wons_week'],
                 'played_season' => $team['played_season'],
