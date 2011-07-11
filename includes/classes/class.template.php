@@ -242,18 +242,6 @@ Class WoW_Template {
                     $path_search_data[$a] = $_data[$a];
                 }
                 break;
-			case '/character/':
-				$dynamic_content = true;
-				$_data = array(
-					0 => '/',
-					1 => '/character/',
-					2 => @$url_data[2],
-					3 => @$url_data[3]
-				);
-                for($a = 0; $a < 4; ++$a) {
-                    $path_search_data[$a] = $_data[$a];
-                }
-				break;
             case '/pvp/':
                 $dynamic_content = true;
                 $_data = array(
@@ -278,6 +266,85 @@ Class WoW_Template {
                     $path_search_data[$a] = $_data[$a];
                 }
                 break;
+            case '/character/':
+                $dynamic_content = true;
+                $subdata4 = '';
+                $data3 = '';
+                
+                if(in_array($url_data[4], array('/simple/', '/advanced/'))) {
+                    $count = 2;
+                    $subdata4 = @$url_data[4];
+                }
+                elseif($url_data[4] == '/achievement/') {
+                    $count = 3;
+                    $data3 = '/character/'.@$url_data[2].@$url_data[3].@$url_data[4];
+                    $label[3] = 'Achievements';
+                }
+                elseif($url_data[4] == '/statistic/') {
+                    $count = 3;
+                    $data3 = '/character/'.@$url_data[2].@$url_data[3].@$url_data[4];
+                    $label[3] = 'Statistics';
+                }
+                elseif($url_data[4] == '/reputation/') {
+                    $count = 3;
+                    $data3 = '/character/'.@$url_data[2].@$url_data[3].@$url_data[4];
+                    $label[3] = 'Reputation';
+                }
+                elseif($url_data[4] == '/pvp/') {
+                    $count = 3;
+                    $data3 = '/character/'.@$url_data[2].@$url_data[3].@$url_data[4];
+                    $label[3] = 'Player vs. Player';
+                }
+                elseif($url_data[4] == '/feed/') {
+                    $count = 3;
+                    $data3 = '/character/'.@$url_data[2].@$url_data[3].@$url_data[4];
+                    $label[3] = 'Activity Feed';
+                }
+                
+                $label[2] = str_replace(array('/', '+'), array('', ' '), @$url_data[3].' @ '.@$url_data[2]);
+                
+                $_data = array(0 => '/',
+                               1 => '/game/',
+                               2 => '/character/'.@$url_data[2].@$url_data[3].$subdata4,
+                               3 => $data3,
+                               4 => NULL,
+                               5 => NULL,
+                              );
+                for($a=0;$a<=$count;++$a) {
+                    $path_search_data[$a] = $_data[$a];
+                }
+              break;
+            case '/blog/':
+                $dynamic_content = true;
+                $_data = array(0 => '/',
+                               1 => '/blog/'.@$url_data[2],
+                              );
+                $label[1] = WoW::GetBlogData('title');
+                for($a=0;$a<count($_data);++$a) {
+                    $path_search_data[$a] = $_data[$a];
+                }
+              break;
+            case '/forum/':
+                $dynamic_content = true;
+                $_data = array(
+                    0 => '/',
+                    1 => '/forum/',
+                    2 => '/forum/#forum'.WoW_Forums::GetGlobalCategoryId(),
+                    3 => '/forum/'.WoW_Forums::GetCategoryId().'/',
+                    4 => '/forum/topic/'.WoW_Forums::GetThreadId().'/',
+                );
+                for($a = 0; $a < count($url_data); ++$a) {
+                    $path_search_data[$a] = $_data[$a];
+                }
+                if(isset($url_data[2]) && $url_data[2] != '/topic/'){
+                    $path_search_data[3] = $_data[3];
+                }
+                if(isset($url_data[2]) && $url_data[2] == '/topic/') {
+                    $path_search_data[3] = $_data[3];
+                    $path_search_data[4] = $_data[4];
+                    $label[4] = WoW_Forums::GetThreadTitle();
+                }
+                break;
             default:
                 $path_search_data = $url_data;
                 break;
@@ -295,7 +362,13 @@ Class WoW_Template {
                 $path_data .= $url_data[$i];
             }
             $path_data = str_replace('//', '/', $path_data);
-            $menu = self::array_searchRecursive($path_data, $navigationMenu);
+            
+            if(!isset($label[$i])) {
+                $menu = self::array_searchRecursive($path_data, $navigationMenu);
+            }
+            else {
+                $menu['label'] = $label[$i];
+            }
             echo '<li' . ($last == true ? ' class="last"' : null) . '><a href="' . WoW::GetWoWPath() . '/wow/' . WoW_Locale::GetLocale() . $path_data . '" rel="np">' . $menu['label'] . '</a></li>';
         }
         echo '</ol>';

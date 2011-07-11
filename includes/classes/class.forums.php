@@ -112,7 +112,7 @@ Class WoW_Forums {
         `a`.*,
         `b`.`name` AS `author`
         FROM `DBPREFIX_forum_threads` AS `a`
-        JOIN `DBPREFIX_user_characters` AS `b` ON `b`.`bn_id` = `a`.`author_id` AND `b`.`account` = `a`.`author_account` AND `b`.`guid` = `a`.`author_guid`
+        LEFT JOIN `DBPREFIX_user_characters` AS `b` ON `b`.`bn_id` = `a`.`author_id` AND `b`.`account` = `a`.`author_account` AND `b`.`guid` = `a`.`author_guid`
         WHERE `a`.`cat_id` = %d", self::GetCategoryId());
         self::HandleCategoryThreads();
     }

@@ -4540,7 +4540,7 @@ array(
        'label' => 'Форумы',
        'url' => '/forum/',
        'children' => 
-      array (
+      array (/*
         array(
            'label' => 'Поддержка',
            'url' => '/forum/#forum896038',
@@ -4831,7 +4831,7 @@ array(
                'url' => '/forum/940652/',
             ),
           ),
-        ),
+        ),*/
       ),
     ),
     array(

@@ -89,6 +89,7 @@ class Forum extends Controller {
             WoW_Forums::InitBlizzTracker(true);
             WoW_Template::SetPageIndex('forum_index');
             WoW_Template::SetPageData('page', 'forum_index');
+            WoW_Template::SetPageData('body_class', WoW_Locale::GetLocale(LOCALE_DOUBLE).' station-home');
         }
         // Init the forums!
         WoW_Forums::InitForums();

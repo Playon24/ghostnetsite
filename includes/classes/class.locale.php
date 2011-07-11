@@ -65,9 +65,34 @@ Class WoW_Locale {
             @include(WOW_DIRECTORY . '/includes/locales/menu_' . WoWConfig::$DefaultLocale . '.php');
         }
         self::$locale_holder = $WoW_Locale;
-        self::$menu_holder = $WoW_Menu;
-        self::$navigation = $Menu;
+        self::$menu_holder = self::$navigation = self::prepareBreadCrumb($Menu);
         return true;
+    }
+    
+    private static function prepareBreadCrumb($Menu) {
+        WoW_Forums::InitForums();
+        $forum_categories = WoW_Forums::GetForumCategories();
+        if(is_array($forum_categories)) {
+            $tmp_cat = 0;
+            foreach($forum_categories as $category) {
+                $info = $category['category_info'];
+                $forums_output[$tmp_cat] = array('label' => $info['title'],
+                                                 'url' => '/forum/#forum'.$info['cat_id'],);
+                $subcats = $category['subcategories'];
+                if(is_array($subcats)) {
+                    $tmp_subcat = 0;
+                    foreach($subcats as $subcat) {
+                        $subcats_output[$tmp_subcat] = array('label' => $subcat['title'],
+                                                             'url' => '/forum/'.$subcat['cat_id'].'/',);
+                        $tmp_subcat++;
+                    }
+                    $forums_output[$tmp_cat]['children'] = $subcats_output;
+                }
+                $tmp_cat++;
+            }
+        }
+        $Menu['children'][3]['children'] = $forums_output;
+        return $Menu;
     }
     
     public static function GetString($index, $gender = -1) {
@@ -95,7 +120,7 @@ Class WoW_Locale {
     }
     
     public static function GetMenuString() {
-        return self::$menu_holder;
+        return json_encode(self::$menu_holder);
     }
     
     public static function IsLocale($locale_str, $locale_id) {

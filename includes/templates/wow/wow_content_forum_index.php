@@ -29,6 +29,7 @@ World of Warcraft
                 <div class="bt-adjust">
                     <div class="bt-mask">
                         <div id="bt-holder">
+                            <div class="bt-set">
                                 <?php
                                 $blizz_posts = WoW_Forums::GetLatestBlizzPosts();
                                 if(is_array($blizz_posts)) {
@@ -38,7 +39,6 @@ World of Warcraft
                                     foreach($blizz_posts as $post) {
                                         if($set_count == 1) {
                                             $set_opened = true;
-                                            echo '<div class="bt-set">';
                                         }
                                         echo sprintf('<a href="topic/%d#%d">
                                         <span class="desc">
@@ -64,11 +64,10 @@ World of Warcraft
                                         }
                                     }
                                     if($set_opened && !$set_closed) {
-                                        echo '</div>';
+                                        echo '';
                                     }
                                 }
                                 ?>
-                                <div class="bt-set">
                                     <a href="blizztracker/">
                                         <span class="desc">
 											<span class="int">
