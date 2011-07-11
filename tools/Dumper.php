@@ -79,6 +79,13 @@ $allowed_tables = array(
         'onlyIfNotExists' => false,
     ),
     array(
+        'name' => 'class_abilities',
+        'internalFile' => false,
+        'skipData' => false,
+        'drop' => true,
+        'onlyIfNotExists' => false,
+    ),
+    array(
         'name' => 'classes',
         'internalFile' => false,
         'skipData' => false,
@@ -220,6 +227,13 @@ $allowed_tables = array(
     ),
     array(
         'name' => 'maps',
+        'internalFile' => false,
+        'skipData' => false,
+        'drop' => true,
+        'onlyIfNotExists' => false,
+    ),
+    array(
+        'name' => 'mounts',
         'internalFile' => false,
         'skipData' => false,
         'drop' => true,

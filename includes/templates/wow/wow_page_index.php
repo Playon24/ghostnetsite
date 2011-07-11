@@ -159,6 +159,13 @@ switch(WoW_Template::GetPageData('page')) {
         echo '<script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/js/profile.js?v7"></script>
 <script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/js/character/statistic.js?v7"></script>';
         break;
+    case 'character_companions_mounts':
+        echo '<script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/js/profile.js?v12"></script>
+<script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/js/character/companion.js?v12"></script>
+<script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/local-common/js/filter.js?v23"></script>
+<script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/local-common/js/utility/dataset.js?v23"></script>
+<script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/local-common/js/utility/model-rotator.js?v23"></script>';
+        break;
     case 'blog':
         echo '<script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/local-common/js/lightbox.js?v17"></script>';
         break;

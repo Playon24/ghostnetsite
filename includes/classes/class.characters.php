@@ -82,6 +82,9 @@ Class WoW_Characters /*implements Interface_Characters*/ {
     private static $stats_bonuses  = array(); // Enchants/gems bonuses
     private static $pvp_data       = array(); // Character PvP Data (Arena Teams)
     private static $m_skills       = array(); // Character skills
+    private static $m_mounts       = array(); // Character companions & mounts
+    private static $m_mounts_count = array(); // Character companions & mounts counters (collected / not collected)
+    private static $m_spells       = array(); // Character spells
     
     private static function IsCharacterFitsRequirements() {
         if(self::$level < WoWConfig::$MinLevelToDisplay) {
@@ -3093,6 +3096,144 @@ Class WoW_Characters /*implements Interface_Characters*/ {
     
     public static function GetAuditInfo($type) {
         return isset(self::$audit[$type]) ? self::$audit[$type] : false;
+    }
+    
+    public static function InitSpells() {
+        self::LoadSpells();
+    }
+    
+    private static function LoadSpells() {
+        $spells = DB::Characters()->select("SELECT `spell` FROM `character_spell` WHERE `guid` = %d AND `disabled` = 0", self::GetGUID());
+        if(!$spells) {
+            return false;
+        }
+        foreach($spells as $spell) {
+            self::$m_spells[] = $spell['spell'];
+        }
+        unset($spells, $spell);
+        return true;
+    }
+    
+    public static function InitMounts() {
+        self::LoadMounts();
+        self::HandleMounts();
+    }
+    
+    public static function GetMounts() {
+        if(!self::$m_mounts) {
+            self::LoadMounts();
+            self::HandleMounts();
+        }
+        return self::$m_mounts;
+    }
+    
+    private static function LoadMounts() {
+        if(!self::$m_spells) {
+            self::LoadSpells();
+        }
+        $category = WoW_Template::GetPageData('category');
+        if($category == null) {
+            $category = 'companion';
+            WoW_Template::SetPageData('category', $category);
+        }
+        $type = 0;
+        switch($category) {
+            case 'mount':
+                $type = 1;
+                break;
+            case 'companion':
+                $type = 2;
+                break;
+        }
+        if($type == 0) {
+            WoW_Log::WriteError('%s : unknown mount type (type: %d, category: %s)!', __METHOD__, $type, $category);
+            return false;
+        }
+        self::$m_mounts = DB::WoW()->select("SELECT `spell`, `type`, `name_%s` AS `name`, `mount_type`, `icon`, `quality`, `npc_id`, `item_id`, `source`, `source_%s` AS `sourceText` FROM `DBPREFIX_mounts` WHERE `type` = %d ORDER BY `quality` DESC, `name_%s` ASC", WoW_Locale::GetLocale(), WoW_Locale::GetLocale(), $type, WoW_Locale::GetLocale());
+    }
+    
+    private static function HandleMounts() {
+        if(!self::$m_mounts) {
+            self::LoadMounts();
+        }
+        self::$m_mounts_count = array(
+            'collected' => 0,
+            'not_collected' => 0
+        );
+        foreach(self::$m_mounts as &$mount) {
+            $type = -1;
+            switch($mount['source']) {
+                case SOURCE_TYPE_QUEST:
+                    $type = 'quest';
+                    break;
+                case SOURCE_TYPE_DROP:
+                    $type = 'drop';
+                    break;
+                case SOURCE_TYPE_PROFESSION:
+                    $type = 'prof';
+                    break;
+                case SOURCE_TYPE_ACHIEVEMENT:
+                    $type = 'achv';
+                    break;
+                case SOURCE_TYPE_FACTION:
+                    $type = 'faction';
+                    break;
+                case SOURCE_TYPE_EVENT:
+                    $type = 'event';
+                    break;
+                case SOURCE_TYPE_PROMOTION:
+                    $type = 'promo';
+                    break;
+                case SOURCE_TYPE_PET_STORE:
+                    $type = 'store';
+                    break;
+                case SOURCE_TYPE_CARD_GAME:
+                    $type = 'tgc';
+                    break;
+                case SOURCE_TYPE_TRAINER:
+                case SOURCE_TYPE_OTHER:
+                    $type = 'other';
+                    break;
+                case SOURCE_TYPE_VENDOR:
+                    $type = 'vendor';
+                    break;
+            }
+            if($type == -1) {
+                continue;
+            }
+            $mount['source_type'] = $type;
+            $mount['add_styles'] = $type;
+            if($mount['type'] == 1) {
+                switch($mount['mount_type']) {
+                    case 1:
+                        $mount['add_styles'] .= ' ground';
+                        break;
+                    case 2:
+                        $mount['add_styles'] .= ' flying';
+                        break;
+                    case 3:
+                        $mount['add_styles'] .= ' aquatic';
+                        break;
+                }
+            }
+            if(in_array($mount['spell'], self::$m_spells)) {
+                ++self::$m_mounts_count['collected'];
+                $mount['add_styles'] .= ' is-collected';
+            }
+            else {
+                ++self::$m_mounts_count['not_collected'];
+                $mount['add_styles'] .= ' not-collected';
+            }
+        }
+        return true;
+    }
+    
+    public static function GetCollectedMountsCount() {
+        return isset(self::$m_mounts_count['collected']) ? self::$m_mounts_count['collected'] : 0;
+    }
+    
+    public static function GetNotCollectedMountsCount() {
+        return isset(self::$m_mounts_count['not_collected']) ? self::$m_mounts_count['not_collected'] : 0;
     }
 }
 ?>

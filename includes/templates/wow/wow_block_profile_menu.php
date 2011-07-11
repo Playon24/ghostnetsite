@@ -18,8 +18,11 @@
 			</li>
 			<li class="<?php echo WoW_Template::GetPageData('page') == 'character_achievements' ? ' active' : null; ?>">
 	<a href="<?php echo WoW_Characters::GetURL(); ?>achievement" class=" has-submenu" rel="np"><span class="arrow"><span class="icon"><?php echo WoW_Locale::GetString('template_profile_achievements'); ?></span></span></a>
-		</li>
-			<li class="<?php echo WoW_Template::GetPageData('page') == 'character_statistics' ? ' active' : null; ?>">
+		    </li>
+			<li class="<?php echo WoW_Template::GetPageData('page') == 'character_companions_mounts' ? ' active' : null; ?>">
+	<a href="<?php echo WoW_Characters::GetURL(); ?>companion" class="" rel="np"><span class="arrow"><span class="icon"><?php echo WoW_Locale::GetString('template_profile_companions_mounts'); ?></span></span></a>
+		    </li>
+            <li class="<?php echo WoW_Template::GetPageData('page') == 'character_statistics' ? ' active' : null; ?>">
 	<a href="<?php echo WoW_Characters::GetURL(); ?>statistic" class=" has-submenu" rel="np"><span class="arrow"><span class="icon"><?php echo WoW_Locale::GetString('template_profile_statistics'); ?></span></span></a>
 			</li>
 			<li class="<?php echo WoW_Template::GetPageData('page') == 'character_reputation' ? ' active' : null; ?>">

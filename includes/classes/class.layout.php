@@ -620,6 +620,30 @@ class WoW_Layout {
                     )
                 );
                 break;
+            case 'character_companions_mounts':
+                $css_data_page = array(
+                    array(
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile.css',
+                        'version' => 4,
+                        'browser' => false
+                    ),
+                    array(
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile-ie.css',
+                        'version' => 4,
+                        'browser' => 'IE'
+                    ),
+                    array(
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile-ie6.css',
+                        'version' => 4,
+                        'browser' => 'IE 6'
+                    ),
+                    array(
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/character/companion.css',
+                        'version' => 12,
+                        'browser' => false
+                    )
+                );
+                break;
             case 'blog':
                 $css_data_page = array(
                     array(
@@ -1226,6 +1250,8 @@ class WoW_Layout {
                 return sprintf('%s - %s - ' , WoW_Template::GetPageData('zone_name'), WoW_Locale::GetString('template_menu_game'));
             case 'pvp_arena':
                 return sprintf('PvP - %s - ', WoW_Locale::GetString('template_menu_game'));
+            case 'character_companions_mounts':
+                return sprintf('%s - %s - ', WoW_Locale::GetString('template_profile_' . WoW_Template::GetPageData('category') . 's'), WoW_Locale::GetString('template_menu_game'));
             default:
                 return '';
         }

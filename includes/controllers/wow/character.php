@@ -124,6 +124,13 @@ class Character extends Controller {
                         WoW_Template::SetPageIndex('character_feed');
                         WoW_Template::SetPageData('page', 'character_feed');
                         break;
+                    case 'companion':
+                    case 'mount':
+                        WoW_Template::SetPageIndex('character_companions_mounts');
+                        WoW_Template::SetPageData('page', 'character_companions_mounts');
+                        WoW_Template::SetPageData('category', $url_data['action0']);
+                        WoW_Characters::InitMounts();
+                        break;
                 }
             }
         }

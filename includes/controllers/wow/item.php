@@ -45,7 +45,7 @@ class Item extends Controller {
         $proto = new WoW_ItemPrototype();
         $proto->LoadItem($item_entry);
         if(!$proto->IsCorrect()) {
-            if(!isset($_GET['t'])) {
+            if(!isset($_GET['t']) && (!isset($url_data['action0']) || $url_data['action0'] != 'tooltip')) {
                 WoW_Template::ErrorPage(404);
             }
             exit;

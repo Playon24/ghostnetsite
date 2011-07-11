@@ -10,6 +10,25 @@
 .profile-section-header .category { font-size: 26px; }
 .profile-section { background: url("../images/profile/section-bg.png") no-repeat; padding: 15px; min-height: 400px; }
 
+	/* tab menu */
+	.profile-section-header ul { height: 50px; margin-bottom: -2px; }
+	.profile-section-header ul li { height: 50px; display: inline-block; margin-right: 10px; position: relative; }
+	.profile-section-header ul a,
+	.profile-section-header ul a .r,
+	.profile-section-header ul a .m { font-size: 14px; color: #c09a67; display: inline-block; height: 50px; background: url("../images/profile/section-tabs.png") no-repeat; }
+	.profile-section-header ul a { padding-left: 10px; opacity: 0.80; }
+	.profile-section-header ul a .r { padding-right: 10px; background-position: 100% -100px; }
+	.profile-section-header ul a .m { padding: 0 10px; background-position: 0 -50px; background-repeat: repeat-x; line-height: 50px; }
+	.profile-section-header ul a:hover { background-position: 0 -150px; opacity: 1; }
+	.profile-section-header ul a:hover span span { color: white; }
+	.profile-section-header ul a:hover .r { background-position: 100% -250px; }
+	.profile-section-header ul a:hover .m { background-position: 0 -200px; }
+	.profile-section-header ul .tab-active a { font-weight: bold; background-position: 0 -300px; opacity: 1; }
+	.profile-section-header ul .tab-active a .r { background-position: 100% -400px; }
+	.profile-section-header ul .tab-active a .m { background-position: 0 -350px; color: #fff; }
+	.profile-section-header ul .has-icons a .m { padding-left: 30px; }
+	.profile-section-header ul .icon-frame { display: inline-block; vertical-align: middle; }
+
 	/* sidebar menu */
 	ul.profile-sidebar-menu { width: 196px; margin: 14px 0 0 25px; padding-bottom: 1px; background: url("../images/profile/sidebar-menu-sep.gif") left bottom no-repeat; font-size:13px; }
 	ul.profile-sidebar-menu li { padding-top: 1px; background: url("../images/profile/sidebar-menu-sep.gif") left top no-repeat; white-space: nowrap; }
@@ -211,3 +230,31 @@ a.profile-linktomore:hover { background-position: right -40px; }
 .swipe-container .profile-sidebar-menu ul ul { display: none; }
 .swipe-container .root-menu { display: block; }
 .swipe-container ul ul { margin-left: 10px; }
+
+/* filters */
+.profile-filters { padding-bottom: 15px; width: 760px; }
+.profile-filters .input { width: 175px; padding-right: 25px; color: #707070; background: #F1EBD7; }
+.profile-filters .input.active { color: #000; }
+.profile-filters .tabs { padding-bottom: 15px; }
+.profile-filters .tabs a { display: inline-block; margin-right: 5px; padding: 5px 12px; background: #3a271f; -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px; }
+.profile-filters .tabs a:hover { background: #412d24; }
+.profile-filters .tabs a.tab-active { color: #fff; font-weight: bold; background: #412d24; }
+.profile-filters .mode { margin-bottom: 15px; }
+.profile-filters .mode label { margin-right: 10px; display: inline-block; }
+.profile-filters .mode input { vertical-align: top; margin-top: 1px; }
+.profile-filters .advanced-togglers { float: right; }
+.profile-filters .advanced { clear: both; margin: 15px 0; background: #1a0d08; padding: 15px; -moz-border-radius: 4px; -webkit-border-radius: 4px; border-radius: 4px; }
+.profile-filters .advanced .group { float: left; }
+.profile-filters .advanced .group-name { display: block; font-size: 14px; color: #98542D; padding-bottom: 7px; margin-top: -5px }
+.profile-filters .advanced ul { line-height: 1.8em; }
+.profile-filters .advanced input { vertical-align: bottom; }
+.profile-filters .advanced p { margin: 0; padding: 0 5px 15px 5px; }
+.profile-filters .advanced p .pipe { margin: 0 5px; }
+
+.profile-wrapper .keyword { float: right; position: relative; }
+.profile-wrapper .keyword .view,
+.profile-wrapper .keyword .reset { display: block; width: 16px; height: 16px; position: absolute; top: 5px; right: 5px; background: url("../images/wiki/filter.gif") center center no-repeat; }
+.profile-wrapper .keyword .reset { background-image: url("../images/icons/cross-small-brown.gif"); cursor: pointer; }
+
+.chrome .profile-wrapper .keyword .view,
+.chrome .profile-wrapper .keyword .reset { top: 7px; }

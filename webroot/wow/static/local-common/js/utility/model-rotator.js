@@ -42,6 +42,7 @@ var ModelRotator = Class.extend({
 	coords: null,
 	xPosition: 0,
 	yPosition: 0,
+	canDrag: false,
 
 	/**
 	 * Custom configuration.
@@ -73,7 +74,9 @@ var ModelRotator = Class.extend({
 			yOffset: 0,
 			xOffset: 0,
 			viewerClass: '.viewer',
+			rotate: true,
 			rotateClass: '.rotate',
+			zoom: true,
 			zoomClass: '.zoom',
 			zoomCallback: function(value) {
 				return value.replace('rotate', 'zoom');
@@ -93,11 +96,17 @@ var ModelRotator = Class.extend({
 			this.node.addClass('touch');
 
 		// Setup event binds
-		if (this.rotateButton.length)
+		if (this.config.rotate && this.rotateButton.length) {
 			this.rotateButton.bind('click', $.proxy(this.rotate, this));
+		} else {
+			this.rotateButton.remove();
+		}
 
-		if (this.zoomButton.length)
+		if (this.config.zoom && this.zoomButton.length) {
 			this.zoomButton.bind('click', $.proxy(this.zoom, this));
+		} else {
+			this.zoomButton.remove();
+		}
 
 		if (this.viewer.length) {
 			this.viewer.bind((this.isTouch ? 'touchstart' : 'mousedown'), $.proxy(this.down, this));
@@ -114,6 +123,22 @@ var ModelRotator = Class.extend({
 			bgPos = bgPos.replace('px', '').replace('%', '').replace('-', '').split(' ')[0];
 
 		this.frame = this.lastFrame = Math.round(bgPos / this.config.frameWidth);
+
+		// Verify image
+		this.verifyImage();
+	},
+
+	/**
+	 * Get background image (that works in all browsers).
+	 *
+	 * @return string
+	 */
+	backgroundImage: function() {
+		var url = this.viewer.css('background-image');
+			url = url.replace(/^url\(('|")?/, ''); // Remove leading url("
+			url = url.replace(/('|")?\)$/, '');    // Remove trailing ")
+
+		return url;
 	},
 
 	/**
@@ -122,8 +147,7 @@ var ModelRotator = Class.extend({
 	 * @param e
 	 */
 	down: function(e) {
-		// Left click only
-		if (!this.isTouch && e.which != 1)
+		if (!this.isTouch && e.which != 1 || !this.canDrag)
 			return false;
 
 		// Disable auto-rotation
@@ -134,11 +158,32 @@ var ModelRotator = Class.extend({
 		this.dragging = true;
 		this.node.addClass('dragging');
 
+		if (this.config.dragCallback)
+			this.config.dragCallback(true);
+
 		// Save mouse pointer coords on dragstart
 		if (this.coords == null)
 			this.coords = this.mouseCoords(e);
 
 		return false;
+	},
+
+	/**
+	 * Is it currently dragging.
+	 *
+	 * @return boolean
+	 */
+	isDragging: function() {
+		return this.dragging;
+	},
+
+	/**
+	 * Is it currently rotating.
+	 *
+	 * @return boolean
+	 */
+	isRotating: function() {
+		return this.rotating;
 	},
 
 	/**
@@ -186,7 +231,7 @@ var ModelRotator = Class.extend({
 	 * @param e
 	 */
 	move: function(e) {
-		if (!this.dragging || this.rotating || this.timer)
+		if (!this.dragging || this.rotating || this.timer || !this.canDrag)
 			return false;
 
 		// Fake a timer being used
@@ -205,8 +250,11 @@ var ModelRotator = Class.extend({
 	 * Reset the viewer to defaults.
 	 */
 	reset: function() {
+		this.node.removeClass('load-fail can-drag');
+
 		this.stop();
 		this.dragging = false;
+		this.canDrag = false;
 		this.frame = 0;
 		this.lastFrame = 0;
 		this.offset = null;
@@ -222,8 +270,10 @@ var ModelRotator = Class.extend({
 	 * @param e
 	 */
 	rotate: function(e) {
-		e.stopPropagation();
-		e.preventDefault();
+		if (e) {
+			e.stopPropagation();
+			e.preventDefault();
+		}
 
 		if (this.timer !== null) {
 			this.stop();
@@ -232,6 +282,16 @@ var ModelRotator = Class.extend({
 			this.rotating = true;
 			this.node.addClass('rotating');
 		}
+	},
+
+	/**
+	 * Set the drag callback.
+	 *
+	 * @param callback
+	 */
+	setDragCallback: function(callback) {
+		if (Core.isCallback(callback))
+			this.config.dragCallback = callback;
 	},
 
 	/**
@@ -251,15 +311,41 @@ var ModelRotator = Class.extend({
 	 * Triggered when mouse is released, disables drag and resets.
 	 */
 	up: function() {
-		if (this.rotating)
+		if (this.rotating || !this.canDrag)
 			return false;
 
 		this.lastFrame = this.frame;
 		this.coords = null;
+
+		// No longer dragging
 		this.dragging = false;
 		this.node.removeClass('dragging');
 
+		if (this.config.dragCallback)
+			this.config.dragCallback(false);
+
 		return true;
+	},
+
+	/**
+	 * Verify the image has loaded, else throw errors.
+	 */
+	verifyImage: function() {
+		var self = this,
+			bgImg = new Image();
+
+		bgImg.onerror = function() {
+			self.node.addClass('load-fail');
+		};
+
+		bgImg.onload = function() {
+			if (this.width > self.config.frameWidth) {
+				self.node.addClass('can-drag');
+				self.canDrag = true;
+			}
+		};
+
+		bgImg.src = this.backgroundImage();
 	},
 
 	/**
@@ -271,13 +357,8 @@ var ModelRotator = Class.extend({
 		e.stopPropagation();
 		e.preventDefault();
 
-		// Get URL from background image (Cross-browser compatible)
-		var url = this.viewer.css('background-image');
-		url = url.replace(/^url\(('|")?/, ''); // Remove leading url("
-		url = url.replace(/('|")?\)$/, '');    // Remove trailing ")
-
 		Lightbox.loadImage([{
-			src: this.config.zoomCallback(url)
+			src: this.config.zoomCallback(this.backgroundImage())
 		}]);
 	},
 

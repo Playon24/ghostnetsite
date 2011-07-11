@@ -30,16 +30,15 @@ var Filter = {
 		if (location.hash) {
 			var hash = Core.getHash();
 
-			if (hash == 'reset')
-				return;
+			if (hash != 'reset') {
+				var params = hash.split('&'),
+					parts;
 
-			var params = hash.split('&'),
-				parts;
-
-			for (var i = 0, length = params.length; i < length; ++i) {
-				parts = params[i].split('=');
-				Filter.query[parts[0]] = decodeURIComponent(parts[1]);
-				total++;
+				for (var i = 0, length = params.length; i < length; ++i) {
+					parts = params[i].split('=');
+					Filter.query[parts[0]] = decodeURIComponent(parts[1]);
+					total++;
+				}
 			}
 		}
 
@@ -117,7 +116,7 @@ var Filter = {
 	 * @param callback
 	 */
 	bindInputs: function(target, callback) {
-		$(target).find('.input[data-filter]').each(function() {
+		$(target).find('[data-filter]').each(function() {
 			var self = $(this),
 				data = {
 					name: (typeof self.data('name') != 'undefined') ? self.data('name') : this.id.replace('filter-', ''),
@@ -138,13 +137,15 @@ var Filter = {
 
 			} else {
 				self.change(function() {
+					var value = (typeof self.data('value') != 'undefined') ? self.data('value') : '';
+
 					if (data.field == 'checkbox') {
 						if (self.is(':checked'))
-							data.value = (data.filter == 'class' && typeof self.data('value') != 'undefined') ? self.data('value') : 'true';
+							data.value = value || 'true';
 						else
 							data.value = '';
 					} else {
-						data.value = self.val();
+						data.value = value || self.val();
 					}
 
 					callback(data);
