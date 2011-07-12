@@ -82,11 +82,19 @@ class Forum extends Controller {
             WoW_Template::SetPageIndex('forum_thread');
             WoW_Template::SetPageData('page', 'forum_thread');
         }
-        else {
+        elseif($url_data['action4'] == 'blizztracker') {
+            $page = isset($_GET['page']) ? $_GET['page'] : 1;
             // Set Blizz tracker as active
             WoW_Forums::SetBlizzTrackerActive();
             // Init Blizz tracker!
-            WoW_Forums::InitBlizzTracker(true);
+            WoW_Forums::InitBlizzTracker(false, $page);
+            WoW_Template::SetPageIndex('forum_blizztracker');
+            WoW_Template::SetPageData('page', 'forum_blizztracker');
+            WoW_Template::SetPageData('current_page', $page);
+        }
+        else {
+            // Init Blizz tracker!
+            WoW_Forums::InitBlizzTracker();
             WoW_Template::SetPageIndex('forum_index');
             WoW_Template::SetPageData('page', 'forum_index');
             WoW_Template::SetPageData('body_class', WoW_Locale::GetLocale(LOCALE_DOUBLE).' station-home');

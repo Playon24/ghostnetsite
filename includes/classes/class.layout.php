@@ -705,6 +705,30 @@ class WoW_Layout {
                     )
                 );
                 break;
+            case 'forum_blizztracker':
+                $css_data_page = array(
+                    array(
+                        'path' => WoW::GetWoWPath() . '/wow/static/local-common/css/cms/forums.css',
+                        'version' => 19,
+                        'browser' => false
+                    ),
+                    array(
+                        'path' => WoW::GetWoWPath() . '/wow/static/local-common/css/cms/cms-common.css',
+                        'version' => 19,
+                        'browser' => false
+                    ),
+                    array(
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/cms.css',
+                        'version' => 10,
+                        'browser' => false
+                    ),
+                    array(
+                        'path' => WoW::GetWoWPath() . '/wow/static/css/cms-ie6.css',
+                        'version' => 10,
+                        'browser' => 'IE 6'
+                    )
+                );
+                break;
             case 'item':
             case 'item_list':
                 $css_data_page = array(
@@ -1244,6 +1268,8 @@ class WoW_Layout {
                 return sprintf('%s - %s - ', WoW_Template::GetPageData('forum_category_title'), WoW_Locale::GetString('template_menu_forums'));
             case 'forum_thread':
                 return sprintf('%s - %s - ', WoW_Template::GetPageData('forum_thread_title'), WoW_Locale::GetString('template_menu_forums'));
+            case 'forum_blizztracker':
+                return sprintf('%s - %s - ', WoW_Locale::GetString('template_blizztracker_title'), WoW_Locale::GetString('template_menu_forums'));
             case 'zones':
                 return sprintf('%s - %s - ', WoW_Locale::GetString('template_game_dungeons_and_raids'), WoW_Locale::GetString('template_menu_game'));
             case 'zone':

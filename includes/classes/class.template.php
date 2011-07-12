@@ -360,12 +360,20 @@ Class WoW_Template {
                     2 => '/forum/#forum'.WoW_Forums::GetGlobalCategoryId(),
                     3 => '/forum/'.WoW_Forums::GetCategoryId().'/',
                     4 => '/forum/topic/'.WoW_Forums::GetThreadId().'/',
+                    5 => '/forum/blizztracker/'
                 );
                 for($a = 0; $a < count($url_data); ++$a) {
                     $path_search_data[$a] = $_data[$a];
                 }
                 if(isset($url_data[2]) && $url_data[2] != '/topic/'){
-                    $path_search_data[3] = $_data[3];
+                    if(isset($url_data[2]) && $url_data[2] == '/blizztracker/'){
+                        $path_search_data[2] = $_data[5];
+                        $label[2] = WoW_Locale::GetString('template_blizztracker_title');
+                        unset($path_search_data[3]);
+                    }
+                    else {
+                        $path_search_data[3] = $_data[3];
+                    }
                 }
                 if(isset($url_data[2]) && $url_data[2] == '/topic/') {
                     $path_search_data[3] = $_data[3];

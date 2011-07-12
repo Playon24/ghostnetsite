@@ -1711,5 +1711,11 @@ The Battle.net Account Team<br />
     'template_rarity_1' => 'Common',
     'template_rarity_0' => 'Poor',
     'template_no_results' => 'There are no results to display.',
+    
+    'template_blizztracker_title' => 'Blizz Tracker: Official Blizzard Posts',
+    'template_blizztracker_jump_first' => 'Jump to first Blizzard Post',
+    'template_blizztracker_posted_before_days' => ' - %s days, %s hours ago',
+    'template_blizztracker_posted_before_hours' => ' - %s hours, %s minutes ago',
+    'template_blizztracker_posted_before_minutes' => ' - %s minutes ago',
 );
 ?>

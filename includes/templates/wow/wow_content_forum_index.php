@@ -29,54 +29,41 @@ World of Warcraft
                 <div class="bt-adjust">
                     <div class="bt-mask">
                         <div id="bt-holder">
-                            <div class="bt-set">
                                 <?php
-                                $blizz_posts = WoW_Forums::GetLatestBlizzPosts();
+                                $blizz_posts = WoW_Forums::GetLoadedBlizzPosts();
+                                $posts_count = count($blizz_posts);
                                 if(is_array($blizz_posts)) {
-                                    $set_count = 1;
-                                    $set_closed = false;
-                                    $set_opened = false;
-                                    foreach($blizz_posts as $post) {
-                                        if($set_count == 1) {
-                                            $set_opened = true;
+                                    for($i=0;$i<$posts_count;++$i) {
+                                        if($i%3 == 0) {
+                                            echo '<div class="bt-set">';
                                         }
+                                        if($blizz_posts[$i]['post_days'] > 0)
+                                          $before_text = sprintf(WoW_Locale::getString('template_blizztracker_posted_before_days'), $blizz_posts[$i]['post_days'], $blizz_posts[$i]['post_hours']);
+                                        elseif($blizz_posts[$i]['post_days'] == 0 && $blizz_posts[$i]['post_hours'] > 0)
+                                          $before_text = sprintf(WoW_Locale::getString('template_blizztracker_posted_before_hours'), $blizz_posts[$i]['post_hours'], $blizz_posts[$i]['post_minutes']);
+                                        elseif($blizz_posts[$i]['post_hours'] == 0)
+                                          $before_text = sprintf(WoW_Locale::getString('template_blizztracker_posted_before_minutes'), $blizz_posts[$i]['post_minutes']);
+                                          
                                         echo sprintf('<a href="topic/%d#%d">
-                                        <span class="desc">
-											<span class="int">
-                                            «%s»
-                                        </span>
-										</span>
-                                        <span class="info">
-                                                <span class="char">%s</span>
-                                                 %s
-                                                 %s <strong>%s</strong>:
-                                                 "%s"
-                                         </span>
-                                         </a>', $post['thread_id'], $post['post_count'], $post['message_short'], $post['author'], $post['date'], WoW_Locale::GetString('template_forums_in'), $post['categoryTitle'], $post['threadTitle_short']);
-                                        if($set_count == 3) {
+                                        <span class="desc"><span class="int">«%s»</span></span>
+                                        <span class="info"><span class="char">%s</span>%s %s <strong>%s</strong>:"%s"</span>
+                                        </a>', $blizz_posts[$i]['thread_id'], $blizz_posts[$i]['post_count'], $blizz_posts[$i]['message_short'], $blizz_posts[$i]['author'], $before_text, WoW_Locale::GetString('template_forums_in'), $blizz_posts[$i]['categoryTitle'], $blizz_posts[$i]['threadTitle_short']);
+                                        if($i%3 == 2) {
                                             echo '</div>';
-                                            $set_count = 1;
-                                            $set_closed = true;
-                                            $set_opened = false;
-                                        }
-                                        else {
-                                            ++$set_count;
                                         }
                                     }
-                                    if($set_opened && !$set_closed) {
-                                        echo '';
+                                    if($i%3 == 0) {
+                                        echo '<div class="bt-set">';
+                                    }
+                                    echo '<a href="blizztracker/">
+                                        <span class="desc"><span class="int">'.WoW_Locale::GetString('template_forums_blizztracker_all').'</span></span>
+                                        <span class="info"></span>
+                                    </a>';
+                                    if($i%3 == 2) {
+                                        echo '</div>';
                                     }
                                 }
                                 ?>
-                                    <a href="blizztracker/">
-                                        <span class="desc">
-											<span class="int">
-                                            <?php echo WoW_Locale::GetString('template_forums_blizztracker_all'); ?>
-                                        </span>
-										</span>
-                                        <span class="info">
-                                         </span>
-                                    </a>
                                 </div>
                         </div>
                     </div>

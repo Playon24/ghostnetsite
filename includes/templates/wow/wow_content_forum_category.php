@@ -118,8 +118,8 @@ World of Warcraft
                                 </div>
                                 <a href="../topic/%d" data-tooltip="#thread_tt_%d" data-tooltip-options=\'{"location": "mouse"}\'>
                                     %s
-                                </a>', $thread['thread_id'], $thread['message_short'], date('d/m/Y', $thread['post_date']), sprintf(WoW_Locale::GetString('template_forums_views_replies_category'), $thread['views'], $thread['replies']),
-                                WoW_Locale::GetString('template_forums_last_reply'), $thread['last_author'], date('d/m/Y', $thread['last_post_date']), $thread['thread_id'], $thread['thread_id'], $thread['title']);
+                                </a>', $thread['thread_id'], $thread['message_short'], $thread['formated_date'], sprintf(WoW_Locale::GetString('template_forums_views_replies_category'), $thread['views'], $thread['replies']),
+                                WoW_Locale::GetString('template_forums_last_reply'), $thread['last_author'], $thread['last_formated_date'], $thread['thread_id'], $thread['thread_id'], $thread['title']);
                                 echo '</td>
                                 <td class="post-pageNav">
                                 <div class="pageNav">
@@ -133,7 +133,7 @@ World of Warcraft
                                 </td>
                                 </tr>', $thread['author'], $thread['replies'], $thread['views'],
                                 $thread['thread_id'], true ? null : '?page=1', $thread['replies'] > 0 ? $thread['replies'] : null,
-                                date('d/m/Y', $thread['last_post_date']), $thread['last_author'] 
+                                $thread['last_formated_date'], $thread['last_author'] 
                                 );
                             }
                         }
