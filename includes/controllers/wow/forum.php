@@ -29,7 +29,7 @@ class Forum extends Controller {
         WoW_Forums::SetCategoryId(0);
         WoW_Forums::SetThreadId(0);
         // Check preview
-        if(isset($url_data['action3'], $url_data['action4'], $url_data['action5']) && (($url_data['action3'].$url_data['action4'].$url_data['action5']) == 'topicpostpreview')) {
+        if(isset($url_data['action4'], $url_data['action5'], $url_data['action6']) && (($url_data['action4'].$url_data['action5'].$url_data['action6']) == 'topicpostpreview')) {
             $post_text = isset($_POST['post']) ? $_POST['post'] : null;
             if($post_text == null) {
                 WoW_Template::ErrorPage(500);
@@ -47,7 +47,7 @@ class Forum extends Controller {
                 WoW_Template::ErrorPage(404);
                 exit;
             }
-            if(isset($url_data['action4']) && $url_data['action4'] == 'topic') {
+            if(isset($url_data['action5']) && $url_data['action5'] == 'topic') {
                 // Check $_POST query
                 if(isset($_POST['xstoken'])) {
                     $post_allowed = true;
