@@ -28,6 +28,7 @@ Class PageController {
     protected $m_locale_index = 0;  // locale index in URL
     protected $m_skip_redirect = false;
     protected $m_allowErrorPage = true;
+	protected $m_urlDeepOffset = 0;
     
     public function __construct() {
         // Check maintenance
@@ -47,6 +48,14 @@ Class PageController {
         $this->ParseURL();
         $this->LoadController();
     }
+	
+	private function DetectUrlDeep() {
+		$this->m_urlDeepOffset = count(explode('/', WoW::GetWoWPath()))-1;
+	}
+	
+	protected function getDeep($mult = 0) {
+		return ($this->m_urlDeepOffset + $mult);
+	}
     
     public function FindActions() {
         $this->m_url = $_SERVER['REQUEST_URI'];
@@ -59,22 +68,23 @@ Class PageController {
         if(!$url_size) {
             return false;
         }
-        switch(strtolower($url_data[1])) {
+		$this->DetectUrlDeep();
+        switch(strtolower($url_data[$this->getDeep(1)])) {
             case 'wow':
             case 'login':
-                $this->m_type = strtolower($url_data[1]);
-                $this->m_locale_index = 2;
+                $this->m_type = strtolower($url_data[$this->getDeep(1)]);
+                $this->m_locale_index = $this->getDeep(2);
                 break;
             case 'account':
             case 'marketing':
             case 'ta':
-                $this->m_type = strtolower($url_data[1]);
-                $this->m_locale_index = 0;
+                $this->m_type = strtolower($url_data[$this->getDeep(1)]);
+                $this->m_locale_index = $this->getDeep(0);
                 $this->m_skip_redirect = true;
                 break;
             default:
                 $this->m_type = 'bn';
-                $this->m_locale_index = 1;
+                $this->m_locale_index = $this->getDeep(1);
                 break;
         }
         $allowed_locales = array('de', 'en', 'es', 'fr', 'ru');
@@ -82,6 +92,8 @@ Class PageController {
             $this->m_actions['action' . ($i - 1)] = $url_data[$i];
             if(in_array($url_data[$i], $allowed_locales)) {
                 $this->m_locale = $url_data[$i];
+				setcookie('wow_locale', $this->m_locale, strtotime('NEXT YEAR'), '/');
+				$_COOKIE['wow_locale'] = $this->m_locale;
             }
         }
         if($this->m_type == 'account') {
@@ -93,21 +105,21 @@ Class PageController {
         $url_data = explode('/', $this->m_url);
         $allowed_locales = array('de', 'en', 'es', 'fr', 'ru');
         if((!isset($url_data[$this->m_locale_index]) || $url_data[$this->m_locale_index] === null || !in_array($url_data[$this->m_locale_index], $allowed_locales)) && !$this->m_skip_redirect) {
-            $sTmp = substr($this->m_url, 1, strlen($url_data[1]));
-            unset($url_data[0]);
+            unset($url_data[$this->getDeep(0)]);
             if($this->m_type == 'wow') {
-                unset($url_data[1]);
-                $newUrl =  WoW::GetWoWPath(). 'wow/' . $_COOKIE['wow_locale'] . '/' . implode('/', $url_data);
+                unset($url_data[$this->getDeep(1)]);
+                $newUrl =  WoW::GetWoWPath(). '/wow/' . $_COOKIE['wow_locale'] . '/' . implode('/', $url_data);
             }
             elseif($this->m_type == 'login') {
-                unset($url_data[1]);
-                $newUrl =  WoW::GetWoWPath(). 'login/' . $_COOKIE['wow_locale'] . '/' . implode('/', $url_data);
+                unset($url_data[$this->getDeep(1)]);
+                $newUrl =  WoW::GetWoWPath(). '/login/' . $_COOKIE['wow_locale'] . '/' . implode('/', $url_data);
             }
             else {
-                $newUrl = $_COOKIE['wow_locale'] . '/' . implode('/', $url_data);
+				$newUrl =  $_COOKIE['wow_locale'] . implode('/', $url_data) . '/';
             }
             $newUrl = str_replace('//', '/', $newUrl);
-            WoW::RedirectTo($newUrl);
+            header('Location: ' . $newUrl);
+			die;
         }
         else {
             $this->m_locale = $_COOKIE['wow_locale'];
