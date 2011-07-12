@@ -286,37 +286,49 @@ Class WoW_Template {
                 $dynamic_content = true;
                 $subdata4 = '';
                 $data3 = '';
-                
-                if(in_array($url_data[4], array('/simple/', '/advanced/'))) {
-                    $count = 2;
-                    $subdata4 = @$url_data[4];
+                $count = 0;
+                $url_data[3] = urldecode($url_data[3]);
+                if(isset($url_data[4])) {
+                    if(in_array($url_data[4], array('/simple/', '/advanced/'))) {
+                        $count = 2;
+                        $subdata4 = @$url_data[4];
+                    }
+                    elseif($url_data[4] == '/achievement/') {
+                        $count = 3;
+                        $data3 = '/character/'.@$url_data[2].@$url_data[3].@$url_data[4];
+                        $label[3] = WoW_Locale::GetString('template_profile_achievements');
+                    }
+                    elseif($url_data[4] == '/statistic/') {
+                        $count = 3;
+                        $data3 = '/character/'.@$url_data[2].@$url_data[3].@$url_data[4];
+                        $label[3] = WoW_Locale::GetString('template_profile_statistics');
+                    }
+                    elseif($url_data[4] == '/reputation/') {
+                        $count = 3;
+                        $data3 = '/character/'.@$url_data[2].@$url_data[3].@$url_data[4];
+                        $label[3] = WoW_Locale::GetString('template_profile_reputation');
+                    }
+                    elseif($url_data[4] == '/pvp/') {
+                        $count = 3;
+                        $data3 = '/character/'.@$url_data[2].@$url_data[3].@$url_data[4];
+                        $label[3] = 'PvP';
+                    }
+                    elseif($url_data[4] == '/feed/') {
+                        $count = 3;
+                        $data3 = '/character/'.@$url_data[2].@$url_data[3].@$url_data[4];
+                        $label[3] = WoW_Locale::GetString('template_profile_feed');
+                    }
+                    elseif($url_data[4] == '/mount/') {
+                        $count = 3;
+                        $data3 = '/character/'.@$url_data[2].@$url_data[3].@$url_data[4];
+                        $label[3] = WoW_Locale::GetString('template_profile_mounts');
+                    }
+                    elseif($url_data[4] == '/companion/') {
+                        $count = 3;
+                        $data3 = '/character/'.@$url_data[2].@$url_data[3].@$url_data[4];
+                        $label[3] = WoW_Locale::GetString('template_profile_companions');
+                    }
                 }
-                elseif($url_data[4] == '/achievement/') {
-                    $count = 3;
-                    $data3 = '/character/'.@$url_data[2].@$url_data[3].@$url_data[4];
-                    $label[3] = 'Achievements';
-                }
-                elseif($url_data[4] == '/statistic/') {
-                    $count = 3;
-                    $data3 = '/character/'.@$url_data[2].@$url_data[3].@$url_data[4];
-                    $label[3] = 'Statistics';
-                }
-                elseif($url_data[4] == '/reputation/') {
-                    $count = 3;
-                    $data3 = '/character/'.@$url_data[2].@$url_data[3].@$url_data[4];
-                    $label[3] = 'Reputation';
-                }
-                elseif($url_data[4] == '/pvp/') {
-                    $count = 3;
-                    $data3 = '/character/'.@$url_data[2].@$url_data[3].@$url_data[4];
-                    $label[3] = 'Player vs. Player';
-                }
-                elseif($url_data[4] == '/feed/') {
-                    $count = 3;
-                    $data3 = '/character/'.@$url_data[2].@$url_data[3].@$url_data[4];
-                    $label[3] = 'Activity Feed';
-                }
-                
                 $label[2] = str_replace(array('/', '+'), array('', ' '), @$url_data[3].' @ '.@$url_data[2]);
                 
                 $_data = array(0 => '/',

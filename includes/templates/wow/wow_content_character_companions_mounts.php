@@ -4,6 +4,8 @@ $mounts = WoW_Characters::GetMounts();
 <div id="content">
 <div class="content-top">
 <div class="content-trail">
+<?php WoW_Template::NavigationMenu(); ?>
+<!--
 <ol class="ui-breadcrumb">
 <li>
 <a href="<?php echo WoW::GetWoWPath(); ?>/wow/<?php echo WoW_Locale::GetLocale(); ?>/" rel="np">
@@ -26,6 +28,7 @@ World of Warcraft
 </a>
 </li>
 </ol>
+-->
 </div>
 <div class="content-bot">
 	<div id="profile-wrapper" class="profile-wrapper profile-wrapper-<?php echo WoW_Characters::GetFactionName(); ?>">
