@@ -207,7 +207,7 @@ Class WoW_Template {
                 $dynamic_content = true;
                 //WoW_Items::GetBreadCrumbsForItem($_GET) is NOT needed now
                 if(isset($url_data[2])) {
-                    $preg = preg_match('/\/\?classId=([0-9]+)(&subClassId=([0-9]+))(&invType=([0-9]+))?/i', $url_data[2], $matches);
+                    $preg = preg_match('/\/(\?classId=([0-9]+)((&subClassId=([0-9]+))?(&invType=([0-9]+))?)?)|([0-9]+)\/{0,1}/i', $url_data[2], $matches);
                 }
                 $_data = array(
                     0 => '/',
@@ -217,19 +217,35 @@ Class WoW_Template {
                     4 => NULL,
                     5 => NULL,
                 );
-                for($a = 0; $a <= count($url_data); ++$a) {
+                for($a=0;$a<=count($url_data);++$a) {
                     $path_search_data[$a] = $_data[$a];
                 }
-                if(isset($matches) && array_key_exists(1, $matches)) {
-                    $path_search_data[3] = '/item/?classId=' . $matches[1];
+                if(isset($matches) && array_key_exists(8, $matches)) {
+                    $proto = new WoW_ItemPrototype();
+                    $proto->LoadItem($matches[8]);
+                    $matches[2] = $proto->class;
+                    $matches[5] = $proto->subclass;
+                    if($matches[2] == 4 && in_array($matches[5], array(0,1,2,3,4))) {
+                        $matches[7] = $proto->InventoryType;
+                        $path_search_data[6] = '/item/'.$matches[8];
+                        $label[6] = $proto->name;
+                    }
+                    else {
+                        unset($matches[7]);
+                        $path_search_data[5] = '/item/'.$matches[8];
+                        $label[5] = $proto->name;
+                    }
                 }
-                if(isset($matches) && array_key_exists(3, $matches)) {
-                    $path_search_data[4] = '/item/?classId=' . $matches[1] . '&subClassId=' . $matches[3];
+                if(isset($matches) && (array_key_exists(2, $matches) || array_key_exists(8, $matches))) {
+                    $path_search_data[3] = '/item/?classId='.$matches[2];
                 }
-                if(isset($matches) && array_key_exists(5, $matches)) {
-                    $path_search_data[5] = '/item/?classId=' . $matches[1] . '&subClassId=' . $matches[3] . '&invType=' . $matches[5];
+                if(isset($matches) && (array_key_exists(5, $matches) || array_key_exists(8, $matches))) {
+                    $path_search_data[4] = '/item/?classId='.$matches[2].'&subClassId='.$matches[5];
                 }
-                break;
+                if(isset($matches) && (array_key_exists(7, $matches))) {
+                    $path_search_data[5] = '/item/?classId='.$matches[2].'&subClassId='.$matches[5].'&invType='.$matches[7];
+                }
+              break;
             case '/profession/':
                 $dynamic_content = true;
                 $_data = array(
