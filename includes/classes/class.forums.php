@@ -412,7 +412,7 @@ Class WoW_Forums {
                 if(!$info) {
                     continue;
                 }
-                $post_text = str_replace($matches[0][$i], sprintf('<a href="%s/wow/item/%d" class="bml-link-item color-q%d"><span class="icon-frame frame-10"><img src="http://battle.net/wow-assets/static/images/icons/18/%s.jpg"> </span>%s</a>', WoW::GetWoWPath(), $info['entry'], $info['Quality'], WoW_Items::GetItemIcon(0, $info['displayid']), WoW_Items::GetItemName($info['entry'])), $post_text);
+                $post_text = str_replace($matches[0][$i], sprintf('<a href="%s/wow/%s/item/%d" class="bml-link-item color-q%d"><span class="icon-frame frame-10"><img src="http://eu.battle.net/wow-assets/static/images/icons/18/%s.jpg"> </span>%s</a>', WoW::GetWoWPath(), WoW_Locale::GetLocale(), $info['entry'], $info['Quality'], WoW_Items::GetItemIcon(0, $info['displayid']), WoW_Items::GetItemName($info['entry'])), $post_text);
             }
         }
         // Replace [quote] tag

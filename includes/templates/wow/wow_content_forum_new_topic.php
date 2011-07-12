@@ -46,6 +46,9 @@ New Topic
 			<div>
         	<input type="hidden" name="xstoken" value="396a2031-47e2-44b8-99d3-a77c2f8ec2d5"/>
         	<input type="hidden" name="sessionPersist" value="forum.topic.form"/>
+			<?php
+			if(WoW_Account::IsLoggedIn()) {
+			?>
             <div class="post general">
                     <div class="post-user-details ">
                         <h4>
@@ -223,6 +226,24 @@ New Topic
 
             </div>
 			</div>
+			<?php }
+			else {
+			?>
+			<div class="post ">
+	<table class="dynamic-center ">
+		<tr>
+			<td>
+		<a class="ui-button button1 " href="?login" onclick="return Login.open('<?php echo WoW::GetWoWPath(); ?>/login/login.frag')">
+			<span>
+				<span>Add a reply</span>
+			</span>
+		</a>
+		</td>
+		</tr>
+	</table>
+            </div>
+			</div>
+			<?php } ?>
         </form>
 	<span class="clear"><!-- --></span>
         <div class="talkback-code">
