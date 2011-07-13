@@ -10,7 +10,7 @@
 <?php
 // paging
 $total_blizz_posts = WoW_Forums::GetTotalBlizzPosts();
-echo WoW_Paginator::Initialize(WoW_Template::GetPageData('current_page'), $total_blizz_posts, 15, '?page=', '', '', '', '<div class="page-sep"></div>', '<a href="/wow/en/forum/blizztracker/{link}">&lt; Prev</a>', '<a href="/wow/en/forum/blizztracker/{link}">Next &gt;</a>', '<a href="/wow/en/forum/blizztracker/{link}">{page}</a>', '<span class="active">{page}</span>', '<div class="pageNav">%s</div>');
+echo WoW_Paginator::Initialize(WoW_Template::GetPageData('current_page'), $total_blizz_posts, 15, 'blizztracker');
 ?>
 			</div>
 		</div>
@@ -62,7 +62,7 @@ if(is_array($blizz_posts)) {
 			<div class="actions-panel">
 <?php
 // paging
-echo WoW_Paginator::Initialize(WoW_Template::GetPageData('current_page'), $total_blizz_posts, 15, '?page=', '', '', '', '<div class="page-sep"></div>', '<a href="/wow/en/forum/blizztracker/{link}">&lt; Prev</a>', '<a href="/wow/en/forum/blizztracker/{link}">Next &gt;</a>', '<a href="/wow/en/forum/blizztracker/{link}">{page}</a>', '<span class="active">{page}</span>', '<div class="pageNav">%s</div>');
+echo WoW_Paginator::Initialize(WoW_Template::GetPageData('current_page'), $total_blizz_posts, 15, 'blizztracker');
 ?>
 			</div>
         </div>
