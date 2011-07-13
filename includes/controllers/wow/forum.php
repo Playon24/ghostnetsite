@@ -25,6 +25,8 @@ class Forum extends Controller {
         WoW_Template::SetMenuIndex('menu-forums');
         
         $url_data = WoW::GetUrlData('forum');
+        $page = isset($_GET['page']) ? $_GET['page'] : 1;
+        WoW_Template::SetPageData('current_page', $page);
         // Clear category/thread values
         WoW_Forums::SetCategoryId(0);
         WoW_Forums::SetThreadId(0);
@@ -79,28 +81,28 @@ class Forum extends Controller {
                 WoW_Template::ErrorPage(404);
                 exit;
             }
+            
+            WoW_Forums::SetPostsPage($page);
             WoW_Template::SetPageIndex('forum_thread');
             WoW_Template::SetPageData('page', 'forum_thread');
         }
         elseif($url_data['action4'] == 'blizztracker') {
-            $page = isset($_GET['page']) ? $_GET['page'] : 1;
             // Set Blizz tracker as active
             WoW_Forums::SetBlizzTrackerActive();
             // Init Blizz tracker!
             WoW_Forums::InitBlizzTracker(false, $page);
             WoW_Template::SetPageIndex('forum_blizztracker');
             WoW_Template::SetPageData('page', 'forum_blizztracker');
-            WoW_Template::SetPageData('current_page', $page);
         }
         else {
             // Init Blizz tracker!
-            WoW_Forums::InitBlizzTracker();
+            WoW_Forums::InitBlizzTracker(true);
             WoW_Template::SetPageIndex('forum_index');
             WoW_Template::SetPageData('page', 'forum_index');
             WoW_Template::SetPageData('body_class', WoW_Locale::GetLocale(LOCALE_DOUBLE).' station-home');
         }
         // Init the forums!
-        WoW_Forums::InitForums();
+        WoW_Forums::InitForums($page);
         WoW_Template::SetPageData('forum_category_title', WoW_Forums::GetCategoryTitle());
         WoW_Template::SetPageData('forum_thread_title', WoW_Forums::GetThreadTitle());
         

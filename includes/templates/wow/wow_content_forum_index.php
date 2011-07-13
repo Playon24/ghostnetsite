@@ -45,8 +45,8 @@ World of Warcraft
                                           $before_text = sprintf(WoW_Locale::getString('template_blizztracker_posted_before_minutes'), $blizz_posts[$i]['post_minutes']);
                                           
                                         echo sprintf('<a href="topic/%d#%d">
-                                        <span class="desc"><span class="int">«%s»</span></span>
-                                        <span class="info"><span class="char">%s</span>%s %s <strong>%s</strong>:"%s"</span>
+                                        <span class="desc"><span class="int">‘%s’</span></span>
+                                        <span class="info"><span class="char">%s</span> %s %s <strong>%s</strong>:"%s"</span>
                                         </a>', $blizz_posts[$i]['thread_id'], $blizz_posts[$i]['post_count'], $blizz_posts[$i]['message_short'], $blizz_posts[$i]['author'], $before_text, WoW_Locale::GetString('template_forums_in'), $blizz_posts[$i]['categoryTitle'], $blizz_posts[$i]['threadTitle_short']);
                                         if($i%3 == 2) {
                                             echo '</div>';
@@ -59,7 +59,7 @@ World of Warcraft
                                         <span class="desc"><span class="int">'.WoW_Locale::GetString('template_forums_blizztracker_all').'</span></span>
                                         <span class="info"></span>
                                     </a>';
-                                    if($i%3 == 2) {
+                                    if($i%3 == 0) {
                                         echo '</div>';
                                     }
                                 }

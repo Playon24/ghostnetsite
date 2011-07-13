@@ -24,40 +24,65 @@ class WoW_Paginator
     private static $_total_results = 1;
     private static $_per_page = 10;
     private static $total_pages = 0;
-    private static $_padding = 2;
-    private static $link_prefix = '/?page=';
+    private static $_padding_l = 1;
+    private static $_padding_r = 1;
+    private static $link_prefix = '?page=';
     private static $link_suffix = '';
-    private static $tpl_first = '<a href="{link}">&laquo;</a> | ';
-    private static $tpl_last = ' | <a href="{link}">&raquo;</a> ';
-    private static $separator = ' | ';
-    private static $tpl_prev = '<a href="{link}">&lsaquo;</a> | ';
-    private static $tpl_next = ' | <a href="{link}">&rsaquo;</a> ';
-    private static $tpl_page_nums = '<span><a href="{link}">{page}</a></span>';
-    private static $tpl_cur_page_num = '<span>{page}</span>';
+    private static $tpl_first = '';
+    private static $tpl_last = '';
+    private static $separator = '';
+    private static $tpl_prev = '';
+    private static $tpl_next = '';
+    private static $tpl_page_nums = '';
+    private static $tpl_cur_page_num = '';
     private static $_output = '';
     private static $outside_template = '';
+    private static $_data = NULL;
  
-    public static function Initialize($page, $totalResults, $perPage, $link_prefix, $link_suffix, $tpl_first, $tpl_last, $separator, $tpl_prev, $tpl_next, $tpl_page_nums, $tpl_cur_page_num, $outside_template)
+    public static function Initialize($page, $totalResults, $perPage, $template = false, $data = NULL)
     {
-        if($page > 0) {
+        self::$_data = $data;
+        self::LoadTemplate($template);
+        if($page > 0 || $page == NULL) {
             self::$_current_page = $page;
             self::$_total_results = $totalResults;
             self::$_per_page = $perPage;
-            self::$link_prefix = $link_prefix;
-            self::$link_suffix = $link_suffix;
-            self::$tpl_first = $tpl_first;
-            self::$tpl_last = $tpl_last;
-            self::$separator = $separator;
-            self::$tpl_prev = $tpl_prev;
-            self::$tpl_next = $tpl_next;
-            self::$tpl_page_nums = $tpl_page_nums;
-            self::$tpl_cur_page_num = $tpl_cur_page_num;
-            self::$outside_template = $outside_template;
             
             return self::paginate();
         }
         else {
             return false;
+        }
+    }
+    
+    private static function LoadTemplate($template) {
+        switch($template) {
+            case 'mini':
+              if(is_array(self::$_data)){
+                  $thread_id = self::$_data['thread_id'];
+              }
+              self::$tpl_first = NULL;
+              self::$tpl_last = NULL;
+              self::$separator = NULL;
+              self::$tpl_prev = NULL;
+              self::$tpl_next = NULL;
+              self::$separator = ', ';
+              self::$tpl_page_nums = '<a href="../topic/'.$thread_id.'{link}">{page}</a>';
+              break;
+            case 'blizztracker':
+            case 'forum':
+            default:
+              self::$link_prefix = '?page=';
+              self::$link_suffix = '';
+              self::$tpl_first = ' <a href="{link}">{page}</a> … ';
+              self::$tpl_last = ' … <a href="{link}">{page}</a> ';
+              self::$separator = ' <div class="page-sep"></div> ';
+              self::$tpl_prev = ' <a href="{link}">&lt; Prev</a> ';
+              self::$tpl_next = ' <a href="{link}">Next &gt;</a> ';
+              self::$tpl_page_nums = ' <a href="{link}">{page}</a> ';
+              self::$tpl_cur_page_num = ' <span class="active">{page}</span> ';
+              self::$outside_template = '<div class="pageNav">%s</div>';
+              break;
         }
     }
  
@@ -73,22 +98,50 @@ class WoW_Paginator
 
         if(self::$_current_page > self::$total_pages)
             self::$_current_page = self::$total_pages;
- 
-        $start = (self::$_current_page - self::$_padding > 0) ? self::$_current_page - self::$_padding : 1;
-        $finish = (self::$_current_page + self::$_padding <= self::$total_pages) ? self::$_current_page + self::$_padding : self::$total_pages;
- 
-        ###########################################
-        # ADD FIRST TO OUTPUT IF CURRENT PAGE > 1 #
-        ###########################################
-        if(self::$_current_page > 1) {
-            $output .= preg_replace('/\{link\}/i', self::$link_prefix . '1' . self::$link_suffix, self::$tpl_first);
+
+        if(self::$total_pages <= 5) {
+            self::$_padding_l = self::$_current_page;
+            self::$_padding_r = self::$total_pages - self::$_current_page;
+            self::$tpl_last = NULL;
+            self::$tpl_first = NULL;
         }
- 
+        elseif(self::$total_pages > 5){
+            if(self::$_current_page < 4){
+                self::$tpl_first = NULL;
+                self::$_padding_r = 4 - self::$_current_page;
+            }
+            else{
+                if(self::$total_pages - self::$_current_page > 2){
+                    self::$_padding_l = 1;
+                }
+                else{
+                    $remain = self::$total_pages - self::$_current_page;
+                    self::$_padding_l = ($remain == 2 ? 1 : ($remain == 0 ? 3 : 2));
+                }
+                self::$_padding_r = (self::$total_pages - self::$_current_page > 2) ? 1 : self::$total_pages - self::$_current_page;
+                if(self::$_current_page + 2 >= self::$total_pages){
+                    self::$tpl_last = NULL;
+                }
+            }
+        }
+        
+        $start = self::$_current_page - self::$_padding_l < 1 ? 1 : self::$_current_page - self::$_padding_l;
+        $finish = self::$_current_page + self::$_padding_r;
+        
         ##########################################
         # ADD PREV TO OUTPUT IF CURRENT PAGE > 1 #
         ##########################################
-        if(self::$_current_page > 1) {
+        if(self::$_current_page > 1 && self::$tpl_prev != NULL) {
             $output .= preg_replace('/\{link\}/i', self::$link_prefix . (self::$_current_page - 1) . self::$link_suffix, self::$tpl_prev);
+        }
+        
+        ###########################################
+        # ADD FIRST TO OUTPUT IF CURRENT PAGE > 1 #
+        ###########################################
+        if(self::$_current_page > 1 && self::$tpl_first != NULL) {
+            $patterns = array('/\{link\}/i', '/\{page\}/i');
+            $replaces = array(self::$link_prefix . '1' . self::$link_suffix, '1');
+            $output .= preg_replace($patterns, $replaces, self::$tpl_first);
         }
  
         ################################################
@@ -104,20 +157,22 @@ class WoW_Paginator
                 $nums[] = preg_replace($patterns, $replaces, self::$tpl_page_nums);
             }
         }
-        $output .= implode('', $nums);
- 
-        ##################################################
-        # ADD NEXT TO OUTPUT IF CURRENT PAGE < MAX PAGES #
-        ##################################################
-        if (self::$_current_page < self::$total_pages) {
-            $output .= preg_replace('/\{link\}/i', self::$link_prefix . (self::$_current_page + 1) . self::$link_suffix, self::$tpl_next);
-        }
+        $output .= implode(self::$separator, $nums);
  
         ############################################
         # ADD LAST TO OUTPUT IF FINISH < MAX PAGES #
         ############################################
-        if (self::$_current_page < $finish) {
-            $output .= preg_replace('/\{link\}/i', self::$link_prefix . self::$total_pages, self::$tpl_last);
+        if (self::$_current_page < $finish && self::$tpl_last != NULL) {
+            $patterns = array('/\{link\}/i', '/\{page\}/i');
+            $replaces = array(self::$link_prefix . self::$total_pages . self::$link_suffix, self::$total_pages);
+            $output .= preg_replace($patterns, $replaces, self::$tpl_last);
+        }
+        
+        ##################################################
+        # ADD NEXT TO OUTPUT IF CURRENT PAGE < MAX PAGES #
+        ##################################################
+        if (self::$_current_page < self::$total_pages && self::$tpl_next != NULL) {
+            $output .= preg_replace('/\{link\}/i', self::$link_prefix . (self::$_current_page + 1) . self::$link_suffix, self::$tpl_next);
         }
  
         return self::$_output = sprintf(self::$outside_template, $output);

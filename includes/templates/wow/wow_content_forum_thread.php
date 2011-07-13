@@ -170,6 +170,7 @@ World of Warcraft
                 	</div>
                 </div>', $post['post_id'], $post['blizzpost'] ? ' blizzard' : null, $post_num, $post['author'], $post['author'], WoW::GetWoWPath(), '', WoW_Locale::GetString('template_blog_lookup_forum_messages'), WoW_Locale::GetString('template_blog_lookup_forum_messages'),
                 $post['author'], '', $post['message'], $post_num, $post_num, $post['fully_formated_date'], $post['formated_date'], $post['thread_id'], WoW_Forums::GetNextBlizzPostIdInThread());
+                ++$post_num;
                 }
             }
             ?>

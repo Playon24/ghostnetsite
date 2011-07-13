@@ -44,7 +44,7 @@ if(is_array($blizz_posts)) {
 		</td>
 		<td class="post-title">
 				<div class="content"><a href="../topic/%d?page=13#%d">‘%s’</a></div>
-				<div class="desc">[<a href="../%d/" class="forum-source">%s</a>] <a href="../topic/%d?page=13#%d">%s</a>%s</div>
+				<div class="desc">[<a href="../%d/" class="forum-source">%s</a>] <a href="../topic/%d?page=13#%d">%s</a> - %s</div>
 		</td>
 		<td class="post-pageNav">&#160;</td>
 		<td class="post-author">
