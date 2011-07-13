@@ -109,6 +109,8 @@ class WoW_Paginator
             if(self::$_current_page < 4){
                 self::$tpl_first = NULL;
                 self::$_padding_r = 4 - self::$_current_page;
+                $remain = self::$total_pages - self::$_current_page;
+                self::$_padding_l = ($remain == 2 ? 1 : ($remain == 0 ? 3 : 2));
             }
             else{
                 if(self::$total_pages - self::$_current_page > 2){
