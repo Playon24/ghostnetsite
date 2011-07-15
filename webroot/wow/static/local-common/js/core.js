@@ -1494,19 +1494,21 @@ var CharSelect = {
 			global: false,
 			success: function(content) {
 				var refreshUrl = switchUrl;
-
-				// Take the user directly to the newly-selected character, don't wait for card update
-				if (location.pathname.indexOf('/character/') != -1) {
+/* THIS IS ONLY TEMPORARY FIX, CHANGE ACTIVE CHARACTER NEEDS TO WRITE TEMPLATE WHICH WILL BE RETURN FOR THIS AJAX REQUEST*/
+location.reload(true);
+				
+        // Take the user directly to the newly-selected character, don't wait for card update
+				/*if (location.pathname.indexOf('/character/') != -1) {
 					if (location.pathname.indexOf('/vault/') != -1)
 						location.reload(true);
 					else
 						CharSelect.redirectTo(link.href);
 
 					return;
-				}
+				}*/
 
 				// If homepage or account status, use those pages since they are unique
-				if (location.pathname.indexOf('/account-status') >= 0)
+				/*if (location.pathname.indexOf('/account-status') >= 0)
 					refreshUrl = Core.baseUrl +'/account-status';
 
 				else if (location.pathname == Core.baseUrl +'/')
@@ -1516,7 +1518,7 @@ var CharSelect = {
 				if (refreshUrl != switchUrl)
 					CharSelect.pageUpdate(refreshUrl);
 				else
-					CharSelect.replace(content);
+					CharSelect.replace(content);*/
 			}
 		})
 	},

@@ -25,8 +25,8 @@ class Pref extends Controller {
             exit;
         }
         $character_index = $_POST['index'];
-        DB::WoW()->query("UPDATE `DBPREFIX_user_characters` SET `isActive` = 0 WHERE `account` = %d", WoW_Account::GetUserID()); // Clear all
-        DB::WoW()->query("UPDATE `DBPREFIX_user_characters` SET `isActive` = 1 WHERE `index` = %d AND `account` = %d", $character_index, WoW_Account::GetUserID());
+        DB::WoW()->query("UPDATE `DBPREFIX_user_characters` SET `isActive` = 0 WHERE `bn_id` = %d", WoW_Account::GetUserID()); // Clear all
+        DB::WoW()->query("UPDATE `DBPREFIX_user_characters` SET `isActive` = 1 WHERE `index` = %d AND `bn_id` = %d", $character_index, WoW_Account::GetUserID());
     }
 }
 

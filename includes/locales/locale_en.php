@@ -1720,6 +1720,21 @@ The Battle.net Account Team<br />
     
     'template_forum_thread_featured' => 'Featured',
     'template_forum_thread_sticky' => 'Sticky',
+    'template_forum_thread_closed' => 'Locked',
     'template_forum_jump_last' => 'Jump to your last read page',
+    'template_forum_topic' => 'Topic',
+    'template_forum_jump_first_blizz' => 'Jump to first Blizzard Post',
+    'template_forum_jump_next_blizz' => 'Next Blizzard Post',
+    'template_forum_add_reply' => 'Add a reply',
+    'template_forum_topic_closed' => 'This thread is locked.',
+    'template_forum_blizz_title' => 'Customer Service',
+    'template_forum_post_edited' => 'Edited by %s on %s',
+    'template_forum_post_quote' => 'Quote',
+    'template_forum_reply_thread' => 'Reply to Thread',
+    'template_forum_edit' => 'Edit',
+    'template_forum_preview' => 'Preview',
+    'template_forum_submit' => 'Submit',
+    'template_forum_create_thread' => 'Create Thread',
+    'template_forum_' => '',
 );
 ?>

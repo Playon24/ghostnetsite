@@ -1016,8 +1016,9 @@ Class WoW_Account {
             $account_ids[] = self::$myGamesList[$i]['account_id'];
         }
         if(is_array($account_ids) && $accounts_count > 0) {
-            $total_chars_count = DB::Realm()->selectCell("SELECT SUM(`numchars`) FROM `realmcharacters` WHERE `acctid` IN (%s)", $account_ids);
-            self::$characters_data = DB::WoW()->select("SELECT * FROM `DBPREFIX_user_characters` WHERE `account` IN (%s) ORDER BY `index`", $account_ids);
+            $total_chars_count = DB::Realm()->selectCell("SELECT SUM(`numchars`) FROM `realmcharacters` WHERE `acctid` IN (%s)", implode(', ', $account_ids));
+            sprintf("SELECT SUM(`numchars`) FROM `realmcharacters` WHERE `acctid` IN (%s)",  implode(', ', $account_ids));
+            self::$characters_data = DB::WoW()->select("SELECT * FROM `DBPREFIX_user_characters` WHERE `account` IN (%s) ORDER BY `index`",  implode(', ', $account_ids));
         }
         else {
             $total_chars_count = 0;
@@ -1074,6 +1075,7 @@ Class WoW_Account {
             );
             if(!$active_set) {
                 self::$active_character = $char;
+                self::$active_forum_character = $char;
                 $active_set = true;
             }
             ++$index;
@@ -1126,7 +1128,7 @@ Class WoW_Account {
             }
             foreach($chars_data as $char) {
                 $tmp_char_data = array(
-                    'account' => self::GetUserID(),
+                    'account' => $char['account'],
                     'index' => $index,
                     'guid' => $char['guid'],
                     'name' => $char['name'],

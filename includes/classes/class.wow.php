@@ -326,8 +326,14 @@ Class WoW {
         return $urldata;
     }
     
-    public static function GetRealmStatus() {
-        $realmList = DB::Realm()->select("SELECT `id`, `name`, `address`, `port`, `icon`, `realmflags`, `timezone`, `allowedSecurityLevel`, `population` FROM `realmlist`");
+    public static function GetRealmStatus($realmID = false) {
+        if($realmID === false) {
+            $realmList = DB::Realm()->select("SELECT `id`, `name`, `address`, `port`, `icon`, `realmflags`, `timezone`, `allowedSecurityLevel`, `population` FROM `realmlist`");
+        }
+        else {
+            $realmList[] = DB::Realm()->selectRow("SELECT `id`, `name`, `address`, `port`, `icon`, `realmflags`, `timezone`, `allowedSecurityLevel`, `population` FROM `realmlist` WHERE `id` = %d", $realmID);
+        }
+        
         if(!$realmList) {
             return false;
         }
