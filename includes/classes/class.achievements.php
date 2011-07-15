@@ -744,5 +744,9 @@ Class WoW_Achievements {
         }
         return '--';
     }
+    
+    public static function GetAchievement($ach_id) {
+        return DB::WoW()->selectRow("SELECT `id`, `name_%s` AS `name`, `iconname`, `points`, `description_%s` AS `desc` FROM `DBPREFIX_achievement` WHERE `id` = %d", WoW_Locale::GetLocale(), WoW_Locale::GetLocale(), $ach_id);
+    }
 }
 ?>

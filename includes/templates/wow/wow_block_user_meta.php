@@ -3,3 +3,4 @@
 <?php echo WoW_Locale::GetString('template_userbox_auth_caption'); ?>
 </a>
 <div class="card-overlay"></div>
+</div>

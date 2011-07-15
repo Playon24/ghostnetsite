@@ -15,7 +15,7 @@ WoW_Template::LoadTemplate('block_header');
             <h1 id="logo"><a href="<?php echo WoW::GetWoWPath(); ?>/wow/">World of Warcraft</a></h1>
             <div class="header-plate-wrapper header-plate">
 <?php
-WoW_Template::PrintMainMenu();
+echo WoW_Layout::PrintMainMenu();
 if(WoW_Account::IsLoggedIn()) {
     if(WoW_Account::IsHaveActiveCharacter()) {
         WoW_Template::LoadTemplate('block_user_meta_auth');
@@ -33,94 +33,39 @@ else {
 <?php
 // <div id="content"> starts here!
 switch(WoW_Template::GetPageIndex()) {
-    default:
-    case 'index':
-        WoW_Template::LoadTemplate('content_index');
-        break;
     case 'item':
         WoW_Template::LoadTemplate('content_item_page');
         break;
     case 'item_list':
         WoW_Template::LoadTemplate('content_item_table');
         break;
-    case 'character_profile_simple':
-        WoW_Template::LoadTemplate('content_character_profile_simple');
-        break;
-    case 'character_profile_advanced':
-        WoW_Template::LoadTemplate('content_character_profile_advanced');
-        break;
-    /*
-    case 'character_talents':
-        WoW_Template::LoadTemplate('content_character_talents');
-        break;
-    */
-    case '404':
-        WoW_Template::LoadTemplate('content_404');
-        break;
-    case 'guild_page':
-        WoW_Template::LoadTemplate('content_guild_page');
-        break;
-    case 'guild_perks':
-        WoW_Template::LoadTemplate('content_guild_perks');
-        break;
-    case 'guild_roster':
-        WoW_Template::LoadTemplate('content_guild_roster');
-        break;
-    case 'guild_professions':
-        WoW_Template::LoadTemplate('content_guild_professions');
-        break;
-    case 'character_achievements':
-        WoW_Template::LoadTemplate('content_character_achievements');
-        break;
-    case 'character_reputation':
-        WoW_Template::LoadTemplate('content_character_reputation');
-        break;
-    case 'character_reputation_tabular':
-        WoW_Template::LoadTemplate('content_character_reputation_tabular');
-        break;
-    case 'character_pvp':
-        WoW_Template::LoadTemplate('content_character_pvp');
-        break;
-    case 'character_statistics':
-        WoW_Template::LoadTemplate('content_character_statistics');
-        break;
-    case 'character_feed':
-        WoW_Template::LoadTemplate('content_character_feed');
-        break;
-    case 'search':
-        WoW_Template::LoadTemplate('content_search');
-        break;
-    case 'realm_status':
-        WoW_Template::LoadTemplate('content_realm_status');
-        break;
-    case 'blog':
-        WoW_Template::LoadTemplate('content_blog');
-        break;
     case 'game':
         WoW_Template::LoadTemplate('static_game_index');
         break;
-    case 'account_status':
-        WoW_Template::LoadTemplate('content_account_status');
+    case 'game_guide_what_is_wow':
+        WoW_Template::LoadTemplate('static_game_guide_what_is_wow');
         break;
-    case 'auction_lots':
-        WoW_Template::LoadTemplate('content_auction_lots');
+    case 'game_guide_getting_started':
+        WoW_Template::LoadTemplate('static_game_guide_getting_started');
         break;
-    case 'forum_index':
-        WoW_Template::LoadTemplate('content_forum_index');
+    case 'game_guide_how_to_play':
+        WoW_Template::LoadTemplate('static_game_guide_how_to_play');
         break;
-    case 'forum_category':
-        WoW_Template::LoadTemplate('content_forum_category');
+    case 'game_guide_playing_together':
+        WoW_Template::LoadTemplate('static_game_guide_playing_together');
         break;
-    case 'forum_thread':
-        WoW_Template::LoadTemplate('content_forum_thread');
+    case 'game_guide_late_game':
+        WoW_Template::LoadTemplate('static_game_guide_late_game');
         break;
-    case 'forum_new_topic':
-        WoW_Template::LoadTemplate('content_forum_new_topic');
-    case 'zones':
-        WoW_Template::LoadTemplate('content_zones');
+    case 'game_race_index':
+    case 'game_class_index':
+        WoW_Template::LoadTemplate('static_' . WoW_Template::GetPageIndex());
         break;
-    case 'zone':
-        WoW_Template::LoadTemplate('content_zone');
+    case 'game_class_index':
+        WoW_Template::LoadTemplate('static_game_class_index');
+        break;
+    default:
+        WoW_Template::LoadTemplate('content_' . WoW_Template::GetPageIndex());
         break;
 }
 WoW_Template::LoadTemplate('block_footer', true);
@@ -214,6 +159,13 @@ switch(WoW_Template::GetPageData('page')) {
         echo '<script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/js/profile.js?v7"></script>
 <script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/js/character/statistic.js?v7"></script>';
         break;
+    case 'character_companions_mounts':
+        echo '<script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/js/profile.js?v12"></script>
+<script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/js/character/companion.js?v12"></script>
+<script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/local-common/js/filter.js?v23"></script>
+<script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/local-common/js/utility/dataset.js?v23"></script>
+<script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/local-common/js/utility/model-rotator.js?v23"></script>';
+        break;
     case 'blog':
         echo '<script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/local-common/js/lightbox.js?v17"></script>';
         break;
@@ -237,6 +189,25 @@ switch(WoW_Template::GetPageData('page')) {
 <script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/local-common/js/filter.js?v20"></script>
 <script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/local-common/js/lightbox.js?v20"></script>';
         break;
+    case 'game_guide_what_is_wow':
+    case 'game_guide_getting_started':
+    case 'game_guide_how_to_play':
+    case 'game_guide_playing_together':
+    case 'game_guide_late_game':
+        echo '<script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/local-common/js/lightbox.js?v20"></script>';
+        break;
+    case 'faction':
+        echo '<script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/js/wiki/wiki.js?v10"></script>
+<script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/local-common/js/filter.js?v20"></script>';
+        break;
+    case 'pvp_arena':
+        echo '<script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/local-common/js/utility/dynamic-menu.js?v21"></script>
+<script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/js/pvp/pvp.js?v11"></script>';
+        break;
+    case 'pvp_arena_ladder':
+        echo '<script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/local-common/js/utility/dynamic-menu.js?v21"></script>
+<script type="text/javascript" src="' . WoW::GetWoWPath() . '/wow/static/js/pvp/ladder.js?v11"></script>';
+        break;
 }
 ?>
 
@@ -248,7 +219,7 @@ switch(WoW_Template::GetPageData('page')) {
     Core.load("<?php echo WoW::GetWoWPath(); ?>/wow/static/local-common/js/third-party/jquery.mousewheel.min.js?v15");
     Core.load("<?php echo WoW::GetWoWPath(); ?>/wow/static/local-common/js/third-party/jquery.tinyscrollbar.min.js?v15");
     Core.load("<?php echo WoW::GetWoWPath(); ?>/wow/static/local-common/js/login.js?v15", false, function() {
-        Login.embeddedUrl = '<?php echo WoW::GetWoWPath(); ?>/login/login.frag';
+        Login.embeddedUrl = '<?php echo WoW::GetWoWPath(); ?>/login/<?php echo WoW_Locale::GetLocale() ?>/login.frag';
     });
 //]]>
 </script>

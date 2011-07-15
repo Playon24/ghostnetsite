@@ -4,7 +4,8 @@ $proto = WoW_Template::GetPageData('proto');
 <div id="content">
 <div class="content-top">
 <div class="content-trail">
-<ol class="ui-breadcrumb">
+<?php WoW_Template::NavigationMenu(); ?>
+<!--<ol class="ui-breadcrumb">
 <li>
 <a href="<?php echo WoW::GetWoWPath(); ?>/wow/" rel="np">
 World of Warcraft
@@ -16,24 +17,24 @@ World of Warcraft
 </a>
 </li>
 <li>
-<a href="<?php echo WoW::GetWoWPath(); ?>/wow/item/" rel="np">
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/<?php echo WoW_Locale::GetLocale(); ?>/item/" rel="np">
 <?php echo WoW_Locale::GetString('template_menu_items'); ?>
 </a>
 </li>
 <li>
-<a href="<?php echo WoW::GetWoWPath(); ?>/wow/item/?classId=<?php echo $proto->class; ?>" rel="np">
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/<?php echo WoW_Locale::GetLocale(); ?>/item/?classId=<?php echo $proto->class; ?>" rel="np">
 <?php echo $proto->class_name; ?>
 </a>
 </li>
 <li>
-<a href="<?php echo WoW::GetWoWPath(); ?>/wow/item/?classId=<?php echo sprintf('%d&amp;subClassId=%d', $proto->class, $proto->subclass); ?>" rel="np">
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/<?php echo WoW_Locale::GetLocale(); ?>/item/?classId=<?php echo sprintf('%d&amp;subClassId=%d', $proto->class, $proto->subclass); ?>" rel="np">
 <?php echo $proto->subclass_name; ?>
 </a>
 </li>
 <?php
 if(in_array($proto->class, array(ITEM_CLASS_WEAPON, ITEM_CLASS_ARMOR))) {
     echo sprintf('<li>
-<a href="%s/wow/item/?classId=%s" rel="np">
+<a href="%s/wow/' . WoW_Locale::GetLocale() . '/item/?classId=%s" rel="np">
 %s
 </a>
 </li>', WoW::GetWoWPath(), sprintf('%d&amp;subClassId=%d&InventoryType=%d', $proto->class, $proto->subclass, $proto->InventoryType), WoW_Locale::GetString('template_item_invtype_' . $proto->InventoryType));
@@ -41,11 +42,11 @@ if(in_array($proto->class, array(ITEM_CLASS_WEAPON, ITEM_CLASS_ARMOR))) {
 
 ?>
 <li class="last">
-<a href="<?php echo WoW::GetWoWPath(); ?>/wow/item/<?php echo $proto->entry; ?>" rel="np">
+<a href="<?php echo WoW::GetWoWPath(); ?>/wow/<?php echo WoW_Locale::GetLocale(); ?>/item/<?php echo $proto->entry; ?>" rel="np">
 <?php echo $proto->name; ?>
 </a>
 </li>
-</ol>
+</ol>-->
 </div>
 <div class="content-bot">
 	<div id="wiki" class="wiki wiki-item">
@@ -119,7 +120,7 @@ if(in_array($proto->class, array(ITEM_CLASS_WEAPON, ITEM_CLASS_ARMOR))) {
 	<script type="text/javascript">
 	//<![CDATA[
 				$(function() {
-					Wiki.pageUrl = '<?php echo WoW::GetWoWPath(); ?>/wow/item/<?php echo $proto->entry; ?>/';
+					Wiki.pageUrl = '<?php echo WoW::GetWoWPath(); ?>/wow/<?php echo WoW_Locale::GetLocale(); ?>/item/<?php echo $proto->entry; ?>/';
 				});
 	//]]>
 	</script>

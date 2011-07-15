@@ -1,7 +1,8 @@
 <div id="content">
 <div class="content-top">
 <div class="content-trail">
-<ol class="ui-breadcrumb">
+<?php WoW_Template::NavigationMenu(); ?>
+<!--<ol class="ui-breadcrumb">
 <li>
 <a href="/wow/" rel="np">
 World of Warcraft
@@ -22,7 +23,7 @@ World of Warcraft
 Таланты и символы
 </a>
 </li>
-</ol>
+</ol>-->
 </div>
 <div class="content-bot">
 	<div id="profile-wrapper" class="profile-wrapper profile-wrapper-<?php echo WoW_Characters::GetFactionName(); ?>">
@@ -1342,7 +1343,7 @@ World of Warcraft
 
 		<ul>
 	<li class="filled">
-			<a href="/wow/item/42414" class="color-q1">
+			<a href="/wow/' . WoW_Locale::GetLocale() . '/item/42414" class="color-q1">
 		<span class="icon"> 
 
 
@@ -1357,7 +1358,7 @@ World of Warcraft
 	<span class="clear"><!-- --></span>
 	</li>
 	<li class="filled">
-			<a href="/wow/item/42406" class="color-q1">
+			<a href="/wow/' . WoW_Locale::GetLocale() . '/item/42406" class="color-q1">
 		<span class="icon"> 
 
 
@@ -1372,7 +1373,7 @@ World of Warcraft
 	<span class="clear"><!-- --></span>
 	</li>
 	<li class="filled">
-			<a href="/wow/item/42415" class="color-q1">
+			<a href="/wow/' . WoW_Locale::GetLocale() . '/item/42415" class="color-q1">
 		<span class="icon"> 
 
 
@@ -1393,7 +1394,7 @@ World of Warcraft
 
 		<ul>
 	<li class="filled">
-			<a href="/wow/item/42398" class="color-q1">
+			<a href="/wow/' . WoW_Locale::GetLocale() . '/item/42398" class="color-q1">
 		<span class="icon"> 
 
 
@@ -1408,7 +1409,7 @@ World of Warcraft
 	<span class="clear"><!-- --></span>
 	</li>
 	<li class="filled">
-			<a href="/wow/item/42404" class="color-q1">
+			<a href="/wow/' . WoW_Locale::GetLocale() . '/item/42404" class="color-q1">
 		<span class="icon"> 
 
 
@@ -1423,7 +1424,7 @@ World of Warcraft
 	<span class="clear"><!-- --></span>
 	</li>
 	<li class="filled">
-			<a href="/wow/item/45757" class="color-q1">
+			<a href="/wow/' . WoW_Locale::GetLocale() . '/item/45757" class="color-q1">
 		<span class="icon"> 
 
 
@@ -1444,7 +1445,7 @@ World of Warcraft
 
 		<ul>
 	<li class="filled">
-			<a href="/wow/item/43370" class="color-q1">
+			<a href="/wow/' . WoW_Locale::GetLocale() . '/item/43370" class="color-q1">
 		<span class="icon"> 
 
 
@@ -1459,7 +1460,7 @@ World of Warcraft
 	<span class="clear"><!-- --></span>
 	</li>
 	<li class="filled">
-			<a href="/wow/item/43374" class="color-q1">
+			<a href="/wow/' . WoW_Locale::GetLocale() . '/item/43374" class="color-q1">
 		<span class="icon"> 
 
 
@@ -1474,7 +1475,7 @@ World of Warcraft
 	<span class="clear"><!-- --></span>
 	</li>
 	<li class="filled">
-			<a href="/wow/item/43371" class="color-q1">
+			<a href="/wow/' . WoW_Locale::GetLocale() . '/item/43371" class="color-q1">
 		<span class="icon"> 
 
 

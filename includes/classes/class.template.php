@@ -26,17 +26,30 @@ Class WoW_Template {
     private static $carousel_data = array();
     private static $menu_index = null;
     private static $template_theme = null;
+    private static $is_redirect = false;
+    private static $is_error_page = false;
     
-    public static function ErrorPage($code) {
+    public static function ErrorPage($code, $error_profile = null, $bn_error = false) {
         switch($code) {
             case 403:
             case 404:
             case 500:
-                die('ERROR ' . $code);
+                self::SetTemplateTheme(($bn_error ? 'bn' : 'wow'));
+                self::SetPageData('body_class', WoW_Locale::GetLocale(LOCALE_DOUBLE));
+                self::SetPageIndex(($bn_error ? 'landing' : '404'));
+                self::SetPageData(($bn_error ? 'landing' : 'page'), '404');
+                if(!$error_profile) {
+                    self::SetPageData('errorProfile', 'template_404');
+                }
+                else {
+                    self::SetPageData('errorProfile', $error_profile);
+                }
+                self::SetPageData('errorCode', $code);
+                self::LoadTemplate(($bn_error ? 'page_landing' : 'page_index'));
+                self::$is_error_page = true; // Set this variable as "true" only after WoW_Template::LoadTemplate call!
                 break;
             default:
                 return false;
-                break;
         }
     }
     
@@ -53,11 +66,14 @@ Class WoW_Template {
     }
     
     public static function LoadTemplate($template_name, $overall = false) {
+        if(self::$is_error_page || self::$is_redirect) {
+            return false; // Do not load any templates if error page was triggered or page is redirecting.
+        }
         if($overall) {
-            $template = WOW_DIRECTORY . '/includes/templates/overall/overall_' . $template_name . '.php';
+            $template = TEMPLATES_DIR . 'overall' . DS . 'overall_' . $template_name . '.php';
         }
         else {
-            $template = WOW_DIRECTORY . '/includes/templates/' . self::GetTemplateTheme() . '/' . self::GetTemplateTheme() . '_' . $template_name . '.php';
+            $template = TEMPLATES_DIR . self::GetTemplateTheme() . DS . self::GetTemplateTheme() . '_' . $template_name . '.php';
         }
         if(file_exists($template)) {
             include($template);
@@ -89,972 +105,6 @@ Class WoW_Template {
         self::$menu_index = $index;
     }
     
-    public static function PrintMainMenu() {
-        $main_menu = "<ul id=\"menu\">\n%s\n</ul>";
-        $menu_item = '<li class="%s"><a href="%s" class="%s"><span>%s</span></a></li>';
-        $full_menu = null;
-        $global_menu = self::GetMainMenu();
-        foreach($global_menu as $menu) {
-            $full_menu .= sprintf($menu_item, $menu['key'], WoW::GetWoWPath() . $menu['href'], (self::GetMenuIndex() == $menu['key']) ? 'active' : null, $menu['title']);
-            $full_menu .= "\n";
-        }
-        echo sprintf($main_menu, $full_menu);
-    }
-    
-    public static function PrintCSSForBNPage() {
-        switch(self::GetTemplateTheme()) {
-            case 'account':
-                $root_path = WoW::GetWoWPath() . '/account';
-                break;
-            default:
-                $root_path = WoW::GetWoWPath() . '/static';
-                break;
-        }
-        $css_data = array(
-            array(
-                'path' => '/local-common/css/common.css',
-                'version' => 15,
-                'browser' => false,
-                'skip_path' => false
-            ),
-            array(
-                'path' => '/local-common/css/common-ie.css',
-                'version' => 15,
-                'browser' => 'IE',
-                'skip_path' => false
-            ),
-            array(
-                'path' => '/local-common/css/common-ie6.css',
-                'version' => 15,
-                'browser' => 'IE 6',
-                'skip_path' => false
-            ),
-            array(
-                'path' => '/local-common/css/common-ie7.css',
-                'version' => 15,
-                'browser' => 'IE 7',
-                'skip_path' => false
-            ),
-            array(
-                'path' => '/css/bnet.css',
-                'version' => 5,
-                'browser' => false,
-                'skip_path' => false
-            ),
-            array(
-                'path' => '/css/bnet-ie.css',
-                'version' => 5,
-                'browser' => 'IE',
-                'skip_path' => false
-            ),
-            array(
-                'path' => '/css/bnet-ie6.css',
-                'version' => 5,
-                'browser' => 'IE 6',
-                'skip_path' => false
-            ),
-            array(
-                'path' => '/css/bnet-ie7.css',
-                'version' => 5,
-                'browser' => 'IE 7',
-                'skip_path' => false
-            )
-        );
-        switch(self::GetPageIndex()) {
-            default:
-                $css_data_page = array(
-                    array(
-                        'path' => '/css/homepage.css',
-                        'version' => 5,
-                        'browser' => false,
-                        'skip_path' => false
-                    )
-                );
-                break;
-            case 'management':
-                $css_data_page = array(
-                    array(
-                        'path' => '/css/bnet-print.css',
-                        'version' => 19,
-                        'media' => 'print',
-                        'browser' => false,
-                        'skip_path' => false
-                    ),
-                    array(
-                        'path' => '/css/inputs.css',
-                        'version' => 19,
-                        'browser' => false,
-                        'skip_path' => false
-                    ),
-                    array(
-                        'path' => '/css/inputs-ie6.css',
-                        'version' => 19,
-                        'browser' => 'IE 6',
-                        'skip_path' => false
-                    ),
-                    array(
-                        'path' => '/css/inputs-ie7.css',
-                        'version' => 19,
-                        'browser' => 'IE 7',
-                        'skip_path' => false
-                    ),
-                    array(
-                        'path' => '/css/management/lobby.css',
-                        'version' => 19,
-                        'browser' => false,
-                        'skip_path' => false
-                    ),
-                    array(
-                        'path' => '/css/management/lobby-ie.css',
-                        'version' => 19,
-                        'browser' => 'IE',
-                        'skip_path' => false
-                    ),
-                );
-                break;
-            case 'dashboard':
-                $css_data_page = array(
-                    array(
-                        'path' => '/css/bnet-print.css',
-                        'media' => 'print',
-                        'version' => 19,
-                        'browser' => false,
-                        'skip_path' => false
-                    ),
-                    array(
-                        'path' => '/css/management/dashboard.css',
-                        'version' => 19,
-                        'browser' => false,
-                        'skip_path' => false
-                    ),
-                    array(
-                        'path' => '/css/management/wow/dashboard.css',
-                        'version' => 19,
-                        'browser' => false,
-                        'skip_path' => false
-                    ),
-                    array(
-                        'path' => '/css/management/wow/dashboard-ie.css',
-                        'version' => 19,
-                        'browser' => 'IE',
-                        'skip_path' => false
-                    ),
-                    array(
-                        'path' => '/css/management/wow/dashboard-ie6.css',
-                        'version' => 19,
-                        'browser' => 'IE 6',
-                        'skip_path' => false
-                    ),
-                );
-                break;
-            case 'landing':
-                switch(self::GetPageData('landing')) {
-                    case 'what_is':
-                        $css_data_page = array(
-                            array(
-                                'path' => '/css/landing/info.css',
-                                'version' => 5,
-                                'browser' => false,
-                                'skip_path' => false
-                            ),
-                            array(
-                                'path' => '/css/landing/info-ie6.css',
-                                'version' => 5,
-                                'browser' => 'IE 6',
-                                'skip_path' => false
-                            )
-                        );
-                        break;
-                }
-                break;
-            case 'creation_tos':
-            case 'creation_success':
-                $css_data_page = array(
-                    array(
-                        'path' => '/css/bnet-print.css',
-                        'version' => 19,
-                        'media' => 'print',
-                        'browser' => false,
-                        'skip_path' => false
-                    ),
-                    array(
-                        'path' => '/css/inputs.css',
-                        'version' => 19,
-                        'browser' => false,
-                        'skip_path' => false
-                    ),
-                    array(
-                        'path' => '/css/inputs-ie6.css',
-                        'version' => 19,
-                        'browser' => 'IE 6',
-                        'skip_path' => false
-                    ),
-                    array(
-                        'path' => '/css/inputs-ie7.css',
-                        'version' => 19,
-                        'browser' => 'IE 7',
-                        'skip_path' => false
-                    ),
-                    array(
-                        'path' => '/css/account-creation/streamlined-creation.css',
-                        'version' => 19,
-                        'browser' => false,
-                        'skip_path' => false
-                    ),
-                    array(
-                        'path' => '/css/account-creation/streamlined-creation-ie6.css',
-                        'version' => 19,
-                        'browser' => 'IE 6',
-                        'skip_path' => false
-                    ),
-                    array(
-                        'path' =>  '/css/account-creation/streamlined-creation-ie7.css',
-                        'version' => 19,
-                        'browser' => 'IE 7',
-                        'skip_path' => false
-                    )
-                );
-                break;
-            case 'add_game':
-                $css_data_page = array(
-                    array(
-                        'path' => '/css/management/add-game.css',
-                        'version' => 19,
-                        'browser' => false,
-                        'skip_path' => false
-                   )
-                );
-                break;
-            case 'password_reset':
-                $css_data_page = array(
-                    array(
-                        'path' => '/css/bnet-print.css',
-                        'version' => 19,
-                        'media' => 'print',
-                        'browser' => false,
-                        'skip_path' => false
-                    ),
-                    array(
-                        'path' => '/css/cant-login/cant-login.css',
-                        'version' => 19,
-                        'browser' => false,
-                        'skip_path' => false
-                    ),
-                );
-                    
-                break;
-            case 'password_reset_select':
-            case 'password_reset_secred_answer':
-            case 'password_reset_success':
-                $css_data_page = array(
-                    array(
-                        'path' => '/css/bnet-print.css',
-                        'version' => 19,
-                        'media' => 'print',
-                        'browser' => false,
-                        'skip_path' => false
-                    ),
-                    array(
-                        'path' => '/css/support/support.css',
-                        'version' => 19,
-                        'browser' => false,
-                        'skip_path' => false
-                    ),
-                );
-                break;
-            case 'account_conversion':
-                $css_data_page = array(
-                    array(
-                        'path' => '/css/bnet-print.css',
-                        'version' => 19,
-                        'media' => 'print',
-                        'browser' => false,
-                        'skip_path' => false
-                    ),
-                    array(
-                        'path' => '/css/inputs.css',
-                        'version' => 19,
-                        'browser' => false,
-                        'skip_path' => false
-                    ),
-                    array(
-                        'path' => '/css/inputs-ie6.css',
-                        'version' => 19,
-                        'browser' => 'IE 6',
-                        'skip_path' => false
-                    ),
-                    array(
-                        'path' => '/css/inputs-ie7.css',
-                        'version' => 19,
-                        'browser' => 'IE 7',
-                        'skip_path' => false
-                    ),
-                    array(
-                        'path' => '/css/management/wow/merge/wow-merge.css',
-                        'version' => 19,
-                        'media' => 'all',
-                        'browser' => false,
-                        'skip_path' => false
-                    )
-                );
-                break;
-        }
-        $cssList = array_merge($css_data, $css_data_page);
-        $cssList[] = array(
-            'path' => sprintf('/local-common/css/locale/%s.css', WoW_Locale::GetLocale(LOCALE_DOUBLE)),
-            'version' => 15,
-            'browser' => false,
-            'skip_path' => false
-        );
-        $cssList[] = array(
-            'path' => sprintf('/css/locale/%s.css', WoW_Locale::GetLocale(LOCALE_DOUBLE)),
-            'version' => 5,
-            'browser' => false,
-            'skip_path' => false
-        );
-        foreach($cssList as $sheet) {
-            if($sheet['skip_path']) {
-                self::PrintCSS($sheet['path'], $sheet['version'], $sheet['browser'], isset($sheet['media']) ? $sheet['media'] : false);
-            }
-            else {
-                self::PrintCSS($root_path . $sheet['path'], $sheet['version'], $sheet['browser'], isset($sheet['media']) ? $sheet['media'] : false);
-            }
-        }
-    }
-    
-    public static function PrintCSSForPage() {
-        $css_data = array(
-            array(
-                'path' => WoW::GetWoWPath() . '/wow/static/local-common/css/common.css',
-                'version' => 15,
-                'browser' => false,
-            ),
-            array(
-                'path' => WoW::GetWoWPath() . '/wow/static/local-common/css/common-ie.css',
-                'version' => 15,
-                'browser' => 'IE',
-            ),
-            array(
-                'path' => WoW::GetWoWPath() . '/wow/static/local-common/css/common-ie6.css',
-                'version' => 15,
-                'browser' => 'IE 6',
-            ),
-            array(
-                'path' => WoW::GetWoWPath() . '/wow/static/local-common/css/common-ie7.css',
-                'version' => 15,
-                'browser' => 'IE 7',
-            ),
-            array(
-                'path' => WoW::GetWoWPath() . '/wow/static/css/wow.css',
-                'version' => 3,
-                'browser' => false,
-            ),
-            array(
-                'path' => WoW::GetWoWPath() . '/wow/static/css/wow-ie.css',
-                'version' => 3,
-                'browser' => 'IE',
-            ),
-            array(
-                'path' => WoW::GetWoWPath() . '/wow/static/css/wow-ie7.css',
-                'version' => 3,
-                'browser' => 'IE 7',
-            ),
-            array(
-                'path' => WoW::GetWoWPath() . '/wow/static/css/wow-ie6.css',
-                'version' => 3,
-                'browser' => 'IE 6',
-            )
-        );
-        switch(self::GetPageIndex()) {
-            case 'index':
-            default:
-                $css_data_page = array(
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/local-common/css/cms/homepage.css',
-                        'version' => 15,
-                        'browser' => false,
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/local-common/css/cms/blog.css',
-                        'version' => 15,
-                        'browser' => false,
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/local-common/css/cms/cms-common.css',
-                        'version' => 15,
-                        'browser' => false,
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/cms.css',
-                        'version' => 3,
-                        'browser' => false,
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/cms-ie6.css',
-                        'version' => 3,
-                        'browser' => 'IE 6',
-                    )
-                );
-                break;
-            case 'search':
-            case 'search_results':
-                $css_data_page = array(
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/local-common/css/cms/search.css',
-                        'version' => 16,
-                        'browser' => false
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/search.css',
-                        'version' => 7,
-                        'browser' => false
-                    )
-                );
-                break;
-            case 'character_profile_simple':
-            case 'character_profile_advanced':
-                $css_data_page = array(
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile.css',
-                        'version' => 4,
-                        'browser' => false
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile-ie.css',
-                        'version' => 4,
-                        'browser' => 'IE'
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile-ie6.css',
-                        'version' => 4,
-                        'browser' => 'IE 6'
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/character/summary.css',
-                        'version' => 4,
-                        'browser' => false
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/character/summary-ie.css',
-                        'version' => 4,
-                        'browser' => 'IE'
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/character/summary-ie6.css',
-                        'version' => 4,
-                        'browser' => 'IE 6'
-                    )
-                );
-                break;
-            case 'character_talents':
-                $css_data_page = array(
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile.css',
-                        'version' => 4,
-                        'browser' => false
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile-ie.css',
-                        'version' => 4,
-                        'browser' => 'IE'
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile-ie6.css',
-                        'version' => 4,
-                        'browser' => 'IE 6'
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile-ie6.css',
-                        'version' => 4,
-                        'browser' => 'IE 6'
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/character/talent.css',
-                        'version' => 6,
-                        'browser' => false
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/character/talent-ie6.css',
-                        'version' => 6,
-                        'browser' => 'IE 6'
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/tool/talent-calculator.css',
-                        'version' => 6,
-                        'browser' => false
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/tool/talent-calculator-ie.css',
-                        'version' => 6,
-                        'browser' => 'IE'
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/tool/talent-calculator-ie6.css',
-                        'version' => 6,
-                        'browser' => 'IE 6'
-                    )
-                );
-                break;
-            case 'character_achievements':
-                $css_data_page = array(
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile.css',
-                        'version' => 4,
-                        'browser' => false
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile-ie.css',
-                        'version' => 4,
-                        'browser' => 'IE'
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile-ie6.css',
-                        'version' => 4,
-                        'browser' => 'IE 6'
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile-ie6.css',
-                        'version' => 4,
-                        'browser' => 'IE 6'
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/character/achievement.css',
-                        'version' => 7,
-                        'browser' => false
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/character/achievement-ie6.css',
-                        'version' => 7,
-                        'browser' => 'IE 6'
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/character/achievement-ie7.css',
-                        'version' => 7,
-                        'browser' => 'IE 7'
-                    ),
-                );
-                break;
-            case 'character_statistics':
-                $css_data_page = array(
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile.css',
-                        'version' => 4,
-                        'browser' => false
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile-ie.css',
-                        'version' => 4,
-                        'browser' => 'IE'
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile-ie6.css',
-                        'version' => 4,
-                        'browser' => 'IE 6'
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile-ie6.css',
-                        'version' => 4,
-                        'browser' => 'IE 6'
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/character/statistic.css',
-                        'version' => 7,
-                        'browser' => false
-                    )
-                );
-                break;
-            case 'character_feed':
-                $css_data_page = array(
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile.css',
-                        'version' => 4,
-                        'browser' => false
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile-ie.css',
-                        'version' => 4,
-                        'browser' => 'IE'
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile-ie6.css',
-                        'version' => 4,
-                        'browser' => 'IE 6'
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/character/feed.css',
-                        'version' => 7,
-                        'browser' => false
-                    )
-                );
-                break;
-            case 'blog':
-                $css_data_page = array(
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/lightbox.css',
-                        'version' => 7,
-                        'browser' => false
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/local-common/css/cms/blog.css',
-                        'version' => 17,
-                        'browser' => false
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/local-common/css/cms/comments.css',
-                        'version' => 17,
-                        'browser' => false
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/cms.css',
-                        'version' => 7,
-                        'browser' => false
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/cms-ie6.css',
-                        'version' => 7,
-                        'browser' => 'IE 6'
-                    )
-                );
-                break;
-            case 'forum_index':
-            case 'forum_category':
-            case 'forum_thread':
-            case 'forum_new_topic':
-                $css_data_page = array(
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/local-common/css/cms/forums.css',
-                        'version' => 19,
-                        'browser' => false
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/local-common/css/cms/comments.css',
-                        'version' => 19,
-                        'browser' => false
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/local-common/css/cms/cms-common.css',
-                        'version' => 19,
-                        'browser' => false
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/cms.css',
-                        'version' => 10,
-                        'browser' => false
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/cms-ie6.css',
-                        'version' => 10,
-                        'browser' => 'IE 6'
-                    )
-                );
-                break;
-            case 'item':
-            case 'item_list':
-                $css_data_page = array(
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/wiki/wiki.css',
-                        'version' => 10,
-                        'browser' => false
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/wiki/wiki-ie6.css',
-                        'version' => 10,
-                        'browser' => 'IE'
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/wiki/item.css',
-                        'version' => 10,
-                        'browser' => false
-                    )
-                );
-                break;
-            case 'guild_page':
-            case 'guild_perks':
-            case 'guild_achievements':
-            case 'guild_roster':
-            case 'guild_professions':
-                $css_data_page = array(
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile.css',
-                        'version' => 4,
-                        'browser' => false
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile-ie.css',
-                        'version' => 4,
-                        'browser' => 'IE'
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile-ie6.css',
-                        'version' => 4,
-                        'browser' => 'IE 6'
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile-ie6.css',
-                        'version' => 4,
-                        'browser' => 'IE 6'
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/guild/guild.css',
-                        'version' => 6,
-                        'browser' => false
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/guild/summary.css',
-                        'version' => 6,
-                        'browser' => false
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/guild/summary-ie6.css',
-                        'version' => 6,
-                        'browser' => 'IE 6'
-                    )
-                );
-                if(self::GetPageIndex() == 'guild_perks') {
-                    $css_data_page[] = array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/guild/perks.css',
-                        'version' => 7,
-                        'browser' => false
-                    );
-                }
-                elseif(in_array(self::GetPageIndex(), array('guild_roster', 'guild_professions'))) {
-                    $css_data_page[] = array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/guild/roster.css',
-                        'version' => 7,
-                        'browser' => false
-                    );
-                    $css_data_page[] = array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/guild/roster-ie.css',
-                        'version' => 7,
-                        'browser' => 'IE'
-                    );
-                    $css_data_page[] = array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/guild/roster-ie6.css',
-                        'version' => 7,
-                        'browser' => 'IE 6'
-                    );
-                }
-                break;
-            case 'realm_status':
-                $css_data_page = array(
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/game/realmstatus.css',
-                        'version' => 7,
-                        'browser' => false
-                    )
-                );
-                break;
-            case 'character_reputation':
-            case 'character_reputation_tabular':
-                $css_data_page = array(
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile.css',
-                        'version' => 4,
-                        'browser' => false
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/character/reputation.css',
-                        'version' => 7,
-                        'browser' => false
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/character/reputation-ie.css',
-                        'version' => 7,
-                        'browser' => 'IE'
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/character/reputation-ie6.css',
-                        'version' => 7,
-                        'browser' => 'IE 6'
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/character/reputation-ie7.css',
-                        'version' => 7,
-                        'browser' => 'IE 7'
-                    ),
-                );
-                break;
-            case 'character_pvp':
-                $css_data_page = array(
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile.css',
-                        'version' => 4,
-                        'browser' => false
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile-ie.css',
-                        'version' => 4,
-                        'browser' => 'IE'
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile-ie6.css',
-                        'version' => 4,
-                        'browser' => 'IE 6'
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/character/pvp.css',
-                        'version' => 7,
-                        'browser' => false
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/character/pvp-ie.css',
-                        'version' => 7,
-                        'browser' => 'IE'
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/arena/arena.css',
-                        'version' => 7,
-                        'browser' => false
-                    )
-                );
-                break;
-            case 'game':
-                $css_data_page = array(
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/wiki/wiki.css',
-                        'version' => 10,
-                        'browser' => false
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/wiki/wiki-ie.css',
-                        'version' => 10,
-                        'browser' => 'IE'
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/game/game-index.css',
-                        'version' => 10,
-                        'browser' => false
-                    )
-                );
-                break;
-            case 'account_status':
-                $css_data_page = array(
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/local-common/css/cms/forums.css',
-                        'version' => 17,
-                        'browser' => false
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/local-common/css/cms/cms-common.css',
-                        'version' => 17,
-                        'browser' => false
-                    )
-                );
-                break;
-            case 'auction_lots':
-                $css_data_page = array(
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile.css',
-                        'version' => 10,
-                        'browser' => false
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile-ie.css',
-                        'version' => 10,
-                        'browser' => 'IE'
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/profile-ie6.css',
-                        'version' => 10,
-                        'browser' => 'IE 6'
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/character/auction.css',
-                        'version' => 10,
-                        'browser' => false
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/character/auction-ie6.css',
-                        'version' => 10,
-                        'browser' => 'IE 6'
-                    )
-                );
-                break;
-            case 'zones':
-                $css_data_page =array(
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/wiki/wiki.css',
-                        'version' => 10,
-                        'browser' => false
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/wiki/wiki-ie.css',
-                        'version' => 10,
-                        'browser' => 'IE'
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/wiki/zone.css',
-                        'version' => 10,
-                        'browser' => false
-                    )
-                );
-                break;
-            case 'zone':
-                $css_data_page =array(
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/wiki/wiki.css',
-                        'version' => 10,
-                        'browser' => false
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/wiki/wiki-ie.css',
-                        'version' => 10,
-                        'browser' => 'IE'
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/wiki/zone.css',
-                        'version' => 10,
-                        'browser' => false
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/lightbox.css',
-                        'version' => 10,
-                        'browser' => false
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/local-common/css/cms/comments.css',
-                        'version' => 20,
-                        'browser' => false
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/cms.css',
-                        'version' => 10,
-                        'browser' => false,
-                    ),
-                    array(
-                        'path' => WoW::GetWoWPath() . '/wow/static/css/cms-ie6.css',
-                        'version' => 10,
-                        'browser' => 'IE 6',
-                    )
-                );
-                break;
-        }
-        $cssList = array_merge($css_data, $css_data_page);
-        $cssList[] = array(
-            'path' => sprintf('%s/wow/static/local-common/css/locale/%s.css', WoW::GetWoWPath(), WoW_Locale::GetLocale(LOCALE_DOUBLE)),
-            'version' => 15,
-            'browser' => false
-        );
-        $cssList[] = array(
-            'path' => sprintf('%s/wow/static/css/locale/%s.css', WoW::GetWoWPath(), WoW_Locale::GetLocale(LOCALE_DOUBLE)),
-            'version' => 15,
-            'browser' => false
-        );
-        foreach($cssList as $sheet) {
-            self::PrintCSS($sheet['path'], $sheet['version'], $sheet['browser']);
-        }
-    }
-    
-    private static function PrintCSS($path, $version = 0, $browser = false, $media = false) {
-        if(!$browser) {
-            echo sprintf("<link rel=\"stylesheet\" type=\"text/css\" media=\"%s\" href=\"%s?v%d\" />\n", $media ? $media : 'all', $path, $version);
-        }
-        else {
-            echo sprintf("<!--[if %s]><link rel=\"stylesheet\" type=\"text/css\" media=\"%s\" href=\"%s?v%d\" /><![endif]-->\n", $browser, $media ? $media : 'all', $path, $version);
-        }
-        return true;
-    }
-    
     public static function GetPageIndex() {
         return self::$page_index;
     }
@@ -1081,70 +131,283 @@ Class WoW_Template {
         self::$page_data[$index] .= $data;
     }
     
-    public static function GetPageTitle() {
-        switch(self::GetPageIndex()) {
-            case 'character_profile_simple':
-            case 'character_profile_advanced':
-                return sprintf('%s @ %s - %s - ' , WoW_Characters::GetName(), WoW_Characters::GetRealmName(), WoW_Locale::GetString('template_menu_game'));
-            case 'character_talents':
-                return sprintf('%s - %s - ', WoW_Locale::GetString('template_profile_talents'), WoW_Locale::GetString('template_menu_game'));
-            case 'character_achievements':
-                return sprintf('%s - %s - ', WoW_Locale::GetString('template_profile_achievements'), WoW_Locale::GetString('template_menu_game'));
-            case 'character_reputation':
-                return sprintf('%s - %s - ', WoW_Locale::GetString('template_profile_reputation'), WoW_Locale::GetString('template_menu_game'));
-            case 'character_statistics':
-                return sprintf('%s - %s - ', WoW_Locale::GetString('template_profile_statistics'), WoW_Locale::GetString('template_menu_game'));
-            case 'character_pvp':
-                return sprintf('PvP - %s - ', WoW_Locale::GetString('template_menu_game'));
-            case 'character_feed':
-                return sprintf('%s - %s - ', WoW_Locale::GetString('template_character_feed'), WoW_Locale::GetString('template_menu_game'));
-            case 'item':
-                return sprintf('%s - ', self::GetPageData('itemName'));
-            case 'item_list':
-                return sprintf('%s - ', self::GetPageData('last-crumb'));
-            case 'guild_page':
-                return sprintf('%s @ %s - ', WoW_Guild::GetGuildName(), WoW_Guild::GetGuildRealmName());
-            case 'guild_perks':
-                return sprintf('%s - %s - ', WoW_Locale::GetString('template_guild_menu_perks'), WoW_Locale::GetString('template_menu_game'));
-            case 'guild_roster':
-            case 'guild_professions':
-                return sprintf('%s - %s - ', WoW_Locale::GetString('template_guild_menu_roster'), WoW_Locale::GetString('template_menu_game'));
-            case 'search':
-                return WoW_Search::GetSearchQuery() != null ? sprintf('%s - %s - ', WoW_Search::GetSearchQuery(), WoW_Locale::GetString('template_search')) : sprintf('%s - ', WoW_Locale::GetString('template_search'));
-            case 'realm_status':
-                return sprintf('%s - %s - ', WoW_Locale::GetString('template_realm_status'), WoW_Locale::GetString('template_menu_game'));
-            case 'blog':
-                return sprintf('%s - ', WoW_Template::GetPageData('blog_title'));
-            case 'game':
-                return sprintf('%s - ', WoW_Locale::GetString('template_menu_game'));
-            case 'dashboard':
-                return sprintf('%s - Battle.Net', WoW_Locale::GetString('expansion_' . WoW_Account::GetExpansion()));
-            case 'landing':
-                switch(self::GetPageData('landing')) {
-                    case 'what_is':
-                        return sprintf('%s - Battle.Net', WoW_Locale::GetString('template_bn_what_is_it_title'));
+    // used to navigation menu
+    private static function array_searchRecursive($needle, $haystack, $strict = false, $path = array()) {
+        if(!is_array($haystack) ) {
+            return false;
+        }
+        foreach($haystack as $key => $val) {
+            if(is_array($val) && $subPath = self::array_searchRecursive($needle, $val, $strict, $path) ) {
+                $path['label'] = @$val['label'];
+                $path = array_merge($path, array($key), $subPath);
+                return $path;
+            }
+            elseif((!$strict && $val == $needle) || ($strict && $val === $needle)) {
+                $path[] = $key;
+                return $path;
+            }
+        }
+        return false;
+    }
+    
+    public static function NavigationMenu() {
+		// Maybe breadcrumb content should be filled from appropriate page controller? // Shadez
+        $navigationMenu[0] = WoW_Locale::$navigation;
+        $url_data = WoW::GetUrlData();
+        $path_data = NULL;
+        $path_search_data = NULL;
+        $last = false;
+        $dynamic_content = false;
+        switch($url_data[1]) {
+            case '/zone/':
+                $dynamic_content = true;
+                @$zone_info = WoW_Game::GetZone();
+                $_data = array(
+                    0 => '/',
+                    1 => '/game/',
+                    2 => '/zone/',
+                    3 => '/zone/#expansion=' . @$zone_info['expansion'] . '&type=' . @$zone_info['type'] . 's',
+                    4 => '/zone/' . @$url_data[2],
+                    5 => '/zone/' . @$url_data[2] . '/' . @$url_data[3],
+                );
+                for($a = 0; $a <= count($url_data); ++$a) {
+                    $path_search_data[$a] = $_data[$a];
+                }
+                if(isset($url_data[2])){
+                    $path_search_data[4] = $_data[4];
                 }
                 break;
-            case 'creation_tos':
-            case 'creation_success':
-            case 'account_conversion':
-            case 'management':
-                return WoW_Locale::GetString('template_management_main_title'); //[PH]
-            case 'auction_lots':
-                return sprintf('%s - %s - ', WoW_Locale::GetString('template_auction_menu_lots'), WoW_Locale::GetString('template_menu_game'));
-            case 'forum_index':
-                return sprintf('%s - ', WoW_Locale::GetString('template_menu_forums'));
-            case 'forum_category':
-                return sprintf('%s - %s - ', self::GetPageData('forum_category_title'), WoW_Locale::GetString('template_menu_forums'));
-            case 'forum_thread':
-                return sprintf('%s - %s - ', self::GetPageData('forum_thread_title'), WoW_Locale::GetString('template_menu_forums'));
-            case 'zones':
-                return sprintf('%s - %s - ', WoW_Locale::GetString('template_game_dungeons_and_raids'), WoW_Locale::GetString('template_menu_game'));
-            case 'zone':
-                return sprintf('%s - %s - ' , self::GetPageData('zone_name'), WoW_Locale::GetString('template_menu_game'));
+            case '/faction/':
+                $dynamic_content = true;
+                /**
+                *  WoW_Game::GetFaction() is not defined    
+                *                           
+                *  TODO
+                *  Create function WoW_Game::GetFaction() with same rules as WoW_Game::GetZone()
+                *  and edit wow_content_faction.php template to load datas from DB same as wow_content_zones.php template
+                *  
+                *  Create template and DB data to load and display each faction details.                              
+                */
+                //@$faction_info = WoW_Game::GetFaction();
+                $_data = array(
+                    0 => '/',
+                    1 => '/game/',
+                    2 => '/faction/',
+                    3 => '/faction/#expansion='.@$faction_info['expansion'],
+                    4 => '/faction/'.@$url_data[2],
+                );
+                for($a = 0; $a <= count($url_data); ++$a) {
+                    $path_search_data[$a] = $_data[$a];
+                }
+                if(isset($url_data[2])){
+                    $path_search_data[4] = $_data[4];
+                }
+                break;
+            case '/item/':
+                $dynamic_content = true;
+                //WoW_Items::GetBreadCrumbsForItem($_GET) is NOT needed now
+                if(isset($url_data[2])) {
+                    $preg = preg_match('/\/(\?classId=([0-9]+)((&subClassId=([0-9]+))?(&invType=([0-9]+))?)?)|([0-9]+)\/{0,1}/i', $url_data[2], $matches);
+                }
+                $_data = array(
+                    0 => '/',
+                    1 => '/game/',
+                    2 => '/item/',
+                    3 => NULL,
+                    4 => NULL,
+                    5 => NULL,
+                );
+                for($a=0;$a<=count($url_data);++$a) {
+                    $path_search_data[$a] = $_data[$a];
+                }
+                if(isset($matches) && array_key_exists(8, $matches)) {
+                    $proto = new WoW_ItemPrototype();
+                    $proto->LoadItem($matches[8]);
+                    $matches[2] = $proto->class;
+                    $matches[5] = $proto->subclass;
+                    if($matches[2] == 4 && in_array($matches[5], array(0,1,2,3,4))) {
+                        $matches[7] = $proto->InventoryType;
+                        $path_search_data[6] = '/item/'.$matches[8];
+                        $label[6] = $proto->name;
+                    }
+                    else {
+                        unset($matches[7]);
+                        $path_search_data[5] = '/item/'.$matches[8];
+                        $label[5] = $proto->name;
+                    }
+                }
+                if(isset($matches) && (array_key_exists(2, $matches) || array_key_exists(8, $matches))) {
+                    $path_search_data[3] = '/item/?classId='.$matches[2];
+                }
+                if(isset($matches) && (array_key_exists(5, $matches) || array_key_exists(8, $matches))) {
+                    $path_search_data[4] = '/item/?classId='.$matches[2].'&subClassId='.$matches[5];
+                }
+                if(isset($matches) && (array_key_exists(7, $matches))) {
+                    $path_search_data[5] = '/item/?classId='.$matches[2].'&subClassId='.$matches[5].'&invType='.$matches[7];
+                }
+              break;
+            case '/profession/':
+                $dynamic_content = true;
+                $_data = array(
+                    0 => '/',
+                    1 => '/game/',
+                    2 => '/profession/',
+                    3 => '/profession/' . @$url_data[2],
+                );
+                for($a = 0; $a <= count($url_data); ++$a) {
+                    $path_search_data[$a] = $_data[$a];
+                }
+                break;
+            case '/pvp/':
+                $dynamic_content = true;
+                $_data = array(
+                    0 => '/',
+                    1 => '/game/',
+                    2 => '/pvp/',
+                    3 => '/pvp/' . @$url_data[2],
+                );
+                for($a = 0; $a <= count($url_data); ++$a) {
+                    $path_search_data[$a] = $_data[$a];
+                }
+                break;
+            case '/status/':
+                $dynamic_content = true;
+                $_data = array(
+                    0 => '/',
+                    1 => '/game/',
+                    2 => '/status/',
+                    3 => '/status/'.@$url_data[2],
+                );
+                for($a = 0; $a <= count($url_data); ++$a) {
+                    $path_search_data[$a] = $_data[$a];
+                }
+                break;
+            case '/character/':
+                $dynamic_content = true;
+                $subdata4 = '';
+                $data3 = '';
+                $count = 0;
+                $url_data[3] = urldecode($url_data[3]);
+                if(isset($url_data[4])) {
+                    if(in_array($url_data[4], array('/simple/', '/advanced/'))) {
+                        $count = 2;
+                        $subdata4 = @$url_data[4];
+                    }
+                    elseif($url_data[4] == '/achievement/') {
+                        $count = 3;
+                        $data3 = '/character/'.@$url_data[2].@$url_data[3].@$url_data[4];
+                        $label[3] = WoW_Locale::GetString('template_profile_achievements');
+                    }
+                    elseif($url_data[4] == '/statistic/') {
+                        $count = 3;
+                        $data3 = '/character/'.@$url_data[2].@$url_data[3].@$url_data[4];
+                        $label[3] = WoW_Locale::GetString('template_profile_statistics');
+                    }
+                    elseif($url_data[4] == '/reputation/') {
+                        $count = 3;
+                        $data3 = '/character/'.@$url_data[2].@$url_data[3].@$url_data[4];
+                        $label[3] = WoW_Locale::GetString('template_profile_reputation');
+                    }
+                    elseif($url_data[4] == '/pvp/') {
+                        $count = 3;
+                        $data3 = '/character/'.@$url_data[2].@$url_data[3].@$url_data[4];
+                        $label[3] = 'PvP';
+                    }
+                    elseif($url_data[4] == '/feed/') {
+                        $count = 3;
+                        $data3 = '/character/'.@$url_data[2].@$url_data[3].@$url_data[4];
+                        $label[3] = WoW_Locale::GetString('template_profile_feed');
+                    }
+                    elseif($url_data[4] == '/mount/') {
+                        $count = 3;
+                        $data3 = '/character/'.@$url_data[2].@$url_data[3].@$url_data[4];
+                        $label[3] = WoW_Locale::GetString('template_profile_mounts');
+                    }
+                    elseif($url_data[4] == '/companion/') {
+                        $count = 3;
+                        $data3 = '/character/'.@$url_data[2].@$url_data[3].@$url_data[4];
+                        $label[3] = WoW_Locale::GetString('template_profile_companions');
+                    }
+                }
+                $label[2] = str_replace(array('/', '+'), array('', ' '), @$url_data[3].' @ '.@$url_data[2]);
+                
+                $_data = array(0 => '/',
+                               1 => '/game/',
+                               2 => '/character/'.@$url_data[2].@$url_data[3].$subdata4,
+                               3 => $data3,
+                               4 => NULL,
+                               5 => NULL,
+                              );
+                for($a=0;$a<=$count;++$a) {
+                    $path_search_data[$a] = $_data[$a];
+                }
+              break;
+            case '/blog/':
+                $dynamic_content = true;
+                $_data = array(0 => '/',
+                               1 => '/blog/'.@$url_data[2],
+                              );
+                $label[1] = WoW::GetBlogData('title');
+                for($a=0;$a<count($_data);++$a) {
+                    $path_search_data[$a] = $_data[$a];
+                }
+              break;
+            case '/forum/':
+                $dynamic_content = true;
+                $_data = array(
+                    0 => '/',
+                    1 => '/forum/',
+                    2 => '/forum/#forum'.WoW_Forums::GetGlobalCategoryId(),
+                    3 => '/forum/'.WoW_Forums::GetCategoryId().'/',
+                    4 => '/forum/topic/'.WoW_Forums::GetThreadId().'/',
+                    5 => '/forum/blizztracker/'
+                );
+                for($a = 0; $a < count($url_data); ++$a) {
+                    $path_search_data[$a] = $_data[$a];
+                }
+                if(isset($url_data[2]) && $url_data[2] != '/topic/'){
+                    if(isset($url_data[2]) && $url_data[2] == '/blizztracker/'){
+                        $path_search_data[2] = $_data[5];
+                        $label[2] = WoW_Locale::GetString('template_blizztracker_title');
+                        unset($path_search_data[3]);
+                    }
+                    else {
+                        $path_search_data[3] = $_data[3];
+                    }
+                }
+                if(isset($url_data[2]) && $url_data[2] == '/topic/') {
+                    $path_search_data[3] = $_data[3];
+                    $path_search_data[4] = $_data[4];
+                    $label[4] = WoW_Forums::GetThreadTitle();
+                }
+                break;
             default:
-                return '';
+                $path_search_data = $url_data;
+                break;
         }
+        echo '<ol class="ui-breadcrumb">';
+        $path_data = '';
+        for($i = 0; $i < count($path_search_data); ++$i) {
+            if($i == count($path_search_data)-1) {
+                $last = true;
+            }
+            if($dynamic_content) {
+                $path_data = $path_search_data[$i];
+            }
+            else {
+                $path_data .= $url_data[$i];
+            }
+            $path_data = str_replace('//', '/', $path_data);
+            
+            if(!isset($label[$i])) {
+                $menu = self::array_searchRecursive($path_data, $navigationMenu);
+            }
+            else {
+                $menu['label'] = $label[$i];
+            }
+            echo '<li' . ($last == true ? ' class="last"' : null) . '><a href="' . WoW::GetWoWPath() . '/wow/' . WoW_Locale::GetLocale() . $path_data . '" rel="np">' . $menu['label'] . '</a></li>';
+        }
+        echo '</ol>';
     }
 }
 ?>

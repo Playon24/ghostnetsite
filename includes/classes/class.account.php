@@ -243,6 +243,8 @@ Class WoW_Account {
      **/
     private static $userGames = array();
     
+    private static $gameAccountData = array();
+    
     /**
      * Return Q&A, userdatas for recovery password
      * @access    private
@@ -765,11 +767,11 @@ Class WoW_Account {
      * @category Account Manager Class
      * @return   bool
      **/
-    public static function PerformLogin($username, $password) {
+    public static function PerformLogin($username, $password, $persistLogin = false, $from_cookie_session = false) {
 //        self::SetEmail($email);
         self::SetEmail($username);
         self::SetPassword($password);
-        self::CreateShaPassHash();
+        ($from_cookie_session == true) ? (self::$sha_pass_hash=$password) : self::CreateShaPassHash();
         // No SQL injection
         $user_data = DB::WoW()->selectRow("SELECT `id`, `first_name`, `last_name`, `email`, `sha_pass_hash`, `country_code` FROM `DBPREFIX_users` WHERE `email` = '%s' LIMIT 1", self::GetEmail());
         if(!$user_data) {
@@ -792,7 +794,36 @@ Class WoW_Account {
         self::SetLoginState(ACCMGR_LOGGED_IN);
         self::$login_time = time();
         self::DropLastErrorCode(); // All fine, we can drop it now.
+        if($persistLogin || isset($_COOKIE['wow_session'])) {
+            self::saveToCookieSession();
+        }
+        
         return true;
+    }
+    
+    public static function loadFromCookieSession() {
+        $user_data = DB::WoW()->selectRow("SELECT `email`, `sha_pass_hash` FROM `DBPREFIX_users` WHERE `cookie_session_key` = '%s' LIMIT 1", $_COOKIE['wow_session']);
+        if(!$user_data) {
+            WoW_Log::WriteLog('%s : cookie_session %s was not found in `DBPREFIX_users` table!', __METHOD__, $_COOKIE['wow_session']);
+            unset($_COOKIE['wow_session']); 
+            return false;
+        }
+        else {
+            self::PerformLogin($user_data['email'], $user_data['sha_pass_hash'], true, true);
+            return true;
+        }
+    }
+    
+    public static function saveToCookieSession() {
+        $cookie_session = sha1(self::$email.'='.time().'/'.self::$userid);
+        
+        if(DB::WoW()->query("UPDATE `DBPREFIX_users` SET `cookie_session_key` = '%s' WHERE `first_name` = '%s' AND `email` = '%s' LIMIT 1", $cookie_session, self::$first_name, self::$email)) {
+            setcookie('wow_session', $cookie_session, strtotime('NEXT YEAR'), '/');
+            return true;
+        }
+        else {
+            return false;
+        }
     }
     
     /**
@@ -812,7 +843,11 @@ Class WoW_Account {
             $account_ids[] = self::$myGamesList[$i]['account_id'];
         }
         if(!empty($account_ids)) {
-            self::$userGames = DB::Realm()->select("SELECT * FROM `account` WHERE `id` IN (%s)", $account_ids);        
+            self::$userGames = DB::Realm()->select("SELECT a.*, b.`bandate`, b.`unbandate`, b.`banreason`, b.`bannedby`, b.`active` AS `active_ban` FROM `account` a LEFT JOIN `account_banned` b ON b.`id` IN (%s) WHERE a.`id` IN (%s)", $account_ids, $account_ids);     
+        }
+        
+        for($i=0;$i<count(self::$userGames);$i++) {
+            self::$gameAccountData[strtolower(self::$userGames[$i]['username'])] = self::$userGames[$i];
         }
         return true;
     }
@@ -853,6 +888,8 @@ Class WoW_Account {
     public static function PerformLogout() {
         self::DestroySession();
         self::DestroyUserData();
+        setcookie('wow_session', '', strtotime('LAST YEAR'), '/');
+        unset($_COOKIE['wow_session']);
         return true;
     }
     
@@ -997,7 +1034,7 @@ Class WoW_Account {
                 self::$characters_data[$i]['faction_text'] = (WoW_Utils::GetFactionId(self::$characters_data[$i]['race']) == FACTION_ALLIANCE) ? 'alliance' : 'horde';
                 
                 // Rebuild character url
-                self::$characters_data[$i]['url'] = sprintf('%s/wow/character/%s/%s/', WoW::GetWoWPath(), self::$characters_data[$i]['realmName'], self::$characters_data[$i]['name']);
+                self::$characters_data[$i]['url'] = sprintf('%s/wow/%s/character/%s/%s/', WoW::GetWoWPath(), WoW_Locale::GetLocale(), self::$characters_data[$i]['realmName'], self::$characters_data[$i]['name']);
                 if(self::$characters_data[$i]['isActive']) {
                     self::$active_character = self::$characters_data[$i];
                 }
@@ -1108,8 +1145,8 @@ Class WoW_Account {
                     'faction_text' => (WoW_Utils::GetFactionId($char['race']) == FACTION_ALLIANCE) ? 'alliance' : 'horde',
                     'guildId' => $char['guildId'],
                     'guildName' => $char['guildName'],
-                    'guildUrl' => sprintf('%s/wow/guild/%s/%s/', WoW::GetWoWPath(), urlencode($realm_info['name']), urlencode($char['guildName'])),
-                    'url' => sprintf('%s/wow/character/%s/%s/', WoW::GetWoWPath(), urlencode($realm_info['name']), urlencode($char['name']))
+                    'guildUrl' => sprintf('%s/wow/%s/guild/%s/%s/', WoW::GetWoWPath(), WoW_Locale::GetLocale(), urlencode($realm_info['name']), urlencode($char['guildName'])),
+                    'url' => sprintf('%s/wow/%s/character/%s/%s/', WoW::GetWoWPath(), WoW_Locale::GetLocale(), urlencode($realm_info['name']), urlencode($char['name']))
                 );
                 self::$characters_data[] = $tmp_char_data;
                 ++$index;
@@ -1148,16 +1185,16 @@ Class WoW_Account {
         switch($type) {
             case 'characters-wrapper':
             default:
-                $template = '<a href="%s/wow/character/%s/%s/" onclick="CharSelect.pin(%d, this); return false;" class="char%s" rel="np"><span class="pin"></span><span class="name">%s</span><span class="class color-c%d">%d %s %s</span><span class="realm">%s</span></a>';
-                $characters_string = sprintf($template, WoW::GetWoWPath(), urlencode(self::GetActiveCharacterInfo('realmName')), urlencode(self::GetActiveCharacterInfo('name')), 0, ' pinned', self::GetActiveCharacterInfo('name'), self::GetActiveCharacterInfo('class'), self::GetActiveCharacterInfo('level'), self::GetActiveCharacterInfo('race_text'), self::GetActiveCharacterInfo('class_text'), self::GetActiveCharacterInfo('realmName'));
+                $template = '<a href="%s/wow/%s/character/%s/%s/" onclick="CharSelect.pin(%d, this); return false;" class="char%s" rel="np"><span class="pin"></span><span class="name">%s</span><span class="class color-c%d">%d %s %s</span><span class="realm">%s</span></a>';
+                $characters_string = sprintf($template, WoW::GetWoWPath(), WoW_Locale::GetLocale(), urlencode(self::GetActiveCharacterInfo('realmName')), urlencode(self::GetActiveCharacterInfo('name')), 0, ' pinned', self::GetActiveCharacterInfo('name'), self::GetActiveCharacterInfo('class'), self::GetActiveCharacterInfo('level'), self::GetActiveCharacterInfo('race_text'), self::GetActiveCharacterInfo('class_text'), self::GetActiveCharacterInfo('realmName'));
                 break;
             case 'characters-overview':
-                $template = '<a href="%s/wow/character/%s/%s/" class="color-c%d" rel="np" onclick="CharSelect.pin(%d, this); return false;" onmouseover="Tooltip.show(this, $(this).children(\'.hide\').text());"><img src="%s/wow/static/images/icons/race/%d-%d.gif" alt="" /><img src="%s/wow/static/images/icons/class/%d.gif" alt="" />%d %s<span class="hide">%s %s (%s)</span></a>';
-                $characters_string = sprintf($template, WoW::GetWoWPath(), urlencode(self::GetActiveCharacterInfo('realmName')), urlencode(self::GetActiveCharacterInfo('name')), self::GetActiveCharacterInfo('class'), 0, WoW::GetWoWPath(), self::GetActiveCharacterInfo('race'), self::GetActiveCharacterInfo('gender'), WoW::GetWoWPath(), self::GetActiveCharacterInfo('class'), self::GetActiveCharacterInfo('level'), self::GetActiveCharacterInfo('name'), self::GetActiveCharacterInfo('race_text'), self::GetActiveCharacterInfo('class_text'), self::GetActiveCharacterInfo('realmName'));
+                $template = '<a href="%s/wow/%s/character/%s/%s/" class="color-c%d" rel="np" onclick="CharSelect.pin(%d, this); return false;" onmouseover="Tooltip.show(this, $(this).children(\'.hide\').text());"><img src="%s/wow/static/images/icons/race/%d-%d.gif" alt="" /><img src="%s/wow/static/images/icons/class/%d.gif" alt="" />%d %s<span class="hide">%s %s (%s)</span></a>';
+                $characters_string = sprintf($template, WoW::GetWoWPath(), WoW_Locale::GetLocale(), urlencode(self::GetActiveCharacterInfo('realmName')), urlencode(self::GetActiveCharacterInfo('name')), self::GetActiveCharacterInfo('class'), 0, WoW::GetWoWPath(), self::GetActiveCharacterInfo('race'), self::GetActiveCharacterInfo('gender'), WoW::GetWoWPath(), self::GetActiveCharacterInfo('class'), self::GetActiveCharacterInfo('level'), self::GetActiveCharacterInfo('name'), self::GetActiveCharacterInfo('race_text'), self::GetActiveCharacterInfo('class_text'), self::GetActiveCharacterInfo('realmName'));
                 break;
             case 'characters-list-js':
-                $template = '{type: "friend", id: "%d", locale: Core.formatLocale(2,\'_\'), term: "%s", title: "%s", url: "%s/wow/character/%s/%s/"}%s';
-                $characters_string = sprintf($template, self::GetActiveCharacterInfo('guid'), self::GetActiveCharacterInfo('name'), self::GetActiveCharacterInfo('name'), WoW::GetWoWPath(), urlencode(self::GetActiveCharacterInfo('realmName')), urlencode(self::GetActiveCharacterInfo('name')), ', ');
+                $template = '{type: "friend", id: "%d", locale: Core.formatLocale(2,\'_\'), term: "%s", title: "%s", url: "%s/wow/%s/character/%s/%s/"}%s';
+                $characters_string = sprintf($template, self::GetActiveCharacterInfo('guid'), self::GetActiveCharacterInfo('name'), self::GetActiveCharacterInfo('name'), WoW::GetWoWPath(), WoW_Locale::GetLocale(), urlencode(self::GetActiveCharacterInfo('realmName')), urlencode(self::GetActiveCharacterInfo('name')), ', ');
                 break;
         }
         if($only_primary) {
@@ -1300,7 +1337,7 @@ Class WoW_Account {
             for($i = 0; $i < $count; $i++) {
                 self::$friends_data[$i]['class_string'] = WoW_Locale::GetString('character_class_' . self::$friends_data[$i]['class_id'], self::$friends_data[$i]['gender']);
                 self::$friends_data[$i]['race_string'] = WoW_Locale::GetString('character_race_' . self::$friends_data[$i]['race_id'], self::$friends_data[$i]['gender']);
-                self::$friends_data[$i]['url'] = sprintf('%s/wow/character/%s/%s', WoW::GetWoWPath(), self::GetActiveCharacterInfo('realmName'), self::$friends_data[$i]['name']);
+                self::$friends_data[$i]['url'] = sprintf('%s/wow/%s/character/%s/%s', WoW::GetWoWPath(), WoW_Locale::GetLocale(), self::GetActiveCharacterInfo('realmName'), self::$friends_data[$i]['name']);
             }
         }
         return self::$friends_data;
@@ -1391,11 +1428,15 @@ Class WoW_Account {
         return false;
     }
     
-    /**
-     * @deprecated
+    /** 
+     * @access   public
+     * @static   WoW_Account::RecoverPasswordSelect($user_data)
+     * @param    array $user_data
+     * @category Account Manager Class
+     * @return   bool
      **/
     public static function RecoverPasswordSelect($user_data) {
-        if(self::$password_recovery_data = DB::WoW()->selectRow("SELECT `secredQ`, `secredA`, `first_name` AS `username`, `email` FROM `DBPREFIX_users` WHERE `first_name` = '%s' AND `email` = '%s' LIMIT 1", $user_data['username'], $user_data['email']) ) {
+        if(self::$password_recovery_data = DB::WoW()->selectRow("SELECT `question_id`,`question_answer`, `first_name` AS `username`, `email` FROM `DBPREFIX_users` WHERE `first_name` = '%s' AND `email` = '%s' LIMIT 1", $user_data['username'], $user_data['email']) ) {
             return true;
         }
         else {
@@ -1403,40 +1444,152 @@ Class WoW_Account {
         }
     }
     
-    /**
-     * @deprecated
+    /** 
+     * @access   public
+     * @static   WoW_Account::GetRecoverPasswordData()
+     * @category Account Manager Class
+     * @return   array
      **/
     public static function GetRecoverPasswordData() {
         return self::$password_recovery_data;
     }
     
-    /**
-     * @deprecated
+    /** 
+     * @access   public
+     * @static   WoW_Account::SetRecoverPasswordData($data_from_session)
+     * @param    array $data_from_session
+     * @category Account Manager Class
+     * @return   bool
      **/
     public static function SetRecoverPasswordData($data_from_session) {
         self::$password_recovery_data = $data_from_session;
         return true;
     }
     
-    /**
-     * @todo RecoveryPasswordSuccess have fully functional password change script, but there is no mail sender object.
-     * @deprecated
-     * Also there is no random password generator.     
-     * Because of this, script to change password is commented.
-     * 
-     * UNCOMMENT THIS ONLY WHEN EMAIL SENDER OBJECT AND RANDOM PASSWORD GENERATOR WILL BE SCRIPTED               
+    /** 
+     * Sets password recovery ticket and sends email with ticket link for type new password
+     *         
+     * @access   public
+     * @static   WoW_Account::RecoverPasswordSuccess($secretAnswer)
+     * @param    array $secretAnswer
+     * @category Account Manager Class
+     * @return   bool
      **/
     public static function RecoverPasswordSuccess($secretAnswer) {
-        if(strtolower(self::$password_recovery_data['secredA']) == strtolower($secretAnswer)) {
-            //$new_password = set here random password generator function
-            //if(DB::WoW()->query("UPDATE `DBPREFIX_users` SET `password` = '%s' WHERE `first_name` = '%s' AND `email` = '%s' LIMIT 1", sha1(strtoupper(self::$password_recovery_data['username']) . ':' . strtoupper($new_password), $password_recovery_data['username'], $password_recovery_data['email'])) {
-            //}
+        if(strtolower(self::$password_recovery_data['question_answer']) == strtolower($secretAnswer)) {
+            $ticket = self::GenerateTicket();
             
-            //make here email sender with new password generator
-            return true;
+            if(DB::WoW()->query("UPDATE `DBPREFIX_users` SET `pass_reset_ticket` = '%s' WHERE `first_name` = '%s' AND `email` = '%s' LIMIT 1", $ticket, self::$password_recovery_data['username'], self::$password_recovery_data['email'])) {
+                //make here email sender with new password generator
+                //because swiftmail is huge use it only if it is needed
+                require_once(INCLUDES_DIR . 'swiftmailer' . DS . 'swift_required.php');
+                //Create the Transport the call setUsername() and setPassword()
+                $transport = Swift_SmtpTransport::newInstance(WoWConfig::$MailSender['smtp'], WoWConfig::$MailSender['port'], WoWConfig::$MailSender['security'])
+                  ->setUsername(WoWConfig::$MailSender['name'])
+                  ->setPassword(WoWConfig::$MailSender['pass'])
+                  ;
+                
+                //Create the Mailer using your created Transport
+                $mailer = Swift_Mailer::newInstance($transport);
+                
+                //Create a message
+                $message = Swift_Message::newInstance(WoW_Locale::GetString('mailer_password_ticked_subject'))
+                  ->setFrom(array(WoWConfig::$MailSender['from']))
+                  ->setTo(array(self::$password_recovery_data['email']))
+                  ->setBody(sprintf(WoW_Locale::GetString('mailer_password_ticked_body'), 'http://'.$_SERVER['SERVER_NAME'].'/account/support/password-reset-confirm.xml?ticket='.$ticket, 'http://'.$_SERVER['SERVER_NAME'].'/account/support/password-reset-confirm.xml?ticket='.$ticket, 'http://'.$_SERVER['SERVER_NAME'].'/account/support/'), 'text/html')
+                  ;
+                //Send the message
+                if($mailer->send($message))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
         else {
             return false;
+        }
+    }
+    
+    /**
+     * Generate unique ticket for password recovery
+     * 
+     * @access   private
+     * @static   WoW_Account::GenerateTicket()
+     * @category Account Manager Class
+     * @return   string
+     **/
+    private static function GenerateTicket() {
+        $ticket = md5(uniqid());
+        if(DB::WoW()->selectCell("SELECT 1 FROM `DBPREFIX_users` WHERE `pass_reset_ticket` = '%s' LIMIT 1", $ticket)) {
+          self::GenerateTicket();
+        }
+        else {
+          return $ticket;
+        }
+    }
+    
+    /**
+     * Check if ticket exists
+     * 
+     * @access   public
+     * @static   WoW_Account::validTicket()
+     * @category Account Manager Class
+     * @return   bool
+     **/
+    public static function validTicket($ticket) {
+        if($recovery = DB::WoW()->selectRow("SELECT `email`, `first_name` FROM `DBPREFIX_users` WHERE `pass_reset_ticket` = '%s' LIMIT 1", $ticket)) {
+          $_SESSION['password_recovery_email'] = $recovery['email'];
+          $_SESSION['password_recovery_first_name'] = $recovery['first_name'];
+          $_SESSION['password_recovery_ticket'] = $ticket;
+          return true;
+        }
+        else {
+          return false;
+        }
+    }
+    
+    /**
+     * Change password in DB
+     * 
+     * @access   public
+     * @static   WoW_Account::RecoverPasswordChange()
+     * @param    string $password     
+     * @category Account Manager Class
+     * @return   bool
+     **/
+    public static function RecoverPasswordChange($password) {
+        $sha_pass_hash = sha1(strtoupper($_SESSION['password_recovery_email']) . ':' . strtoupper($password));
+        $ticket = $_SESSION['password_recovery_ticket'];
+        if(DB::WoW()->query("UPDATE `DBPREFIX_users` SET `sha_pass_hash` = '%s', `pass_reset_ticket` = NULL WHERE `pass_reset_ticket` = '%s' LIMIT 1", $sha_pass_hash, $ticket)) {
+            //make here email sender
+            //because swiftmail is huge use it only if it is needed
+            require_once(INCLUDES_DIR . 'swiftmailer' . DS . 'swift_required.php');
+            //Create the Transport the call setUsername() and setPassword()
+            $transport = Swift_SmtpTransport::newInstance(WoWConfig::$MailSender['smtp'], WoWConfig::$MailSender['port'], WoWConfig::$MailSender['security'])
+              ->setUsername(WoWConfig::$MailSender['name'])
+              ->setPassword(WoWConfig::$MailSender['pass'])
+              ;
+            
+            //Create the Mailer using your created Transport
+            $mailer = Swift_Mailer::newInstance($transport);
+            
+            //Create a message
+            $message = Swift_Message::newInstance(WoW_Locale::GetString('mailer_password_changed_subject'))
+              ->setFrom(array(WoWConfig::$MailSender['from']))
+              ->setTo(array($_SESSION['password_recovery_email']))
+              ->setBody(sprintf(WoW_Locale::GetString('mailer_password_changed_body'), $_SESSION['password_recovery_first_name'], $_SESSION['password_recovery_email'], 'http://'.$_SERVER['SERVER_NAME'].'/account/support/'), 'text/html')
+              ;
+            //Send the message
+            $mailer->send($message);
+            
+            unset($_SESSION['password_recovery_email']);
+            unset($_SESSION['password_recovery_first_name']);
+            unset($_SESSION['password_recovery_ticket']);
+            return true;
+        }
+        else {
+          return false;
         }
     }
     
@@ -1450,17 +1603,24 @@ Class WoW_Account {
      * @return   void
      **/
     public static function InitializeAccount($accountName) {
-        $accountData = DB::Realm()->selectRow("SELECT * FROM `account` WHERE `username` = '%s'", $accountName);
-        if(!$accountData) {
-            header('Location: ' . WoW::GetWoWPath() . '/account/management/');
-            exit;
-        }
-        self::$dashboard_account = $accountData;
-        if(DB::Realm()->selectCell("SELECT 1 FROM `account_banned` WHERE `id` = %d AND `active` = 1", self::$dashboard_account['id'])) {
-            self::$dashboard_account['banned'] = true;
+        if(array_key_exists(strtolower($accountName), self::$gameAccountData) ) {
+            $accountData = DB::Realm()->selectRow("SELECT * FROM `account` WHERE `username` = '%s'", $accountName);
+            if(!$accountData) {
+                header('Location: ' . WoW::GetWoWPath() . '/account/management/');
+                exit;
+            }
+            self::$dashboard_account = $accountData;
+    
+            if(DB::Realm()->selectCell("SELECT 1 FROM `account_banned` WHERE `id` = %d AND `active` = 1", self::$dashboard_account['id'])) {
+                self::$dashboard_account['banned'] = true;
+            }
+            else {
+                self::$dashboard_account['banned'] = false;
+            }
         }
         else {
-            self::$dashboard_account['banned'] = false;
+            header('Location: ' . WoW::GetWoWPath() . '/account/management/');
+            exit;
         }
     }
     

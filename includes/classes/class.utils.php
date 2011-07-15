@@ -29,8 +29,8 @@ Class WoW_Utils {
      **/
     public function GetFactionId($raceID) {
         // Get player factionID
-        $horde_races    = array(RACE_ORC,     RACE_TROLL, RACE_TAUREN, RACE_UNDEAD, RACE_BLOODELF);
-        $alliance_races = array(RACE_DRAENEI, RACE_DWARF, RACE_GNOME,  RACE_HUMAN,  RACE_NIGHTELF);
+        $horde_races    = array(RACE_ORC,     RACE_TROLL, RACE_TAUREN, RACE_UNDEAD, RACE_BLOODELF, RACE_GOBLIN);
+        $alliance_races = array(RACE_DRAENEI, RACE_DWARF, RACE_GNOME,  RACE_HUMAN,  RACE_NIGHTELF, RACE_WORGEN);
         if(in_array($raceID, $horde_races)) {
             return FACTION_HORDE;
         }
@@ -39,7 +39,7 @@ Class WoW_Utils {
         }
         else {
             // Unknown race
-            $this->armory->Log()->writeError('%s : unknown race: %d', __METHOD__, $raceID);
+            WoW_Log::WriteError('%s : unknown race: %d', __METHOD__, $raceID);
             return false;
         }
     }
@@ -696,6 +696,59 @@ Class WoW_Utils {
             'pos_x' => $npc_coordinates['position_x'],
             'pos_y' => $npc_coordinates['position_y']
         );
+    }
+    
+    public function GetClassIDByKey($key) {
+        foreach(Data_Classes::$classes as $classId => $classInfo) {
+            if($classInfo['key'] == $key) {
+                return $classId;
+            }
+        }
+        return 0;
+    }
+    
+    public function GetClassKeyById($id) {
+        return isset(Data_Classes::$classes[$id]['key']) ? Data_Classes::$classes[$id]['key'] : null;
+    }
+    
+    public function GetRaceIDByKey($key) {
+        foreach(Data_Races::$races as $raceId => $raceInfo) {
+            if($raceInfo['key'] == $key) {
+                return $raceId;
+            }
+        }
+        return 0;
+    }
+    
+    public function GetRaceKeyById($id) {
+        return isset(Data_Races::$races[$id]['key']) ? Data_Races::$races[$id]['key'] : null;
+    }
+    
+    public function GetClassSpecs() {
+        return DB::WoW()->select("SELECT `class`, `spec`, `name_%s` AS `name` FROM `DBPREFIX_talent_icons` ORDER BY `class`, `spec`", WoW_Locale::GetLocale());
+    }
+    
+    public function GetClassRolesInfo($roles_flag) {
+        $role_info = '';
+        $roles_masks = array('ROLE_MASK_TANK', 'ROLE_MASK_HEALER', 'ROLE_MASK_MELEE', 'ROLE_MASK_RANGED', 'ROLE_MASK_CASTER');
+        foreach($roles_masks as $mask) {
+            if($roles_flag & constant($mask)) {
+                $role = strtolower(substr($mask, 10));
+                if(!$role) {
+                    continue;
+                }
+                $role_info .= WoW_Locale::GetString('template_class_role_' . $role);
+                $roles_flag -= constant($mask);
+                if($roles_flag > 0) {
+                    $role_info .= ', ';
+                }
+            }
+        }
+        return $role_info;
+    }
+    
+    public function GetZoneName($zoneId) {
+        return DB::WoW()->selectCell("SELECT `name_%s` FROM `DBPREFIX_areas` WHERE `id` = %d", WoW_Locale::GetLocale(), $zoneId);
     }
 }
 ?>

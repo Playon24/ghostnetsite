@@ -4,7 +4,8 @@ $zone_info = WoW_Game::GetZone();
 <div id="content">
 <div class="content-top">
 <div class="content-trail">
-<ol class="ui-breadcrumb">
+<?php WoW_Template::NavigationMenu(); ?>
+<!--<ol class="ui-breadcrumb">
 <li>
 <a href="<?php echo WoW::GetWoWPath(); ?>/wow/" rel="np">
 World of Warcraft
@@ -30,7 +31,7 @@ World of Warcraft
 <?php echo $zone_info['name']; ?>
 </a>
 </li>
-</ol>
+</ol>-->
 </div>
 <div class="content-bot">
 	
@@ -154,14 +155,35 @@ World of Warcraft
 	//<![CDATA[
 			$(function() {
 				Zone.floors = [
-					{
-						
-						src: 'http://eu.media.blizzard.com/wow/media/artwork/dungeon-maps/<?php echo WoW_Locale::GetLocale(LOCALE_DOUBLE) == 'en-gb' ? 'en-us' : WoW_Locale::GetLocale(LOCALE_DOUBLE); ?>/<?php echo $zone_info['zone_key']; ?>/<?php echo $zone_info['zone_key']; ?>1-large.jpg'
-					}
+						<?php
+                        if($zone_info['floorLevelsCount'] == 0) {
+                            echo '
+                            {
+                                src: \'http://eu.media.blizzard.com/wow/media/artwork/dungeon-maps/' . (WoW_Locale::GetLocale(LOCALE_DOUBLE) == 'en-gb' ? 'en-us' : WoW_Locale::GetLocale(LOCALE_DOUBLE)) . '/' . $zone_info['zone_key'] . '/' . $zone_info['zone_key'] . '1-large.jpg\'
+                            }';
+                        }
+                        else {
+                            for($i = 0; $i < $zone_info['floorLevelsCount']; ++$i) {
+                                echo '{
+						title: \'' . addslashes($zone_info['floorLevels'][$i]) . '\',
+						src: \'http://eu.media.blizzard.com/wow/media/artwork/dungeon-maps/' . (WoW_Locale::GetLocale(LOCALE_DOUBLE) == 'en-gb' ? 'en-us' : WoW_Locale::GetLocale(LOCALE_DOUBLE)) . '/' . $zone_info['zone_key'] . '/' . $zone_info['zone_key'] . ($i + 1) . '-large.jpg\'
+					}' . ($i < $zone_info['floorLevelsCount'] ? ',' : null);
+                            }
+                        }
+                        ?>
 				];
 			});
 	//]]>
 	</script>
+    <?php
+    if($zone_info['floorLevelsCount'] > 0) {
+        echo '<div class="radio-buttons" id="map-radios">';
+        for($i = 0; $i < $zone_info['floorLevelsCount']; ++$i) {
+            echo '<a href="javascript:;" id="map-radio-' . ($i + 1) . '" data-id="' . ($i + 1) . '" data-tooltip="' . $zone_info['floorLevels'][$i] . '"' . ($i == 0 ? ' class="radio-active"' : null) . '> </a>';
+        }
+        echo '</div>';
+    }
+    ?>
 
 	</div>
 

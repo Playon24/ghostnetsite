@@ -23,21 +23,29 @@ for($i = 0; $i < 11; $i++) {
         </div>
 	<span class="clear"><!-- --></span>
     </div>',
-    WoW::GetWoWPath(),
-    $wow_news[$i]->id, $wow_news[$i]->title,
-    WoW::GetWoWPath(), urlencode($wow_news[$i]->author), $wow_news[$i]->author,
-    date('d M Y H:i', $wow_news[$i]->postdate),
-    WoW::GetWoWPath(), $wow_news[$i]->id, $wow_news[$i]->comments_count,
-    WoW::GetWoWPath(), $wow_news[$i]->image,
-    WoW::GetWoWPath(), $wow_news[$i]->id, WoW::GetWoWPath(),
-    $wow_news[$i]->desc,
-    WoW::GetWoWPath(), $wow_news[$i]->id, WoW_Locale::GetString('template_articles_full_caption')
+        WoW::GetWoWPath(),
+        $wow_news[$i]['id'], $wow_news[$i]['title'],
+        WoW::GetWoWPath(), urlencode($wow_news[$i]['author']), $wow_news[$i]['author'],
+        date('d M Y H:i', $wow_news[$i]['postdate']),
+        WoW::GetWoWPath(), $wow_news[$i]['id'], $wow_news[$i]['comments_count'],
+        WoW::GetWoWPath(), $wow_news[$i]['image'],
+        WoW::GetWoWPath(), $wow_news[$i]['id'], WoW::GetWoWPath(),
+        $wow_news[$i]['desc'],
+        WoW::GetWoWPath(), $wow_news[$i]['id'], WoW_Locale::GetString('template_articles_full_caption')
     );
 }
 ?>
-    <!--
-    <div class="blog-paging">
-        <a class="ui-button button1 button1-next float-right " href="?page=2"><span><span><?php echo WoW_Locale::GetString('template_articles_full_caption'); ?></span></span></a>
-        <span class="clear"></span>
-    </div>-->
+    <?php
+    // paging
+    if(WoW::GetPrevPage() >= 0 || WoW::GetNextPage() >= 0) {
+        echo '<div class="blog-paging">';
+        if(WoW::GetNextPage() >= 0) {
+            echo '<a class="ui-button button1 button1-next float-right " href="?page=' . (WoW::GetNextPage() + 1) . '"><span><span>Next</span></span></a>';
+        }
+        if(WoW::GetPrevPage() >= 0) {
+            echo '<a class="ui-button button1 button1-previous " href="?page=' . (WoW::GetPrevPage() + 1) . '"><span><span>Prev</span></span></a>';
+        }
+        echo '<span class="clear"></span></div>';
+    }
+    ?>
 </div>

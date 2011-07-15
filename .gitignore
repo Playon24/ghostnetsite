@@ -1,4 +1,4 @@
-﻿.htaccess
-_debug/tmp.dbg
+﻿
+webroot/_debug/tmp.dbg
 includes/configs/WoWConfig.php
 includes/configs/DatabaseConfig.php

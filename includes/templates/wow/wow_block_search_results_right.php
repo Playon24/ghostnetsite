@@ -8,17 +8,17 @@
             foreach($characters as $char) {
                 $guild_text = null;
                 if($char['guildId'] > 0) {
-                    $guild_text = sprintf('<a href="%s/wow/guild/%s/%s/">&lt;%s&gt;</a>', WoW::GetWoWPath(), $char['realmName'], $char['guildName'], $char['guildName']);
+                    $guild_text = sprintf('<a href="%s/wow/%s/guild/%s/%s/">&lt;%s&gt;</a>', WoW::GetWoWPath(), WoW_Locale::GetLocale(), $char['realmName'], $char['guildName'], $char['guildName']);
                 }
                 echo sprintf('<div class="search-result">
         <div class="multi-type">
         <div class="result-title">
         <div class="type-icon type-wowcharacter border-c%d" style="background-image:url(%s/wow/static/images/2d/avatar/%d-%d.jpg)">
-        <a href="%s/wow/character/%s/%s/">
+        <a href="%s/wow/%s/character/%s/%s/">
             <img width="32" height="32" src="%s/wow/static/images/2d/avatar/%d-%d.jpg" alt=""/>
         </a>
         </div>
-        <a href="%s/wow/character/%s/%s/" class="search-title color-c%d">
+        <a href="%s/wow/%s/character/%s/%s/" class="search-title color-c%d">
             %s @ %s
         </a>
         </div>
@@ -31,9 +31,9 @@
         </div>',
                 $char['classId'],
                 WoW::GetWoWPath(), $char['raceId'], $char['gender'],
-                WoW::GetWoWPath(), $char['realmName'], $char['name'],
+                WoW::GetWoWPath(), WoW_Locale::GetLocale(), $char['realmName'], $char['name'],
                 WoW::GetWoWPath(), $char['raceId'], $char['gender'],
-                WoW::GetWoWPath(), $char['realmName'], $char['name'], $char['classId'],
+                WoW::GetWoWPath(), WoW_Locale::GetLocale(), $char['realmName'], $char['name'], $char['classId'],
                 $char['name'], $char['realmName'],
                 $guild_text,
                 WoW_Locale::GetString('character_race_' . $char['raceId'], $char['gender']), WoW_Locale::GetString('character_class_' . $char['classId'], $char['gender']), sprintf(WoW_Locale::GetString('tempalte_lvl_fmt'), $char['level']),
@@ -69,11 +69,11 @@
         <div class="multi-type">
         <div class="result-title">
         <div class="type-icon type-wowitem border-q%d" style="background-image:url(http://eu.battle.net/wow-assets/static/images/icons/36/%s.jpg)">
-        <a href="%s/wow/item/%d" rel="item:%d">
+        <a href="%s/wow/' . WoW_Locale::GetLocale() . '/item/%d" rel="item:%d">
             <img width="32" height="32" src="http://eu.battle.net/wow-assets/static/images/icons/36/%s.jpg" alt=""/>
         </a>
         </div>
-        <a href="%s/wow/item/%d" class="search-title color-q%d">%s</a>
+        <a href="%s/wow/' . WoW_Locale::GetLocale() . '/item/%d" class="search-title color-q%d">%s</a>
         </div>
         <div>%s</div>
         %s / %s / %s<br />

@@ -5,7 +5,8 @@ $talents = WoW_Characters::GetTalentsData();
 <div id="content">
 <div class="content-top">
 <div class="content-trail">
-<ol class="ui-breadcrumb">
+<?php WoW_Template::NavigationMenu(); ?>
+<!--<ol class="ui-breadcrumb">
 <li>
 <a href="<?php echo WoW::GetWoWPath(); ?>/wow/" rel="np">
 World of Warcraft
@@ -19,7 +20,7 @@ World of Warcraft
 <li class="last">
 <a href="<?php echo WoW_Characters::GetURL(); ?>simple" rel="np"><?php echo sprintf('%s @ %s', WoW_Characters::GetName(), WoW_Characters::GetRealmName()); ?></a>
 </li>
-</ol>
+</ol>-->
 </div>
 <div class="content-bot">
 	<div id="profile-wrapper" class="profile-wrapper profile-wrapper-<?php echo WoW_Characters::GetFactionName(); ?> profile-wrapper-light">
@@ -121,7 +122,7 @@ World of Warcraft
         else {
             echo sprintf('<div data-id="%d" data-type="%d" class="slot slot-%d %s item-quality-%d" style="%s">
             <div class="slot-inner">
-            <div class="slot-contents"><a href="%s/wow/item/%d" class="item" data-item="%s"><img src="http://eu.battle.net/wow-assets/static/images/icons/56/%s.jpg" alt="" /><span class="frame"></span></a>
+            <div class="slot-contents"><a href="%s/wow/' . WoW_Locale::GetLocale() . '/item/%d" class="item" data-item="%s"><img src="http://eu.battle.net/wow-assets/static/images/icons/56/%s.jpg" alt="" /><span class="frame"></span></a>
             </div>
             </div>
             </div>', ($data['slot']-1), $data['slot'], $data['slot'], ($slot >= 9 && $slot <= 15) ? 'slot-align-right' : null, $item_info['quality'], $data['style'], WoW::GetWoWPath(), $item_info['item_id'], $item_info['data-item'], $item_info['icon']);
@@ -172,6 +173,15 @@ World of Warcraft
 				</div>
 	<span class="clear"><!-- --></span>
 	<span class="clear"><!-- --></span>
+    <?php
+    if(WoW_Characters::IsHaveArenaTeam()) {
+        WoW_Template::LoadTemplate('block_character_arena_info');
+    }
+    ?>
+    	<span class="clear"><!-- --></span>
+				<div class="summary-lastupdate">
+                    <?php echo WoW_Locale::GetString('template_profile_lastupdate') . ' ' . WoW_Characters::GetLastUpdateTimeStamp('d/m/Y'); ?>
+				</div>
 			</div>
 		</div>
 	<span class="clear"><!-- --></span>

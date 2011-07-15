@@ -79,6 +79,13 @@ $allowed_tables = array(
         'onlyIfNotExists' => false,
     ),
     array(
+        'name' => 'class_abilities',
+        'internalFile' => false,
+        'skipData' => false,
+        'drop' => true,
+        'onlyIfNotExists' => false,
+    ),
+    array(
         'name' => 'classes',
         'internalFile' => false,
         'skipData' => false,
@@ -136,13 +143,6 @@ $allowed_tables = array(
     ),
     array(
         'name' => 'instance_data',
-        'internalFile' => false,
-        'skipData' => false,
-        'drop' => true,
-        'onlyIfNotExists' => false,
-    ),
-    array(
-        'name' => 'instance_template',
         'internalFile' => false,
         'skipData' => false,
         'drop' => true,
@@ -233,6 +233,13 @@ $allowed_tables = array(
         'onlyIfNotExists' => false,
     ),
     array(
+        'name' => 'mounts',
+        'internalFile' => false,
+        'skipData' => false,
+        'drop' => true,
+        'onlyIfNotExists' => false,
+    ),
+    array(
         'name' => 'news',
         'internalFile' => false,
         'skipData' => true,
@@ -248,6 +255,13 @@ $allowed_tables = array(
     ),
     array(
         'name' => 'professions',
+        'internalFile' => false,
+        'skipData' => false,
+        'drop' => true,
+        'onlyIfNotExists' => false,
+    ),
+    array(
+        'name' => 'race_abilities',
         'internalFile' => false,
         'skipData' => false,
         'drop' => true,
@@ -346,13 +360,6 @@ $allowed_tables = array(
     ),
     array(
         'name' => 'talents',
-        'internalFile' => false,
-        'skipData' => false,
-        'drop' => true,
-        'onlyIfNotExists' => false,
-    ),
-    array(
-        'name' => 'talenttab',
         'internalFile' => false,
         'skipData' => false,
         'drop' => true,

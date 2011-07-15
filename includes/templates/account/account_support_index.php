@@ -31,6 +31,12 @@ switch(WoW_Template::GetPageIndex()) {
     case 'password_reset_success':
         WoW_Template::LoadTemplate('content_password_reset_success');
         break;
+    case 'password_reset_confirm':
+        WoW_Template::LoadTemplate('content_password_reset_confirm');
+        break;
+    case 'password_reset_changed':
+        WoW_Template::LoadTemplate('content_password_reset_changed');
+        break;
 }
 ?>
 <div id="layout-bottom">
@@ -63,6 +69,9 @@ switch(WoW_Template::GetPageIndex()) {
     case 'password_reset_secred_answer':
     case 'password_reset_success':
         echo '<script type="text/javascript" src="' . WoW::GetWoWPath() . '/account/js/support/validation.js?v19"></script>';
+        break;
+    case 'password_reset_confirm':
+        echo '<script type="text/javascript" src="' . WoW::GetWoWPath() . '/account/js/settings/settings.js?v19"></script>';
         break;
 }
 ?>

@@ -7,7 +7,8 @@ $audit = WoW_Characters::GetAudit();
 <div id="content">
 <div class="content-top">
 <div class="content-trail">
-<ol class="ui-breadcrumb">
+<?php WoW_Template::NavigationMenu(); ?>
+<!--<ol class="ui-breadcrumb">
 <li>
 <a href="<?php echo WoW::GetWoWPath(); ?>/wow/" rel="np">
 World of Warcraft
@@ -23,7 +24,7 @@ World of Warcraft
 <?php echo sprintf('%s @ %s', WoW_Characters::GetName(), WoW_Characters::GetRealmName()); ?>
 </a>
 </li>
-</ol>
+</ol>-->
 </div>
 <div class="content-bot">
 	<div id="profile-wrapper" class="profile-wrapper profile-wrapper-advanced profile-wrapper-<?php echo WoW_Characters::GetFactionName(); ?> profile-wrapper-light">
@@ -122,18 +123,18 @@ World of Warcraft
         $socket_text = '';
         for($i = 0; $i < 3; ++$i) {
             if(is_array($item_info['g' . $i]) && isset($item_info['g' . $i]['item'])) {
-                $socket_text .= sprintf('<span class="icon-socket socket-%d"><a href="%s/wow/item/%d" class="gem"><img src="http://eu.battle.net/wow-assets/static/images/icons/18/%s.jpg" alt="" /><span class="frame"></span></a></span>', $item_info['g' . $i]['color'], WoW::GetWoWPath(), $item_info['g' . $i]['item'], $item_info['g' . $i]['icon']);
+                $socket_text .= sprintf('<span class="icon-socket socket-%d"><a href="%s/wow/' . WoW_Locale::GetLocale() . '/item/%d" class="gem"><img src="http://eu.battle.net/wow-assets/static/images/icons/18/%s.jpg" alt="" /><span class="frame"></span></a></span>', $item_info['g' . $i]['color'], WoW::GetWoWPath(), $item_info['g' . $i]['item'], $item_info['g' . $i]['icon']);
             }
         }
         echo sprintf('<div data-id="%d" data-type="%d" class="%s" style="%s">
         <div class="slot-inner">
             <div class="slot-contents">
-                <a href="%s/wow/item/%d" class="item" data-item="%s"><img src="http://eu.battle.net/wow-assets/static/images/icons/56/%s.jpg" alt="" /><span class="frame"></span></a>
+                <a href="%s/wow/' . WoW_Locale::GetLocale() . '/item/%d" class="item" data-item="%s"><img src="http://eu.battle.net/wow-assets/static/images/icons/56/%s.jpg" alt="" /><span class="frame"></span></a>
                 <div class="details">
                     <span class="name-shadow">%s</span>
                     <span class="name color-q%d">
                         %s
-                        <a href="%s/wow/item/%d" data-item="%s">%s</a>
+                        <a href="%s/wow/' . WoW_Locale::GetLocale() . '/item/%d" data-item="%s">%s</a>
                         %s
                     </span>
                     <span class="enchant-shadow">%s</span>
@@ -154,7 +155,7 @@ World of Warcraft
         (($data['slot'] < 6 || $data['slot'] > 12) && $item_info['enchid'] == 0 && $item_info['can_ench']) ? '<a href="javascript:;" class="audit-warning"></a>' : null, 
         isset($item_info['enchant_text']) ? $item_info['enchant_text'] : null, 
         isset($item_info['enchant_quality']) ? $item_info['enchant_quality'] : null, 
-        isset($item_info['enchant_item']) ? $item_info['enchant_item'] > 0 ? sprintf('<a href="%s/wow/item/%d">', WoW::GetWoWPath(), $item_info['enchant_item']) : null : null, 
+        isset($item_info['enchant_item']) ? $item_info['enchant_item'] > 0 ? sprintf('<a href="%s/wow/' . WoW_Locale::GetLocale() . '/item/%d">', WoW::GetWoWPath(), $item_info['enchant_item']) : null : null, 
         isset($item_info['enchant_text']) ? $item_info['enchant_text'] : null,
         isset($item_info['enchant_item']) ? $item_info['enchant_item'] > 0 ? '</a>' : null : null,
         $item_info['item_level'], $socket_text != null ? sprintf('<span class="sockets">%s</span>', $socket_text) : null);
@@ -318,10 +319,10 @@ World of Warcraft
                 }
                 $other_str = null;
                 if(is_array($weapon) && isset($weapon['enchant_item']) && $weapon['enchant_item'] > 0) {
-                    $other_str .= sprintf('<span class="name"><a href="%s/wow/item/%d">%s</a></span>%s ', WoW::GetWoWPath(), $weapon['enchant_item'], $weapon['enchant_text'], (is_array($gem_data) && isset($gem_data['name'])) ? '<span class="comma">,</span>' : null);
+                    $other_str .= sprintf('<span class="name"><a href="%s/wow/' . WoW_Locale::GetLocale() . '/item/%d">%s</a></span>%s ', WoW::GetWoWPath(), $weapon['enchant_item'], $weapon['enchant_text'], (is_array($gem_data) && isset($gem_data['name'])) ? '<span class="comma">,</span>' : null);
                 }
                 if(is_array($gem_data) && isset($gem_data['name'])) {
-                    $other_str .= sprintf('<span class="name"><a href="%s/wow/item/%d">%s</a></span>', WoW::GetWoWPath(), $gem_data['id'], $gem_data['name']);
+                    $other_str .= sprintf('<span class="name"><a href="%s/wow/' . WoW_Locale::GetLocale() . '/item/%d">%s</a></span>', WoW::GetWoWPath(), $gem_data['id'], $gem_data['name']);
                 }
                 if($other_str != null) {
                     echo sprintf('<div class="other">%s</div>', $other_str);
@@ -342,13 +343,13 @@ World of Warcraft
                     <span class="value">%d</span>
                     <span class="times">x</span>
                     <span class="icon">	<span class="icon-socket socket-%d">
-                    <a href="%s/wow/item/%d" class="gem">
+                    <a href="%s/wow/' . WoW_Locale::GetLocale() . '/item/%d" class="gem">
                     <img src="http://eu.battle.net/wow-assets/static/images/icons/18/%s.jpg" alt="" />
                     <span class="frame"></span>
                     </a>
                     </span>
                     </span>
-                    <a href="%s/wow/item/%d" class="name color-q%d">%s</a>
+                    <a href="%s/wow/' . WoW_Locale::GetLocale() . '/item/%d" class="name color-q%d">%s</a>
                     <span class="clear"><!-- --></span>
                 </li>', $gem['counter'], $gem['color'], WoW::GetWoWPath(), $gem['item'], $gem['icon'], WoW::GetWoWPath(), $gem['item'], $gem['quality'], $gem['name']);
                     }
@@ -428,6 +429,14 @@ World of Warcraft
 					</div>
 				</div>
 	<span class="clear"><!-- --></span>
+    <?php
+    if(WoW_Characters::IsHaveArenaTeam()) {
+        WoW_Template::LoadTemplate('block_character_arena_info');
+    }
+    ?>
+    <div class="summary-lastupdate">
+        <?php echo WoW_Locale::GetString('template_profile_lastupdate') . ' ' . WoW_Characters::GetLastUpdateTimeStamp('d/m/Y'); ?>
+	</div>
 	<span class="clear"><!-- --></span>
 			</div>
 		</div>

@@ -19,10 +19,27 @@
  **/
 
 Class WoW {
+    private static $total_news_count = 0;
+    private static $current_news_page = 0;
+    private static $pager_data = array('prev' => false, 'next' => false);
     private static $last_news = array();
     private static $blog_contents = array();
     private static $carousel_data = array();
     private static $wow_path = '';
+    
+    public static function SelfTests() {
+        $errorMessage = '';
+        // Core checks
+        // Database revision check
+        $database_revision = DB::WoW()->selectCell("SELECT `version` FROM `DBPREFIX_db_version` LIMIT 1");
+        if($database_revision != DB_VERSION) {
+            $errorMessage .= '<li>You have outdated DB (current revision: ' . DB_VERSION . ', your revision: ' . ($database_revision != null ? $database_revision : '<none>') . '). Please, update project DB with SQL updates from "sql/updates" folder.</li>';
+        }
+        if($errorMessage != '') {
+            die('<em><strong style="color:#ff0000">Some error(s) appeared during core self testing:</strong></em><ul>' . $errorMessage . '</ul>Please, solve this problem(s) and <a href="">refresh</a> this page again.');
+        }
+        return true;
+    }
     
     public static function GetCarouselData() {
         if(!self::$carousel_data) {
@@ -41,27 +58,52 @@ Class WoW {
     
     public static function GetLastNews($limit = 20, $start = 0) {
         if(!self::$last_news) {
-            self::LoadLastNews();
+            self::LoadLastNews($limit, $start);
         }
-        $news_to_return = array();
-        for($i = 0; $i < $limit; $i++) {
-            if(!isset(self::$last_news[ $i + $start ])) {
-                continue;
-            }
-            $news_to_return[] = (object) self::$last_news[ $i + $start ];
-        }
-        return $news_to_return;
+        return self::$last_news;
     }
     
-    private static function LoadLastNews() {
-        self::$last_news = DB::WoW()->select("SELECT `id`, `image`, `header_image`, `title_%s` AS `title`, `desc_%s` AS `desc`, `author`, `postdate` FROM `DBPREFIX_news` ORDER BY `postdate` DESC", WoW_Locale::GetLocale(), WoW_Locale::GetLocale());
+    public static function GetFeaturedNews() {
+        return DB::WoW()->select("SELECT `id`, `image`, `title_%s` AS `title` FROM `DBPREFIX_news` LIMIT 5", WoW_Locale::GetLocale());
+    }
+    
+    private static function LoadLastNews($limit, $start) {
+        if($start > 0) {
+            self::$current_news_page = $start;
+            $offset = ($start * $limit);
+        }
+        else {
+            $offset = 0;
+        }
+        self::$last_news = DB::WoW()->select("SELECT `id`, `image`, `header_image`, `title_%s` AS `title`, `desc_%s` AS `desc`, `author`, `postdate` FROM `DBPREFIX_news` ORDER BY `postdate` DESC LIMIT %d, %d", WoW_Locale::GetLocale(), WoW_Locale::GetLocale(), $offset, $limit);
         $count = count(self::$last_news);
         for($i = 0; $i < $count; $i++) {
             self::$last_news[$i]['comments_count'] = DB::WoW()->selectCell("SELECT COUNT(*) FROM `DBPREFIX_blog_comments` WHERE `blog_id` = %d", self::$last_news[$i]['id']);
         }
+        self::$total_news_count = DB::WoW()->selectCell("SELECT COUNT(*) FROM `DBPREFIX_news`");
+        if(self::$current_news_page > 0) {
+            self::$pager_data['prev'] = true;
+            if(($limit * ($start + 1)) < self::$total_news_count) {
+                self::$pager_data['next'] = true;
+            }
+        }
+        else {
+            self::$pager_data['prev'] = false;
+            if(self::$total_news_count > $limit) {
+                self::$pager_data['next'] = true;
+            }
+        }
     }
     
-    public static function GetUrlData($type) {
+    public static function GetPrevPage() {
+        return self::$pager_data['prev'] ? self::$current_news_page - 1 : -1;
+    }
+    
+    public static function GetNextPage() {
+        return self::$pager_data['next'] ? self::$current_news_page + 1 : -1;
+    }
+    
+    public static function GetUrlData($type = NULL) {
         $url_array = explode('/', $_SERVER['REQUEST_URI']);
         if(!is_array($url_array)) {
             return false;
@@ -240,6 +282,46 @@ Class WoW {
                     }
                 }
                 break;
+            case 'game':
+                for($i = 0; $i < $count; $i++) {
+                    switch($url_array[$i]) {
+                        case 'game':
+                            for($j = 0; $j < 10; $j++) {
+                                if(isset($url_array[ $i + ($j) ]) && $url_array[ $i + ($j) ] != null) {
+                                    $urldata['action' . $j] = $url_array[$i + ($j)];
+                                }
+                                else {
+                                    $urldata['action' . $j] = null;
+                                }
+                            }
+                            break;
+                    }
+                }
+                break;
+            case 'faction':
+                for($i = 0; $i < $count; $i++) {
+                    switch($url_array[$i]) {
+                        case 'faction':
+                            for($j = 0; $j < 10; $j++) {
+                                if(isset($url_array[ $i + ($j) ]) && $url_array[ $i + ($j) ] != null) {
+                                    $urldata['action' . $j] = $url_array[$i + ($j)];
+                                }
+                                else {
+                                    $urldata['action' . $j] = null;
+                                }
+                            }
+                            break;
+                    }
+                }
+                break;
+            //this is used for auto navigation menu generator
+            default:
+                for($i = 2; $i < ($count); $i++) {
+                      if(isset($url_array[$i]) && $url_array[$i] != null) {
+                          $urldata[($i - 2)] = ($url_array[$i] == WoW_Locale::GetLocale()) ? '/' : '/'.$url_array[$i].'/';
+                      }
+                }
+                break;
         }
         return $urldata;
     }
@@ -343,7 +425,7 @@ Class WoW {
         return false;
     }
     
-    public static function CatchOperations() {
+    public static function CatchOperations(&$loaded) {
         // Perform log in (if required)
         if(isset($_GET['login']) || preg_match('/\?login/', $_SERVER['REQUEST_URI'])) {
             // $_SERVER['REQUEST_URI'] check is required for mod_rewrited URL cases.
@@ -359,10 +441,10 @@ Class WoW {
         }
         // Locale
         if(isset($_GET['locale']) && !preg_match('/lookup/', $_SERVER['REQUEST_URI'])) {
-            $_SESSION['wow_locale'] = $_GET['locale'];
-            $_SESSION['wow_locale_id'] = WoW_Locale::GetLocaleIDForLocale($_SESSION['wow_locale']);
-            if(WoW_Locale::IsLocale($_SESSION['wow_locale'], $_SESSION['wow_locale_id'])) {
-                WoW_Locale::SetLocale($_SESSION['wow_locale'], $_SESSION['wow_locale_id']);
+            if(WoW_Locale::IsLocale($_GET['locale'], WoW_Locale::GetLocaleIDForLocale($_GET['locale']))) {
+                WoW_Locale::SetLocale($_GET['locale'], WoW_Locale::GetLocaleIDForLocale($_GET['locale']));
+                $loaded = true;
+                setcookie('wow_locale', WoW_Locale::GetLocale(), strtotime('NEXT YEAR'), '/');
                 if(isset($_SERVER['HTTP_REFERER'])) {
                     header('Location: ' . $_SERVER['HTTP_REFERER']);
                     exit;
@@ -373,6 +455,42 @@ Class WoW {
                 }
             }
         }
+    }
+    
+    public static function RedirectTo($url = '') {
+        header('Location: /' . $url);
+        exit; // Terminate script
+    }
+    
+    public static function GetBattleGroup($id = 1, $name = '') {
+        $activeBG = false;
+        if($name != null) {
+            // Find BG with provided name
+            foreach(WoWConfig::$BattleGroups as &$bg) {
+                if($bg['name'] == $name) {
+                    $activeBG = $bg;
+                }
+            }
+        }
+        else {
+            if(isset(WoWConfig::$BattleGroups[$id])) {
+                $activeBG = WoWConfig::$BattleGroups[$i];
+            }
+        }
+        if($activeBG && isset($activeBG['realms'])) {
+            foreach($activeBG['realms'] as &$realm) {
+                $realm = isset(WoWConfig::$Realms[$realm]) ? WoWConfig::$Realms[$realm] : null;
+                if(!$realm) {
+                    unset($realm);
+                }
+            }
+            return $activeBG;
+        }
+        return false;
+    }
+    
+    public static function GetServerType($realmID) {
+        return isset(WoWConfig::$Realms[$realmID]['type']) ? WoWConfig::$Realms[$realmID]['type'] : UNK_SERVER;
     }
 }
 ?>

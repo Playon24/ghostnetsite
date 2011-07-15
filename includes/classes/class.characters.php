@@ -62,6 +62,7 @@ Class WoW_Characters /*implements Interface_Characters*/ {
     private static $item_level     = array();
     private static $role           = 0;
     private static $next_pvp       = 2;
+    private static $last_update    = 0;
     
     // Storages
     private static $professions    = array();
@@ -81,6 +82,10 @@ Class WoW_Characters /*implements Interface_Characters*/ {
     private static $stats_bonuses  = array(); // Enchants/gems bonuses
     private static $pvp_data       = array(); // Character PvP Data (Arena Teams)
     private static $m_skills       = array(); // Character skills
+    private static $m_mounts       = array(); // Character companions & mounts
+    private static $m_mounts_count = array(); // Character companions & mounts counters (collected / not collected)
+    private static $m_spells       = array(); // Character spells
+    private static $m_dbHash       = '';      // Database connection hash
     
     private static function IsCharacterFitsRequirements() {
         if(self::$level < WoWConfig::$MinLevelToDisplay) {
@@ -120,29 +125,30 @@ Class WoW_Characters /*implements Interface_Characters*/ {
         // Data checks
         if(!is_string($name) || $name == null) {
             WoW_Log::WriteError('%s : name must be a string (%s given.)!', __METHOD__, gettype($name));
-            return false;
+            return 1;
         }
         if(!$realm_id || $realm_id == 0) {
             WoW_Log::WriteError('%s : realm ID must be > 0!', __METHOD__);
-            return false;
+            return 1;
         }
         if(!isset(WoWConfig::$Realms[$realm_id])) {
             WoW_Log::WriteError('%s : unable to find realm with ID #%d. Check your configs.', __METHOD__, $realm_id);
-            return false;
+            return 1;
         }
         // Connect to characters DB
         DB::ConnectToDB(DB_CHARACTERS, $realm_id, true, false);
         // Check connection
         if(!DB::Characters()->TestLink()) {
             // Message about failed connection will appear from database handler class.
-            return false;
+            return 1;
         }
+        self::$m_dbHash = DB::Characters()->GetDatabaseInfo('hash');
         // BINARY.
         self::$name = mb_convert_case($name, MB_CASE_TITLE, "UTF-8");
         // If $full == true, we need to check `armory_character_stats` table.
         // Load character fields.
         if(!self::LoadCharacterFieldsFromDB()) {
-            return false;
+            return 1;
         }
         // Some checks before script will load `data` field.
         if(!self::IsCharacterFitsRequirements()) {
@@ -163,6 +169,8 @@ Class WoW_Characters /*implements Interface_Characters*/ {
             self::$data = DB::Characters()->selectCell("SELECT `data` FROM `armory_character_stats` WHERE `guid`=%d LIMIT 1", self::$guid);
             // Convert string to array
             self::HandleDataField();
+            // Last update date
+            self::$last_update = DB::Characters()->selectCell("SELECT `save_date` FROM `armory_character_stats` WHERE `guid` = %d LIMIT 1", self::$guid);
             // Class/race names/keys
             self::$class_name = WoW_Locale::GetString('character_class_' . self::$class, self::$gender);            
             self::$race_name = WoW_Locale::GetString('character_race_' . self::$race, self::$gender);
@@ -199,7 +207,10 @@ Class WoW_Characters /*implements Interface_Characters*/ {
     }
     
     public static function IsCorrect() {
-        DB::ConnectToDB(DB_CHARACTERS, self::GetRealmID());
+        if(DB::Characters()->GetDatabaseInfo('hash') != self::$m_dbHash) {
+            // Reconnect
+            DB::ConnectToDB(DB_CHARACTERS, self::GetRealmID());
+        }
         return (self::$name != null && self::$guid > 0);
     }
     
@@ -424,6 +435,10 @@ Class WoW_Characters /*implements Interface_Characters*/ {
         return true;
     }
     
+    /**
+     * Calculates average item level
+     * @todo should be rewrited "Total Item level" part (Equipped IL is ok)
+     */
     private static function CalculateAverageItemLevel() {
         if(!self::IsInventoryLoaded()) {
             if(!self::LoadInventory(true)) {
@@ -638,7 +653,7 @@ Class WoW_Characters /*implements Interface_Characters*/ {
                 'class' => $team['class'],
                 'gender' => $team['gender'],
                 'level' => $team['level'],
-                'url' => sprintf('%s/character/%s/%s/', WoW::GetWoWPath(), self::GetRealmName(), $team['charName']),
+                'url' => sprintf('%s/wow/%s/character/%s/%s/', WoW::GetWoWPath(), WoW_Locale::GetLocale(), self::GetRealmName(), $team['charName']),
                 'played_week' => $team['played_week'],
                 'wons_week' => $team['wons_week'],
                 'played_season' => $team['played_season'],
@@ -849,10 +864,8 @@ Class WoW_Characters /*implements Interface_Characters*/ {
         switch(self::GetFactionID()) {
             case FACTION_ALLIANCE:
                 return 'alliance';
-                break;
             default:
                 return 'horde';
-                break;
         }
     }
     
@@ -865,7 +878,7 @@ Class WoW_Characters /*implements Interface_Characters*/ {
     }
     
     public static function GetGuildURL() {
-        return sprintf('%s/wow/guild/%s/%s/', WoW::GetWoWPath(), urlencode(self::GetRealmName()), urlencode(self::GetGuildName()));
+        return sprintf('%s/wow/%s/guild/%s/%s/', WoW::GetWoWPath(), WoW_Locale::GetLocale(), urlencode(self::GetRealmName()), urlencode(self::GetGuildName()));
     }
     
     public static function GetPowerType() {
@@ -877,7 +890,7 @@ Class WoW_Characters /*implements Interface_Characters*/ {
     }
     
     public static function GetURL() {
-        return sprintf('%s/wow/character/%s/%s/', WoW::GetWoWPath(), urlencode(self::GetRealmName()), urlencode(self::GetName()));
+        return sprintf('%s/wow/%s/character/%s/%s/', WoW::GetWoWPath(), WoW_Locale::GetLocale(), urlencode(self::GetRealmName()), urlencode(self::GetName()));
     }
     
     public static function GetAverageItemLevel() {
@@ -894,6 +907,25 @@ Class WoW_Characters /*implements Interface_Characters*/ {
     
     public static function GetFeed() {
         return self::$feeds;
+    }
+    
+    public static function GetLastUpdateTimeStamp($date_format = '') {
+        if($date_format != null) {
+            return date($date_format, self::$last_update);
+        }
+        return self::$last_update;
+    }
+    
+    public static function GetArenaTeams() {
+        $team_ids = DB::Characters()->selectRow("SELECT `%s` AS `id` FROM `arena_team_member` WHERE `guid` = %d", self::GetServerType() == SERVER_MANGOS ? 'arenateamid' : 'arenaTeamId', self::GetGUID());
+        if(!$team_ids) {
+            return false;
+        }
+        $teams = array();
+        foreach($team_ids as $id) {
+            $teams[] = new WoW_ArenaTeam(self::GetRealmID(), '', $id['id']);
+        }
+        return $teams;
     }
     
     /**
@@ -1342,6 +1374,10 @@ Class WoW_Characters /*implements Interface_Characters*/ {
         }
     }
     
+    public static function IsHaveArenaTeam() {
+        return DB::Characters()->selectCell("SELECT 1 FROM `arena_team_member` WHERE guid = %d", self::GetGUID());
+    }
+    
     /**
      * @param  int $entry
      * @todo   Check item stats (avoid using mail with spririt by hunters, for example).
@@ -1574,12 +1610,13 @@ Class WoW_Characters /*implements Interface_Characters*/ {
         self::$talent_points = $talent_points;
     }
     
-    public static function GetTalentSpecNameFromDB($spec) {
-        if(!self::IsCorrect()) {
+    public static function GetTalentSpecNameFromDB($spec, $class = 0) {
+        if(!self::IsCorrect() && $class == 0) {
             WoW_Log::WriteError('%s : character was not found.', __METHOD__);
             return false;
         }
-        return DB::WoW()->selectCell("SELECT `name_%s` FROM `DBPREFIX_talent_icons` WHERE `class` = %d AND `spec` = %d LIMIT 1", WoW_Locale::GetLocale(), self::GetClassID(), $spec);
+        $class = $class == 0 ? self::GetClassID() : $class;
+        return DB::WoW()->selectCell("SELECT `name_%s` FROM `DBPREFIX_talent_icons` WHERE `class` = %d AND `spec` = %d LIMIT 1", WoW_Locale::GetLocale(), $class, $spec);
     }
     
     public static function GetTalentSpecIconFromDB($spec) {
@@ -2914,6 +2951,7 @@ Class WoW_Characters /*implements Interface_Characters*/ {
                     self::UpdateAudit(AUDIT_TYPE_MISSING_BELT_BUCKLE, true);
                 }
                 // Unused profession perks
+                // TODO: add more profession perks (currently only enchanting and blacksmithing are available)
                 switch($item->GetSlot()) {
                     case INV_RING_1:
                     case INV_RING_2:
@@ -3065,6 +3103,144 @@ Class WoW_Characters /*implements Interface_Characters*/ {
     
     public static function GetAuditInfo($type) {
         return isset(self::$audit[$type]) ? self::$audit[$type] : false;
+    }
+    
+    public static function InitSpells() {
+        self::LoadSpells();
+    }
+    
+    private static function LoadSpells() {
+        $spells = DB::Characters()->select("SELECT `spell` FROM `character_spell` WHERE `guid` = %d AND `disabled` = 0", self::GetGUID());
+        if(!$spells) {
+            return false;
+        }
+        foreach($spells as $spell) {
+            self::$m_spells[] = $spell['spell'];
+        }
+        unset($spells, $spell);
+        return true;
+    }
+    
+    public static function InitMounts() {
+        self::LoadMounts();
+        self::HandleMounts();
+    }
+    
+    public static function GetMounts() {
+        if(!self::$m_mounts) {
+            self::LoadMounts();
+            self::HandleMounts();
+        }
+        return self::$m_mounts;
+    }
+    
+    private static function LoadMounts() {
+        if(!self::$m_spells) {
+            self::LoadSpells();
+        }
+        $category = WoW_Template::GetPageData('category');
+        if($category == null) {
+            $category = 'companion';
+            WoW_Template::SetPageData('category', $category);
+        }
+        $type = 0;
+        switch($category) {
+            case 'mount':
+                $type = 1;
+                break;
+            case 'companion':
+                $type = 2;
+                break;
+        }
+        if($type == 0) {
+            WoW_Log::WriteError('%s : unknown mount type (type: %d, category: %s)!', __METHOD__, $type, $category);
+            return false;
+        }
+        self::$m_mounts = DB::WoW()->select("SELECT `spell`, `type`, `name_%s` AS `name`, `mount_type`, `icon`, `quality`, `npc_id`, `item_id`, `source`, `source_%s` AS `sourceText` FROM `DBPREFIX_mounts` WHERE `type` = %d ORDER BY `quality` DESC, `name_%s` ASC", WoW_Locale::GetLocale(), WoW_Locale::GetLocale(), $type, WoW_Locale::GetLocale());
+    }
+    
+    private static function HandleMounts() {
+        if(!self::$m_mounts) {
+            self::LoadMounts();
+        }
+        self::$m_mounts_count = array(
+            'collected' => 0,
+            'not_collected' => 0
+        );
+        foreach(self::$m_mounts as &$mount) {
+            $type = -1;
+            switch($mount['source']) {
+                case SOURCE_TYPE_QUEST:
+                    $type = 'quest';
+                    break;
+                case SOURCE_TYPE_DROP:
+                    $type = 'drop';
+                    break;
+                case SOURCE_TYPE_PROFESSION:
+                    $type = 'prof';
+                    break;
+                case SOURCE_TYPE_ACHIEVEMENT:
+                    $type = 'achv';
+                    break;
+                case SOURCE_TYPE_FACTION:
+                    $type = 'faction';
+                    break;
+                case SOURCE_TYPE_EVENT:
+                    $type = 'event';
+                    break;
+                case SOURCE_TYPE_PROMOTION:
+                    $type = 'promo';
+                    break;
+                case SOURCE_TYPE_PET_STORE:
+                    $type = 'store';
+                    break;
+                case SOURCE_TYPE_CARD_GAME:
+                    $type = 'tgc';
+                    break;
+                case SOURCE_TYPE_TRAINER:
+                case SOURCE_TYPE_OTHER:
+                    $type = 'other';
+                    break;
+                case SOURCE_TYPE_VENDOR:
+                    $type = 'vendor';
+                    break;
+            }
+            if($type == -1) {
+                continue;
+            }
+            $mount['source_type'] = $type;
+            $mount['add_styles'] = $type;
+            if($mount['type'] == 1) {
+                switch($mount['mount_type']) {
+                    case 1:
+                        $mount['add_styles'] .= ' ground';
+                        break;
+                    case 2:
+                        $mount['add_styles'] .= ' flying';
+                        break;
+                    case 3:
+                        $mount['add_styles'] .= ' aquatic';
+                        break;
+                }
+            }
+            if(in_array($mount['spell'], self::$m_spells)) {
+                ++self::$m_mounts_count['collected'];
+                $mount['add_styles'] .= ' is-collected';
+            }
+            else {
+                ++self::$m_mounts_count['not_collected'];
+                $mount['add_styles'] .= ' not-collected';
+            }
+        }
+        return true;
+    }
+    
+    public static function GetCollectedMountsCount() {
+        return isset(self::$m_mounts_count['collected']) ? self::$m_mounts_count['collected'] : 0;
+    }
+    
+    public static function GetNotCollectedMountsCount() {
+        return isset(self::$m_mounts_count['not_collected']) ? self::$m_mounts_count['not_collected'] : 0;
     }
 }
 ?>

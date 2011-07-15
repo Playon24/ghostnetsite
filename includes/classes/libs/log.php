@@ -30,7 +30,7 @@ Class WoW_Log implements Log_Interface {
     public static function Initialize($is_enabled, $log_level) {
         self::$is_enabled = $is_enabled;
         self::$log_level = $log_level;
-        self::$file = WOW_DIRECTORY . '/_debug/tmp.dbg';
+        self::$file = WEBROOT_DIR . '_debug' . DS . 'tmp.dbg';
         return true;
     }
     
@@ -89,7 +89,7 @@ Class WoW_Log implements Log_Interface {
     }
     
     private static function WriteFile($data) {
-        @file_put_contents(self::$file, $data, FILE_APPEND);
+        file_put_contents(self::$file, $data, FILE_APPEND);
         return;
     }
 }

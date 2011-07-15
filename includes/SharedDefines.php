@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  **/
 
-/* Classes */
+/** WoW Classes **/
 define('CLASS_WARRIOR', 1);
 define('CLASS_PALADIN', 2);
 define('CLASS_HUNTER',  3);
@@ -31,18 +31,44 @@ define('CLASS_WARLOCK', 9);
 define('CLASS_DRUID',   11);
 define('MAX_CLASSES',   12);
 
-/* Races */
-define('RACE_HUMAN',    1);
-define('RACE_ORC',      2);
-define('RACE_DWARF',    3);
-define('RACE_NIGHTELF', 4);
-define('RACE_UNDEAD',   5);
-define('RACE_TAUREN',   6);
-define('RACE_GNOME',    7);
-define('RACE_TROLL',    8);
+define('CLASS_MASK_WARRIOR',   1);
+define('CLASS_MASK_PALADIN',   2);
+define('CLASS_MASK_HUNTER',    4);
+define('CLASS_MASK_ROGUE',     8);
+define('CLASS_MASK_PRIEST',   16);
+define('CLASS_MASK_DK',       32);
+define('CLASS_MASK_SHAMAN',   64);
+define('CLASS_MASK_MAGE',    128);
+define('CLASS_MASK_WARLOCK', 256);
+define('CLASS_MASK_DRUID',   512);
+
+/** WoW Races **/
+define('RACE_HUMAN',     1);
+define('RACE_ORC',       2);
+define('RACE_DWARF',     3);
+define('RACE_NIGHTELF',  4);
+define('RACE_UNDEAD',    5);
+define('RACE_TAUREN',    6);
+define('RACE_GNOME',     7);
+define('RACE_TROLL',     8);
+define('RACE_GOBLIN',    9);
 define('RACE_BLOODELF', 10);
 define('RACE_DRAENEI',  11);
-define('MAX_RACES',     12);
+define('RACE_WORGEN',   22);
+define('MAX_RACES',     23);
+
+define('RACE_MASK_HUMAN',      1);
+define('RACE_MASK_ORC',        2);
+define('RACE_MASK_DWARF',      4);
+define('RACE_MASK_NIGHTELF',   8);
+define('RACE_MASK_UNDEAD',    16);
+define('RACE_MASK_TAUREN',    32);
+define('RACE_MASK_GNOME',     64);
+define('RACE_MASK_TROLL',    128);
+define('RACE_MASK_GOBLIN',   256);
+define('RACE_MASK_BLOODELF', 512);
+define('RACE_MASK_DRAENEI', 1024);
+define('RACE_MASK_WORGEN',  2048);
 
 /* Factions */
 define('FACTION_HORDE',    1);
@@ -628,6 +654,14 @@ define('POWER_RUNE', 5);
 define('POWER_RUNIC_POWER', 6);
 define('MAX_POWERS', 7);
 
+define('POWER_MASK_MANA',         1);
+define('POWER_MASK_RAGE',         2);
+define('POWER_MASK_FOCUS',        4);
+define('POWER_MASK_ENERGY',       8);
+define('POWER_MASK_HAPPINES',    16);
+define('POWER_MASK_RUNE',        32);
+define('POWER_MASK_RUNIC_POWER', 64);
+
 /* ItemFlags */
 define('ITEM_FLAGS_BINDED', 0x00000001); // set in game at binding, not set in template
 define('ITEM_FLAGS_CONJURED', 0x00000002);
@@ -875,6 +909,8 @@ define('ERROR_USER_LOCKED', 16);
 define('ERROR_USER_BANNED', 32);
 define('ERORR_INVALID_PASSWORD_RECOVERY_COMBINATION', 64);
 define('ERORR_INVALID_PASSWORD_RECOVERY_ANSWER', 128);
+define('ERORR_NEW_PASSWORD_NOT_MATCH', 256);
+define('ERORR_NEW_PASSWORD_FAIL', 512);
 
 /** Database Types **/
 define('DB_WORLD',      0);
@@ -897,6 +933,12 @@ define('ROLE_RANGED', 2);
 define('ROLE_CASTER', 3);
 define('ROLE_HEALER', 4);
 define('ROLE_TANK',   5);
+
+define('ROLE_MASK_MELEE',  1);
+define('ROLE_MASK_RANGED', 2);
+define('ROLE_MASK_CASTER', 4);
+define('ROLE_MASK_HEALER', 8);
+define('ROLE_MASK_TANK',  16);
 
 /** Professions **/
 define('MAX_PROFESSION_SKILL_VALUE', 450); // Wrath: 450 (+10 Racial Bonus), Cata: 525 (+10 Racial Bonus)
@@ -935,6 +977,7 @@ define('EXPANSION_BC', 1);
 define('EXPANSION_WRATH', 2);
 define('EXPANSION_CATA', 3);
 
+/** WoW Zones **/
 define('INSTANCE_FLAG_DUNGEON', 1);
 define('INSTANCE_FLAG_RAID', 2);
 define('INSTANCE_FLAG_NORMAL', 4);
@@ -948,4 +991,41 @@ define('INSTANCE_FLAG_SKIP_INTRODUCED_INFO', 512);
 define('INSTANCE_FLAG_RAID1_MODE_ONLY', 1024); // 10 players mode only
 define('INSTANCE_FLAG_RAID2_MODE_ONLY', 2048); // 25 players mode only
 define('INSTANCE_FLAG_RAID3_MODE_ONLY', 4096); // 40 players mode only
+
+/** WoW Classes **/
+define('ITEM_SUBCLASS_MASK_CLOTH',   1);
+define('ITEM_SUBCLASS_MASK_LEATHER', 2);
+define('ITEM_SUBCLASS_MASK_MAIL',    4);
+define('ITEM_SUBCLASS_MASK_PLATE',   8);
+define('ITEM_SUBCLASS_MASK_SHIELD', 16);
+
+define('ITEM_SUBCLASS_MASK_AXE', 1);
+define('ITEM_SUBCLASS_MASK_AXE2', 2);
+define('ITEM_SUBCLASS_MASK_BOW', 4);
+define('ITEM_SUBCLASS_MASK_GUN', 8);
+define('ITEM_SUBCLASS_MASK_MACE', 16);
+define('ITEM_SUBCLASS_MASK_MACE2', 32);
+define('ITEM_SUBCLASS_MASK_POLEARM', 64);
+define('ITEM_SUBCLASS_MASK_SWORD', 128);
+define('ITEM_SUBCLASS_MASK_SWORD2', 256);
+define('ITEM_SUBCLASS_MASK_STAFF', 512);
+define('ITEM_SUBCLASS_MASK_FIST', 1024);
+define('ITEM_SUBCLASS_MASK_DAGGER', 2048);
+define('ITEM_SUBCLASS_MASK_THROWN', 4096);
+define('ITEM_SUBCLASS_MASK_SPEAR', 8192);
+define('ITEM_SUBCLASS_MASK_CROSSBOW', 16384);
+define('ITEM_SUBCLASS_MASK_WAND', 32768);
+
+define('SOURCE_TYPE_QUEST', 0);
+define('SOURCE_TYPE_DROP', 1);
+define('SOURCE_TYPE_PROFESSION', 2);
+define('SOURCE_TYPE_ACHIEVEMENT', 3);
+define('SOURCE_TYPE_FACTION', 4);
+define('SOURCE_TYPE_EVENT', 5);
+define('SOURCE_TYPE_PROMOTION', 6);
+define('SOURCE_TYPE_PET_STORE', 7);
+define('SOURCE_TYPE_CARD_GAME', 8);
+define('SOURCE_TYPE_TRAINER', 9);
+define('SOURCE_TYPE_VENDOR', 10);
+define('SOURCE_TYPE_OTHER', 11);
 ?>

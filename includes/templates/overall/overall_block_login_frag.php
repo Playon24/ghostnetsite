@@ -29,7 +29,7 @@
 		<div id="embedded-login">
 			<h1>Battle.net</h1>
 
-	<form action="<?php echo WoW::GetWoWPath(); ?>/login/login.frag" method="post">
+	<form action="<?php echo WoW::GetWoWPath(); ?>/login/<?php echo WoW_Locale::GetLocale(); ?>/login.frag" method="post">
 		<a id="embedded-close" href="javascript:;" onclick="updateParent('close')"> </a>
 
 		<div>

@@ -66,8 +66,8 @@
                                 foreach($auction_items as $item) {
                                     echo sprintf('<tr id="auction-%d" class="row%d">
 											<td class="item" data-raw="-4 %s">
-												<a href="%s/wow/item/%d" data-item="t=true&amp;i=%d&amp;s=%d" class="icon-frame frame-36" style="background-image: url(\'http://eu.media.blizzard.com/wow/icons/36/%s.jpg\');"> </a>
-												<a href="%s/wow/item/%d" data-item="t=true&amp;i=%d&amp;s=%d" class="color-q%d"><strong>%s</strong></a><br />
+												<a href="%s/wow/' . WoW_Locale::GetLocale() . '/item/%d" data-item="t=true&amp;i=%d&amp;s=%d" class="icon-frame frame-36" style="background-image: url(\'http://eu.media.blizzard.com/wow/icons/36/%s.jpg\');"> </a>
+												<a href="%s/wow/' . WoW_Locale::GetLocale() . '/item/%d" data-item="t=true&amp;i=%d&amp;s=%d" class="color-q%d"><strong>%s</strong></a><br />
 												<a href="%s">%s</a>
 
 		<span class="png-fix" data-tooltip="%s">

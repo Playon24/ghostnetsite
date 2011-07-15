@@ -149,7 +149,7 @@ $ssv = WoW_Template::GetPageData('ssv');
             if(isset($_GET['g' . $i])) {
                 $socket_info = WoW_Items::GetSocketInfo($_GET['g' . $i]);
                 if($socket_info) {
-                    $sockets_text .= sprintf('<a href="%s/wow/item/%d" class="gem">
+                    $sockets_text .= sprintf('<a href="%s/wow/' . WoW_Locale::GetLocale() . '/item/%d" class="gem">
                     <img src="http://eu.battle.net/wow-assets/static/images/icons/18/%s.jpg" alt="" />
                     <span class="frame"></span>
                     </a>
@@ -293,10 +293,10 @@ $ssv = WoW_Template::GetPageData('ssv');
                     $pieces_text = null;
                     for($i = 1; $i < $totalItemsCount+1; $i++) {
                         if(in_array($setdata['item' . $i], $setpieces)) {
-                            $pieces_text .= sprintf('<li class="indent"><a class="color-tooltip-beige has-tip" href="%s/wow/item/%d">%s</li>', WoW::GetWoWPath(), $setdata['item' . $i], WoW_Items::GetItemName($setdata['item' . $i]));
+                            $pieces_text .= sprintf('<li class="indent"><a class="color-tooltip-beige has-tip" href="%s/wow/' . WoW_Locale::GetLocale() . '/item/%d">%s</li>', WoW::GetWoWPath(), $setdata['item' . $i], WoW_Items::GetItemName($setdata['item' . $i]));
                         }
                         else {
-                            $pieces_text .= sprintf('<li class="indent"><a class="color-d4 has-tip" href="%s/wow/item/%d">%s</li>', WoW::GetWoWPath(), $setdata['item' . $i], WoW_Items::GetItemName($setdata['item' . $i]));
+                            $pieces_text .= sprintf('<li class="indent"><a class="color-d4 has-tip" href="%s/wow/' . WoW_Locale::GetLocale() . '/item/%d">%s</li>', WoW::GetWoWPath(), $setdata['item' . $i], WoW_Items::GetItemName($setdata['item' . $i]));
                         }
                     }
                 }
@@ -306,7 +306,7 @@ $ssv = WoW_Template::GetPageData('ssv');
                 if(is_array($setdata)) {
                     $isItemSet = true;
                     for($i = 1; $i < 6; $i++) {
-                        $pieces_text .= sprintf('<li class="indent"><a class="color-d4 has-tip" href="%s/wow/item/%d">%s</li>', WoW::GetWoWPath(), $setdata['item' . $i], WoW_Items::GetItemName($setdata['item' . $i]));
+                        $pieces_text .= sprintf('<li class="indent"><a class="color-d4 has-tip" href="%s/wow/' . WoW_Locale::GetLocale() . '/item/%d">%s</li>', WoW::GetWoWPath(), $setdata['item' . $i], WoW_Items::GetItemName($setdata['item' . $i]));
                     }
                 }
             }
@@ -357,7 +357,18 @@ $ssv = WoW_Template::GetPageData('ssv');
             }
             echo '</li>';
         }
-        //TODO: Item source
+        if(WoW_Template::GetPageData('tooltip') == true) {
+            $source = WoW_Items::GetItemSource($proto->entry);
+            if($source) {
+                switch($source['type']) {
+                    case 'sourceType.creatureDrop':
+                        break;
+                    case 'sourceType.questReward':
+                        echo '<ul class="item-specs"><li><span class="color-tooltip-yellow">Quest:</span> <span data-quest="' . $source['questId'] . '">' . $source['Title'] . '</span></li>' . ($source['questZone'] > 0 ? '<li><span class="color-tooltip-yellow">Zone:</span></li>' . WoW_Utils::GetZoneName($source['questZone']) : null) . '</ul>';
+                        break;
+                }
+            }
+        }
         ?>
     </ul>
 <span class="clear"><!-- --></span>

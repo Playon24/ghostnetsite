@@ -722,7 +722,7 @@ Class WoW_Items {
             return false;
         }
         $breadcrumbs = array();
-        $global_url = sprintf('%s/wow/item/', WoW::GetWoWPath());
+        $global_url = sprintf('%s/wow/%s/item/', WoW::GetWoWPath(), WoW_Locale::GetLocale());
         $index = 0;
         if(isset($item_info['classId'])) {
             $global_url .= '?classId=' . $item_info['classId'];
@@ -1115,6 +1115,76 @@ Class WoW_Items {
                 break;
         }
         return $item_tabs;
+    }
+
+    public function GetItemSource($entry) {
+        $source_info = DB::WoW()->selectRow("SELECT `source`, `areaKey` FROM `DBPREFIX_item_sources` WHERE `item` = %d", $entry);
+        if(!$source_info) {
+            return false;
+        }
+        switch($source_info['source']) {
+            case 'sourceType.none':
+                return false;
+            case 'sourceType.vendor':
+            case 'sourceType.questReward':
+            case 'sourceType.creatureDrop':
+                return self::FindItemSourceInfo($entry, $source_info['source']);
+        }
+        return false;
+    }
+    
+    public function FindItemSourceInfo($entry, $type) {
+        $source_info = false;
+        switch($type) {
+            case 'sourceType.questReward':
+                $source_info = DB::World()->selectRow("
+                SELECT
+                `a`.`entry` AS `questId`,
+                `a`.`Title`,
+                `a`.`ZoneOrSort` AS `questZone`,
+                %s
+                FROM `quest_template` AS `a`
+                %s
+                WHERE
+                `a`.`RewChoiceItemId1` = %d OR `a`.`RewChoiceItemId2` = %d OR `a`.`RewChoiceItemId3` = %d OR `a`.`RewChoiceItemId4` = %d OR `a`.`RewChoiceItemId5` = %d OR `a`.`RewChoiceItemId6` = %d OR
+                `a`.`RewItemId1` = %d OR `a`.`RewItemId2` = %d OR `a`.`RewItemId3` = %d OR `a`.`RewItemId4` = %d
+                LIMIT 1",
+                    (WoW_Locale::GetLocale() != LOCALE_EN ? '`b`.`Title_loc' . WoW_Locale::GetLocaleId() . '` AS `Title_Loc`' : 'NULL'),
+                    (WoW_Locale::GetLocale() != LOCALE_EN ? 'LEFT JOIN `locale_quest` AS `b` ON `b`.`entry` = `a`.`entry`' : null),
+                    $entry, $entry, $entry, $entry, $entry, $entry, $entry, $entry, $entry, $entry
+                );
+                if(!$source_info) {
+                    return false;
+                }
+                if(WoW_Locale::GetLocale() != LOCALE_EN && $source_info['Title_Loc'] != null) {
+                    $source_info['Title'] = $source_info['Title_Loc'];
+                }
+                break;
+            case 'sourceType.creatureDrop':
+                $source_info = DB::World()->selectRow("
+                SELECT
+                `a`.`entry` AS `npcId`,
+                `b`.`name`,
+                %s
+                FROM
+                LEFT JOIN `creature_template` AS `b` ON `b`.`entry` = `a`.`entry`
+                %s
+                WHERE
+                `b`.`item` = %d
+                LIMIT 1",
+                    (WoW_Locale::GetLocale() != LOCALE_EN ? '`c`.`name_loc`' . WoW_Locale::GetLocaleId() . '` AS `name_loc`' : 'NULL'),
+                    (WoW_Locale::GetLocale() != LOCALE_EN ? 'LEFT JOIN `locale_creature` AS `c` ON `c`.`entry` = `a`.`entry`' : null),
+                    $entry
+                );
+                if($source_info && WoW_Locale::GetLocale() != LOCALE_EN && $source_info['name_loc'] != null) {
+                    $source_info['name'] = $source_info['name_loc'];
+                }
+                break;
+            case 'sourceType.vendor':
+                break;
+        }
+        $source_info['type'] = $type;
+        return $source_info;
     }
 }
 ?>

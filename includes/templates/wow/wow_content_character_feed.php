@@ -1,7 +1,8 @@
 <div id="content">
 <div class="content-top">
 <div class="content-trail">
-<ol class="ui-breadcrumb">
+<?php WoW_Template::NavigationMenu(); ?>
+<!--<ol class="ui-breadcrumb">
 <li>
 <a href="<?php echo WoW::GetWoWPath(); ?>/wow/" rel="np">
 World of Warcraft
@@ -14,9 +15,7 @@ World of Warcraft
 </li>
 <li>
 <a href="<?php echo WoW_Characters::GetURL(); ?>" rel="np">
-<?php
-echo sprintf('%s @ %s', WoW_Characters::GetName(), WoW_Characters::GetRealmName());
-?>
+<?php echo sprintf('%s @ %s', WoW_Characters::GetName(), WoW_Characters::GetRealmName()); ?>
 </a>
 </li>
 <li class="last">
@@ -24,7 +23,7 @@ echo sprintf('%s @ %s', WoW_Characters::GetName(), WoW_Characters::GetRealmName(
 <?php echo WoW_Locale::GetString('template_character_feed'); ?>
 </a>
 </li>
-</ol>
+</ol>-->
 </div>
 <div class="content-bot">	
 	<div id="profile-wrapper" class="profile-wrapper profile-wrapper-<?php echo WoW_Characters::GetFactionName(); ?>">
@@ -73,8 +72,8 @@ WoW_Template::LoadTemplate('block_profile_menu');
                     $i, $event['icon'], $event['name'], $event['desc'], $event['date']);
                     break;
                 case TYPE_ITEM_FEED:
-                    $item_link = sprintf('<a href="%s/wow/item/%d" class="color-q%d" data-item="%s">%s</a>', WoW::GetWoWPath(), $event['id'], $event['quality'], $event['data-item'], $event['name']);
-                    echo sprintf('<li><dl><dd><a href="%s/wow/item/%d" class="color-q%d" data-item="%s">
+                    $item_link = sprintf('<a href="%s/wow/' . WoW_Locale::GetLocale() . '/item/%d" class="color-q%d" data-item="%s">%s</a>', WoW::GetWoWPath(), $event['id'], $event['quality'], $event['data-item'], $event['name']);
+                    echo sprintf('<li><dl><dd><a href="%s/wow/' . WoW_Locale::GetLocale() . '/item/%d" class="color-q%d" data-item="%s">
                     <span  class="icon-frame frame-18" style=\'background-image: url("http://eu.battle.net/wow-assets/static/images/icons/18/%s.jpg");\'>
                     </span>
                     </a>

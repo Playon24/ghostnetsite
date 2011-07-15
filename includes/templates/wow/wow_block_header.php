@@ -1,10 +1,10 @@
 <head>
-<title><?php echo WoW_Template::GetPageTitle() . WoW_Locale::GetString('template_title'); ?></title>
+<title><?php echo WoW_Layout::GetPageTitle() . WoW_Locale::GetString('template_title'); ?></title>
 <meta content="false" http-equiv="imagetoolbar" />
 <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" />
 <link rel="shortcut icon" href="<?php echo WoW::GetWoWPath(); ?>/wow/static/local-common/images/favicons/wow.ico" type="image/x-icon"/>
 <link rel="search" type="application/opensearchdescription+xml" href="http://eu.battle.net/<?php echo WoW_Locale::GetLocale(LOCALE_DOUBLE); ?>/data/opensearch" title="<?php echo WoW_Locale::GetString('template_bn_search'); ?>" />
-<?php WoW_Template::PrintCSSForPage(); ?>
+<?php echo WoW_Layout::PrintCSSForPage(); ?>
 <script type="text/javascript" src="<?php echo WoW::GetWoWPath(); ?>/wow/static/local-common/js/third-party/jquery-1.4.4-p1.min.js"></script>
 <script type="text/javascript" src="<?php echo WoW::GetWoWPath(); ?>/wow/static/local-common/js/core.js?v15"></script>
 <script type="text/javascript" src="<?php echo WoW::GetWoWPath(); ?>/wow/static/local-common/js/tooltip.js?v15"></script>
@@ -17,12 +17,12 @@ try { document.execCommand('BackgroundImageCache', false, true) } catch(e) {}
 <script type="text/javascript">
 //<![CDATA[
 Core.staticUrl = '<?php echo WoW::GetWoWPath(); ?>/wow/static';
-Core.baseUrl = '<?php echo WoW::GetWoWPath(); ?>/wow';
+Core.baseUrl = '<?php echo WoW::GetWoWPath(); ?>/wow/<?php echo WoW_Locale::GetLocale(); ?>';
 Core.project = 'wow';
 Core.locale = '<?php echo WoW_Locale::GetLocale(LOCALE_DOUBLE); ?>';
 Core.buildRegion = 'eu';
 Core.shortDateFormat= 'dd/MM/Y';
-Core.loggedIn = false;
+Core.loggedIn = <?php echo WoW_Account::IsLoggedIn() ? 'true' : 'false'; ?>;
 Flash.videoPlayer = '<?php echo WoW::GetWoWPath(); ?>/wow/player/videoplayer.swf';
 Flash.videoBase = '<?php echo WoW::GetWoWPath(); ?>/wow/media/videos';
 Flash.ratingImage = '<?php echo WoW::GetWoWPath(); ?>/wow/player/rating-pegi.jpg';

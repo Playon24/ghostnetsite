@@ -15,7 +15,7 @@
                                     foreach($searchResults as $item) {
                                         echo sprintf('<tr class="row%d">
 									<td class="table-link" data-row="1 %s">
-										<a href="%s/wow/item/%d" rel="item:%d" class="color-q%d">
+										<a href="%s/wow/' . WoW_Locale::GetLocale() . '/item/%d" rel="item:%d" class="color-q%d">
                                             <span  class="icon-frame frame-18" style=\'background-image: url("http://eu.battle.net/wow-assets/static/images/icons/18/%s.jpg");\'> </span>
 											%s
 										</a>

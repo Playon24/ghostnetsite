@@ -11,7 +11,7 @@
 </div>
 </form>
 </div>
-<h1 id="logo"><a href="<?php echo WoW::GetWoWPath() . '/account/management/'; ?>" tabindex="50" accesskey="h">Battle.net</a></h1>
+<h1 id="logo"><a href="<?php echo WoW::GetWoWPath() . '/' . WoW_Locale::GetLocale(); ?>/" tabindex="50" accesskey="h">Battle.net</a></h1>
 <div id="navigation">
 <div id="page-menu" class="large">
 <h2><a href="<?php echo WoW::GetWoWPath(); ?>/account/management/"> <?php echo WoW_Locale::GetString('template_management_account_management'); ?>
@@ -141,7 +141,7 @@ Core.load("<?php echo WoW::GetWoWPath(); ?>/account/local-common/js/third-party/
 Core.load("<?php echo WoW::GetWoWPath(); ?>/account/local-common/js/third-party/jquery.mousewheel.min.js?v17");
 Core.load("<?php echo WoW::GetWoWPath(); ?>/account/local-common/js/third-party/jquery.tinyscrollbar.custom.js?v17");
 Core.load("<?php echo WoW::GetWoWPath(); ?>/account/local-common/js/login.js?v17", false, function() {
-Login.embeddedUrl = '<?php echo WoW::GetWoWPath(); ?>/login/login.frag';
+Login.embeddedUrl = '<?php echo WoW::GetWoWPath(); ?>/login/<?php echo WoW_Locale::GetLocale(); ?>/login.frag';
 });
 //]]>
 </script>

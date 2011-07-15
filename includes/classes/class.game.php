@@ -23,20 +23,24 @@ Class WoW_Game {
     private static $m_zone = array();
     private static $m_zone_key = array();
     
+    private static $m_class = array();
+    private static $m_classes = array();
+    private static $m_race = array();
+    
     public static function LoadZones() {
         self::$m_zones = DB::WoW()->select("SELECT
-        `a`.`zone_id`, 
-        `a`.`zone_key`, 
+        `a`.`zone_id`,
+        `a`.`zone_key`,
         `a`.`name_%s` AS `name`,
         `a`.`name_en` AS `nameOriginal`,
-        `a`.`minLevel`, 
-        `a`.`maxLevel`, 
-        `a`.`minLevelExtra`, 
-        `a`.`maxLevelExtra`, 
-        `a`.`flags`, 
-        `a`.`expansion`, 
-        `a`.`itemLevel`, 
-        `a`.`patch`, 
+        `a`.`minLevel`,
+        `a`.`maxLevel`,
+        `a`.`minLevelExtra`,
+        `a`.`maxLevelExtra`,
+        `a`.`flags`,
+        `a`.`expansion`,
+        `a`.`itemLevel`,
+        `a`.`patch`,
         `a`.`dungeonGroup`,
         `b`.`name_%s` AS `dungeonGroupName`,
         `b`.`name_en` AS `dungeonGroupNameOriginal`
@@ -71,6 +75,8 @@ Class WoW_Game {
         `a`.`itemLevel`,
         `a`.`patch`,
         `a`.`dungeonGroup`,
+        `a`.`floor_levels_count` AS `floorLevelsCount`,
+        `a`.`floor_levels_%s` AS `floorLevels`,
         `b`.`name_%s` AS `dungeonGroupName`,
         `b`.`name_en` AS `dungeonGroupNameOriginal`,
         `c`.`name_%s` AS `locationName`,
@@ -78,7 +84,7 @@ Class WoW_Game {
         FROM `DBPREFIX_instances` AS `a`
         LEFT JOIN `DBPREFIX_instances_groups` AS `b` ON `b`.`group_id` = `a`.`dungeonGroup`
         LEFT JOIN `DBPREFIX_areas` AS `c` ON `c`.`id` = `a`.`location`
-        WHERE `a`.`zone_key` = '%s' LIMIT 1", WoW_Locale::GetLocale(), WoW_Locale::GetLocale(), WoW_Locale::GetLocale(), WoW_Locale::GetLocale(), WoW_Locale::GetLocale(), self::$m_zone_key);
+        WHERE `a`.`zone_key` = '%s' LIMIT 1", WoW_Locale::GetLocale(), WoW_Locale::GetLocale(), WoW_Locale::GetLocale(), WoW_Locale::GetLocale(), WoW_Locale::GetLocale(), WoW_Locale::GetLocale(), self::$m_zone_key);
         if(!self::$m_zone) {
             WoW_Log::WriteError('%s : zone "%s" was not found in %s_instances table!', __METHOD__, self::$m_zone_key, DB::WoW()->GetDatabaseInfo('prefix'));
             return false;
@@ -231,6 +237,15 @@ Class WoW_Game {
             self::$m_zone['bosses'] = $bosses;
             unset($bosses);
         }
+        if(self::$m_zone['floorLevelsCount'] > 0 && self::$m_zone['floorLevels'] != null) {
+            $zone_floors = explode('|', self::$m_zone['floorLevels']);
+            if($zone_floors) {
+                self::$m_zone['floorLevels'] = $zone_floors;
+            }
+            else {
+                self::$m_zone['floorLevelsCount'] = 0;
+            }
+        }
         WoW_Template::SetPageData('zone_name', self::$m_zone['name']);
         WoW_Template::SetPageData('zone_key', self::$m_zone['zone_key']);
     }
@@ -251,9 +266,78 @@ Class WoW_Game {
     
     public static function GetZone() {
         if(!self::$m_zone) {
-            self::LoadZone();
+            self::LoadZone(WoW_Template::GetPageData('zoneKey'));
         }
         return self::$m_zone;
+    }
+    
+    public static function LoadClass($class_id) {
+        if($class_id <= 0 || $class_id >= MAX_CLASSES) {
+            WoW_Log::WriteError('%s : classID %d was not found!', __METHOD__, $class_id);
+            return false;
+        }
+        self::$m_class = DB::WoW()->selectRow("
+        SELECT `id`, `story_%s` AS `story`, `info_%s` AS `info`, `desc_%s` AS `desc`, `talents_%s` AS `talentsInfo`, `races_flag`, `roles_flag`, `powers_flag`, `armors_flag`, `weapons_flag`, `expansion`
+        FROM `DBPREFIX_classes`
+        WHERE `id` = %d", WoW_Locale::GetLocale(), WoW_Locale::GetLocale(), WoW_Locale::GetLocale(), WoW_Locale::GetLocale(), $class_id);
+        if(!self::$m_class) {
+            WoW_Log::WriteError('%s : class %d was not found in DB!', __METHOD__, $class_id);
+            return false;
+        }
+        self::$m_class['talents'] = DB::WoW()->select("SELECT `spec`, `icon`, `name_%s` AS `name`, `dps`, `tank`, `healer` FROM `DBPREFIX_talent_icons` WHERE `class` = %d ORDER BY `spec`", WoW_Locale::GetLocale(), self::$m_class['id']);
+        self::$m_class['abilities'] = DB::WoW()->select("SELECT `title_%s` AS `title`, `text_%s` AS `text`, `icon` FROM `DBPREFIX_class_abilities` WHERE `class` = %d", WoW_Locale::GetLocale(), WoW_Locale::GetLocale(), $class_id);
+        if(!self::$m_class['abilities']) {
+            WoW_Log::WriteError('%s : unable to load abilities for class %d!', __METHOD__, $class_id);
+            // Do not return false
+        }
+        return true;
+    }
+    
+    public static function GetClass() {
+        return self::$m_class;
+    }
+    
+    public static function LoadRace($race_id) {
+        if($race_id <= 0 || $race_id >= MAX_RACES) {
+            WoW_Log::WriteError('%s : raceID %d was not found!', __METHOD__, $race_id);
+            return false;
+        }
+        self::$m_race = DB::WoW()->selectRow("
+        SELECT
+        `id`, `story_%s` AS `story`, `info_%s` AS `info`, `location_%s` AS `location`, `location_info_%s` AS `location_info`, `homecity_%s` AS `homecity`,
+        `homecity_info_%s` AS `homecity_info`, `mount_%s` AS `mount`, `mount_info_%s` AS `mount_info`, `leader_%s` AS `leader`, `leader_info_%s` AS `leader_info`,
+        `classes_flag`, `expansion`
+        FROM `DBPREFIX_races`
+        WHERE `id` = '%d'",
+        WoW_Locale::GetLocale(), WoW_Locale::GetLocale(), WoW_Locale::GetLocale(), WoW_Locale::GetLocale(), WoW_Locale::GetLocale(), 
+        WoW_Locale::GetLocale(), WoW_Locale::GetLocale(), WoW_Locale::GetLocale(), WoW_Locale::GetLocale(), WoW_Locale::GetLocale(), $race_id);
+        if(!self::$m_race) {
+            WoW_Log::WriteError('%s : race %d was not found in DB!', __METHOD__, $race_id);
+            return false;
+        }
+        self::$m_race['abilities'] = DB::WoW()->select("SELECT `title_%s` AS `title`, `text_%s` AS `text`, `icon` FROM `DBPREFIX_race_abilities` WHERE `race` = %d", WoW_Locale::GetLocale(), WoW_Locale::GetLocale(), $race_id);
+        if(!self::$m_race['abilities']) {
+            WoW_Log::WriteError('%s : unable to load abilities for race %d!', __METHOD__, $race_id);
+            // Do not return false
+        }
+        return true;
+    }
+    
+    public static function GetRace() {
+        return self::$m_race;
+    }
+    
+    public static function GetClassRole($class_id) {
+        if(!self::$m_classes) {
+            // Re-load classes
+            self::$m_classes = DB::WoW()->select("SELECT `id`, `roles_flag` FROM `DBPREFIX_classes`");
+        }
+        foreach(self::$m_classes as &$class) {
+            if($class['id'] == $class_id) {
+                return $class['roles_flag'];
+            }
+        }
+        return 0;
     }
 }
 ?>
