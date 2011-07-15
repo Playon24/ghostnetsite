@@ -8,7 +8,7 @@
             foreach($characters as $char) {
                 $guild_text = null;
                 if($char['guildId'] > 0) {
-                    $guild_text = sprintf('<a href="%s/wow/guild/%s/%s/">&lt;%s&gt;</a>', WoW::GetWoWPath(), $char['realmName'], $char['guildName'], $char['guildName']);
+                    $guild_text = sprintf('<a href="%s/wow/%s/guild/%s/%s/">&lt;%s&gt;</a>', WoW::GetWoWPath(), WoW_Locale::GetLocale(), $char['realmName'], $char['guildName'], $char['guildName']);
                 }
                 echo sprintf('<div class="search-result">
         <div class="multi-type">

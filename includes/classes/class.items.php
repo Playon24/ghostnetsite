@@ -722,7 +722,7 @@ Class WoW_Items {
             return false;
         }
         $breadcrumbs = array();
-        $global_url = sprintf('%s/wow/item/', WoW::GetWoWPath());
+        $global_url = sprintf('%s/wow/%s/item/', WoW::GetWoWPath(), WoW_Locale::GetLocale());
         $index = 0;
         if(isset($item_info['classId'])) {
             $global_url .= '?classId=' . $item_info['classId'];

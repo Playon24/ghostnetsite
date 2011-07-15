@@ -19,7 +19,9 @@
  **/
 
 class Marketing extends Controller {
-    public function main() { }
+    public function main() {
+		die('Marketing is not supported');
+	}
 }
 
 ?>

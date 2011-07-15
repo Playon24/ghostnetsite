@@ -435,6 +435,10 @@ Class WoW_Characters /*implements Interface_Characters*/ {
         return true;
     }
     
+    /**
+     * Calculates average item level
+     * @todo should be rewrited "Total Item level" part (Equipped IL is ok)
+     */
     private static function CalculateAverageItemLevel() {
         if(!self::IsInventoryLoaded()) {
             if(!self::LoadInventory(true)) {
@@ -860,10 +864,8 @@ Class WoW_Characters /*implements Interface_Characters*/ {
         switch(self::GetFactionID()) {
             case FACTION_ALLIANCE:
                 return 'alliance';
-                break;
             default:
                 return 'horde';
-                break;
         }
     }
     
@@ -876,7 +878,7 @@ Class WoW_Characters /*implements Interface_Characters*/ {
     }
     
     public static function GetGuildURL() {
-        return sprintf('%s/wow/guild/%s/%s/', WoW::GetWoWPath(), urlencode(self::GetRealmName()), urlencode(self::GetGuildName()));
+        return sprintf('%s/wow/%s/guild/%s/%s/', WoW::GetWoWPath(), WoW_Locale::GetLocale(), urlencode(self::GetRealmName()), urlencode(self::GetGuildName()));
     }
     
     public static function GetPowerType() {

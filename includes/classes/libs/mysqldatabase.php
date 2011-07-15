@@ -125,7 +125,7 @@ Class WoW_DatabaseHandler {
         $performed_query = @mysql_query($safe_sql, $this->connectionLink);
         $this->errmsg = @mysql_error($this->connectionLink);
         $this->errno = @mysql_errno($this->connectionLink);
-        if($performed_query == false) {
+        if(!$performed_query) {
             WoW_Log::WriteLog('%s : unable to execute SQL query (%s). MySQL error: %s', __METHOD__, $safe_sql, $this->errmsg ? sprintf('"%s" (Error #%d)', $this->errmsg, $this->errno) : 'none');
             return false;
         }

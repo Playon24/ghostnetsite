@@ -40,7 +40,7 @@
 										<img data-tooltip="%s" alt="" src="%s/wow/static/images/icons/faction/%d.gif" />
 									</td>
 									<td>
-                                        <a href="%s/wow/guild/%s/%s/">%s</a>
+                                        <a href="%s/wow/%s/guild/%s/%s/">%s</a>
 									</td>
 									<td>
 										%s
@@ -66,7 +66,7 @@
                                     WoW_Locale::GetString('faction_' . (WoW_Utils::GetFactionId($char['raceId']) == FACTION_ALLIANCE ? 'alliance' : 'horde')),
                                     WoW::GetWoWPath(),
                                     WoW_Utils::GetFactionId($char['raceId']),
-                                    WoW::GetWoWPath(), $char['realmName'], $char['guildName'], $char['guildName'],
+                                    WoW::GetWoWPath(), Wow_Locale::GetLocale(), $char['realmName'], $char['guildName'], $char['guildName'],
                                     $char['realmName'],
                                     WoWConfig::$DefaultBGName
                                 );

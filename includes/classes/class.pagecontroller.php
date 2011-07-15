@@ -100,31 +100,40 @@ Class PageController {
             $this->m_locale = $_COOKIE['wow_locale'];
         }
     }
+	
+    private function GetNewUrl(&$url_data) {
+        switch($this->m_type) {
+            case 'wow':
+            case 'login':
+                unset($url_data[$this->getDeep(1)]);
+                $newUrl = WoW::GetWoWPath() . '/' . $this->m_type . '/' . $_COOKIE['wow_locale'] . '/';
+                break;
+            default:
+                $newUrl = $_COOKIE['wow_locale'] . '/';
+                break;
+        }
+        // Add url pieces
+        foreach($url_data as $url_piece) {
+            if(empty($url_piece)) {
+                continue;
+            }
+            $newUrl .= $url_piece . '/';
+        }
+        return $newUrl;
+    }
     
     private function ParseURL() {
         $url_data = explode('/', $this->m_url);
         $allowed_locales = array('de', 'en', 'es', 'fr', 'ru');
         if((!isset($url_data[$this->m_locale_index]) || $url_data[$this->m_locale_index] === null || !in_array($url_data[$this->m_locale_index], $allowed_locales)) && !$this->m_skip_redirect) {
             unset($url_data[$this->getDeep(0)]);
-            if($this->m_type == 'wow') {
-                unset($url_data[$this->getDeep(1)]);
-                $newUrl =  WoW::GetWoWPath(). '/wow/' . $_COOKIE['wow_locale'] . '/' . implode('/', $url_data);
-            }
-            elseif($this->m_type == 'login') {
-                unset($url_data[$this->getDeep(1)]);
-                $newUrl =  WoW::GetWoWPath(). '/login/' . $_COOKIE['wow_locale'] . '/' . implode('/', $url_data);
-            }
-            else {
-				$newUrl =  $_COOKIE['wow_locale'] . implode('/', $url_data) . '/';
-            }
-            $newUrl = str_replace('//', '/', $newUrl);
-            header('Location: ' . $newUrl);
+            header('Location: ' . $this->GetNewUrl($url_data));
 			die;
         }
         else {
             $this->m_locale = $_COOKIE['wow_locale'];
         }
-        $this->m_controller = 'home';
+		$this->m_controller = 'home';
         if(isset($url_data[$this->m_locale_index + 1])) {
             $exploded = explode('?', $url_data[$this->m_locale_index + 1]);
             if($exploded) {

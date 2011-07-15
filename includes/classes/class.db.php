@@ -54,13 +54,14 @@ Class DB implements DB_Interface {
             return false;
         }
         $db = new WoW_DatabaseHandler($configs->host, $configs->user, $configs->password, $configs->db_name, $configs->charset, $configs->db_prefix);
-        if(!$db || !$db->TestLink()) {
-            WoW_Log::WriteError('%s : unable to establish connection to MySQL server!', __METHOD__);
-            return false;
-        }
+        // Store object (even if it's unable to establish connection)
         if($add) {
             self::$database_objects[$database_type] = $db;
             self::$database_connections[$database_type] = true;
+        }
+        if(!$db || !$db->TestLink()) {
+            WoW_Log::WriteError('%s : unable to establish connection to MySQL server (database: %s)!', __METHOD__);
+            return false;
         }
         if($return) {
             return $db;
