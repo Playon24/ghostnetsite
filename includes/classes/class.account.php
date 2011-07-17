@@ -902,17 +902,21 @@ Class WoW_Account {
      * @return   bool
      **/
     public static function IsHaveActiveCharacter() {
-        if(!self::$characters_data && self::IsCharactersLoaded()) {
+        if(self::IsLoggedIn()) {
+            if(!self::$characters_data && self::IsCharactersLoaded()) {
+                return false;
+            }
+            elseif(!self::$characters_data && !self::IsCharactersLoaded()) {
+                self::LoadCharacters();
+            }
+            if(!self::$characters_data) {
+                return false;
+            }
+            return true;
+        }
+        else{
             return false;
         }
-        elseif(!self::$characters_data && !self::IsCharactersLoaded()) {
-            self::LoadCharacters();
-        }
-        if(!self::$characters_data) {
-            return false;
-        }
-
-        return true;
     }
     
     /**
@@ -1016,8 +1020,9 @@ Class WoW_Account {
             $account_ids[] = self::$myGamesList[$i]['account_id'];
         }
         if(is_array($account_ids) && $accounts_count > 0) {
-            $total_chars_count = DB::Realm()->selectCell("SELECT SUM(`numchars`) FROM `realmcharacters` WHERE `acctid` IN (%s)", $account_ids);
-            self::$characters_data = DB::WoW()->select("SELECT * FROM `DBPREFIX_user_characters` WHERE `account` IN (%s) ORDER BY `index`", $account_ids);
+            $total_chars_count = DB::Realm()->selectCell("SELECT SUM(`numchars`) FROM `realmcharacters` WHERE `acctid` IN (%s)", implode(', ', $account_ids));
+            sprintf("SELECT SUM(`numchars`) FROM `realmcharacters` WHERE `acctid` IN (%s)",  implode(', ', $account_ids));
+            self::$characters_data = DB::WoW()->select("SELECT * FROM `DBPREFIX_user_characters` WHERE `account` IN (%s) ORDER BY `index`",  implode(', ', $account_ids));
         }
         else {
             $total_chars_count = 0;
@@ -1126,7 +1131,7 @@ Class WoW_Account {
             }
             foreach($chars_data as $char) {
                 $tmp_char_data = array(
-                    'account' => self::GetUserID(),
+                    'account' => $char['account'],
                     'index' => $index,
                     'guid' => $char['guid'],
                     'name' => $char['name'],

@@ -23,9 +23,8 @@ class Forum extends Controller {
         WoW_Template::SetTemplateTheme('wow');
         WoW_Template::SetPageData('body_class', WoW_Locale::GetLocale(LOCALE_DOUBLE));
         WoW_Template::SetMenuIndex('menu-forums');
-        
         $url_data = WoW::GetUrlData('forum');
-        $page = isset($_GET['page']) ? $_GET['page'] : 1;
+        $page = (isset($_GET['page']) && preg_match('/([0-9]+)/i', $_GET['page'])) ? $_GET['page'] : 1;
         WoW_Template::SetPageData('current_page', $page);
         // Clear category/thread values
         WoW_Forums::SetCategoryId(0);
@@ -34,7 +33,8 @@ class Forum extends Controller {
         if(isset($url_data['action4'], $url_data['action5'], $url_data['action6']) && (($url_data['action4'].$url_data['action5'].$url_data['action6']) == 'topicpostpreview')) {
             $post_text = isset($_POST['post']) ? $_POST['post'] : null;
             if($post_text == null) {
-                WoW_Template::ErrorPage(500);
+                //This can not be here, it causes error when preview blank post text
+                //WoW_Template::ErrorPage(500);
             }
             // Convert BB codes to HTML
             WoW_Forums::BBCodesToHTML($post_text);
@@ -49,7 +49,7 @@ class Forum extends Controller {
                 WoW_Template::ErrorPage(404);
                 exit;
             }
-            if(isset($url_data['action5']) && $url_data['action5'] == 'topic') {
+            if(isset($url_data['action5']) && $url_data['action5'] == 'topic' && WoW_Account::IsHaveActiveCharacter()) {
                 // Check $_POST query
                 if(isset($_POST['xstoken'])) {
                     $post_allowed = true;
@@ -62,7 +62,7 @@ class Forum extends Controller {
                     if($post_allowed) {
                         $post_info = WoW_Forums::AddNewThread($url_data['category_id'], $_POST, false);
                         if(is_array($post_info)) {
-                            header('Location: ' . WoW::GetWoWPath() . '/wow/forum/topic/' . $post_info['thread_id']);
+                            header('Location: ' . WoW::GetWoWPath() . '/wow/'.WoW_Locale::GetLocale().'/forum/topic/' . $post_info['thread_id']);
                             exit;
                         }
                     }
@@ -81,10 +81,71 @@ class Forum extends Controller {
                 WoW_Template::ErrorPage(404);
                 exit;
             }
-            
-            WoW_Forums::SetPostsPage($page);
+            if(isset($url_data['action4']) && $url_data['action4'] == 'topic' && preg_match('/([0-9]+)/i', $url_data['action5']) && WoW_Account::IsHaveActiveCharacter()) {
+                // Check $_POST query
+                if(isset($_POST['xstoken'])) {
+                    $post_allowed = true;
+                    $required_post_fields = array('xstoken', 'sessionPersist', 'detail');
+                    foreach($required_post_fields as $field) {
+                        if(!isset($_POST[$field])) {
+                            $post_allowed = false;
+                        }
+                    }
+                    if($post_allowed) {
+                        $post_info = WoW_Forums::AddNewPost(null, $url_data['thread_id'], $_POST);
+                        if(is_array($post_info)) {
+                            header('Location: ' . WoW::GetWoWPath() . '/wow/'.WoW_Locale::GetLocale().'/forum/topic/' . $url_data['thread_id']);
+                            exit;
+                        }
+                    }
+                }
+            }
             WoW_Template::SetPageIndex('forum_thread');
             WoW_Template::SetPageData('page', 'forum_thread');
+        }
+        elseif(isset($url_data['action4']) && $url_data['action4'] == 'topic' 
+                && isset($url_data['action5']) && $url_data['action5'] == 'post'
+                && isset($url_data['action6']) && preg_match('/([0-9]+)/i', $url_data['action6'])) {
+            if(isset($url_data['action7']) && WoW_Account::IsHaveActiveCharacter()){
+                switch($url_data['action7']){
+                    case 'frag':
+                        $Quote = WoW_Forums::QuotePost($url_data['action6']);
+                        header('Content-type: text/json');
+                        echo '{"detail":"'.$Quote['message'].'","name":"'.$Quote['name'].'"}';
+                        exit;
+                      break;
+                    case 'edit':
+                        if(isset($_POST['xstoken'])) {
+                            $post_allowed = true;
+                            $required_post_fields = array('xstoken', 'sessionPersist', 'postCommand_detail');
+                            foreach($required_post_fields as $field) {
+                                if(!isset($_POST[$field])) {
+                                    $post_allowed = false;
+                                }
+                            }
+                            if($post_allowed) {
+                                $thread_id = WoW_Forums::EditPost($url_data['action6'], $_POST);
+                                if($thread_id) {
+                                    header('Location: ' . WoW::GetWoWPath() . '/wow/'.WoW_Locale::GetLocale().'/forum/topic/' . $thread_id);
+                                    exit;
+                                }
+                            }
+                        }
+                        
+                        if($post = WoW_Forums::GetPost($url_data['action6'])) {
+                            if(!WoW_Forums::SetThreadId($post['thread_id'])) {
+                                WoW_Template::ErrorPage(404);
+                                exit;
+                            }
+                            WoW_Template::SetPageData('edit_text', $post['message']);
+                            WoW_Template::SetPageIndex('forum_edit_post');
+                            WoW_Template::SetPageData('page', 'forum_edit_post');
+                        }
+                      break;
+                }
+            }
+            
+            
         }
         elseif($url_data['action4'] == 'blizztracker') {
             // Set Blizz tracker as active

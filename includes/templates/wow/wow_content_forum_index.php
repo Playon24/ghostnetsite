@@ -2,18 +2,6 @@
 <div class="content-top">
 <div class="content-trail">
 <?php WoW_Template::NavigationMenu(); ?>
-<!--<ol class="ui-breadcrumb">
-<li>
-<a href="<?php echo WoW::GetWoWPath(); ?>/wow/" rel="np">
-World of Warcraft
-</a>
-</li>
-<li class="last">
-<a href="<?php echo WoW::GetWoWPath(); ?>/wow/forum/" rel="np">
-<?php echo WoW_Locale::GetString('template_menu_forums'); ?>
-</a>
-</li>
-</ol>-->
 </div>
 <div class="content-bot">	<script type="text/javascript">
 		$(function(){Cms.Station.init();});
@@ -44,10 +32,10 @@ World of Warcraft
                                         elseif($blizz_posts[$i]['post_hours'] == 0)
                                           $before_text = sprintf(WoW_Locale::getString('template_blizztracker_posted_before_minutes'), $blizz_posts[$i]['post_minutes']);
                                           
-                                        echo sprintf('<a href="topic/%d#%d">
+                                        echo sprintf('<a href="topic/%d%s">
                                         <span class="desc"><span class="int">‘%s’</span></span>
                                         <span class="info"><span class="char">%s</span> %s %s <strong>%s</strong>:"%s"</span>
-                                        </a>', $blizz_posts[$i]['thread_id'], $blizz_posts[$i]['post_count'], $blizz_posts[$i]['message_short'], $blizz_posts[$i]['author'], $before_text, WoW_Locale::GetString('template_forums_in'), $blizz_posts[$i]['categoryTitle'], $blizz_posts[$i]['threadTitle_short']);
+                                        </a>', $blizz_posts[$i]['thread_id'], $blizz_posts[$i]['link'], $blizz_posts[$i]['message_short'], $blizz_posts[$i]['author'], $before_text, WoW_Locale::GetString('template_forums_in'), $blizz_posts[$i]['categoryTitle'], $blizz_posts[$i]['threadTitle_short']);
                                         if($i%3 == 2) {
                                             echo '</div>';
                                         }
